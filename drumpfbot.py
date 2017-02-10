@@ -57,7 +57,7 @@ class DrumpfBot:
 
         if command.lower().startswith("debug"):
             self.users_in_game.append('U3MP47XAB') #James U3MP47XAB
-            self.users_in_game.append('U3LCLSTA5') #Roberto U3LCLSTA5 Alex U3LNCN0F3
+            self.users_in_game.append('U3LCLSTA5') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82
             response = ">>>Starting a new game of Drumpf with players: \n" + self.get_readable_list_of_players()
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=response, as_user=True)
@@ -66,7 +66,7 @@ class DrumpfBot:
 
         if command.lower().startswith("create game"):
             if len(self.users_in_game) == 0:
-                response = "<@{}> Wants to play a game of drumpf! Tell me `add me` to play.".format(username)
+                response = "<@{}> Wants to play a game of drumpf! Type `@drumpfbot add me` to play.".format(username)
                 self.users_in_game.append(user_id)
             else:
                 response = "There's already a game being made, say `add me` if you want in."
@@ -179,7 +179,7 @@ class DrumpfBot:
 
         self.private_message_user(user_id, response)
 
-    def get_card_being_played(self, user_id, index): # -> ex. ['A', 'spades']
+    def get_card_being_played(self, user_id, index): # -> ex. ['K', 'spades']
         for user_object in self.current_game.players:
             if user_object.id == user_id:
                 print(user_object.cards_in_hand)
@@ -196,6 +196,7 @@ class DrumpfBot:
         elif user_id == self.player_bid_queue[0]:
             #expected user to bid
             try:
+                print self.current_game.current_round
                 if 0 > int(command) > self.current_game.current_round:
                     response = "You can't bid that amount!"
                 else:
@@ -244,7 +245,7 @@ class DrumpfBot:
                     return
                 #otherwise valid card played
                 if self.leading_suit != None:
-                    print("Sub-round-suit: {}".format(self.leading_suit))
+                    print("Sub-round trump suit: {}".format(self.leading_suit))
                     #a drumpf or a jester is always a valid play
                     if card_being_played == "drumpf" or card_being_played == "jester":
                         self.handle_valid_card_played(card_being_played)
@@ -261,7 +262,7 @@ class DrumpfBot:
                     else:
                         self.private_message_user(user_id, "Sorry, you can't play that card")
                 elif self.leading_suit == None:
-                    print("There is no sub-round-suit")
+                    print("There is no sub-round trump suit")
                     if card_being_played == "drumpf":
                         print("{} played a Drumpf".format(current_username))
                         self.leading_suit = "Any"
@@ -272,7 +273,7 @@ class DrumpfBot:
                         self.handle_valid_card_played(card_being_played)
                     else:
                         self.leading_suit = card_being_played[1]
-                        print("Sub-round-suit set to {}".format(card_being_played[1]))
+                        print("Sub-round trump suit set to {}".format(card_being_played[1]))
                         self.handle_valid_card_played(card_being_played)
             else:
                 response = "That wasn't a valid card index."
@@ -292,17 +293,21 @@ class DrumpfBot:
         player_who_played_card = self.user_ids_to_username[self.player_turn_queue[0]]
         self.remove_card_from_players_hand(self.player_turn_queue[0], card)
         card_emoji = helper_functions.emojify_card(card)
-        if card in DrumpfGame.drumpf_deck_special:
-            self.message_main_game_channel("><@{}> played:".format(player_who_played_card))
-            image_url = "http://cjbrogers.com/drumpf/images/"+card+".png"
-            self.attachments = [{"title": card, "image_url": image_url}]
-            slack_client.api_call(
-                "chat.postMessage",
-                channel=self.main_channel_id,
-                as_user=True, attachments=self.attachments
-            )
-        else:
-            self.message_main_game_channel("><@{}> played {}".format(player_who_played_card, card_emoji))
+
+        # if card in DrumpfGame.drumpf_deck_special:
+        #     self.message_main_game_channel("><@{}> played:".format(player_who_played_card))
+        #     image_url = "http://cjbrogers.com/drumpf/images/"+card+".png"
+        #     self.attachments = [{"title": card, "image_url": image_url}]
+        #     slack_client.api_call(
+        #         "chat.postMessage",
+        #         channel=self.main_channel_id,
+        #         as_user=True, attachments=self.attachments
+        #     )
+        # else:
+        #     self.attachments = None
+        #     self.message_main_game_channel("><@{}> played {}".format(player_who_played_card, card_emoji))
+
+        self.message_main_game_channel("><@{}> played {}".format(player_who_played_card, card_emoji))
         self.cards_played_for_sub_round.append(card)
         print("Cards played for sub-round: {}".format(self.cards_played_for_sub_round))
         self.player_turn_queue.popleft()
@@ -312,12 +317,6 @@ class DrumpfBot:
             print(">Everyone played, time to determine winner for sub-round")
             self.determine_winner_for_sub_round()
             self.player_points_for_round[self.winner_for_sub_round] += 1
-            # for card in DrumpfGame.drumpf_deck_special:
-            #     if card in self.winning_sub_round_card:
-            #         image_url = "http://cjbrogers.com/drumpf/images/"+card+".png"
-            #         self.attachments = [{"title": card, "image_url": image_url}]
-            #     else:
-            #         self.attachments = None
             self.message_main_game_channel(">*<@{}> won this sub-round with a {}*".format(
                 self.winner_for_sub_round, helper_functions.emojify_card(self.winning_sub_round_card)), attachments=self.attachments)
             #reset all sub-round variables
@@ -349,10 +348,10 @@ class DrumpfBot:
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
             if points_off_from_bid == 0:
                 #The player got his/her bid correctly
-                self.game_scorecard[player_id] += (20 + 10 * current_players_bid)
+                self.game_scorecard[player_id] += (50 + 25 * current_players_bid)
             else:
                 #player loses 10-points for every point above or below bid
-                self.game_scorecard[player_id] -= 10 * points_off_from_bid
+                self.game_scorecard[player_id] -= 25 * points_off_from_bid
         self.message_main_game_channel(">*Score Board*")
         for player_id in self.users_in_game:
             self.message_main_game_channel("><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
@@ -494,11 +493,11 @@ class DrumpfBot:
         self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
         self.users_in_game.rotate(-1)
 
-        #DEBUGGING REMOVE THIS AFTER TESTING
-        self.player_bid_queue.clear()
-        self.player_bids_for_current_round = [1 ,1]
-        self.message_main_game_channel("_DEBUG MODE: Automatic bidding, < 3 players can play_")
-        self.private_message_user(self.player_turn_queue[0], "Play a card `index`")
+        # #DEBUGGING REMOVE THIS AFTER TESTING
+        # self.player_bid_queue.clear()
+        # self.player_bids_for_current_round = [1 ,1]
+        # self.message_main_game_channel("_DEBUG MODE: Automatic bidding, < 3 players can play_")
+        # self.private_message_user(self.player_turn_queue[0], "Play a card `index`")
         #DEBUGGING
 
         # slack_client.api_call(
@@ -536,30 +535,30 @@ class DrumpfBot:
             text="Your card(s): {}".format(formatted_cards),
             as_user=True, attachments=self.attachments
         )
-        for card in cards:
-            if card in DrumpfGame.drumpf_deck_special:
-                image_url = "http://cjbrogers.com/drumpf/images/"+card+".png"
-                self.attachments = [{"title": card, "image_url": image_url}]
-                slack_client.api_call(
-                    "chat.postMessage",
-                    channel=player_id,
-                    as_user=True, attachments=self.attachments
-                )
-            else:
-                self.attachments = None
-                slack_client.api_call(
-                    "chat.postMessage",
-                    channel=player_id,
-                    as_user=True, attachments=self.attachments
-                )
+        # for card in cards:
+        #     if card in DrumpfGame.drumpf_deck_special:
+        #         image_url = "http://cjbrogers.com/drumpf/images/"+card+".png"
+        #         self.attachments = [{"title": card, "image_url": image_url}]
+        #         slack_client.api_call(
+        #             "chat.postMessage",
+        #             channel=player_id,
+        #             as_user=True, attachments=self.attachments
+        #         )
+        #     else:
+        #         self.attachments = None
+        #         slack_client.api_call(
+        #             "chat.postMessage",
+        #             channel=player_id,
+        #             as_user=True, attachments=self.attachments
+        #         )
 
     def announce_trump_card(self, trump_card):
         # for card in DrumpfGame.drumpf_deck_special:
-        if trump_card in DrumpfGame.drumpf_deck_special:
-            image_url = "http://cjbrogers.com/drumpf/images/"+trump_card+".png"
-            self.attachments = [{"title": trump_card, "image_url": image_url}]
-        else:
-            self.attachments = None
+        # if trump_card in DrumpfGame.drumpf_deck_special:
+        #     image_url = "http://cjbrogers.com/drumpf/images/"+trump_card+".png"
+        #     self.attachments = [{"title": trump_card, "image_url": image_url}]
+        # else:
+        #     self.attachments = None
 
         self.message_main_game_channel(">>>*Round {}* \n The trump card is: {} \n".format(
             self.current_game.current_round,

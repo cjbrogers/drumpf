@@ -78,3 +78,4 @@ class Game:
     def deal_single_card_to_each_player(self, deck):
         for player in self.players:
             player.receive_card(deck.deal_card())
+            # player.receive_card(deck.deal_card()) #ADDED FOR DEBUG PURPOSES - JAMESBUG
