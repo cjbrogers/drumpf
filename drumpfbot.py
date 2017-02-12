@@ -74,7 +74,7 @@ class DrumpfBot:
                                   text=response, as_user=True)
             self.game_created == True
             self.users_in_game.append(user_id)
-            self.users_in_game.append('U3LCLSTA5') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82
+            self.users_in_game.append('U3LNCN0F3') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB
             response = ""
             self.handle_command("start game", channel, user_id)
             # return
@@ -216,6 +216,8 @@ class DrumpfBot:
                     response = "That wasn't a valid index for a trump suit."
             except:
                 response = "That's not a valid command. Please select a trump suit."
+        else:
+            print "Whoops! Something went wrong."
 
         self.private_message_user(user_id, response)
 
@@ -462,7 +464,7 @@ class DrumpfBot:
                 if len(player.cards_in_hand) > 0:
                     self.display_cards_for_player_in_pm(player.id, player.cards_in_hand)
 
-
+    # TODO: Modify this to make Drumpf! a reality
     def determine_winner_for_sub_round(self, card):
 
         print " determine_winner_for_sub_round(self, card) "
@@ -480,7 +482,7 @@ class DrumpfBot:
         else:
             card_value_sub_round = str(self.cards_played_for_sub_round[0])
             card_suit_sub_round = None
-
+        # everyone has played VM cards, first person to play one wins
         if "VM:" in ([self.cards_played_for_sub_round for _ in range(num_cards_played)]):
             print("Everyone played visible minority cards this sub-round. First player wins.")
             self.winning_sub_round_card = self.cards_played_for_sub_round[0]
@@ -506,11 +508,13 @@ class DrumpfBot:
                     card_value = str(card)
                     card_suit = None
                 current_player = self.player_turn_queue_reference[idx]
-                # if card_value.startswith("T:"):
-                #     self.winning_sub_round_card = card
-                #     self.winner_for_sub_round = current_player
-                #     return
-                if card[1] == trump_suit:
+                if card_value.startswith("T:") or card_value.startswith("D:"):
+                    self.winning_sub_round_card = card
+                    self.winner_for_sub_round = current_player
+                    return
+                elif card_value.startswith("VM:"):
+                    return
+                if card_suit == trump_suit:
                     if self.winning_sub_round_card[1] == trump_suit:
                         if DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
                             #trump suit played beats previous trump suit
@@ -519,7 +523,7 @@ class DrumpfBot:
                     else:
                         self.winning_sub_round_card = card
                         self.winner_for_sub_round = current_player
-                elif card[1] == self.leading_suit:
+                elif card_suit == self.leading_suit:
                     if self.winning_sub_round_card == None:
                         self.winning_sub_round_card = card
                         self.winner_for_sub_round = current_player
