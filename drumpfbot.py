@@ -518,7 +518,7 @@ class DrumpfBot:
                     self.winner_for_sub_round = current_player
                     return
                 elif card_value.startswith("VM:"):
-                    if ("muslims" in card_value) || ("thieves" in card_value) || 
+                    if ("muslims" in card_value) || ("thieves" in card_value)
                         return
 
                     if "hombres" in card_value
