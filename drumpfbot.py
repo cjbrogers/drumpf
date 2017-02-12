@@ -60,7 +60,7 @@ class DrumpfBot:
 
         if command.lower().startswith("debug"):
             self.users_in_game.append('U3MP47XAB') #James U3MP47XAB
-            self.users_in_game.append('U3MP47XAB') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82
+            self.users_in_game.append('U3LNCN0F3') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82
             response = ">>>Starting a new game of Drumpf with players: \n" + self.get_readable_list_of_players()
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=response, as_user=True)
