@@ -413,7 +413,7 @@ class DrumpfBot:
         print " calculate_and_display_points_for_players(self) "
         self.message_main_game_channel("*Round {} over!* _calculating points..._".format(self.current_game.current_round))
         for idx, player_id in enumerate(self.users_in_game):
-            if player_id in self.zero_point_players
+            if player_id in self.zero_point_players:
                 continue
 
             current_players_bid = self.player_bids_for_current_round[idx]
@@ -594,7 +594,7 @@ class DrumpfBot:
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
                                 return
-                                
+
                 elif card_value.startswith("VM:"):
                     if ("muslims" in card_value) || ("thieves" in card_value)
                         return
