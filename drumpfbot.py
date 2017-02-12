@@ -60,7 +60,7 @@ class DrumpfBot:
 
         if command.lower().startswith("debug"):
             self.users_in_game.append('U3MP47XAB') #James U3MP47XAB
-            self.users_in_game.append('U3LNCN0F3') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82
+            self.users_in_game.append('U3MP47XAB') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82
             response = ">>>Starting a new game of Drumpf with players: \n" + self.get_readable_list_of_players()
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=response, as_user=True)
@@ -257,17 +257,28 @@ class DrumpfBot:
                 if card_being_played == None:
                     self.private_message_user(user_id, "That's not a valid card index")
                     return
+                card_value = None
+                card_suit = None
+                if len(card_being_played) == 2: # regular card
+                    card_value = str(card_being_played[0])
+                    print "Trump Value: ", card_value
+                    card_suit = card_being_played[1]
+                    print "Trump Suit: ", card_suit
+                else: # special card
+                    card_value = card_being_played
+                    print "Card Value: ", card_value
+                    card_suit = None
                 #otherwise valid card played
                 if self.leading_suit != None:
                     print("Sub-round trump suit: {}".format(self.leading_suit))
                     #a drumpf or a visible minority card or a tremendous card is always a valid play
-                    if card_being_played.startswith("D:") or card_being_played.startswith("VM:") or card_being_played.startswith("T:"):
+                    if card_value.startswith("D:") or card_value.startswith("VM:") or card_value.startswith("T:"):
                         self.handle_valid_card_played(card_being_played)
                     elif self.leading_suit == "Any":
                         #a drumpf was played as the first card
                         #players are free to play whatever they want
                         self.handle_valid_card_played(card_being_played)
-                    elif card_being_played[1] == self.leading_suit:
+                    elif card_suit == self.leading_suit:
                         #card played same suit as sub_round_suit
                         self.handle_valid_card_played(card_being_played)
                     elif self.player_hand_contains_suit(user_id, self.leading_suit) == False:
@@ -277,20 +288,20 @@ class DrumpfBot:
                         self.private_message_user(user_id, "Sorry, you can't play that card")
                 elif self.leading_suit == None:
                     print("There is no sub-round trump suit")
-                    if card_being_played.startswith("D:"):
+                    if card_value.startswith("D:"):
                         print("{} played a Drumpf Card".format(current_username))
                         self.leading_suit = "Any"
                         self.handle_valid_card_played(card_being_played)
-                    elif card_being_played.startswith("T:"):
+                    elif card_value.startswith("T:"):
                         print("{} played a Tremendous Card".format(current_username))
                         self.handle_valid_card_played(card_being_played)
-                    elif card_being_played.startswith("VM:"):
+                    elif card_value.startswith("VM:"):
                         print("{} played a Visible Minority Card".format(current_username))
                         #the sub round suit stays None until a player plays a suited card
                         self.handle_valid_card_played(card_being_played)
                     else:
-                        self.leading_suit = card_being_played[1]
-                        print("Sub-round trump suit set to {}".format(card_being_played[1]))
+                        self.leading_suit = card_suit
+                        print("Sub-round trump suit set to {}".format(card_suit))
                         self.handle_valid_card_played(card_being_played)
             else:
                 response = "That wasn't a valid card index."
@@ -401,7 +412,7 @@ class DrumpfBot:
         print("Players in game: {}".format(self.users_in_game))
         print("Cards played: {}".format(self.cards_played_for_sub_round))
         num_cards_played = len(self.cards_played_for_sub_round)
-        if self.cards_played_for_sub_round.startswith(["VM:" for _ in range(num_cards_played)]):
+        if "VM:" in ([self.cards_played_for_sub_round for _ in range(num_cards_played)]):
             print("Everyone played visible minority cards this sub-round. First player wins.")
             self.winning_sub_round_card = self.cards_played_for_sub_round[0]
             self.winner_for_sub_round = self.player_turn_queue_reference[0]

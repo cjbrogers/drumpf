@@ -58,15 +58,25 @@ class Game:
         #determine trump suit according to default rules
         if len(shuffled_deck.cards) > 0:
             trump_card = shuffled_deck.cards.pop()
-            if trump_card == "drumpf" or trump_card == "jester":
-                #is a drumpf or jester
-                if trump_card == "drumpf":
+            trump_value = None
+            trump_suit = None
+            if len(trump_card) == 2: # regular card
+                trump_value = str(trump_card[0])
+                print "Trump Value: ", trump_value
+                trump_suit = trump_card[1]
+                print "Trump Suit: ", trump_suit
+            else: # special card
+                trump_value = trump_card
+                trump_suit = None
+            if trump_value.startswith("D:") or trump_value.startswith("T:") or trump_value.startswith("VM:"):
+                #is a tremendous, drumpf or visible minority card
+                if trump_value.startswith("D:") or trump_value.startswith("T:"):
                     self.bot.prompt_dealer_for_trump_suit(self.players[0].id)
                     self.bot.player_trump_card_queue.append(self.players[0].id)
-                elif trump_card == "jester":
+                elif trump_value.startswith("VM:"):
                     trump_suit = None
-            elif len(trump_card) == 2: #regular card
-                trump_suit = trump_card[1]
+            # elif len(trump_value) == 2: #regular card
+            #     trump_suit = trump_suit
         elif len(shuffled_deck.cards) == 0:
             self.bot.prompt_dealer_for_trump_suit(self.players.first.id)
         for player in self.players:
@@ -78,4 +88,4 @@ class Game:
     def deal_single_card_to_each_player(self, deck):
         for player in self.players:
             player.receive_card(deck.deal_card())
-            # player.receive_card(deck.deal_card()) #ADDED FOR DEBUG PURPOSES - JAMESBUG
+            player.receive_card(deck.deal_card()) #ADDED FOR DEBUG PURPOSES - JAMESBUG
