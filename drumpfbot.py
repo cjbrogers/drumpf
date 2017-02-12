@@ -311,9 +311,17 @@ class DrumpfBot:
         print("Checking if player hand contains expected suit, {}".format(self.leading_suit))
         for user_object in self.current_game.players:
             if user_object.id == user_id:
-                for card in user_object.cards_in_hand:
-                    if not card.startswith("D:") and not card.startswith("T:") and not card.startswith("VM:"):
-                        if card[1] == suit:
+                for card_obj in user_object.cards_in_hand:
+                    card_value = None
+                    card_suit = None
+                    if len(card_obj) == 2:
+                        card_value = str(card_obj[0])
+                        card_suit = card_obj[1]
+                    else:
+                        card_value = str(card_obj)
+                        card_suit = None
+                    if not card_value.startswith("D:") and not card_value.startswith("T:") and not card_value.startswith("VM:"):
+                        if card_suit == suit:
                             return True
         return False
 
@@ -412,36 +420,47 @@ class DrumpfBot:
         print("Players in game: {}".format(self.users_in_game))
         print("Cards played: {}".format(self.cards_played_for_sub_round))
         num_cards_played = len(self.cards_played_for_sub_round)
+
+        card_value_sub_round = None
+        card_suit_sub_round = None
+
+        if len(self.cards_played_for_sub_round[0]) == 2:
+            card_value_sub_round = str(self.cards_played_for_sub_round[0][0])
+            card_suit_sub_round = self.cards_played_for_sub_round[0][1]
+        else:
+            card_value_sub_round = str(self.cards_played_for_sub_round[0])
+            card_suit_sub_round = None
+
         if "VM:" in ([self.cards_played_for_sub_round for _ in range(num_cards_played)]):
             print("Everyone played visible minority cards this sub-round. First player wins.")
             self.winning_sub_round_card = self.cards_played_for_sub_round[0]
             self.winner_for_sub_round = self.player_turn_queue_reference[0]
             return
-        elif self.cards_played_for_sub_round[0].startswith("T: russian"):
+        elif card_value_sub_round.startswith("T: russian"):
             print("First player played a Russian Blackmail card, he/she wins.")
-            self.winning_sub_round_card = self.cards_played_for_sub_round[0]
+            self.winning_sub_round_card = card_value_sub_round
             self.winner_for_sub_round = self.player_turn_queue_reference[0]
             return
         else:
             #we have to iterate over the cards to determine the winner for the sub-round
             winning_card = None
             trump_suit = self.current_game.current_round_trump_suit
+            card_value = None
+            card_suit = None
             for idx, card in enumerate(self.cards_played_for_sub_round):
+                if len(card) == 2:
+                    card_value = str(card[0])
+                    card_suit = card[1]
+                else:
+                    card_value = str(card)
+                    card_suit = None
                 current_player = self.player_turn_queue_reference[idx]
-                if card.startswith("T:"):
-                    if card.startswith("T: russian"):
+                if card_value.startswith("T:"):
+                    if card_value.startswith("T: russian"):
                         self.winning_sub_round_card = card
                         self.winner_for_sub_round = current_player
                         return
-                    elif card.startswith("T: nasty"):
-                        if "D:" in self.cards_played_for_sub_round:
-                            idy = self.cards_played_for_sub_round.startswith("D:")[0].index
-                            # if the nasty card was played after a drumpf card
-                            if idx > idy:
-                                # the drumpf card loses it's drumf card status
-                                return
-
-
+            # TODO: FIX ALL THIS MESSED UP LOGIC
                     #first drumpf played wins, regardless of all other hands
                     self.winning_sub_round_card = card
                     self.winner_for_sub_round = current_player
