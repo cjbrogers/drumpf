@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 import time
 import copy
 
@@ -24,7 +25,7 @@ class DrumpfBot:
         self.users_in_game = deque([]) #[user_id, user_id...]
         self.user_ids_to_username = {} #{'USERID': 'James'}
         self.channel_ids_to_name = {} #{'CHANNELID': "#drumpf-play"}
-        self.main_channel_id = 'C41Q1H4BD' #TODO make this dynamic
+        self.main_channel_id = main_channel_id #TODO make this dynamic
         self.game_scorecard = defaultdict(int)
 
         self.player_trump_card_queue = [] #['USERID']
@@ -46,18 +47,19 @@ class DrumpfBot:
         self.winning_sub_round_card = None
 
         self.attachments = None
+        self.game_started = False
+        self.game_created = False
 
     def handle_command(self, command, channel, user_id):
         attachments = None
         #TODO restrict the channel this is in
         username = self.user_ids_to_username[user_id] #user who sent the message
 
-        #TODO this response can come from a random array of responses to gibberish
-        response = "Wrong! I only respond to tremendous, I mean, ya know, real bigly commands."
+        response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
 
         if command.lower().startswith("debug"):
             self.users_in_game.append('U3MP47XAB') #James U3MP47XAB
-            self.users_in_game.append('U3LCLSTA5') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82
+            self.users_in_game.append('U3MP47XAB') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82
             response = ">>>Starting a new game of Drumpf with players: \n" + self.get_readable_list_of_players()
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=response, as_user=True)
@@ -65,15 +67,25 @@ class DrumpfBot:
             return
 
         if command.lower().startswith("create game"):
+            self.game_created == True
             if len(self.users_in_game) == 0:
                 response = "<@{}> Wants to play a game of drumpf! Type `@drumpfbot add me` to play.".format(username)
                 self.users_in_game.append(user_id)
             else:
-                response = "There's already a game being made, say `add me` if you want in."
+                response = "There's already a game being made, say `@drumpfbot add me` if you want in."
 
-        if command.lower().startswith("cancel"):
-            response = "Okay, game cancelled."
-            self.users_in_game.clear()
+        if command.lower().startswith("restart"):
+            response = "Application restarted."
+            slack_client.api_call("chat.postMessage", channel=channel,
+                                  text=response, as_user=True, attachments=attachments)
+            return self.restart_program()
+
+        if command.lower().startswith("remove me") and (self.game_started == False) and (self.game_created == True):
+            if user_id not in self.users_in_game:
+                response = "You haven't been added, so how the hell can I remove you? Type `@drumpfbot add me` if you want in."
+            else:
+                response = "Okay, {} removed from the game queue. When you have three or more players, type `@drumpfbot start game`.".format(username)
+                self.users_in_game.remove(user_id)
 
         if command.lower().startswith("add me"):
             if len(self.users_in_game) == 0:
@@ -86,14 +98,14 @@ class DrumpfBot:
                     response = "Added <@{}> to the game!".format(username)
 
         if command.lower().startswith("start game"):
-             #TODO this should be minimum for 3 players.
-             #TODO is there a max number of players?
             if len(self.users_in_game) == 0:
-                response = "No game exists yet. Try `create game`"
-
-            elif len(self.users_in_game) < 2:
-                response = "There aren't enough players yet (minimum 4). Users can say `add me` to be added to the game."
+                response = "No game exists yet. Try `@drumpfbot create game`"
+            elif len(self.users_in_game) < 3:
+                response = "There aren't enough players yet (minimum 3). Users can say `add me` to be added to the game."
+            elif len(self.users_in_game) > 6:
+                response = "There are too many players (max 6). Please try again."
             else:
+                self.game_started = True
                 response = ">>>Starting a new game of Drumpf with players: \n" + self.get_readable_list_of_players()
                 slack_client.api_call("chat.postMessage", channel=channel,
                                       text=response, as_user=True)
@@ -105,10 +117,11 @@ class DrumpfBot:
             "*[add me]*\tAdd yourself to the game queue.\n" \
             "*[bigly]*\tIt's a word.\n" \
             "*[cancel]*\tStop the current game.\n" \
-            "*[card rules]*\tView the card values.\n" \
             "*[commands]*\tView available commands.\n" \
+            "*[comp]*\tView the card deck composition.\n" \
             "*[create game]*\tLet Slack know you want to play a game. Players reply '<@drumpfbot> add me' if they wish to join.\n"\
             "*[debug]*\tStart a game in debug mode. Bidding is automatic.\n" \
+            "*[remove me]*\tRemove yourself from the current game queue.\n" \
             "*[rules]*\tView the rules of the game.\n" \
             "*[start game]*\tStart the game.\n" \
             "*[< _these_ > cards]*\tReplace < _these_ > with the cards you wish to view. i.e. 'Drumpf' cards.\n\n" \
@@ -144,7 +157,7 @@ class DrumpfBot:
             image_url = "https://s24.postimg.org/4jwyhuj2d/dcards.png"
             attachments = [{"title": "Drumpf Cards", "image_url": image_url}]
 
-        if command.lower().startswith("card rules"):
+        if command.lower().startswith("comp"):
             response = ">>>Here's the card deck composition: \n"
             image_url = "https://s30.postimg.org/r28wxm89t/cards.png"
             attachments = [{"title": "Card Deck Composition", "image_url": image_url}]
@@ -161,7 +174,7 @@ class DrumpfBot:
         elif user_id == self.player_trump_card_queue:
             #validate that the dealer picked a valid trump suit
             try:
-                if 0 <= int(command) <= 3:
+                if isinstance(command, int) and (0 <= int(command) <= self.sub_rounds_played + 1):
                     self.current_game.current_round_trump_suit = suits[int(command)]
                     response = "Trump suit recorded! Check the main channel."
                     slack_client.api_call(
@@ -246,8 +259,8 @@ class DrumpfBot:
                 #otherwise valid card played
                 if self.leading_suit != None:
                     print("Sub-round trump suit: {}".format(self.leading_suit))
-                    #a drumpf or a jester is always a valid play
-                    if card_being_played == "drumpf" or card_being_played == "jester":
+                    #a drumpf or a visible minority card or a tremendous card is always a valid play
+                    if card_being_played.startswith("D:") or card_being_played.startswith("VM:") or card_being_played.startswith("T:"):
                         self.handle_valid_card_played(card_being_played)
                     elif self.leading_suit == "Any":
                         #a drumpf was played as the first card
@@ -263,12 +276,15 @@ class DrumpfBot:
                         self.private_message_user(user_id, "Sorry, you can't play that card")
                 elif self.leading_suit == None:
                     print("There is no sub-round trump suit")
-                    if card_being_played == "drumpf":
-                        print("{} played a Drumpf".format(current_username))
+                    if card_being_played.startswith("D:"):
+                        print("{} played a Drumpf Card".format(current_username))
                         self.leading_suit = "Any"
                         self.handle_valid_card_played(card_being_played)
-                    elif card_being_played == "jester":
-                        print("{} played a Jester".format(current_username))
+                    elif card_being_played.startswith("T:"):
+                        print("{} played a Tremendous Card".format(current_username))
+                        self.handle_valid_card_played(card_being_played)
+                    elif card_being_played.startswith("VM:"):
+                        print("{} played a Visible Minority Card".format(current_username))
                         #the sub round suit stays None until a player plays a suited card
                         self.handle_valid_card_played(card_being_played)
                     else:
@@ -284,7 +300,7 @@ class DrumpfBot:
         for user_object in self.current_game.players:
             if user_object.id == user_id:
                 for card in user_object.cards_in_hand:
-                    if card != "drumpf" and card != "jester":
+                    if not card.startswith("D:") and not card.startswith("T:") and not card.startswith("VM:"):
                         if card[1] == suit:
                             return True
         return False
@@ -294,19 +310,6 @@ class DrumpfBot:
         self.remove_card_from_players_hand(self.player_turn_queue[0], card)
         card_emoji = helper_functions.emojify_card(card)
 
-        # if card in DrumpfGame.drumpf_deck_special:
-        #     self.message_main_game_channel("><@{}> played:".format(player_who_played_card))
-        #     image_url = "http://cjbrogers.com/drumpf/images/"+card+".png"
-        #     self.attachments = [{"title": card, "image_url": image_url}]
-        #     slack_client.api_call(
-        #         "chat.postMessage",
-        #         channel=self.main_channel_id,
-        #         as_user=True, attachments=self.attachments
-        #     )
-        # else:
-        #     self.attachments = None
-        #     self.message_main_game_channel("><@{}> played {}".format(player_who_played_card, card_emoji))
-
         self.message_main_game_channel("><@{}> played {}".format(player_who_played_card, card_emoji))
         self.cards_played_for_sub_round.append(card)
         print("Cards played for sub-round: {}".format(self.cards_played_for_sub_round))
@@ -315,7 +318,7 @@ class DrumpfBot:
         if len(self.player_turn_queue) == 0:
             self.sub_rounds_played += 1
             print(">Everyone played, time to determine winner for sub-round")
-            self.determine_winner_for_sub_round()
+            self.determine_winner_for_sub_round(card)
             self.player_points_for_round[self.winner_for_sub_round] += 1
             self.message_main_game_channel(">*<@{}> won this sub-round with a {}*".format(
                 self.winner_for_sub_round, helper_functions.emojify_card(self.winning_sub_round_card)), attachments=self.attachments)
@@ -392,19 +395,19 @@ class DrumpfBot:
                     self.display_cards_for_player_in_pm(player.id, player.cards_in_hand)
 
 
-    def determine_winner_for_sub_round(self):
+    def determine_winner_for_sub_round(self, card):
         self.winning_sub_round_card = None
         print("Players in game: {}".format(self.users_in_game))
         print("Cards played: {}".format(self.cards_played_for_sub_round))
         num_cards_played = len(self.cards_played_for_sub_round)
-        if self.cards_played_for_sub_round == ["jester" for _ in range(num_cards_played)]:
-            print("Everyone played jesters this sub-round. First player wins.")
-            self.winning_sub_round_card = "jester"
+        if self.cards_played_for_sub_round.startswith(["VM:" for _ in range(num_cards_played)]):
+            print("Everyone played visible minority cards this sub-round. First player wins.")
+            self.winning_sub_round_card = self.cards_played_for_sub_round[0]
             self.winner_for_sub_round = self.player_turn_queue_reference[0]
             return
-        elif self.cards_played_for_sub_round[0] == "drumpf":
-            print("First player played a Drumpf, he/she wins.")
-            self.winning_sub_round_card = "drumpf"
+        elif self.cards_played_for_sub_round[0].startswith("T: russian"):
+            print("First player played a Russian Blackmail card, he/she wins.")
+            self.winning_sub_round_card = self.cards_played_for_sub_round[0]
             self.winner_for_sub_round = self.player_turn_queue_reference[0]
             return
         else:
@@ -413,7 +416,20 @@ class DrumpfBot:
             trump_suit = self.current_game.current_round_trump_suit
             for idx, card in enumerate(self.cards_played_for_sub_round):
                 current_player = self.player_turn_queue_reference[idx]
-                if card == "drumpf":
+                if card.startswith("T:"):
+                    if card.startswith("T: russian"):
+                        self.winning_sub_round_card = card
+                        self.winner_for_sub_round = current_player
+                        return
+                    elif card.startswith("T: nasty"):
+                        if "D:" in self.cards_played_for_sub_round:
+                            idy = self.cards_played_for_sub_round.startswith("D:")[0].index
+                            # if the nasty card was played after a drumpf card
+                            if idx > idy:
+                                # the drumpf card loses it's drumf card status
+                                return
+
+
                     #first drumpf played wins, regardless of all other hands
                     self.winning_sub_round_card = card
                     self.winner_for_sub_round = current_player
@@ -458,7 +474,6 @@ class DrumpfBot:
     def handle_private_message(self, command, user_id):
         response = ""
         if len(self.player_trump_card_queue):
-            # self.handle_trump_suit_selection(command, user_id)
             self.handle_trump_suit_selection(command, user_id)
 
         elif len(self.player_bid_queue):
@@ -574,6 +589,10 @@ class DrumpfBot:
         game = DrumpfGame.Game(player_objects, bot)
         game.play_round()
 
+    #Restarts the current program.
+    def restart_program(self):
+        python = sys.executable
+        os.execl(python, python, * sys.argv)
 
 if __name__ == "__main__":
     bot = DrumpfBot()

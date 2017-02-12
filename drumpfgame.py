@@ -1,14 +1,14 @@
 import random
 import drumpfbot as DrumpfBot
 
-drumpf_deck = ["blacks", "hombres", "muslims", "thieves"]
+drumpf_deck = ["VM: blacks", "VM: hombres", "VM: muslims", "VM: thieves"]
 suits = ["diamonds", "clubs", "hearts", "spades"]
 values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
 for suit in suits:
     for value in values:
         drumpf_deck.append([value, suit])
-drumpf_deck = drumpf_deck + ["pussy", "wall", "clinton", "ivanka"]
-drumpf_deck = drumpf_deck + ["russian", "nasty","shower","comey"]
+drumpf_deck = drumpf_deck + ["D: pussy", "D: wall", "D: clinton", "D: ivanka"]
+drumpf_deck = drumpf_deck + ["T: russian", "T: nasty","T: shower","T: comey"]
 
 drumpf_deck_special = ["blacks", "hombres", "muslims", "thieves"]
 drumpf_deck_special = drumpf_deck_special + ["pussy", "wall", "clinton", "ivanka"]
