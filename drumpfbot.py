@@ -45,6 +45,7 @@ class DrumpfBot:
         self.winner_for_sub_round = None
         self.sub_rounds_played = 0
         self.winning_sub_round_card = None
+        self.zero_point_players = [] #if users play blacks card in a sub round they get 0 points for that round
 
         self.attachments = None
         self.game_started = False
@@ -412,6 +413,9 @@ class DrumpfBot:
         print " calculate_and_display_points_for_players(self) "
         self.message_main_game_channel("*Round {} over!* _calculating points..._".format(self.current_game.current_round))
         for idx, player_id in enumerate(self.users_in_game):
+            if player_id in self.zero_point_players
+                continue
+
             current_players_bid = self.player_bids_for_current_round[idx]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
             if points_off_from_bid == 0:
@@ -448,6 +452,7 @@ class DrumpfBot:
         self.winning_sub_round_card = None
         self.winer_for_sub_round = None
         self.cards_played_for_sub_round = []
+        self.zero_point_players = []
         #clears all round and sub-round variables
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
@@ -511,7 +516,6 @@ class DrumpfBot:
 
                 # handle Tremendous cards and Drumpf cards
                 if card_value.startswith("T:") or card_value.startswith("D:"):
-
                     # golden shower card means player wins all lies up to 3 max
                     if card_value.startswith("T: shower"):
                         self.shower_card_holder = current_player # keep track of who holds the Golden Shower card so they don't earn more points than they should
@@ -590,7 +594,22 @@ class DrumpfBot:
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
                                 return
+                                
+                elif card_value.startswith("VM:"):
+                    if ("muslims" in card_value) || ("thieves" in card_value)
+                        return
 
+                    if "hombres" in card_value
+                        if any("wall" in s for s in self.cards_played_for_sub_round):
+                            self.winning_sub_round_card = card
+                            self.winner_for_sub_round = current_player
+                        return
+
+                    if "blacks" in card_value
+                        self.zero_point_players.append(current_player.id)
+                        return
+
+                    return
                 if card_suit == trump_suit:
                     if self.winning_sub_round_card[1] == trump_suit:
                         if DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
