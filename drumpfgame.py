@@ -51,6 +51,8 @@ class Game:
     # 4) gets bids from players
     # 5) plays mini-rounds & allocates points until round is over
     def play_round(self):
+        print "==========================FUNCTION CALL=============================="
+        print "\n__________________________ play_round(self) __________________________"
         shuffled_deck = Deck()
         for _ in range(0, self.current_round):
             self.deal_single_card_to_each_player(shuffled_deck)
@@ -67,6 +69,7 @@ class Game:
                 print "Trump Suit: ", trump_suit
             else: # special card
                 trump_value = trump_card
+                print "Trump Card: ", trump_value
                 trump_suit = None
             if trump_value.startswith("D:") or trump_value.startswith("T:") or trump_value.startswith("VM:"):
                 #is a tremendous, drumpf or visible minority card
@@ -86,6 +89,7 @@ class Game:
         #dealer is always index 0 of players and we will rotate the array end of each turn
 
     def deal_single_card_to_each_player(self, deck):
+        print "==========================FUNCTION CALL=============================="
+        print "\n__________________________ deal_single_card_to_each_player(self, deck) __________________________"
         for player in self.players:
             player.receive_card(deck.deal_card())
-            player.receive_card(deck.deal_card()) #ADDED FOR DEBUG PURPOSES - JAMESBUG
