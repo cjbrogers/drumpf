@@ -508,12 +508,89 @@ class DrumpfBot:
                     card_value = str(card)
                     card_suit = None
                 current_player = self.player_turn_queue_reference[idx]
+
+                # handle Tremendous cards and Drumpf cards
                 if card_value.startswith("T:") or card_value.startswith("D:"):
-                    self.winning_sub_round_card = card
-                    self.winner_for_sub_round = current_player
-                    return
-                elif card_value.startswith("VM:"):
-                    return
+
+                    # golden shower card means player wins all lies up to 3 max
+                    if card_value.startswith("T: shower"):
+                        self.shower_card_holder = current_player # keep track of who holds the Golden Shower card so they don't earn more points than they should
+                        if self.cards_played_for_sub_round < 4:
+                            self.player_points_for_round[current_player] = self.cards_played_for_sub_round
+                        else:
+                            self.player_points_for_round[current_player] = 3
+
+                    # russian blackmail card always wins sub-round
+                    elif card_value.startswith("T: russian"):
+                        self.winning_sub_round_card = card
+                        self.winner_for_sub_round = current_player
+                        return
+
+                    # comey card steals Clinton's Email Server card
+                    elif card_value.startswith("D: clinton"):
+                        if "T: comey" in self.cards_played_for_sub_round:
+                            comey_card_idx = self.cards_played_for_sub_round.index("T: comey")
+                            if idx < comey_card_idx:
+                                self.winning_sub_round_card = self.cards_played_for_sub_round[comey_card_idx]
+                                self.winner_for_sub_round = self.player_turn_queue_reference[comey_card_idx]
+                                return
+                            else:
+                                self.winning_sub_round_card = card
+                                self.winner_for_sub_round = current_player
+                                return
+                        elif "T: nasty" in self.cards_played_for_sub_round:
+                            nasty_card_idx = self.cards_played_for_sub_round.index("T: nasty")
+                            if idx < nasty_card_idx:
+                                continue
+                            else:
+                                self.winning_sub_round_card = card
+                                self.winner_for_sub_round = current_player
+                                return
+
+                    # The Wall card can be usurped by the Bad Hombres
+                    elif card_value.startswith("D: wall"):
+                        if "VM: hombres" in self.cards_played_for_sub_round:
+                            hombres_card_idx = self.cards_played_for_sub_round.index("VM: hombres")
+                            if idx < hombres_card_idx:
+                                self.winning_sub_round_card = self.cards_played_for_sub_round[hombres_card_idx]
+                                self.winner_for_sub_round = self.player_turn_queue_reference[hombres_card_idx]
+                                return
+                            else:
+                                self.winning_sub_round_card = card
+                                self.winner_for_sub_round = current_player
+                                return
+                        elif "T: nasty" in self.cards_played_for_sub_round:
+                            nasty_card_idx = self.cards_played_for_sub_round.index("T: nasty")
+                            if idx < nasty_card_idx:
+                                continue
+                            else:
+                                self.winning_sub_round_card = card
+                                self.winner_for_sub_round = current_player
+                                return
+
+                    visited = False # keeps track of the case of all 3 cards below being present in a round
+                    # the regular old Drumpf cards
+                    elif card_value.startswith("D: pussy") or card_value.startswith("D: ivanka"):
+                        # the non-negated Drumpf wins
+                        if visited:
+                            self.winning_sub_round_card = card
+                            self.winner_for_sub_round = current_player
+                            return
+                        else:
+                            if "T: nasty" in self.cards_played_for_sub_round:
+                                nasty_card_idx = self.cards_played_for_sub_round.index("T: nasty")
+                                if idx < nasty_card_idx:
+                                    visited = True
+                                    continue
+                                else:
+                                    self.winning_sub_round_card = card
+                                    self.winner_for_sub_round = current_player
+                                    return
+                            else:
+                                self.winning_sub_round_card = card
+                                self.winner_for_sub_round = current_player
+                                return
+
                 if card_suit == trump_suit:
                     if self.winning_sub_round_card[1] == trump_suit:
                         if DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
@@ -662,13 +739,6 @@ class DrumpfBot:
         #         )
 
     def announce_trump_card(self, trump_card):
-        # for card in DrumpfGame.drumpf_deck_special:
-        # if trump_card in DrumpfGame.drumpf_deck_special:
-        #     image_url = "http://cjbrogers.com/drumpf/images/"+trump_card+".png"
-        #     self.attachments = [{"title": trump_card, "image_url": image_url}]
-        # else:
-        #     self.attachments = None
-
         print " announce_trump_card(self, trump_card) "
         print "trump_card: ",trump_card
         self.message_main_game_channel(">>>*Round {}* \n The trump card is: {} \n".format(
