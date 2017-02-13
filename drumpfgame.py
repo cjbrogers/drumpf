@@ -11,9 +11,8 @@ drumpf_deck = drumpf_deck + ["D: pussy", "D: wall", "D: clinton", "D: ivanka"]
 drumpf_deck = drumpf_deck + ["T: russian", "T: nasty","T: shower","T: comey"]
 
 drumpf_deck_special = ["blacks", "hombres", "muslims", "thieves"]
-drumpf_deck_special = drumpf_deck_special + ["pussy", "wall", "clinton", "ivanka"]
-drumpf_deck_special = drumpf_deck_special + ["russian", "nasty", "shower",
-                                            "comey"]
+drumpf_deck_special += ["pussy", "wall", "clinton", "ivanka"]
+drumpf_deck_special += ["russian", "nasty", "shower", "comey"]
 
 def rotate_list(l, n):
     return l[-n:] + l[:-n]
@@ -71,25 +70,25 @@ class Game:
                 trump_value = trump_card
                 print "Trump Card: ", trump_value
                 trump_suit = None
-            if trump_value.startswith("D:") or trump_value.startswith("T:") or trump_value.startswith("VM:"):
-                #is a tremendous, drumpf or visible minority card
-                if trump_value.startswith("D:") or trump_value.startswith("T:"):
-                    self.bot.prompt_dealer_for_trump_suit(self.players[0].id)
-                    self.bot.player_trump_card_queue.append(self.players[0].id)
-                elif trump_value.startswith("VM:"):
-                    trump_suit = None
+            # is a tremendous, drumpf
+            if trump_value[0:2] == "D:" or trump_value[0:2] == "T:":
+                self.bot.prompt_dealer_for_trump_suit(self.players[0].id)
+                self.bot.player_trump_card_queue.append(self.players[0].id)
+            # or visible minority card
+            elif trump_value[0:3] == "VM:":
+                trump_suit = None
             # elif len(trump_value) == 2: #regular card
             #     trump_suit = trump_suit
         elif len(shuffled_deck.cards) == 0:
             self.bot.prompt_dealer_for_trump_suit(self.players.first.id)
         for player in self.players:
-            self.bot.display_cards_for_player_in_pm(player.id, player.cards_in_hand)
+            self.bot.display_cards_for_player_in_pm(player.id,
+                                                    player.cards_in_hand)
         self.bot.get_bids_from_players(self.current_round, self.players)
         self.bot.announce_trump_card(trump_card)
         #dealer is always index 0 of players and we will rotate the array end of each turn
 
     def deal_single_card_to_each_player(self, deck):
-
         print " deal_single_card_to_each_player(self, deck) "
         for player in self.players:
             player.receive_card(deck.deal_card())
