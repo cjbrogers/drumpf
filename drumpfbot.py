@@ -186,8 +186,7 @@ class DrumpfBot:
                               text=response, as_user=True, attachments=attachments)
 
     def handle_trump_suit_selection(self, command, user_id):
-        print "\n\n"
-        print "\n  handle_trump_suit_selection(command, user_id) "
+        print "  handle_trump_suit_selection(command, user_id) "
         print "user_id: ",user_id
         response = ""
         current_username = self.user_ids_to_username[self.player_trump_card_queue[0]]
@@ -197,7 +196,7 @@ class DrumpfBot:
         elif user_id == self.player_trump_card_queue[0]:
             #validate that the dealer picked a valid trump suit
             try:
-                if isinstance(command, int) and (0 <= int(command) <= self.sub_rounds_played + 1):
+                if isinstance(command, int) and (0 <= int(command) <= 3):
                     self.current_game.current_round_trump_suit = suits[int(command)]
                     response = "Trump suit recorded! Check the main channel."
                     slack_client.api_call(
