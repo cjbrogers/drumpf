@@ -572,7 +572,7 @@ class DrumpfBot:
                                 self.winner_for_sub_round = current_player
                                 return
 
-                    visited = False # keeps track of the case of all 3 cards below being present in a round
+                            visited = False # keeps track of the case of all 3 cards below being present in a round        ### IS THIS SUPPOSED TO GO HERE?!?!?!????
                     # the regular old Drumpf cards
                     elif card_value.startswith("D: pussy") or card_value.startswith("D: ivanka"):
                         # the non-negated Drumpf wins
@@ -595,17 +595,17 @@ class DrumpfBot:
                                 self.winner_for_sub_round = current_player
                                 return
 
-                elif card_value.startswith("VM:"):
-                    if ("muslims" in card_value) || ("thieves" in card_value)
+                elif card_value[0:3] == "VM:":
+                    if "muslims" in card_value or "thieves" in card_value:
                         return
 
-                    if "hombres" in card_value
+                    if "hombres" in card_value:
                         if any("wall" in s for s in self.cards_played_for_sub_round):
                             self.winning_sub_round_card = card
                             self.winner_for_sub_round = current_player
                         return
 
-                    if "blacks" in card_value
+                    if "blacks" in card_value:
                         self.zero_point_players.append(current_player.id)
                         return
 
@@ -650,8 +650,8 @@ class DrumpfBot:
     def handle_private_message(self, command, user_id):
 
         print " handle_private_message(self, command, user_id) "
-        print "command: ",command
-        print "user_id: ",user_id
+        print "command: ", command
+        print "user_id: ", user_id
         response = ""
         if len(self.player_trump_card_queue):
             self.handle_trump_suit_selection(command, user_id)
