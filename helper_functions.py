@@ -1,5 +1,5 @@
 def format_cards_to_emojis(cards):
-
+    print "\n\n"
     print " format_cards_to_emojis(cards) "
     print "cards: ",cards
     formatted_cards = []
@@ -11,10 +11,11 @@ def format_cards_to_emojis(cards):
     return "".join(formatted_cards)
 
 def emojify_card(card):
-
+    print "\n\n"
     print " emojify_card(card) "
     print "card: ",card
-    if len(card) == 2:
+
+    if isinstance(card, list):
         return "[{}:{}:]".format(card[0], card[1])
     else:
         return "[:{}:]".format(card)

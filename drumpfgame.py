@@ -51,7 +51,7 @@ class Game:
     # 4) gets bids from players
     # 5) plays mini-rounds & allocates points until round is over
     def play_round(self):
-
+        print "\n\n"
         print " play_round(self) "
         shuffled_deck = Deck()
         for _ in range(0, self.current_round):
@@ -89,7 +89,7 @@ class Game:
         #dealer is always index 0 of players and we will rotate the array end of each turn
 
     def deal_single_card_to_each_player(self, deck):
-
+        print "\n\n"
         print " deal_single_card_to_each_player(self, deck) "
         for player in self.players:
             player.receive_card(deck.deal_card())
