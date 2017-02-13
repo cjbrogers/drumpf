@@ -63,12 +63,6 @@ class DrumpfBot:
         response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
 
         if command.lower().startswith("debug"):
-            # self.users_in_game.append('U3MP47XAB') #James U3MP47XAB
-            # self.users_in_game.append('U3MP47XAB') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82
-            # response = ">>>Starting a new game of Drumpf with players: \n" + self.get_readable_list_of_players()
-            # slack_client.api_call("chat.postMessage", channel=channel,
-            #                       text=response, as_user=True)
-            # self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
             self.debug = True
             response = ">>>Now entering debug mode. \n"
             slack_client.api_call("chat.postMessage", channel=channel,
@@ -280,7 +274,7 @@ class DrumpfBot:
         print " handle_player_turn(self, command, user_id) "
         response = ""
         current_username = self.user_ids_to_username[self.player_turn_queue[0]]
-        print("User sending message: {}".format(self.user_ids_to_username[user_id]  ))
+        print("User sending message: {}".format(self.user_ids_to_username[user_id]))
         #waiting for first player after dealer to play a card
         if user_id != self.player_turn_queue[0]:
             response = "Waiting for <@{}> to play a card.".format(current_username)
@@ -325,12 +319,9 @@ class DrumpfBot:
                         self.private_message_user(user_id, "Sorry, you can't play that card")
                 elif self.leading_suit == None:
                     print("There is no sub-round trump suit")
-                    if card_value.startswith("D:"):
+                    if card_value.startswith("D:") or card_value.startswith("T:"):
                         print("{} played a Drumpf Card".format(current_username))
                         self.leading_suit = "Any"
-                        self.handle_valid_card_played(card_being_played)
-                    elif card_value.startswith("T:"):
-                        print("{} played a Tremendous Card".format(current_username))
                         self.handle_valid_card_played(card_being_played)
                     elif card_value.startswith("VM:"):
                         print("{} played a Visible Minority Card".format(current_username))
@@ -345,7 +336,6 @@ class DrumpfBot:
         self.private_message_user(user_id, response)
 
     def player_hand_contains_suit(self, user_id, suit):
-        print "\n\n"
         print " player_hand_contains_suit(self, user_id, suit) "
         print("Checking if player hand contains expected suit, {}".format(self.leading_suit))
         for user_object in self.current_game.players:
@@ -359,13 +349,12 @@ class DrumpfBot:
                     else:
                         card_value = str(card_obj)
                         card_suit = None
-                    if not card_value.startswith("D:") and not card_value.startswith("T:") and not card_value.startswith("VM:"):
+                    if "D:" not in card_value and "T:" not in card_value and "VM:" not in card_value:
                         if card_suit == suit:
                             return True
         return False
 
     def handle_valid_card_played(self, card):
-        print "\n\n"
         print " handle_valid_card_played(self, card) "
         print "card: ",card
 
@@ -408,7 +397,6 @@ class DrumpfBot:
             self.private_message_user(self.player_turn_queue[0], "Play a card `index`")
 
     def calculate_and_display_points_for_players(self):
-        print "\n\n"
         print " calculate_and_display_points_for_players(self) "
         self.message_main_game_channel("*Round {} over!* _calculating points..._".format(self.current_game.current_round))
         for idx, player_id in enumerate(self.users_in_game):
@@ -417,7 +405,9 @@ class DrumpfBot:
 
             current_players_bid = self.player_bids_for_current_round[idx]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
-            if points_off_from_bid == 0:
+            if player_id == self.shower_card_holder:
+                self.game_scorecard[player_id] = 175
+            elif points_off_from_bid == 0:
                 #The player got his/her bid correctly
                 self.game_scorecard[player_id] += (50 + 25 * current_players_bid)
             else:
@@ -470,7 +460,6 @@ class DrumpfBot:
 
     # TODO: Modify this to make Drumpf! a reality
     def determine_winner_for_sub_round(self, card):
-        print "\n\n"
         print " determine_winner_for_sub_round(self, card) "
         self.winning_sub_round_card = None
         print("Players in game: {}".format(self.users_in_game))
@@ -486,17 +475,23 @@ class DrumpfBot:
         else:
             card_value_sub_round = str(self.cards_played_for_sub_round[0])
             card_suit_sub_round = None
+        print "card_value_sub_round: ",card_value_sub_round
+        print "card_suit_sub_round: ",card_suit_sub_round
         # everyone has played VM cards, first person to play one wins
         if "VM:" in ([self.cards_played_for_sub_round for _ in range(num_cards_played)]):
             print("Everyone played visible minority cards this sub-round. First player wins.")
             self.winning_sub_round_card = self.cards_played_for_sub_round[0]
+            print "Winning sub-round card: ",self.winning_sub_round_card
             self.winner_for_sub_round = self.player_turn_queue_reference[0]
+            print "player_turn_queue_reference: ",self.winner_for_sub_round
             return
         # Russian Blackmail card wins in every situation
         elif card_value_sub_round.startswith("T: russian"):
             print("First player played a Russian Blackmail card, he/she wins.")
             self.winning_sub_round_card = card_value_sub_round
+            print "Winning sub-round card: ",self.winning_sub_round_card
             self.winner_for_sub_round = self.player_turn_queue_reference[0]
+            print "player_turn_queue_reference: ",self.winner_for_sub_round
             return
         else:
             #we have to iterate over the cards to determine the winner for the sub-round
@@ -504,6 +499,7 @@ class DrumpfBot:
             trump_suit = self.current_game.current_round_trump_suit
             card_value = None
             card_suit = None
+            self.shower_card_holder = None
             for idx, card in enumerate(self.cards_played_for_sub_round):
                 if len(card) == 2:
                     card_value = str(card[0])
@@ -513,23 +509,14 @@ class DrumpfBot:
                     card_suit = None
                 current_player = self.player_turn_queue_reference[idx]
                 visited = False # keeps track of the case of pussy/ivanka/nasty cards all being played same round
-
                 # handle Tremendous cards and Drumpf cards
                 if card_value.startswith("T:") or card_value.startswith("D:"):
-                    # golden shower card means player wins all lies up to 3 max
+                    # golden shower card means player wins 3 lies for the round
                     if card_value.startswith("T: shower"):
                         print "handling {} card...".format(card_value)
-                        self.shower_card_holder = current_player # keep track of who holds the Golden Shower card so they don't earn more points than they should
-                        if self.cards_played_for_sub_round < 4:
-                            print "cards_played_for_sub_round = {}".format(self.cards_played_for_sub_round)
-                            print "cards_played_for_sub_round < 4"
-                            self.player_points_for_round[current_player] = int(self.cards_played_for_sub_round)
-                        else:
-                            print "cards_played_for_sub_round = {}".format(self.cards_played_for_sub_round)
-                            print "cards_played_for_sub_round == 3 "
-                            self.player_points_for_round[current_player] = 3
+                        self.shower_card_holder = current_player
+                        print "shower_card_holder: {}".format(self.shower_card_holder)
                         return
-
                     # russian blackmail card always wins sub-round
                     elif card_value.startswith("T: russian"):
                         print "handling {} card...".format(card_value)
@@ -624,7 +611,7 @@ class DrumpfBot:
                         return
 
                     if "blacks" in card_value:
-                        self.zero_point_players.append(current_player.id)
+                        self.zero_point_players.append(current_player)
                         return
                     return
                 elif card_suit == trump_suit:
