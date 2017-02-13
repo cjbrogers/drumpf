@@ -586,7 +586,6 @@ class DrumpfBot:
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
                                 return
-
                     # the regular old Drumpf cards
                     elif card_value.startswith("D: pussy") or card_value.startswith("D: ivanka"):
                         print "handling {} card...".format(card_value)
@@ -614,9 +613,8 @@ class DrumpfBot:
                                 self.winner_for_sub_round = current_player
                                 return
 
-                elif card_value.startswith("VM:"):
-                    print "handling {} card...".format(card_value)
-                    if ("muslims" in card_value) or ("thieves" in card_value):
+                elif card_value[0:3] == "VM:":
+                    if "muslims" in card_value or "thieves" in card_value:
                         return
 
                     if "hombres" in card_value:
@@ -670,8 +668,8 @@ class DrumpfBot:
     def handle_private_message(self, command, user_id):
         print "\n\n"
         print " handle_private_message(self, command, user_id) "
-        print "command: ",command
-        print "user_id: ",user_id
+        print "command: ", command
+        print "user_id: ", user_id
         response = ""
         if len(self.player_trump_card_queue):
             self.handle_trump_suit_selection(command, user_id)
