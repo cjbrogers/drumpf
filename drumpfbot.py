@@ -398,9 +398,6 @@ class DrumpfBot:
         print "calculate_and_display_points_for_players(self) "
         self.message_main_game_channel("*Round {} over!* _calculating points..._".format(self.current_game.current_round))
         for idx, player_id in enumerate(self.users_in_game):
-            if player_id in self.zero_point_players:
-                return
-
             current_players_bid = self.player_bids_for_current_round[idx]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
             if self.user_ids_to_username[player_id] == self.shower_card_holder:
