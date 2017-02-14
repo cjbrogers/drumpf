@@ -404,9 +404,9 @@ class DrumpfBot:
             current_players_bid = self.player_bids_for_current_round[idx]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
             if self.user_ids_to_username[player_id] == self.shower_card_holder:
-                self.game_scorecard[player_id] = 175
+                self.game_scorecard[player_id] += 175
             elif if self.user_ids_to_username[player_id] in self.zero_point_players:
-                self.game_scorecard[player_id] = 0
+                self.game_scorecard[player_id] += 0
             elif points_off_from_bid == 0:
                 #The player got his/her bid correctly
                 self.game_scorecard[player_id] += (50 + 25 * current_players_bid)
@@ -424,8 +424,7 @@ class DrumpfBot:
             self.current_game.play_round()
 
     def present_winner_for_game(self):
-        print "\n\n"
-        print " present_winner_for_game(self) "
+        print "present_winner_for_game(self) "
         pass
 
     # clears all round and sub-round variables
@@ -831,7 +830,7 @@ class DrumpfBot:
         print "play_game_of_drumpf_on_slack(self, players, channel) "
         print "  players: ", players
         print "  channel: ", channel
-        
+
         player_objects = []
         for player_id in players:
             player_objects.append(DrumpfGame.Player(player_id))
