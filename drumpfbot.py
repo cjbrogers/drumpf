@@ -71,7 +71,7 @@ class DrumpfBot:
                                   text=response, as_user=True)
             self.game_created == True
             self.users_in_game.append(user_id)
-            self.users_in_game.append('U3LCLSTA5') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
+            self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
             response = ""
             self.handle_command("start game", channel, user_id)
             # return
@@ -580,13 +580,13 @@ class DrumpfBot:
                                 self.winning_sub_round_card = self.cards_played_for_sub_round[hombres_card_idx]
                                 self.winner_for_sub_round = self.player_turn_queue_reference[hombres_card_idx]
                                 print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins", self.winner_for_sub_round
+                                print "  player {} wins".format(self.winner_for_sub_round)
                                 return
                             else:
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
                                 print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins", self.winner_for_sub_round
+                                print "  player {} wins".format(self.winner_for_sub_round)
                                 return
                         elif "T: nasty" in self.cards_played_for_sub_round:
                             nasty_card_idx = self.cards_played_for_sub_round.index("T: nasty")
@@ -597,13 +597,13 @@ class DrumpfBot:
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
                                 print "  {} card wins".format(card)
-                                print "  player {} wins", current_player
+                                print "  player {} wins".format(self.winner_for_sub_round)
                                 return
                         else:
                             self.winning_sub_round_card = card
                             self.winner_for_sub_round = current_player
                             print "  {} card wins".format(card)
-                            print "  player {} wins", current_player
+                            print "  player {} wins".format(self.winner_for_sub_round)
                             return
                     # the regular old Drumpf cards
                     elif card_value.startswith("D: pussy") or card_value.startswith("D: ivanka"):
@@ -613,7 +613,7 @@ class DrumpfBot:
                             self.winning_sub_round_card = card
                             self.winner_for_sub_round = current_player
                             print "  {} card wins".format(self.winning_sub_round_card)
-                            print "  player {} wins", self.winner_for_sub_round
+                            print "  player {} wins".format(self.winner_for_sub_round)
                             return
                         else:
                             if "T: nasty" in self.cards_played_for_sub_round:
@@ -626,13 +626,13 @@ class DrumpfBot:
                                     self.winning_sub_round_card = card
                                     self.winner_for_sub_round = current_player
                                     print "  {} card wins".format(self.winning_sub_round_card)
-                                    print "  player {} wins", self.winner_for_sub_round
+                                    print "  player {} wins".format(self.winner_for_sub_round)
                                     return
                             else:
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
                                 print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins", self.winner_for_sub_round
+                                print "  player {} wins".format(self.winner_for_sub_round)
                                 return
 
                 elif card_value[0:3] == "VM:":
@@ -645,7 +645,7 @@ class DrumpfBot:
                             self.winning_sub_round_card = card
                             self.winner_for_sub_round = current_player
                             print "  {} card wins".format(self.winning_sub_round_card)
-                            print "  player {} wins", self.winner_for_sub_round
+                            print "  player {} wins".format(self.winner_for_sub_round)
                         return
 
                     if "blacks" in card_value:
@@ -668,7 +668,7 @@ class DrumpfBot:
                             self.winning_sub_round_card = card
                             self.winner_for_sub_round = current_player
                             print "  {} card wins".format(self.winning_sub_round_card)
-                            print "  player {} wins", self.winner_for_sub_round
+                            print "  player {} wins".format(self.winner_for_sub_round)
                 elif card_suit == self.leading_suit:
                     print "  card_suit == self.leading_suit <-> {} == {}".format(card_suit,self.leading_suit)
                     if self.winning_sub_round_card == None:
@@ -676,13 +676,13 @@ class DrumpfBot:
                         self.winning_sub_round_card = card
                         self.winner_for_sub_round = current_player
                         print "  {} card wins".format(self.winning_sub_round_card)
-                        print "  player {} wins", self.winner_for_sub_round
+                        print "  player {} wins".format(self.winner_for_sub_round)
                     elif DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
                         print "  the card index of {} is greater than the index of the winning sub-round card ({})".format(card,self.winning_sub_round_card)
                         self.winning_sub_round_card = card
                         self.winner_for_sub_round = current_player
                         print "  {} card wins".format(self.winning_sub_round_card)
-                        print "  player {} wins", self.winner_for_sub_round
+                        print "  player {} wins".format(self.winner_for_sub_round)
 
         # TODO: remember to reset all the sub-round variables for the next sub-round
 
