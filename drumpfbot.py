@@ -405,7 +405,7 @@ class DrumpfBot:
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
             if self.user_ids_to_username[player_id] == self.shower_card_holder:
                 self.game_scorecard[player_id] += 175
-            elif if self.user_ids_to_username[player_id] in self.zero_point_players:
+            elif self.user_ids_to_username[player_id] in self.zero_point_players:
                 self.game_scorecard[player_id] += 0
             elif points_off_from_bid == 0:
                 #The player got his/her bid correctly
