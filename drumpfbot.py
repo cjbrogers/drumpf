@@ -449,7 +449,7 @@ class DrumpfBot:
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
         print "remove_card_from_players_hand(self, current_player_id, card_to_remove) "
-        print "  curremt_player_id: ",current_player_id
+        print "  current_player_id: ",current_player_id
         print "  card_to_remove: ",card_to_remove
 
         idx_of_card_to_remove = None
@@ -705,10 +705,9 @@ class DrumpfBot:
 
 
     def handle_private_message(self, command, user_id):
-        print "\n\n"
-        print " handle_private_message(self, command, user_id) "
-        print "command: ", command
-        print "user_id: ", user_id
+        print "handle_private_message(self, command, user_id) "
+        print "  command: ", command
+        print "  user_id: ", user_id
         response = ""
         if len(self.player_trump_card_queue):
             self.handle_trump_suit_selection(command, user_id)
@@ -739,8 +738,10 @@ class DrumpfBot:
         return None, None, None
 
     def get_bids_from_players(self, current_round, players):
-        print "\n\n"
-        print " get_bids_from_players(self, current_round, players) "
+        print "get_bids_from_players(self, current_round, players) "
+        print "  current_round: ", current_round
+        print "  players: ", players
+
         self.player_bid_queue = deque([player.id for player in players])
         self.player_turn_queue = deque([player.id for player in players])
         #the player after the dealer should be first to bid, so we rotate the queue
@@ -764,8 +765,8 @@ class DrumpfBot:
         )
 
     def prompt_dealer_for_trump_suit(self, player_id):
-        print "\n\n"
-        print " prompt_dealer_for_trump_suit(self, player_id) "
+        print "prompt_dealer_for_trump_suit(self, player_id) "
+        print "  player_id: ", player_id
         self.player_trump_card_queue.append(player_id)
         slack_client.api_call(
             "chat.postMessage",
@@ -775,8 +776,7 @@ class DrumpfBot:
         )
 
     def get_readable_list_of_players(self):
-        print "\n\n"
-        print " get_readable_list_of_players(self) "
+        print "get_readable_list_of_players(self) "
         #TODO refactor this with less mumbojumbo
         player_names = []
         printable_player_names = []
@@ -787,8 +787,10 @@ class DrumpfBot:
         return (' \n ').join(printable_player_names)
 
     def display_cards_for_player_in_pm(self, player_id, cards):
-        print "\n\n"
-        print " display_cards_for_player_in_pm(self, player_id, cards) "
+        print "display_cards_for_player_in_pm(self, player_id, cards) "
+        print "  player_id: ", player_id
+        print "  cards: ", cards
+
         formatted_cards = helper_functions.format_cards_to_emojis(cards)
         self.attachments = None
         slack_client.api_call(
@@ -815,9 +817,9 @@ class DrumpfBot:
         #         )
 
     def announce_trump_card(self, trump_card):
-        print "\n\n"
-        print " announce_trump_card(self, trump_card) "
-        print "trump_card: ",trump_card
+        print "announce_trump_card(self, trump_card) "
+        print "  trump_card: ",trump_card
+
         self.message_main_game_channel(">>>*Round {}* \n The trump card is: {} \n".format(
             self.current_game.current_round,
             helper_functions.emojify_card(trump_card)), attachments=self.attachments)
@@ -826,8 +828,10 @@ class DrumpfBot:
 
     #takes an array of player_ids and the channel the game request originated from
     def play_game_of_drumpf_on_slack(self, players, channel):
-        print "\n\n"
-        print " play_game_of_drumpf_on_slack(self, players, channel) "
+        print "play_game_of_drumpf_on_slack(self, players, channel) "
+        print "  players: ", players
+        print "  channel: ", channel
+        
         player_objects = []
         for player_id in players:
             player_objects.append(DrumpfGame.Player(player_id))
