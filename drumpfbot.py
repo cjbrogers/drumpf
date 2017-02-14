@@ -69,7 +69,7 @@ class DrumpfBot:
                                   text=response, as_user=True)
             self.game_created == True
             self.users_in_game.append(user_id)
-            self.users_in_game.append('U3LCLSTA5') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB
+            self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
             response = ""
             self.handle_command("start game", channel, user_id)
             # return
@@ -196,7 +196,7 @@ class DrumpfBot:
         elif user_id == self.player_trump_card_queue[0]:
             #validate that the dealer picked a valid trump suit
             try:
-                if isinstance(command, int) and (0 <= int(command) <= 3):
+                if 0 <= int(command) <= 3:
                     self.current_game.current_round_trump_suit = suits[int(command)]
                     response = "Trump suit recorded! Check the main channel."
                     slack_client.api_call(
@@ -291,9 +291,9 @@ class DrumpfBot:
                 card_suit = None
                 if len(card_being_played) == 2: # regular card
                     card_value = str(card_being_played[0])
-                    print "Trump Value: ", card_value
+                    print "Card Value: ", card_value
                     card_suit = card_being_played[1]
-                    print "Trump Suit: ", card_suit
+                    print "Card Suit: ", card_suit
                 else: # special card
                     card_value = card_being_played
                     print "Card Value: ", card_value
@@ -459,10 +459,10 @@ class DrumpfBot:
 
     # TODO: Modify this to make Drumpf! a reality
     def determine_winner_for_sub_round(self, card):
-        print " determine_winner_for_sub_round(self, card) "
+        print "determine_winner_for_sub_round(self, card) "
         self.winning_sub_round_card = None
-        print("Players in game: {}".format(self.users_in_game))
-        print("Cards played: {}".format(self.cards_played_for_sub_round))
+        print("  Players in game: {}".format(self.users_in_game))
+        print("   Cards played: {}".format(self.cards_played_for_sub_round))
         num_cards_played = len(self.cards_played_for_sub_round)
 
         card_value_sub_round = None
@@ -474,23 +474,23 @@ class DrumpfBot:
         else:
             card_value_sub_round = str(self.cards_played_for_sub_round[0])
             card_suit_sub_round = None
-        print "card_value_sub_round: ",card_value_sub_round
-        print "card_suit_sub_round: ",card_suit_sub_round
+        print "  card_value_sub_round: ",card_value_sub_round
+        print "  card_suit_sub_round: ",card_suit_sub_round
         # everyone has played VM cards, first person to play one wins
         if "VM:" in ([self.cards_played_for_sub_round for _ in range(num_cards_played)]):
-            print("Everyone played visible minority cards this sub-round. First player wins.")
+            print("  Everyone played visible minority cards this sub-round. First player wins.")
             self.winning_sub_round_card = self.cards_played_for_sub_round[0]
-            print "Winning sub-round card: ",self.winning_sub_round_card
+            print "  Winning sub-round card: ",self.winning_sub_round_card
             self.winner_for_sub_round = self.player_turn_queue_reference[0]
-            print "player_turn_queue_reference: ",self.winner_for_sub_round
+            print "  player_turn_queue_reference: ",self.winner_for_sub_round
             return
         # Russian Blackmail card wins in every situation
         elif card_value_sub_round.startswith("T: russian"):
-            print("First player played a Russian Blackmail card, he/she wins.")
+            print("  First player played a Russian Blackmail card, he/she wins.")
             self.winning_sub_round_card = card_value_sub_round
-            print "Winning sub-round card: ",self.winning_sub_round_card
+            print "  Winning sub-round card: ",self.winning_sub_round_card
             self.winner_for_sub_round = self.player_turn_queue_reference[0]
-            print "player_turn_queue_reference: ",self.winner_for_sub_round
+            print "  player_turn_queue_reference: ",self.winner_for_sub_round
             return
         else:
             #we have to iterate over the cards to determine the winner for the sub-round
@@ -507,57 +507,73 @@ class DrumpfBot:
                     card_value = str(card)
                     card_suit = None
                 current_player = self.player_turn_queue_reference[idx]
+                print "  current_player: ",current_player
                 visited = False # keeps track of the case of pussy/ivanka/nasty cards all being played same round
                 # handle Tremendous cards and Drumpf cards
                 if card_value.startswith("T:") or card_value.startswith("D:"):
                     # golden shower card means player wins 3 lies for the round
                     if card_value.startswith("T: shower"):
-                        print "handling {} card...".format(card_value)
+                        print "  handling {} card...".format(card_value)
                         self.shower_card_holder = current_player
-                        print "shower_card_holder: {}".format(self.shower_card_holder)
-                        return
+                        print "    shower_card_holder: {}".format(self.shower_card_holder)
+                        continue
                     # russian blackmail card always wins sub-round
                     elif card_value.startswith("T: russian"):
-                        print "handling {} card...".format(card_value)
+                        print "  handling {} card...".format(card_value)
                         self.winning_sub_round_card = card
                         self.winner_for_sub_round = current_player
+                        print "  {} card wins".format(card)
+                        print "  player {} wins".format(current_player)
                         return
 
                     # comey card steals Clinton's Email Server card
                     elif card_value.startswith("D: clinton"):
-                        print "handling {} card...".format(card_value)
+                        print "  handling {} card...".format(card_value)
                         if "T: comey" in self.cards_played_for_sub_round:
-                            print "{} card played in round".format(card_value)
+                            print "    {} card played in round".format(card_value)
                             comey_card_idx = self.cards_played_for_sub_round.index("T: comey")
                             if idx < comey_card_idx:
-                                print "{} card steals {} card...".format(self.cards_played_for_sub_round[comey_card_idx],card_value)
+                                print "    {} card steals {} card...".format(self.cards_played_for_sub_round[comey_card_idx],card_value)
                                 self.winning_sub_round_card = self.cards_played_for_sub_round[comey_card_idx]
                                 self.winner_for_sub_round = self.player_turn_queue_reference[comey_card_idx]
+                                print "  {} card wins".format(self.winning_sub_round_card)
+                                print "  player {} wins".format(self.winner_for_sub_round)
                                 return
                             else:
-                                print "{} card wins".format(card_value)
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
+                                print "  {} card wins".format(card)
+                                print "  player {} wins".format(current_player)
                                 return
                         elif "T: nasty" in self.cards_played_for_sub_round:
                             nasty_card_idx = self.cards_played_for_sub_round.index("T: nasty")
                             if idx < nasty_card_idx:
-                                print "{} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
-                                return
+                                print "  {} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
+                                continue
                             else:
-                                print "{} card wins".format(card)
+                                print "  {} card wins".format(card)
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
+                                print "  {} card wins".format(card)
+                                print "  player {} wins".format(current_player)
                                 return
+                        else:
+                            self.winning_sub_round_card = card
+                            self.winner_for_sub_round = current_player
+                            print "  {} card wins".format(card)
+                            print "  player {} wins".format(current_player)
+                            return
 
                     # The Wall card can be usurped by the Bad Hombres
                     elif card_value.startswith("D: wall"):
-                        print "handling {} card...".format(card_value)
+                        print "  handling {} card...".format(card_value)
                         if "VM: hombres" in self.cards_played_for_sub_round:
                             hombres_card_idx = self.cards_played_for_sub_round.index("VM: hombres")
                             if idx < hombres_card_idx:
                                 self.winning_sub_round_card = self.cards_played_for_sub_round[hombres_card_idx]
                                 self.winner_for_sub_round = self.player_turn_queue_reference[hombres_card_idx]
+                                print "  {} card wins".format(self.winning_sub_round_card)
+                                print "  player {} wins", self.winner_for_sub_round
                                 return
                             else:
                                 self.winning_sub_round_card = card
@@ -566,18 +582,26 @@ class DrumpfBot:
                         elif "T: nasty" in self.cards_played_for_sub_round:
                             nasty_card_idx = self.cards_played_for_sub_round.index("T: nasty")
                             if idx < nasty_card_idx:
-                                print "{} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
-                                return
+                                print "  {} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
+                                continue
                             else:
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
+                                print "  {} card wins".format(card)
+                                print "  player {} wins", current_player
                                 return
+                        else:
+                            self.winning_sub_round_card = card
+                            self.winner_for_sub_round = current_player
+                            print "  {} card wins".format(card)
+                            print "  player {} wins", current_player
+                            return
                     # the regular old Drumpf cards
                     elif card_value.startswith("D: pussy") or card_value.startswith("D: ivanka"):
-                        print "handling {} card...".format(card_value)
+                        print "  handling {} card...".format(card_value)
                         # the non-negated Drumpf wins
                         if visited:
-                            print "{} card wins".format(card)
+                            print "  {} card wins".format(card)
                             self.winning_sub_round_card = card
                             self.winner_for_sub_round = current_player
                             return
@@ -586,35 +610,36 @@ class DrumpfBot:
                                 nasty_card_idx = self.cards_played_for_sub_round.index("T: nasty")
                                 if idx < nasty_card_idx:
                                     visited = True
-                                    print "{} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
+                                    print "  {} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
                                     return
                                 else:
-                                    print "{} card wins".format(card)
+                                    print "  {} card wins".format(card)
                                     self.winning_sub_round_card = card
                                     self.winner_for_sub_round = current_player
                                     return
                             else:
-                                print "{} card wins".format(card)
+                                print "  {} card wins".format(card)
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
                                 return
 
-                elif card_value[0:3] == "VM:":
-                    if "muslims" in card_value or "thieves" in card_value:
-                        return
+                # elif card_value[0:3] == "VM:":
+                #     if "muslims" in card_value or "thieves" in card_value:
+                #         return
+                #
+                #     # if "hombres" in card_value:
+                #     #     if any("wall" in s for s in self.cards_played_for_sub_round):
+                #     #         self.winning_sub_round_card = card
+                #     #         self.winner_for_sub_round = current_player
+                #     #     return
+                #
+                #     if "blacks" in card_value:
+                #         self.zero_point_players.append(current_player)
+                #         return
+                #     return
 
-                    if "hombres" in card_value:
-                        if any("wall" in s for s in self.cards_played_for_sub_round):
-                            self.winning_sub_round_card = card
-                            self.winner_for_sub_round = current_player
-                        return
-
-                    if "blacks" in card_value:
-                        self.zero_point_players.append(current_player)
-                        return
-                    return
                 elif card_suit == trump_suit:
-                    # TODO: verify this works for earlier fix
+                    print "  card_suit == trump_suit <-> {} == {}".format(card_suit,trump_suit)
                     if self.winning_sub_round_card != None:
                         if self.winning_sub_round_card[1] == trump_suit:
                             if DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
@@ -625,6 +650,7 @@ class DrumpfBot:
                             self.winning_sub_round_card = card
                             self.winner_for_sub_round = current_player
                 elif card_suit == self.leading_suit:
+                    print "  card_suit == self.leading_suit <-> {} == {}".format(card_suit,self.leading_suit)
                     if self.winning_sub_round_card == None:
                         self.winning_sub_round_card = card
                         self.winner_for_sub_round = current_player
@@ -703,12 +729,12 @@ class DrumpfBot:
         # self.private_message_user(self.player_turn_queue[0], "Play a card `index`")
         #DEBUGGING
 
-        # slack_client.api_call(
-        #     "chat.postMessage",
-        #     channel=self.player_bid_queue[0],
-        #     text="What's your bid for the round?",
-        #     as_user=True
-        # )
+        slack_client.api_call(
+            "chat.postMessage",
+            channel=self.player_bid_queue[0],
+            text="What's your bid for the round?",
+            as_user=True
+        )
 
     def prompt_dealer_for_trump_suit(self, player_id):
         print "\n\n"
