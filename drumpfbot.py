@@ -69,7 +69,7 @@ class DrumpfBot:
                                   text=response, as_user=True)
             self.game_created == True
             self.users_in_game.append(user_id)
-            self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
+            self.users_in_game.append('U3LCLSTA5') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
             response = ""
             self.handle_command("start game", channel, user_id)
             # return
@@ -499,6 +499,7 @@ class DrumpfBot:
             card_value = None
             card_suit = None
             self.shower_card_holder = None
+            visited = False # keeps track of the case of pussy/ivanka/nasty cards all being played same round
             for idx, card in enumerate(self.cards_played_for_sub_round):
                 if len(card) == 2:
                     card_value = str(card[0])
@@ -508,7 +509,7 @@ class DrumpfBot:
                     card_suit = None
                 current_player = self.player_turn_queue_reference[idx]
                 print "  current_player: ",current_player
-                visited = False # keeps track of the case of pussy/ivanka/nasty cards all being played same round
+
                 # handle Tremendous cards and Drumpf cards
                 if card_value.startswith("T:") or card_value.startswith("D:"):
                     # golden shower card means player wins 3 lies for the round
@@ -623,20 +624,20 @@ class DrumpfBot:
                                 self.winner_for_sub_round = current_player
                                 return
 
-                # elif card_value[0:3] == "VM:":
-                #     if "muslims" in card_value or "thieves" in card_value:
-                #         return
-                #
-                #     # if "hombres" in card_value:
-                #     #     if any("wall" in s for s in self.cards_played_for_sub_round):
-                #     #         self.winning_sub_round_card = card
-                #     #         self.winner_for_sub_round = current_player
-                #     #     return
-                #
-                #     if "blacks" in card_value:
-                #         self.zero_point_players.append(current_player)
-                #         return
-                #     return
+                elif card_value[0:3] == "VM:":
+                    if "muslims" in card_value or "thieves" in card_value:
+                        return
+
+                    # if "hombres" in card_value:
+                    #     if any("wall" in s for s in self.cards_played_for_sub_round):
+                    #         self.winning_sub_round_card = card
+                    #         self.winner_for_sub_round = current_player
+                    #     return
+
+                    if "blacks" in card_value:
+                        self.zero_point_players.append(current_player)
+                        return
+                    return
 
                 elif card_suit == trump_suit:
                     print "  card_suit == trump_suit <-> {} == {}".format(card_suit,trump_suit)
