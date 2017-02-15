@@ -406,7 +406,7 @@ class DrumpfBot:
             current_players_bid = self.player_bids_for_current_round[idx]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
             slack_client.api_call("chat.postMessage", channel=self.main_channel_id, #debbug delete after
-                                  text="current_players_bid: %s" % current_players_bid, as_user=True)
+                                  text="idx:%s\nplayers_bids:%s\nplayer points for round:%s\nplayer_id:%s\ncurrent_players_bid: %s" % (idx, self.player_bids_for_current_round, self.player_points_for_round[player_id], player_id, current_players_bid), as_user=True)
             slack_client.api_call("chat.postMessage", channel=self.main_channel_id, #debbug delete after
                                   text="points_off_from_bid: %s" % points_off_from_bid, as_user=True)
             if self.user_ids_to_username[player_id] == self.shower_card_holder:
