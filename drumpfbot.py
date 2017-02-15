@@ -400,20 +400,27 @@ class DrumpfBot:
         for idx, player_id in enumerate(self.users_in_game):
             current_players_bid = self.player_bids_for_current_round[idx]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
+            print "  player_id: ",player_id
+            print "  current_players_bid: ",current_players_bid
+            print "  points_off_from_bid: ",points_off_from_bid
+
             if self.user_ids_to_username[player_id] == self.shower_card_holder:
+                print "  We have a golden shower card holder!"
                 self.game_scorecard[player_id] += 175
             elif self.user_ids_to_username[player_id] in self.zero_point_players:
+                print "  We have a zero_points_player!"
                 self.game_scorecard[player_id] += 0
             elif points_off_from_bid == 0:
+                print "  player got their bid correct"
                 #The player got his/her bid correctly
                 self.game_scorecard[player_id] += (50 + 25 * current_players_bid)
             else:
+                print "  player loses points for incorrect bid"
                 #player loses 25-points for every point above or below bid
-                self.game_scorecard[player_id] -= 25 * points_off_from_bid
+                self.game_scorecard[player_id] -= (25 * points_off_from_bid)
         self.message_main_game_channel(">*Score Board*")
         for player_id in self.users_in_game:
             self.message_main_game_channel("><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
-        print(self.current_game)
         self.prepare_for_next_round()
         if self.current_game.current_round == self.current_game.final_round:
             self.present_winner_for_game()
@@ -439,8 +446,9 @@ class DrumpfBot:
         self.cards_played_for_sub_round = []
         self.zero_point_players = []
 
-        # TODO: Should James have added self.player_bid_queue.clear() to this?
+        # TODO: Should James have added the below?
         self.player_bid_queue.clear()
+        self.current_game.current_round_trump_suit = None
 
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
