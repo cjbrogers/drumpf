@@ -40,7 +40,8 @@ class DrumpfBot:
         self.dealer_for_current_round = None
 
         #ROUND VARIABLES
-        self.player_bids_for_current_round = [] #[1, 1, 0]
+        #self.player_bids_for_current_round = [] #[1, 1, 0]
+        self.player_bids_for_current_round = {} #{"U3LCLSTA5": 1, "U3MP47XAB": 0}
         self.current_game = None #DrumpfGame.Game() object
         self.player_points_for_round = defaultdict(int)
         self.leading_suit = None #string
@@ -245,7 +246,7 @@ class DrumpfBot:
                     response = "You can't bid that amount!"
                 else:
                     #valid bid
-                    self.player_bids_for_current_round.append(int(command))
+                    self.player_bids_for_current_round[user_id] =int(command)
                     response = "Bid recorded! Check the main channel."
                     slack_client.api_call(
                         "chat.postMessage",
@@ -384,25 +385,32 @@ class DrumpfBot:
 
             if self.sub_rounds_played == self.current_game.current_round:
                 print("  >Sub-rounds over, time to tally points and display them")
+                self.message_main_game_channel("player_turn_queue: %s" % self.player_turn_queue) #debug delete
+                self.message_main_game_channel("player_bid_queue: %s" % self.player_bid_queue) #debug delete
+                self.message_main_game_channel("self.users_in_game: %s" % self.users_in_game) #debug delete
+                self.message_main_game_channel("self.player_bids_for_current_round: %s" % self.player_bids_for_current_round) #debug delete
                 self.calculate_and_display_points_for_players()
                 self.winner_for_sub_round = None
             elif self.sub_rounds_played < self.current_game.current_round:
                 self.message_main_game_channel(">_Sub-Round {}_".format(self.sub_rounds_played + 1))
                 #initialize another turn queue cause there are more cards to play
                 self.player_turn_queue = copy.copy(self.users_in_game)
+
+                self.message_main_game_channel("player_turn_queue: %s" % self.player_turn_queue) #debug delete
+                self.message_main_game_channel("player_bid_queue: %s" % self.player_bid_queue) #debug delete
+                self.message_main_game_channel("self.users_in_game: %s" % self.users_in_game) #debug delete
+                self.message_main_game_channel("self.player_bids_for_current_round: %s" % self.player_bids_for_current_round) #debug delete
                 while self.player_turn_queue[0] != self.winner_for_sub_round:
                     print("  *Rotating player turn queue")
                     #rotate player_turn_queue until the first player is the one who won
                     self.player_turn_queue.rotate(1)
                     self.player_bid_queue.rotate(1)
                     self.users_in_game.rotate(1)
-                    self.player_bids_for_current_round = deque(self.player_bids_for_current_round)
-                    self.player_bids_for_current_round.rotate(1)
-                    self.player_bids_for_current_round = list(self.player_bids_for_current_round)
 
                 self.message_main_game_channel("player_turn_queue: %s" % self.player_turn_queue) #debug delete
                 self.message_main_game_channel("player_bid_queue: %s" % self.player_bid_queue) #debug delete
                 self.message_main_game_channel("self.users_in_game: %s" % self.users_in_game) #debug delete
+                self.message_main_game_channel("self.player_bids_for_current_round: %s" % self.player_bids_for_current_round) #debug delete
                 self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
                 self.winner_for_sub_round = None
                 self.private_message_user(self.player_turn_queue[0], "Play a card `index`")
@@ -413,7 +421,7 @@ class DrumpfBot:
         print "calculate_and_display_points_for_players(self) "
         self.message_main_game_channel("*Round {} over!* _calculating points..._".format(self.current_game.current_round))
         for idx, player_id in enumerate(self.users_in_game):
-            current_players_bid = self.player_bids_for_current_round[idx]
+            current_players_bid = self.player_bids_for_current_round[player_id]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
             slack_client.api_call("chat.postMessage", channel=self.main_channel_id, #debbug delete after
                                   text="idx:%s\nplayers_bids:%s\nplayer points for round:%s\nplayer_id:%s\ncurrent_players_bid: %s" % (idx, self.player_bids_for_current_round, self.player_points_for_round[player_id], player_id, current_players_bid), as_user=True)
@@ -468,7 +476,9 @@ class DrumpfBot:
         print "prepare_for_next_round(self) "
         self.current_game.current_round += 1
 
-        self.player_bids_for_current_round = []
+        for k in self.player_bids_for_current_round.keys():
+            self.player_bids_for_current_round[k] = ""
+
         self.player_points_for_round = defaultdict(int)
         self.leading_suit = None
 
