@@ -657,20 +657,28 @@ class DrumpfBot:
 
                 elif card_suit == trump_suit:
                     print "  card_suit == trump_suit <-> {} == {}".format(card_suit,trump_suit)
-                    if self.winning_sub_round_card != None:
+                    # if self.winning_sub_round_card != None:
+                    if self.winning_sub_round_card == None:
                         print "  self.winning_sub_round_card == ", self.winning_sub_round_card
-                        if self.winning_sub_round_card[1] == trump_suit:
-                            print "  self.winning_sub_round_card[1] == trump_suit <-> {} == {}".format(self.winning_sub_round_card[1],trump_suit)
-                            if DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
-                                print "  trump suit played beats previous trump suit"
-                                #trump suit played beats previous trump suit
-                                self.winning_sub_round_card = card
-                                self.winner_for_sub_round = current_player
-                        else:
+                        self.winning_sub_round_card = card
+                        self.winner_for_sub_round = current_player
+                        print "  {} card wins".format(self.winning_sub_round_card)
+                        print "  player {} wins".format(self.winner_for_sub_round)
+
+                    elif self.winning_sub_round_card[1] == trump_suit:
+                        print "  self.winning_sub_round_card[1] == trump_suit <-> {} == {}".format(self.winning_sub_round_card[1],trump_suit)
+                        if DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
+                            print "  trump suit played beats previous trump suit"
+                            #trump suit played beats previous trump suit
                             self.winning_sub_round_card = card
                             self.winner_for_sub_round = current_player
                             print "  {} card wins".format(self.winning_sub_round_card)
                             print "  player {} wins".format(self.winner_for_sub_round)
+                    else:
+                        self.winning_sub_round_card = card
+                        self.winner_for_sub_round = current_player
+                        print "  {} card wins".format(self.winning_sub_round_card)
+                        print "  player {} wins".format(self.winner_for_sub_round)
                 elif card_suit == self.leading_suit:
                     print "  card_suit == self.leading_suit <-> {} == {}".format(card_suit,self.leading_suit)
                     if self.winning_sub_round_card == None:
