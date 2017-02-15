@@ -77,6 +77,9 @@ class Game:
             # or visible minority card
             elif trump_value[0:3] == "VM:":
                 trump_suit = None
+            # TODO: Is the else statement below correct? James did it
+            else:
+                self.bot.current_game.current_round_trump_suit = trump_suit
             # elif len(trump_value) == 2: #regular card
             #     trump_suit = trump_suit
         elif len(shuffled_deck.cards) == 0:

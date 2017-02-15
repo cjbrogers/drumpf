@@ -498,6 +498,7 @@ class DrumpfBot:
             #we have to iterate over the cards to determine the winner for the sub-round
             winning_card = None
             trump_suit = self.current_game.current_round_trump_suit
+            print  "  trump_suit: ",trump_suit
             card_value = None
             card_suit = None
             self.shower_card_holder = None
@@ -632,18 +633,22 @@ class DrumpfBot:
                                 print "  player {} wins".format(self.winner_for_sub_round)
                                 return
 
-                elif card_value[0:3] == "VM:":
-                    print "  handling {} card...".format(card_value)
-                    if "muslims" in card_value or "thieves" in card_value:
+                    elif card_value.startswith("T: nasty") or card_value.startswith("T: comey"):
+                        print "  handling {} card...".format(card_value)
                         continue
 
-                    if "hombres" in card_value:
-                        if any("wall" in s for s in self.cards_played_for_sub_round):
-                            self.winning_sub_round_card = card
-                            self.winner_for_sub_round = current_player
-                            print "  {} card wins".format(self.winning_sub_round_card)
-                            print "  player {} wins".format(self.winner_for_sub_round)
-                        return
+                elif card_value[0:3] == "VM:":
+                    print "  handling {} card...".format(card_value)
+                    if "muslims" in card_value or "thieves" in card_value or "hombres" in card_value:
+                        continue
+
+                    # if "hombres" in card_value:
+                    #     if any("wall" in s for s in self.cards_played_for_sub_round):
+                    #         self.winning_sub_round_card = card
+                    #         self.winner_for_sub_round = current_player
+                    #         print "  {} card wins".format(self.winning_sub_round_card)
+                    #         print "  player {} wins".format(self.winner_for_sub_round)
+                    #     return
 
                     if "blacks" in card_value:
                         self.zero_point_players.append(current_player)
