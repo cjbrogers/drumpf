@@ -10,6 +10,8 @@ def format_cards_to_emojis(cards):
     return "".join(formatted_cards)
 
 def emojify_card(card):
+    if not card:
+        return "[:{}:]".format("")
     print "emojify_card(card) "
     print "  card: ",card
 
