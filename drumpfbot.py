@@ -272,16 +272,16 @@ class DrumpfBot:
 
         response = ""
         current_username = self.user_ids_to_username[self.player_turn_queue[0]]
-        print("User sending message: {}".format(self.user_ids_to_username[user_id]))
+        print("  User sending message: {}".format(self.user_ids_to_username[user_id]))
         #waiting for first player after dealer to play a card
         if user_id != self.player_turn_queue[0]:
             response = "Waiting for <@{}> to play a card.".format(current_username)
         elif user_id == self.player_turn_queue[0]:
-            print('Received input from expected player: {}'.format(current_username))
+            print('  Received input from expected player: {}'.format(current_username))
             #validate the int(command) index selected is within the range of cards in hand
             if int(command) >= 0 and int(command) < self.current_game.current_round:
 
-                print("Selected a valid card index")
+                print("  Selected a valid card index")
                 card_being_played = self.get_card_being_played(user_id, int(command))
                 if card_being_played == None:
                     self.private_message_user(user_id, "That's not a valid card index")
@@ -290,16 +290,16 @@ class DrumpfBot:
                 card_suit = None
                 if len(card_being_played) == 2: # regular card
                     card_value = str(card_being_played[0])
-                    print "Card Value: ", card_value
+                    print "  Card Value: ", card_value
                     card_suit = card_being_played[1]
-                    print "Card Suit: ", card_suit
+                    print "  Card Suit: ", card_suit
                 else: # special card
                     card_value = card_being_played
-                    print "Card Value: ", card_value
+                    print "  Card Value: ", card_value
                     card_suit = None
                 #otherwise valid card played
                 if self.leading_suit != None:
-                    print("Sub-round trump suit: {}".format(self.leading_suit))
+                    print("  Sub-round trump suit: {}".format(self.leading_suit))
                     #a drumpf or a visible minority card or a tremendous card is always a valid play
                     if card_value.startswith("D:") or card_value.startswith("VM:") or card_value.startswith("T:"):
                         self.handle_valid_card_played(card_being_played)
@@ -316,7 +316,7 @@ class DrumpfBot:
                     else:
                         self.private_message_user(user_id, "Sorry, you can't play that card")
                 elif self.leading_suit == None:
-                    print("There is no sub-round trump suit")
+                    print("  There is no sub-round trump suit set yet....")
                     if card_value.startswith("D:") or card_value.startswith("T:"):
                         print("{} played a Drumpf Card".format(current_username))
                         self.leading_suit = "Any"
@@ -327,7 +327,7 @@ class DrumpfBot:
                         self.handle_valid_card_played(card_being_played)
                     else:
                         self.leading_suit = card_suit
-                        print("Sub-round trump suit set to {}".format(card_suit))
+                        print("  Sub-round trump suit set to {}".format(card_suit))
                         self.handle_valid_card_played(card_being_played)
             else:
                 response = "That wasn't a valid card index."
@@ -338,9 +338,9 @@ class DrumpfBot:
         print "  Checking if player hand contains expected suit:  {}".format(self.leading_suit)
         for user_object in self.current_game.players:
             if user_object.id == user_id:
+                card_value = None
+                card_suit = None
                 for card_obj in user_object.cards_in_hand:
-                    card_value = None
-                    card_suit = None
                     if len(card_obj) == 2:
                         card_value = str(card_obj[0])
                         card_suit = card_obj[1]
