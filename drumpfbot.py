@@ -394,7 +394,7 @@ class DrumpfBot:
                     #rotate player_turn_queue until the first player is the one who won
                     self.player_turn_queue.rotate(1)
                     self.player_bid_queue.rotate(1)
-                    self.users_in_game.rotate(-1)
+                    self.users_in_game.rotate(1)
 
                 self.message_main_game_channel("player_turn_queue: %s" % self.player_turn_queue) #debug delete
                 self.message_main_game_channel("player_bid_queue: %s" % self.player_bid_queue) #debug delete
