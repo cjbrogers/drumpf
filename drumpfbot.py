@@ -11,6 +11,11 @@ from collections import deque
 import drumpfgame as DrumpfGame
 import helper_functions
 
+if not os.environ.get("BOT_ID") or not os.environ.get("SLACK_BOT_TOKEN"):
+    os.environ["BOT_ID"] = "U41R44L82"
+    os.environ["SLACK_BOT_TOKEN"] = "xoxb-137854156274-"\
+        "ZKlVGuPYXT8zgRmahoIzgeio"
+
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
@@ -400,16 +405,33 @@ class DrumpfBot:
         for idx, player_id in enumerate(self.users_in_game):
             current_players_bid = self.player_bids_for_current_round[idx]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
+            slack_client.api_call("chat.postMessage", channel=channel, #debbug delete after
+                                  text="current_players_bid: %s" % current_players_bid, as_user=True)
+            slack_client.api_call("chat.postMessage", channel=channel, #debbug delete after
+                                  text="points_off_from_bid: %s" % points_off_from_bid, as_user=True)
             if self.user_ids_to_username[player_id] == self.shower_card_holder:
+                slack_client.api_call("chat.postMessage", channel=channel, #debbug delete after
+                                      text="self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id], as_user=True)
                 self.game_scorecard[player_id] += 175
+                slack_client.api_call("chat.postMessage", channel=channel, #debbug delete after
+                                      text="self.game_scorecard[player_id] + 175: %s" % self.game_scorecard[player_id], as_user=True)
             elif self.user_ids_to_username[player_id] in self.zero_point_players:
                 self.game_scorecard[player_id] += 0
             elif points_off_from_bid == 0:
+
+                slack_client.api_call("chat.postMessage", channel=channel, #debbug delete after
+                                      text="self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id], as_user=True)
                 #The player got his/her bid correctly
                 self.game_scorecard[player_id] += (50 + 25 * current_players_bid)
+                slack_client.api_call("chat.postMessage", channel=channel, #debbug delete after
+                                      text="self.game_scorecard[player_id] + (50 + 25 * bid): %s" % self.game_scorecard[player_id], as_user=True)
             else:
                 #player loses 25-points for every point above or below bid
+                slack_client.api_call("chat.postMessage", channel=channel, #debbug delete after
+                                      text="self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id], as_user=True)
                 self.game_scorecard[player_id] -= 25 * points_off_from_bid
+                slack_client.api_call("chat.postMessage", channel=channel, #debbug delete after
+                                      text="self.game_scorecard[player_id] -25 * points off bid: %s" % self.game_scorecard[player_id], as_user=True)
         self.message_main_game_channel(">*Score Board*")
         for player_id in self.users_in_game:
             self.message_main_game_channel("><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
