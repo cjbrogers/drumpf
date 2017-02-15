@@ -1,14 +1,14 @@
 import random
 import drumpfbot as DrumpfBot
 
-drumpf_deck = ["VM: blacks", "VM: hombres", "VM: muslims", "VM: thieves"]
+drumpf_deck = ["vm_blacks", "vm_hombres", "vm_muslims", "vm_thieves"]
 suits = ["diamonds", "clubs", "hearts", "spades"]
 values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
 for suit in suits:
     for value in values:
         drumpf_deck.append([value, suit])
-drumpf_deck = drumpf_deck + ["D: pussy", "D: wall", "D: clinton", "D: ivanka"]
-drumpf_deck = drumpf_deck + ["T: russian", "T: nasty","T: shower","T: comey"]
+drumpf_deck = drumpf_deck + ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
+drumpf_deck = drumpf_deck + ["t_russian", "t_nasty","t_shower","t_comey"]
 
 drumpf_deck_special = ["blacks", "hombres", "muslims", "thieves"]
 drumpf_deck_special += ["pussy", "wall", "clinton", "ivanka"]
@@ -71,11 +71,11 @@ class Game:
                 print "Trump Card: ", trump_value
                 trump_suit = None
             # is a tremendous, drumpf
-            if trump_value[0:2] == "D:" or trump_value[0:2] == "T:":
+            if trump_value[0:2] == "d_" or trump_value[0:2] == "t_":
                 self.bot.prompt_dealer_for_trump_suit(self.players[0].id)
                 self.bot.player_trump_card_queue.append(self.players[0].id)
             # or visible minority card
-            elif trump_value[0:3] == "VM:":
+            elif trump_value[0:3] == "vm_":
                 trump_suit = None
             # TODO: Is the else statement below correct? James did it
             else:
