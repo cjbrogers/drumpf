@@ -394,8 +394,11 @@ class DrumpfBot:
                     #rotate player_turn_queue until the first player is the one who won
                     self.player_turn_queue.rotate(1)
                     self.player_bid_queue.rotate(1)
-                    self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
                     self.users_in_game.rotate(-1)
+
+                self.message_main_game_channel("player_turn_queue: %s" % self.player_turn_queue) #debug delete
+                self.message_main_game_channel("player_bid_queue: %s" % self.player_bid_queue) #debug delete
+                self.message_main_game_channel("self.users_in_game: %s" % self.users_in_game) #debug delete
                 self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
                 self.winner_for_sub_round = None
                 self.private_message_user(self.player_turn_queue[0], "Play a card `index`")
