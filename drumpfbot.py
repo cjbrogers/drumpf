@@ -11,11 +11,6 @@ from collections import deque
 import drumpfgame as DrumpfGame
 import helper_functions
 
-if not os.environ.get("BOT_ID") or not os.environ.get("SLACK_BOT_TOKEN"):
-    os.environ["BOT_ID"] = "U41R44L82"
-    os.environ["SLACK_BOT_TOKEN"] = "xoxb-137854156274-"\
-        "ZKlVGuPYXT8zgRmahoIzgeio"
-
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
