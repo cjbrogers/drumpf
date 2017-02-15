@@ -396,6 +396,9 @@ class DrumpfBot:
                     self.player_turn_queue.rotate(1)
                     self.player_bid_queue.rotate(1)
                     self.users_in_game.rotate(1)
+                    self.player_bids_for_current_round = deque(self.player_bids_for_current_round)
+                    self.player_bids_for_current_round.rotate(1)
+                    self.player_bids_for_current_round = list(self.player_bids_for_current_round)
 
                 self.message_main_game_channel("player_turn_queue: %s" % self.player_turn_queue) #debug delete
                 self.message_main_game_channel("player_bid_queue: %s" % self.player_bid_queue) #debug delete
