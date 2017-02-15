@@ -74,6 +74,7 @@ class Game:
             if trump_value[0:2] == "d_" or trump_value[0:2] == "t_":
                 self.bot.prompt_dealer_for_trump_suit(self.players[0].id)
                 self.bot.player_trump_card_queue.append(self.players[0].id)
+
             # or visible minority card
             elif trump_value[0:3] == "vm_":
                 trump_suit = None
