@@ -11,11 +11,11 @@ def format_cards_to_emojis(cards):
 
 def emojify_card(card):
     if not card:
-        return "[:{}:]".format("")
+        return ":{}:".format("")
     print "emojify_card(card) "
     print "  card: ",card
 
     if len(card) == 2:
         return "[{}:{}:]".format(card[0], card[1])
     else:
-        return "[:{}:]".format(card)
+        return ":{}:".format(card)

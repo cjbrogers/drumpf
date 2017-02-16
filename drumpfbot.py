@@ -451,7 +451,7 @@ class DrumpfBot:
         for idx, player_id in enumerate(self.users_in_game):
             current_players_bid = self.player_bids_for_current_round[player_id]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
-            print "    idx:%s\nplayers_bids:%s\n    player points for round:%s\n    player_id:%s\n    current_players_bid: %s" % (idx, self.player_bids_for_current_round, self.player_points_for_round[player_id], player_id, current_players_bid)
+            print "    idx:%s\n    players_bids:%s\n    player points for round:%s\n    player_id:%s\n    current_players_bid: %s" % (idx, self.player_bids_for_current_round, self.player_points_for_round[player_id], player_id, current_players_bid)
             print "    points_off_from_bid: %s" % points_off_from_bid
 
             # debbug remove after
@@ -465,6 +465,8 @@ class DrumpfBot:
             #
             # if player_id in self.shower_card_holder:
             #     print "    self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
+
+            print "self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
 
             # debbug remove after
             if self.debug:
@@ -627,7 +629,6 @@ class DrumpfBot:
             print  "  trump_suit: ",trump_suit
             card_value = None
             card_suit = None
-            self.shower_card_holder = []
             visited = False # keeps track of the case of pussy/ivanka/nasty cards all being played same round
             for idx, card in enumerate(self.cards_played_for_sub_round):
                 if len(card) == 2:
@@ -687,7 +688,11 @@ class DrumpfBot:
                             nasty_card_idx = self.cards_played_for_sub_round.index("t_nasty")
                             if idx < nasty_card_idx:
                                 print "  {} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
-                                continue
+                                self.winning_sub_round_card = self.cards_played_for_sub_round[nasty_card_idx]
+                                self.winner_for_sub_round = self.player_turn_queue_reference[nasty_card_idx]
+                                print "  {} card wins".format(self.winning_sub_round_card)
+                                print "  player {} wins".format(self.winner_for_sub_round)
+                                return
                             else:
                                 print "  {} card wins".format(card)
                                 self.winning_sub_round_card = card
@@ -732,7 +737,11 @@ class DrumpfBot:
                             nasty_card_idx = self.cards_played_for_sub_round.index("t_nasty")
                             if idx < nasty_card_idx:
                                 print "  {} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
-                                continue
+                                self.winning_sub_round_card = self.cards_played_for_sub_round[nasty_card_idx]
+                                self.winner_for_sub_round = self.player_turn_queue_reference[nasty_card_idx]
+                                print "  {} card wins".format(self.winning_sub_round_card)
+                                print "  player {} wins".format(self.winner_for_sub_round)
+                                return
                             else:
                                 self.winning_sub_round_card = card
                                 self.winner_for_sub_round = current_player
@@ -768,8 +777,12 @@ class DrumpfBot:
                                 nasty_card_idx = self.cards_played_for_sub_round.index("t_nasty")
                                 if idx < nasty_card_idx:
                                     visited = True
-                                    print "  {} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
-                                    continue
+                                    print "  *{} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
+                                    self.winning_sub_round_card = self.cards_played_for_sub_round[nasty_card_idx]
+                                    self.winner_for_sub_round = self.player_turn_queue_reference[nasty_card_idx]
+                                    print "  {} card wins".format(self.winning_sub_round_card)
+                                    print "  player {} wins".format(self.winner_for_sub_round)
+                                    return
                                 else:
                                     self.winning_sub_round_card = card
                                     self.winner_for_sub_round = current_player
@@ -785,6 +798,7 @@ class DrumpfBot:
 
                     elif card_value.startswith("t_nasty") or card_value.startswith("t_comey"):
                         print "  handling {} card...".format(card_value)
+                        print "  *this card is a pass card since no other trumping or stealing cards have been played"
                         continue
 
                 elif card_value[0:3] == "vm_":
