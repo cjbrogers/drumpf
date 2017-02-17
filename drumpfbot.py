@@ -307,8 +307,8 @@ class DrumpfBot:
             print "  ***self.sub_rounds_played + 1 : {}".format(self.sub_rounds_played + 1)
 
             allowable_index = int(self.current_game.current_round) - (int(self.sub_rounds_played) + 1)
-
             print "  ***allowable_index: {}".format(allowable_index)
+
             # the command must be between 0 and the largest index of the card in the players hand
             if int(command) >= 0 and int(command) <=  allowable_index:
 
@@ -482,9 +482,6 @@ class DrumpfBot:
                 as_user=True)
                 slack_client.api_call("chat.postMessage", channel=self.main_channel_id,
                                   text="points_off_from_bid: %s" % points_off_from_bid, as_user=True)
-            #
-            # if player_id in self.shower_card_holder:
-            #     print "    self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
 
             print "  self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
 
@@ -538,7 +535,7 @@ class DrumpfBot:
             else:
                 print "  player loses points for incorrect bid"
                 #player loses 25-points for every point above or below bid
-                print "    self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
+                print "  self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
 
                 # debbug remove after
                 if self.debug:
@@ -592,10 +589,8 @@ class DrumpfBot:
         self.zero_point_players = []
         self.shower_card_holder = []
 
-        # TODO: Should James have added the below?
         self.player_bid_queue.clear()
         self.current_game.current_round_trump_suit = None
-
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
         print "remove_card_from_players_hand(self, current_player_id, card_to_remove) "
@@ -614,7 +609,6 @@ class DrumpfBot:
                 if len(player.cards_in_hand) > 0:
                     self.display_cards_for_player_in_pm(player.id, player.cards_in_hand)
 
-    # TODO: Modify this to make Drumpf! a reality
     def determine_winner_for_sub_round(self, card):
         print "determine_winner_for_sub_round(self, card) "
         self.winning_sub_round_card = None
