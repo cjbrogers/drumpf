@@ -3,12 +3,12 @@ import drumpfbot as DrumpfBot
 
 drumpf_deck = ["vm_blacks", "vm_hombres", "vm_muslims", "vm_thieves"]
 suits = ["diamonds", "clubs", "hearts", "spades"]
-# values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
-# for suit in suits:
-#     for value in values:
-#         drumpf_deck.append([value, suit])
-# drumpf_deck = drumpf_deck + ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
-# drumpf_deck = drumpf_deck + ["t_russian", "t_nasty","t_shower","t_comey"]
+values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
+for suit in suits:
+    for value in values:
+        drumpf_deck.append([value, suit])
+drumpf_deck = drumpf_deck + ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
+drumpf_deck = drumpf_deck + ["t_russian", "t_nasty","t_shower","t_comey"]
 
 drumpf_deck_special = ["blacks", "hombres", "muslims", "thieves"]
 drumpf_deck_special += ["pussy", "wall", "clinton", "ivanka"]
