@@ -635,7 +635,7 @@ class DrumpfBot:
         self.shower_card_holder = []
         self.drumpfmendous_card_first = None
         self.player_bid_queue.clear()
-        # self.current_game.current_round_trump_suit = None
+        self.current_game.current_round_trump_suit = None
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
         print "remove_card_from_players_hand(self, current_player_id, card_to_remove) "
@@ -933,7 +933,6 @@ class DrumpfBot:
                         print "  {} card wins".format(self.winning_sub_round_card)
                         print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
 
-                # TODO: james added else statement below... verify that it leads to expected output when a card such as the T: shower card is played (i.e. next highest card wins)
                 elif self.winning_sub_round_card == None:
                     print "  *The remaining card must be the winner"
                     self.winning_sub_round_card = card

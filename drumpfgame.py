@@ -10,10 +10,6 @@ for suit in suits:
 drumpf_deck = drumpf_deck + ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
 drumpf_deck = drumpf_deck + ["t_russian", "t_nasty","t_shower","t_comey"]
 
-drumpf_deck_special = ["blacks", "hombres", "muslims", "thieves"]
-drumpf_deck_special += ["pussy", "wall", "clinton", "ivanka"]
-drumpf_deck_special += ["russian", "nasty", "shower", "comey"]
-
 def rotate_list(l, n):
     return l[-n:] + l[:-n]
 
@@ -76,11 +72,6 @@ class Game:
                 self.bot.drumpfmendous_card_first = True
                 self.bot.prompt_dealer_for_trump_suit(self.players[0].id)
 
-                # TODO: VERIFY COMMENTING OUT BELOW GETS RID OF TRUMP SELECTION ISSUES (james)
-                # print "  self.bot.player_trump_card_queue before append(): {}".format(self.bot.player_trump_card_queue)
-                # self.bot.player_trump_card_queue.append(self.players[0].id)
-                # print "  self.bot.player_trump_card_queue after append(): {}".format(self.bot.player_trump_card_queue)
-
             # or visible minority card
             elif trump_value[0:3] == "vm_":
                 print "  *dealing with a vm_ card"
@@ -88,6 +79,8 @@ class Game:
             elif len(trump_value) == 2: #regular card
                 print "  *dealing with a regular card"
                 trump_suit = trump_suit
+                # TODO: verify the below works 2/17/2017 (James)
+                self.bot.current_game.current_round_trump_suit = trump_suit
         elif len(shuffled_deck.cards) == 0:
             print "  len(shuffled_deck.cards) == 0"
             self.bot.prompt_dealer_for_trump_suit(self.players.first.id)
