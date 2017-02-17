@@ -72,7 +72,8 @@ class DrumpfBot:
         response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
 
         if command.lower().startswith("debug"):
-            self.debug = True
+            if command.lower().startswith("debug true"):
+                self.debug = True
             response = ">>>Now entering debug mode. \n"
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=response, as_user=True)
@@ -149,6 +150,7 @@ class DrumpfBot:
             "*[remove me]*\tRemove yourself from the current game queue.\n" \
             "*[rules]*\tView the rules of the game.\n" \
             "*[start game]*\tStart the game.\n" \
+            "*[undebug]*\tTurn off the debugging output.\n" \
             "*[< _these_ > cards]*\tReplace < _these_ > with the cards you wish to view. i.e. 'Drumpf' cards.\n\n" \
             "Still lost? Follow this link for step-by-step instructions:"
             title_link = "http://cjbrogers.com/drumpf/howto.html"
@@ -172,7 +174,7 @@ class DrumpfBot:
             attachments = [{"title": "The Joker", "image_url": image_url}]
 
         if command.lower().startswith("visible minority cards"):
-            response = ">>>Are WASP'S _really_ still a thing? \n"
+            response = ">>>Racism is bad. \n"
             image_url = "https://s27.postimg.org/8ffx0pigz/vmcards.png"
             attachments = [{"title": "Visible Minority Cards", "image_url": image_url}]
 
@@ -631,7 +633,7 @@ class DrumpfBot:
         self.cards_played_for_sub_round = []
         self.zero_point_players = []
         self.shower_card_holder = []
-
+        self.drumpfmendous_card_first = None
         self.player_bid_queue.clear()
         # self.current_game.current_round_trump_suit = None
 
