@@ -486,7 +486,7 @@ class DrumpfBot:
             # if player_id in self.shower_card_holder:
             #     print "    self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
 
-            print "self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
+            print "  self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
 
             # debbug remove after
             if self.debug:
@@ -500,7 +500,7 @@ class DrumpfBot:
             print "  current_players_bid: ",current_players_bid
             print "  points_off_from_bid: ",points_off_from_bid
 
-            if player_id in self.shower_card_holder:
+            if player_id in self.shower_card_holder and player_id not in self.zero_point_players:
                 print "  We have a golden shower card holder!"
                 self.game_scorecard[player_id] += 175
                 print "    self.game_scorecard[player_id] + 175: %s" % self.game_scorecard[player_id]
