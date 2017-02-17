@@ -56,6 +56,7 @@ class DrumpfBot:
         self.vm_cards = ["vm_blacks","vm_hombres","vm_thieves","vm_muslims"]
         self.t_cards = ["t_comey","t_nasty","t_russian","t_shower"]
         self.d_cards = ["d_wall","d_clinton","d_ivanka","d_pussy"]
+        self.drumpfmendous_card_first = None
 
     def handle_command(self, command, channel, user_id):
         print "handle_command(self, command, channel, user_id) "
@@ -161,6 +162,10 @@ class DrumpfBot:
         if command.lower().startswith("bigly"):
             response = ">>>*bigly* (ˈbɪɡlɪ) \n_adj_\n\t\t_archaic_ comfortably habitable"
 
+        if command.lower().startswith("undebug"):
+            self.debug = False
+            response = ">>>successfully undebugged"
+
         if command.lower().startswith("what's a joker?"):
             response = ">>>This is: \n"
             image_url = "https://s29.postimg.org/9ide0xa0n/joker.png"
@@ -198,25 +203,39 @@ class DrumpfBot:
         response = ""
         current_username = self.user_ids_to_username[self.player_trump_card_queue[0]]
         #we're waiting for a user to select a trump card
+        print "      $$~what's self.player_trump_card_queue[0]?: {}".format(self.player_trump_card_queue[0])
         if user_id != self.player_trump_card_queue[0]:
+            print "  Waiting for <@{}> to select a trump suit".format(current_username)
             response = "Waiting for <@{}> to select a trump suit".format(current_username)
         elif user_id == self.player_trump_card_queue[0]:
             #validate that the dealer picked a valid trump suit
             try:
                 if 0 <= int(command) <= 3:
                     self.current_game.current_round_trump_suit = suits[int(command)]
+
+                    print "  self.current_game.current_round_trump_suit set to: {}".format(self.current_game.current_round_trump_suit)
+
+                    print "  Trump suit recorded! Check the main channel."
                     response = "Trump suit recorded! Check the main channel."
+
+                    print "  <@{}> chose :{}: for the trump suit.".format(current_username, suits[int(command)])
+
                     slack_client.api_call(
                         "chat.postMessage",
                         channel=self.main_channel_id,
                         text="<@{}> chose :{}: for the trump suit.".format(current_username, suits[int(command)]),
                         as_user=True
                     )
+                    print "  What's your bid for the round?"
                     self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
+                    print "    self.player_trump_card_queue before pop(): {}".format(self.player_trump_card_queue)
                     self.player_trump_card_queue.pop()
+                    print "    self.player_trump_card_queue after pop(): {}".format(self.player_trump_card_queue)
                 else:
+                    print "  That wasn't a valid index for a trump suit."
                     response = "That wasn't a valid index for a trump suit."
             except:
+                print "  That's not a valid command. Please select a trump suit."
                 response = "That's not a valid command. Please select a trump suit."
         else:
             print "Whoops! Something went wrong."
@@ -246,15 +265,19 @@ class DrumpfBot:
         current_username = self.user_ids_to_username[self.player_bid_queue[0]]
         #we're waiting for the first player in queue to bid
         if user_id != self.player_bid_queue[0]:
+            print "  We're still waiting on <@{}> to bid.".format(current_username)
             response = "We're still waiting on <@{}> to bid.".format(current_username)
         elif user_id == self.player_bid_queue[0]:
             #expected user to bid
             try:
                 if 0 > int(command) > self.current_game.current_round:
-                    response = "You can't bid that amount!"
+                    print "  You can't bid that amount you turkey!"
+                    response = "You can't bid that amount you turkey!"
                 else:
                     #valid bid
+                    print "  Bid recorded! Check the main channel."
                     self.player_bids_for_current_round[user_id] =int(command)
+                    print "  <@{}> bids `{}`.".format(current_username, int(command))
                     response = "Bid recorded! Check the main channel."
                     slack_client.api_call(
                         "chat.postMessage",
@@ -265,6 +288,7 @@ class DrumpfBot:
                     self.player_bid_queue.popleft()
                     if len(self.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
+                        print "  All bids recorded, let's play!"
                         slack_client.api_call(
                             "chat.postMessage",
                             channel=self.main_channel_id,
@@ -272,6 +296,7 @@ class DrumpfBot:
                             as_user=True
                         )
                         print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
+                        print "  Please select a card `index` to play."
                         self.private_message_user(self.player_turn_queue[0], "Please select a card `index` to play.")
 
                         # debbug remove after
@@ -279,6 +304,7 @@ class DrumpfBot:
                             self.message_main_game_channel("self.player_bids_for_current_round: %s" % self.player_bids_for_current_round)
 
                     else: #get the next player's bid
+                        print "  What's your bid for the round?"
                         self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
             except:
                 response = "That wasn't a valid bid."
@@ -302,23 +328,24 @@ class DrumpfBot:
 
             #validate the int(command) index selected is within the range of cards in hand
 
-            print "  ***self.current_game.current_round: {}".format(self.current_game.current_round)
+            print "  self.current_game.current_round: {}".format(self.current_game.current_round)
 
-            print "  ***self.sub_rounds_played + 1 : {}".format(self.sub_rounds_played + 1)
+            print "  self.sub_rounds_played + 1 : {}".format(self.sub_rounds_played + 1)
 
             allowable_index = int(self.current_game.current_round) - (int(self.sub_rounds_played) + 1)
-            print "  ***allowable_index: {}".format(allowable_index)
+            print "  set allowable_index: {}".format(allowable_index)
 
             # the command must be between 0 and the largest index of the card in the players hand
             if int(command) >= 0 and int(command) <=  allowable_index:
-
                 print("  Selected a valid card index")
                 card_being_played = self.get_card_being_played(user_id, int(command))
+
                 if card_being_played == None:
                     self.private_message_user(user_id, "That's not a valid card index")
                     return
                 card_value = None
                 card_suit = None
+
                 if len(card_being_played) == 2: # regular card
                     card_value = str(card_being_played[0])
                     print "  Card Value: ", card_value
@@ -328,8 +355,10 @@ class DrumpfBot:
                     card_value = card_being_played
                     print "  Card Value: ", card_value
                     card_suit = None
+
                 #otherwise valid card played
                 if self.leading_suit != None:
+                    print "  self.leading_suit != None"
                     print("  Sub-round trump suit: {}".format(self.leading_suit))
                     #a drumpf or a visible minority card or a tremendous card is always a valid play
                     if card_value.startswith("d_") or card_value.startswith("vm_") or card_value.startswith("t_"):
@@ -389,26 +418,37 @@ class DrumpfBot:
 
         player_who_played_card = self.user_ids_to_username[self.player_turn_queue[0]]
         self.remove_card_from_players_hand(self.player_turn_queue[0], card)
-        card_emoji = helper_functions.emojify_card(card)
 
+        card_emoji = helper_functions.emojify_card(card)
+        print "  ><@{}> played {}".format(player_who_played_card, card_emoji)
         self.message_main_game_channel("><@{}> played {}".format(player_who_played_card, card_emoji))
+
         self.cards_played_for_sub_round.append(card)
         print("  Cards played for sub-round: {}".format(self.cards_played_for_sub_round))
+
+        print "    self.player_turn_queue before popleft(): {}".format(self.player_turn_queue)
         self.player_turn_queue.popleft()
+        print "    self.player_turn_queue after popleft(): {}".format(self.player_turn_queue)
+
         print("  Player turn queue: {}".format(self.player_turn_queue))
         if len(self.player_turn_queue) == 0:
             self.sub_rounds_played += 1
+
             print("  >Everyone played, time to determine winner for sub-round")
             self.determine_winner_for_sub_round(card)
+
             self.player_points_for_round[self.winner_for_sub_round] += 1
+
+            print "  >*<@{}> won this sub-round with a {}*".format(self.winner_for_sub_round,helper_functions.emojify_card(self.winning_sub_round_card))
             self.message_main_game_channel(">*<@{}> won this sub-round with a {}*".format(
                 self.winner_for_sub_round, helper_functions.emojify_card(self.winning_sub_round_card)), attachments=self.attachments)
+
             #reset all sub-round variables
             self.leading_suit = None
             self.cards_played_for_sub_round = []
 
             if self.sub_rounds_played == self.current_game.current_round:
-                print("  >Sub-rounds over, time to tally points and display them")
+                print "  >Sub-round is over, time to tally points and display them"
                 print "    player_turn_queue: %s" % self.player_turn_queue
                 print "    player_bid_queue: %s" % self.player_bid_queue
                 print "    self.users_in_game: %s" % self.users_in_game
@@ -471,7 +511,7 @@ class DrumpfBot:
         for idx, player_id in enumerate(self.users_in_game):
             current_players_bid = self.player_bids_for_current_round[player_id]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
-            print "    idx:%s\n    players_bids:%s\n    player points for round:%s\n    player_id:%s\n    current_players_bid: %s" % (idx, self.player_bids_for_current_round, self.player_points_for_round[player_id], player_id, current_players_bid)
+            print "    idx:%s\n    players_bids:%s\n    player_points_for_round:%s\n    player_id:%s\n    current_players_bid: %s" % (idx, self.player_bids_for_current_round, self.player_points_for_round[player_id], player_id, current_players_bid)
             print "    points_off_from_bid: %s" % points_off_from_bid
 
             # debbug remove after
@@ -556,10 +596,13 @@ class DrumpfBot:
         self.message_main_game_channel(">*Score Board*")
         for player_id in self.users_in_game:
             if player_id in self.shower_card_holder:
+                print "  ><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 self.message_main_game_channel("><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
             elif player_id in self.zero_point_players:
+                print "  ><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 self.message_main_game_channel("><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
             else:
+                print "  ><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 self.message_main_game_channel("><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
         self.prepare_for_next_round()
         if self.current_game.current_round == self.current_game.final_round:
@@ -590,7 +633,7 @@ class DrumpfBot:
         self.shower_card_holder = []
 
         self.player_bid_queue.clear()
-        self.current_game.current_round_trump_suit = None
+        # self.current_game.current_round_trump_suit = None
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
         print "remove_card_from_players_hand(self, current_player_id, card_to_remove) "
@@ -831,7 +874,7 @@ class DrumpfBot:
 
                         # to get to this point, t_comey or t_nasty or t_shower must be the only other card and played first, so no winner is present.
                         if self.winning_sub_round_card == None:
-                            for t_card in t_cards:
+                            for t_card in self.t_cards:
                                 if t_card == "t_russian":
                                     print "    *passing on t_russian card"
                                     pass
@@ -927,7 +970,19 @@ class DrumpfBot:
         print "  player: ", self.user_ids_to_username[user_id]
 
         response = ""
+
+        print "  **$$**len(self.player_trump_card_queue): {}".format(len(self.player_trump_card_queue))
+        print "  **$$**self.player_trump_card_queue: {}".format(self.player_trump_card_queue)
+
+        print "  **$$**len(self.player_bid_queue): {}".format(len(self.player_bid_queue))
+        print "  **$$**self.player_bid_queue: {}".format(self.player_bid_queue)
+
+        print "  **$$**len(self.player_turn_queue): {}".format(len(self.player_turn_queue))
+        print "  **$$**self.player_turn_queue: {}".format(self.player_turn_queue)
+
+
         if len(self.player_trump_card_queue):
+            print "  len(self.player_trump_card_queue)"
             self.handle_trump_suit_selection(command, user_id)
 
         elif len(self.player_bid_queue):
@@ -963,23 +1018,30 @@ class DrumpfBot:
         self.player_bid_queue = deque([player.id for player in players])
         self.player_turn_queue = deque([player.id for player in players])
         #the player after the dealer should be first to bid, so we rotate the queue
+        print "  *rotating self.player_bid_queue; self.player_turn_queue; self.users_in_game"
         self.player_bid_queue.rotate(-1)
         self.player_turn_queue.rotate(-1)
         self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
         self.users_in_game.rotate(-1)
-        slack_client.api_call(
-            "chat.postMessage",
-            channel=self.player_bid_queue[0],
-            text="What's your bid for the round?",
-            as_user=True
-        )
+        if not self.drumpfmendous_card_first:
+            print "  What's your bid for the round?"
+            slack_client.api_call(
+                "chat.postMessage",
+                channel=self.player_bid_queue[0],
+                text="What's your bid for the round?",
+                as_user=True
+            )
 
     def prompt_dealer_for_trump_suit(self, player_id):
         print "prompt_dealer_for_trump_suit(self, player_id) "
         print "  player_id: ", player_id
         print "  player: ", self.user_ids_to_username[player_id]
 
+        print "  self.player_trump_card_queue before append(): {}".format(self.player_trump_card_queue)
         self.player_trump_card_queue.append(player_id)
+        print "  self.player_trump_card_queue after append(): {}".format(self.player_trump_card_queue)
+
+        print "  please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]"
         slack_client.api_call(
             "chat.postMessage",
             channel=player_id,
@@ -1005,6 +1067,7 @@ class DrumpfBot:
 
         formatted_cards = helper_functions.format_cards_to_emojis(cards)
         self.attachments = None
+        print "  Your card(s): {}".format(formatted_cards)
         slack_client.api_call(
             "chat.postMessage",
             channel=player_id,
@@ -1016,10 +1079,14 @@ class DrumpfBot:
         print "announce_trump_card(self, trump_card) "
         print "  trump_card: ",trump_card
 
+        print ">>>*Round {}* \n The trump card is: {} \n".format(
+            self.current_game.current_round,
+            helper_functions.emojify_card(trump_card))
         self.message_main_game_channel(">>>*Round {}* \n The trump card is: {} \n".format(
             self.current_game.current_round,
             helper_functions.emojify_card(trump_card)), attachments=self.attachments)
 
+        print ">>>_Sub-Round {}_".format(self.sub_rounds_played + 1)
         self.message_main_game_channel(">>>_Sub-Round {}_".format(self.sub_rounds_played + 1))
 
     #takes an array of player_ids and the channel the game request originated from
@@ -1036,6 +1103,7 @@ class DrumpfBot:
 
     #Restarts the current program.
     def restart_program(self):
+        print "restart_program(self)"
         python = sys.executable
         os.execl(python, python, * sys.argv)
 
