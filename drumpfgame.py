@@ -50,8 +50,7 @@ class Game:
     # 4) gets bids from players
     # 5) plays mini-rounds & allocates points until round is over
     def play_round(self):
-        print "\n\n"
-        print " play_round(self) "
+        print "play_round(self) "
         shuffled_deck = Deck()
         for _ in range(0, self.current_round):
             self.deal_single_card_to_each_player(shuffled_deck)
@@ -63,12 +62,12 @@ class Game:
             trump_suit = None
             if len(trump_card) == 2: # regular card
                 trump_value = str(trump_card[0])
-                print "Trump Value: ", trump_value
+                print "  Trump Value: ", trump_value
                 trump_suit = trump_card[1]
-                print "Trump Suit: ", trump_suit
+                print "  Trump Suit: ", trump_suit
             else: # special card
                 trump_value = trump_card
-                print "Trump Card: ", trump_value
+                print "  Trump Value: ", trump_value
                 trump_suit = None
             # is a tremendous, drumpf
             if trump_value[0:2] == "d_" or trump_value[0:2] == "t_":
@@ -93,6 +92,6 @@ class Game:
         #dealer is always index 0 of players and we will rotate the array end of each turn
 
     def deal_single_card_to_each_player(self, deck):
-        print " deal_single_card_to_each_player(self, deck) "
+        print "deal_single_card_to_each_player(self, deck) "
         for player in self.players:
             player.receive_card(deck.deal_card())

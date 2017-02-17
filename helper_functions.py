@@ -13,7 +13,7 @@ def emojify_card(card):
     if not card:
         return ":{}:".format("")
     print "emojify_card(card) "
-    print "  card: ",card
+    print " card: ",card
 
     if len(card) == 2:
         return "[{}:{}:]".format(card[0], card[1])
