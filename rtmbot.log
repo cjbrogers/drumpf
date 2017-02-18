@@ -1,0 +1,1914 @@
+2017-02-18 14:17:37,667 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:17:37,677 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:17:38,517 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7027
+2017-02-18 14:17:38,796 Loading plugins
+2017-02-18 14:17:38,796 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:17:38,798 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003ED0E80>
+2017-02-18 14:17:38,798 Registering jobs for RepeatPlugin
+2017-02-18 14:17:38,798 No jobs registered for RepeatPlugin
+2017-02-18 14:17:38,999 got process_hello
+2017-02-18 14:17:39,099 got process_reconnect_url
+2017-02-18 14:17:39,200 got process_pong
+2017-02-18 14:17:39,904 got process_presence_change
+2017-02-18 14:17:42,243 got process_pong
+2017-02-18 14:17:46,266 got process_pong
+2017-02-18 14:17:47,671 got process_user_typing
+2017-02-18 14:17:49,881 got process_message
+2017-02-18 14:17:49,983 got process_desktop_notification
+2017-02-18 14:17:50,283 got process_pong
+2017-02-18 14:17:54,201 got process_pong
+2017-02-18 14:17:54,805 got process_user_typing
+2017-02-18 14:17:57,717 got process_message
+2017-02-18 14:17:57,818 got process_desktop_notification
+2017-02-18 14:17:58,219 got process_pong
+2017-02-18 14:18:01,835 got process_user_typing
+2017-02-18 14:18:02,237 got process_pong
+2017-02-18 14:18:02,941 got process_message
+2017-02-18 14:18:04,144 got process_user_typing
+2017-02-18 14:18:04,750 got process_message
+2017-02-18 14:18:06,257 got process_pong
+2017-02-18 14:18:10,178 got process_reconnect_url
+2017-02-18 14:18:10,279 got process_pong
+2017-02-18 14:18:14,299 got process_pong
+2017-02-18 14:18:18,220 got process_pong
+2017-02-18 14:18:22,240 got process_pong
+2017-02-18 14:18:26,259 got process_pong
+2017-02-18 14:18:30,276 got process_pong
+2017-02-18 14:18:34,296 got process_pong
+2017-02-18 14:18:38,216 got process_pong
+2017-02-18 14:18:42,234 got process_pong
+2017-02-18 14:18:46,262 got process_pong
+2017-02-18 14:18:50,280 got process_pong
+2017-02-18 14:18:54,299 got process_pong
+2017-02-18 14:18:58,217 got process_pong
+2017-02-18 14:21:51,759 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:21:51,767 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:21:52,607 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7027
+2017-02-18 14:21:52,888 Loading plugins
+2017-02-18 14:21:52,888 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:21:52,890 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003D38E80>
+2017-02-18 14:21:52,890 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:21:52,891 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003D38160>
+2017-02-18 14:21:52,891 Registering jobs for RepeatPlugin
+2017-02-18 14:21:52,891 No jobs registered for RepeatPlugin
+2017-02-18 14:21:52,891 Registering jobs for MyPlugin
+2017-02-18 14:21:52,891 No jobs registered for MyPlugin
+2017-02-18 14:21:53,092 got process_hello
+2017-02-18 14:21:53,194 got process_presence_change
+2017-02-18 14:21:53,296 got process_reconnect_url
+2017-02-18 14:21:53,401 got process_pong
+2017-02-18 14:21:53,605 got process_presence_change
+2017-02-18 14:21:56,219 got process_pong
+2017-02-18 14:22:00,240 got process_pong
+2017-02-18 14:22:04,265 got process_pong
+2017-02-18 14:22:08,298 got process_pong
+2017-02-18 14:22:10,214 got process_reconnect_url
+2017-02-18 14:22:12,226 got process_pong
+2017-02-18 14:22:16,246 got process_pong
+2017-02-18 14:22:20,269 got process_pong
+2017-02-18 14:22:23,799 got process_user_typing
+2017-02-18 14:22:24,203 got process_pong
+2017-02-18 14:22:28,224 got process_pong
+2017-02-18 14:22:28,930 got process_user_typing
+2017-02-18 14:22:29,032 got process_message
+2017-02-18 14:22:29,033 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:29,440 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:29,546 got process_message
+2017-02-18 14:22:29,549 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:29,964 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 174
+2017-02-18 14:22:30,071 got process_message
+2017-02-18 14:22:30,075 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:30,523 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 174
+2017-02-18 14:22:30,630 got process_message
+2017-02-18 14:22:30,631 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:31,062 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:31,167 got process_message
+2017-02-18 14:22:31,170 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:31,573 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:31,681 got process_message
+2017-02-18 14:22:31,684 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:32,124 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:32,234 got process_message
+2017-02-18 14:22:32,236 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:32,642 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:32,750 got process_pong
+2017-02-18 14:22:32,851 got process_message
+2017-02-18 14:22:32,852 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:33,278 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 174
+2017-02-18 14:22:33,384 got process_message
+2017-02-18 14:22:33,385 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:33,871 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 174
+2017-02-18 14:22:33,977 got process_message
+2017-02-18 14:22:33,980 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:34,414 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:34,520 got process_message
+2017-02-18 14:22:34,523 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:34,927 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:35,032 got process_message
+2017-02-18 14:22:35,035 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:35,515 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 174
+2017-02-18 14:22:35,621 got process_message
+2017-02-18 14:22:35,622 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:36,178 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:36,285 got process_message
+2017-02-18 14:22:36,286 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:36,747 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:36,852 got process_pong
+2017-02-18 14:22:36,953 got process_message
+2017-02-18 14:22:36,956 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:37,414 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:37,520 got process_message
+2017-02-18 14:22:37,523 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:37,923 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:38,029 got process_message
+2017-02-18 14:22:38,032 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:38,430 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:38,536 got process_message
+2017-02-18 14:22:38,538 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:38,951 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:39,056 got process_message
+2017-02-18 14:22:39,058 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:39,507 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 174
+2017-02-18 14:22:39,615 got process_message
+2017-02-18 14:22:39,618 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:40,089 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:40,197 got process_message
+2017-02-18 14:22:40,200 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:40,628 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:40,736 got process_pong
+2017-02-18 14:22:40,836 got process_message
+2017-02-18 14:22:40,838 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:41,249 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:41,355 got process_message
+2017-02-18 14:22:41,357 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:41,779 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:41,885 got process_message
+2017-02-18 14:22:41,888 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:42,346 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:42,453 got process_message
+2017-02-18 14:22:42,456 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:22:42,903 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 175
+2017-02-18 14:22:43,010 got process_message
+2017-02-18 14:22:43,013 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:23:54,713 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:23:54,721 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:23:55,513 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7060
+2017-02-18 14:23:55,765 Loading plugins
+2017-02-18 14:23:55,765 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:23:55,766 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003E88E80>
+2017-02-18 14:23:55,766 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:23:55,767 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003E88160>
+2017-02-18 14:23:55,767 Registering jobs for RepeatPlugin
+2017-02-18 14:23:55,767 No jobs registered for RepeatPlugin
+2017-02-18 14:23:55,767 Registering jobs for MyPlugin
+2017-02-18 14:23:55,767 No jobs registered for MyPlugin
+2017-02-18 14:23:55,970 got process_hello
+2017-02-18 14:23:56,072 got process_presence_change
+2017-02-18 14:23:56,180 got process_reconnect_url
+2017-02-18 14:23:56,303 got process_pong
+2017-02-18 14:23:56,815 got process_presence_change
+2017-02-18 14:23:59,229 got process_pong
+2017-02-18 14:24:02,545 got process_user_typing
+2017-02-18 14:24:03,051 got process_message
+2017-02-18 14:24:03,053 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:03,536 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 166
+2017-02-18 14:24:03,641 got process_message
+2017-02-18 14:24:03,642 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:04,073 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 166
+2017-02-18 14:24:04,178 got process_pong
+2017-02-18 14:24:04,279 got process_message
+2017-02-18 14:24:04,282 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:04,697 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 166
+2017-02-18 14:24:04,803 got process_message
+2017-02-18 14:24:04,805 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:05,207 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 165
+2017-02-18 14:24:05,312 got process_message
+2017-02-18 14:24:05,313 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:05,763 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 167
+2017-02-18 14:24:05,869 got process_message
+2017-02-18 14:24:05,871 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:06,325 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 167
+2017-02-18 14:24:06,469 got process_message
+2017-02-18 14:24:06,470 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:06,871 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 167
+2017-02-18 14:24:06,989 got process_message
+2017-02-18 14:24:06,993 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:07,440 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 166
+2017-02-18 14:24:07,546 got process_message
+2017-02-18 14:24:07,549 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:07,993 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 167
+2017-02-18 14:24:08,101 got process_pong
+2017-02-18 14:24:08,203 got process_message
+2017-02-18 14:24:08,207 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:08,671 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 166
+2017-02-18 14:24:08,776 got process_message
+2017-02-18 14:24:08,778 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:09,247 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 167
+2017-02-18 14:24:09,355 got process_message
+2017-02-18 14:24:09,358 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:09,756 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 167
+2017-02-18 14:24:10,677 got process_message
+2017-02-18 14:24:10,684 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:11,135 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 167
+2017-02-18 14:24:11,243 got process_message
+2017-02-18 14:24:11,246 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:11,631 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 166
+2017-02-18 14:24:11,739 got process_pong
+2017-02-18 14:24:11,841 got process_message
+2017-02-18 14:24:11,842 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:12,279 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 167
+2017-02-18 14:24:12,385 got process_message
+2017-02-18 14:24:12,388 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:24:12,842 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 167
+2017-02-18 14:24:12,947 got process_message
+2017-02-18 14:24:12,950 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:26:09,987 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:26:09,996 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:26:10,802 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7034
+2017-02-18 14:26:11,052 Loading plugins
+2017-02-18 14:26:11,052 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:26:11,053 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x00000000045A8E80>
+2017-02-18 14:26:11,053 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:26:11,053 Plugin registered: <plugins.myplugin.MyPlugin object at 0x00000000045A8160>
+2017-02-18 14:26:11,053 Registering jobs for RepeatPlugin
+2017-02-18 14:26:11,053 No jobs registered for RepeatPlugin
+2017-02-18 14:26:11,053 Registering jobs for MyPlugin
+2017-02-18 14:26:11,053 No jobs registered for MyPlugin
+2017-02-18 14:26:11,256 got process_hello
+2017-02-18 14:26:11,358 got process_presence_change
+2017-02-18 14:26:11,460 got process_reconnect_url
+2017-02-18 14:26:11,588 got process_pong
+2017-02-18 14:26:11,690 got process_presence_change
+2017-02-18 14:26:15,209 got process_pong
+2017-02-18 14:26:19,234 got process_pong
+2017-02-18 14:26:23,255 got process_pong
+2017-02-18 14:26:23,357 got process_user_typing
+2017-02-18 14:26:23,559 got process_message
+2017-02-18 14:26:27,286 got process_pong
+2017-02-18 14:26:31,206 got process_pong
+2017-02-18 14:26:35,226 got process_pong
+2017-02-18 14:26:39,249 got process_pong
+2017-02-18 14:26:43,269 got process_pong
+2017-02-18 14:26:47,283 got process_pong
+2017-02-18 14:26:51,204 got process_pong
+2017-02-18 14:26:55,223 got process_pong
+2017-02-18 14:26:59,246 got process_pong
+2017-02-18 14:27:03,266 got process_pong
+2017-02-18 14:27:07,289 got process_pong
+2017-02-18 14:27:11,206 got process_pong
+2017-02-18 14:27:15,230 got process_pong
+2017-02-18 14:27:19,253 got process_pong
+2017-02-18 14:27:23,279 got process_pong
+2017-02-18 14:27:27,200 got process_pong
+2017-02-18 14:27:31,221 got process_pong
+2017-02-18 14:27:35,240 got process_pong
+2017-02-18 14:27:39,265 got process_pong
+2017-02-18 14:27:43,285 got process_pong
+2017-02-18 14:27:47,194 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:27:47,201 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:27:47,928 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7008
+2017-02-18 14:27:48,273 Loading plugins
+2017-02-18 14:27:48,273 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:27:48,273 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003BF8E80>
+2017-02-18 14:27:48,275 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:28:08,798 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:28:08,805 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:28:09,631 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7024
+2017-02-18 14:28:09,901 Loading plugins
+2017-02-18 14:28:09,901 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:28:09,901 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003C88E80>
+2017-02-18 14:28:09,901 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:28:09,901 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003C88160>
+2017-02-18 14:28:09,901 Registering jobs for RepeatPlugin
+2017-02-18 14:28:09,903 No jobs registered for RepeatPlugin
+2017-02-18 14:28:09,903 Registering jobs for MyPlugin
+2017-02-18 14:28:09,903 No jobs registered for MyPlugin
+2017-02-18 14:28:10,104 got process_hello
+2017-02-18 14:28:10,204 got process_presence_change
+2017-02-18 14:28:10,338 got process_reconnect_url
+2017-02-18 14:28:10,440 got process_pong
+2017-02-18 14:28:10,542 got process_reconnect_url
+2017-02-18 14:28:10,744 got process_presence_change
+2017-02-18 14:28:13,260 got process_pong
+2017-02-18 14:28:17,276 got process_pong
+2017-02-18 14:28:19,213 got process_user_typing
+2017-02-18 14:28:19,717 got process_message
+2017-02-18 14:28:21,223 got process_pong
+2017-02-18 14:28:25,242 got process_pong
+2017-02-18 14:28:29,262 got process_pong
+2017-02-18 14:28:33,285 got process_pong
+2017-02-18 14:28:37,204 got process_pong
+2017-02-18 14:28:41,421 got process_pong
+2017-02-18 14:28:45,240 got process_pong
+2017-02-18 14:28:48,759 got process_user_typing
+2017-02-18 14:28:49,263 got process_pong
+2017-02-18 14:28:49,969 got process_message
+2017-02-18 14:28:52,181 got process_user_typing
+2017-02-18 14:28:53,088 got process_message
+2017-02-18 14:28:53,290 got process_pong
+2017-02-18 14:28:57,211 got process_pong
+2017-02-18 14:29:01,226 got process_pong
+2017-02-18 14:29:05,246 got process_pong
+2017-02-18 14:29:09,266 got process_pong
+2017-02-18 14:29:13,285 got process_pong
+2017-02-18 14:29:17,213 got process_pong
+2017-02-18 14:29:21,239 got process_pong
+2017-02-18 14:29:25,265 got process_pong
+2017-02-18 14:29:29,289 got process_pong
+2017-02-18 14:29:33,207 got process_pong
+2017-02-18 14:29:37,230 got process_pong
+2017-02-18 14:29:41,252 got process_pong
+2017-02-18 14:29:45,266 got process_pong
+2017-02-18 14:29:49,288 got process_pong
+2017-02-18 14:29:53,230 got process_pong
+2017-02-18 14:29:55,749 got process_user_typing
+2017-02-18 14:29:56,052 got process_message
+2017-02-18 14:29:56,053 output from RepeatPlugin
+2017-02-18 14:29:56,154 got process_desktop_notification
+2017-02-18 14:29:57,266 got process_pong
+2017-02-18 14:30:01,282 got process_pong
+2017-02-18 14:30:05,204 got process_pong
+2017-02-18 14:30:09,223 got process_pong
+2017-02-18 14:30:10,232 got process_reconnect_url
+2017-02-18 14:30:13,250 got process_pong
+2017-02-18 14:30:14,556 got process_user_typing
+2017-02-18 14:30:14,960 got process_message
+2017-02-18 14:30:14,960 output from RepeatPlugin
+2017-02-18 14:30:17,273 got process_pong
+2017-02-18 14:30:18,180 got process_desktop_notification
+2017-02-18 14:30:21,203 got process_pong
+2017-02-18 14:30:25,220 got process_pong
+2017-02-18 14:30:29,236 got process_pong
+2017-02-18 14:30:33,260 got process_pong
+2017-02-18 14:30:37,279 got process_pong
+2017-02-18 14:30:41,200 got process_pong
+2017-02-18 14:30:45,223 got process_pong
+2017-02-18 14:30:49,237 got process_pong
+2017-02-18 14:30:53,252 got process_pong
+2017-02-18 14:30:57,276 got process_pong
+2017-02-18 14:31:01,203 got process_pong
+2017-02-18 14:31:05,253 got process_pong
+2017-02-18 14:31:09,288 got process_pong
+2017-02-18 14:31:13,207 got process_pong
+2017-02-18 14:31:17,230 got process_pong
+2017-02-18 14:31:21,250 got process_pong
+2017-02-18 14:31:25,272 got process_pong
+2017-02-18 14:31:29,286 got process_pong
+2017-02-18 14:31:33,203 got process_pong
+2017-02-18 14:31:37,230 got process_pong
+2017-02-18 14:31:41,250 got process_pong
+2017-02-18 14:31:45,269 got process_pong
+2017-02-18 14:31:49,296 got process_pong
+2017-02-18 14:31:53,217 got process_pong
+2017-02-18 14:31:57,233 got process_pong
+2017-02-18 14:32:01,257 got process_pong
+2017-02-18 14:32:05,288 got process_pong
+2017-02-18 14:32:09,210 got process_pong
+2017-02-18 14:32:10,217 got process_reconnect_url
+2017-02-18 14:32:13,236 got process_pong
+2017-02-18 14:32:17,250 got process_pong
+2017-02-18 14:32:21,269 got process_pong
+2017-02-18 14:32:25,289 got process_pong
+2017-02-18 14:32:29,210 got process_pong
+2017-02-18 14:32:33,236 got process_pong
+2017-02-18 14:32:37,256 got process_pong
+2017-02-18 14:32:41,280 got process_pong
+2017-02-18 14:32:45,302 got process_pong
+2017-02-18 14:32:49,220 got process_pong
+2017-02-18 14:32:53,243 got process_pong
+2017-02-18 14:32:57,267 got process_pong
+2017-02-18 14:33:01,292 got process_pong
+2017-02-18 14:33:05,211 got process_pong
+2017-02-18 14:33:08,411 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:33:08,421 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:33:09,201 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7044
+2017-02-18 14:33:09,398 Loading plugins
+2017-02-18 14:33:09,398 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:33:09,401 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003C98E80>
+2017-02-18 14:33:09,401 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:33:09,401 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003C98160>
+2017-02-18 14:33:09,401 Registering jobs for RepeatPlugin
+2017-02-18 14:33:09,401 No jobs registered for RepeatPlugin
+2017-02-18 14:33:09,401 Registering jobs for MyPlugin
+2017-02-18 14:33:09,401 No jobs registered for MyPlugin
+2017-02-18 14:33:09,604 got process_hello
+2017-02-18 14:33:09,704 got process_presence_change
+2017-02-18 14:33:09,812 got process_message
+2017-02-18 14:33:09,813 output from RepeatPlugin
+2017-02-18 14:33:09,915 got process_reconnect_url
+2017-02-18 14:33:10,020 got process_pong
+2017-02-18 14:33:10,122 got process_presence_change
+2017-02-18 14:33:13,257 got process_pong
+2017-02-18 14:33:17,289 got process_pong
+2017-02-18 14:33:17,490 got process_user_typing
+2017-02-18 14:33:18,194 got process_message
+2017-02-18 14:33:18,200 output from RepeatPlugin
+2017-02-18 14:33:21,214 got process_pong
+2017-02-18 14:33:25,229 got process_pong
+2017-02-18 14:33:28,943 got process_user_typing
+2017-02-18 14:33:29,247 got process_pong
+2017-02-18 14:33:32,062 got process_user_typing
+2017-02-18 14:33:33,270 got process_pong
+2017-02-18 14:33:36,187 got process_user_typing
+2017-02-18 14:33:37,295 got process_pong
+2017-02-18 14:33:40,311 got process_user_typing
+2017-02-18 14:33:41,216 got process_pong
+2017-02-18 14:33:44,030 got process_user_typing
+2017-02-18 14:33:44,434 got process_message
+2017-02-18 14:33:44,438 output from RepeatPlugin
+2017-02-18 14:33:44,539 got process_desktop_notification
+2017-02-18 14:33:45,259 got process_pong
+2017-02-18 14:33:49,282 got process_pong
+2017-02-18 14:33:52,301 got process_user_typing
+2017-02-18 14:33:53,210 got process_pong
+2017-02-18 14:33:54,822 got process_message
+2017-02-18 14:33:54,825 output from RepeatPlugin
+2017-02-18 14:33:57,236 got process_pong
+2017-02-18 14:34:01,256 got process_pong
+2017-02-18 14:34:05,272 got process_pong
+2017-02-18 14:34:09,206 got process_pong
+2017-02-18 14:34:13,226 got process_pong
+2017-02-18 14:34:17,246 got process_pong
+2017-02-18 14:34:21,269 got process_pong
+2017-02-18 14:34:25,289 got process_pong
+2017-02-18 14:34:29,207 got process_pong
+2017-02-18 14:34:33,232 got process_pong
+2017-02-18 14:34:37,255 got process_pong
+2017-02-18 14:34:41,279 got process_pong
+2017-02-18 14:34:45,299 got process_pong
+2017-02-18 14:34:49,217 got process_pong
+2017-02-18 14:34:51,881 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:34:51,888 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:34:52,740 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7058
+2017-02-18 14:34:52,943 Loading plugins
+2017-02-18 14:34:52,944 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:34:52,944 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003DD8E80>
+2017-02-18 14:34:52,944 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:34:52,946 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003DD8160>
+2017-02-18 14:34:52,946 Registering jobs for RepeatPlugin
+2017-02-18 14:34:52,946 No jobs registered for RepeatPlugin
+2017-02-18 14:34:52,946 Registering jobs for MyPlugin
+2017-02-18 14:34:52,946 No jobs registered for MyPlugin
+2017-02-18 14:34:53,148 got process_hello
+2017-02-18 14:34:53,249 got process_presence_change
+2017-02-18 14:34:53,349 got process_message
+2017-02-18 14:34:53,354 output from RepeatPlugin
+2017-02-18 14:34:53,453 got process_reconnect_url
+2017-02-18 14:34:53,559 got process_pong
+2017-02-18 14:34:53,961 got process_presence_change
+2017-02-18 14:34:56,280 got process_pong
+2017-02-18 14:35:00,203 got process_pong
+2017-02-18 14:35:04,224 got process_pong
+2017-02-18 14:35:08,239 got process_pong
+2017-02-18 14:35:08,440 got process_user_typing
+2017-02-18 14:35:09,148 got process_message
+2017-02-18 14:35:09,154 output from RepeatPlugin
+2017-02-18 14:35:10,256 got process_reconnect_url
+2017-02-18 14:35:12,269 got process_pong
+2017-02-18 14:35:12,471 got process_user_typing
+2017-02-18 14:35:15,894 got process_user_typing
+2017-02-18 14:35:16,301 got process_pong
+2017-02-18 14:35:19,617 got process_user_typing
+2017-02-18 14:35:20,223 got process_pong
+2017-02-18 14:35:23,237 got process_message
+2017-02-18 14:35:23,240 output from RepeatPlugin
+2017-02-18 14:35:24,253 got process_pong
+2017-02-18 14:35:26,763 got process_user_typing
+2017-02-18 14:35:28,273 got process_pong
+2017-02-18 14:35:32,295 got process_pong
+2017-02-18 14:35:36,213 got process_pong
+2017-02-18 14:35:40,233 got process_pong
+2017-02-18 14:35:44,252 got process_pong
+2017-02-18 14:35:48,275 got process_pong
+2017-02-18 14:35:52,293 got process_pong
+2017-02-18 14:35:56,217 got process_pong
+2017-02-18 14:36:00,236 got process_pong
+2017-02-18 14:36:04,255 got process_pong
+2017-02-18 14:36:08,207 got process_pong
+2017-02-18 14:36:12,233 got process_pong
+2017-02-18 14:36:16,259 got process_pong
+2017-02-18 14:36:20,226 got process_pong
+2017-02-18 14:36:24,246 got process_pong
+2017-02-18 14:36:28,265 got process_pong
+2017-02-18 14:36:32,292 got process_pong
+2017-02-18 14:36:36,213 got process_pong
+2017-02-18 14:36:40,240 got process_pong
+2017-02-18 14:36:44,257 got process_pong
+2017-02-18 14:36:48,275 got process_pong
+2017-02-18 14:36:52,290 got process_pong
+2017-02-18 14:36:56,214 got process_pong
+2017-02-18 14:37:00,236 got process_pong
+2017-02-18 14:37:04,257 got process_pong
+2017-02-18 14:37:08,279 got process_pong
+2017-02-18 14:37:10,197 got process_reconnect_url
+2017-02-18 14:37:12,207 got process_pong
+2017-02-18 14:37:16,223 got process_pong
+2017-02-18 14:37:20,244 got process_pong
+2017-02-18 14:37:24,276 got process_pong
+2017-02-18 14:37:28,298 got process_pong
+2017-02-18 14:37:32,219 got process_pong
+2017-02-18 14:37:36,243 got process_pong
+2017-02-18 14:37:40,262 got process_pong
+2017-02-18 14:37:44,280 got process_pong
+2017-02-18 14:37:48,201 got process_pong
+2017-02-18 14:37:52,217 got process_pong
+2017-02-18 14:37:56,243 got process_pong
+2017-02-18 14:38:00,266 got process_pong
+2017-02-18 14:38:04,618 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:38:04,627 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:38:05,437 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7063
+2017-02-18 14:38:05,644 Loading plugins
+2017-02-18 14:38:05,645 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:38:05,709 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x00000000049F8D30>
+2017-02-18 14:38:05,709 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:38:05,709 Plugin registered: <plugins.myplugin.MyPlugin object at 0x00000000046E0E80>
+2017-02-18 14:38:05,709 Registering jobs for RepeatPlugin
+2017-02-18 14:38:05,709 No jobs registered for RepeatPlugin
+2017-02-18 14:38:05,710 Registering jobs for MyPlugin
+2017-02-18 14:38:05,710 No jobs registered for MyPlugin
+2017-02-18 14:38:05,911 got process_hello
+2017-02-18 14:38:06,013 got process_presence_change
+2017-02-18 14:38:06,115 got process_message
+2017-02-18 14:38:06,131 output from RepeatPlugin
+2017-02-18 14:38:06,232 got process_reconnect_url
+2017-02-18 14:38:06,335 got process_pong
+2017-02-18 14:38:06,437 got process_presence_change
+2017-02-18 14:38:09,252 got process_pong
+2017-02-18 14:38:13,280 got process_pong
+2017-02-18 14:38:17,200 got process_pong
+2017-02-18 14:38:21,214 got process_pong
+2017-02-18 14:38:23,023 got process_user_typing
+2017-02-18 14:38:23,223 got process_message
+2017-02-18 14:38:23,226 output from RepeatPlugin
+2017-02-18 14:38:25,243 got process_pong
+2017-02-18 14:38:29,266 got process_pong
+2017-02-18 14:38:33,296 got process_pong
+2017-02-18 14:38:37,219 got process_pong
+2017-02-18 14:38:41,236 got process_pong
+2017-02-18 14:38:45,256 got process_pong
+2017-02-18 14:38:49,275 got process_pong
+2017-02-18 14:38:53,296 got process_pong
+2017-02-18 14:38:57,219 got process_pong
+2017-02-18 14:39:01,250 got process_pong
+2017-02-18 14:39:05,279 got process_pong
+2017-02-18 14:39:09,200 got process_pong
+2017-02-18 14:39:13,226 got process_pong
+2017-02-18 14:39:17,252 got process_pong
+2017-02-18 14:39:21,273 got process_pong
+2017-02-18 14:39:25,290 got process_pong
+2017-02-18 14:39:29,211 got process_pong
+2017-02-18 14:39:33,233 got process_pong
+2017-02-18 14:39:37,253 got process_pong
+2017-02-18 14:39:41,275 got process_pong
+2017-02-18 14:39:45,290 got process_pong
+2017-02-18 14:39:49,207 got process_pong
+2017-02-18 14:39:53,229 got process_pong
+2017-02-18 14:39:57,250 got process_pong
+2017-02-18 14:40:01,275 got process_pong
+2017-02-18 14:40:05,299 got process_pong
+2017-02-18 14:40:09,782 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:40:09,790 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:40:10,635 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7058
+2017-02-18 14:40:10,796 Loading plugins
+2017-02-18 14:40:10,796 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:40:10,809 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000004386D30>
+2017-02-18 14:40:10,809 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:40:10,809 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000004068E80>
+2017-02-18 14:40:10,809 Registering jobs for RepeatPlugin
+2017-02-18 14:40:10,809 No jobs registered for RepeatPlugin
+2017-02-18 14:40:10,809 Registering jobs for MyPlugin
+2017-02-18 14:40:10,809 No jobs registered for MyPlugin
+2017-02-18 14:40:11,010 got process_hello
+2017-02-18 14:40:11,112 got process_presence_change
+2017-02-18 14:40:11,216 got process_message
+2017-02-18 14:40:11,220 output from RepeatPlugin
+2017-02-18 14:40:11,322 got process_reconnect_url
+2017-02-18 14:40:11,424 got process_pong
+2017-02-18 14:40:11,628 got process_presence_change
+2017-02-18 14:40:14,244 got process_pong
+2017-02-18 14:40:17,773 got process_user_typing
+2017-02-18 14:40:18,276 got process_pong
+2017-02-18 14:40:19,084 got process_message
+2017-02-18 14:40:19,091 output from RepeatPlugin
+2017-02-18 14:40:22,206 got process_pong
+2017-02-18 14:40:26,292 got process_pong
+2017-02-18 14:40:30,214 got process_pong
+2017-02-18 14:40:34,233 got process_pong
+2017-02-18 14:40:38,255 got process_pong
+2017-02-18 14:40:42,279 got process_pong
+2017-02-18 14:40:46,299 got process_pong
+2017-02-18 14:40:50,219 got process_pong
+2017-02-18 14:40:54,243 got process_pong
+2017-02-18 14:40:58,272 got process_pong
+2017-02-18 14:41:02,203 got process_pong
+2017-02-18 14:41:06,221 got process_pong
+2017-02-18 14:41:10,243 got process_pong
+2017-02-18 14:41:14,262 got process_pong
+2017-02-18 14:41:18,279 got process_pong
+2017-02-18 14:41:22,296 got process_pong
+2017-02-18 14:41:26,216 got process_pong
+2017-02-18 14:41:30,236 got process_pong
+2017-02-18 14:41:34,257 got process_pong
+2017-02-18 14:41:38,280 got process_pong
+2017-02-18 14:41:42,298 got process_pong
+2017-02-18 14:41:46,223 got process_pong
+2017-02-18 14:41:48,529 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:41:48,538 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:41:49,242 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7059
+2017-02-18 14:41:49,470 Loading plugins
+2017-02-18 14:41:49,470 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:41:49,483 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000004017D30>
+2017-02-18 14:41:49,483 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:42:12,355 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:42:12,362 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:42:13,079 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7080
+2017-02-18 14:42:13,345 Loading plugins
+2017-02-18 14:42:13,345 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:42:13,358 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000004586D30>
+2017-02-18 14:42:13,358 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:42:13,358 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000004268E80>
+2017-02-18 14:42:13,359 Registering jobs for RepeatPlugin
+2017-02-18 14:42:13,359 No jobs registered for RepeatPlugin
+2017-02-18 14:42:13,359 Registering jobs for MyPlugin
+2017-02-18 14:42:13,359 No jobs registered for MyPlugin
+2017-02-18 14:42:13,561 got process_hello
+2017-02-18 14:42:13,664 got process_presence_change
+2017-02-18 14:42:13,769 got process_message
+2017-02-18 14:42:13,778 output from RepeatPlugin
+2017-02-18 14:42:13,880 got process_reconnect_url
+2017-02-18 14:42:13,986 got process_pong
+2017-02-18 14:42:14,088 got process_presence_change
+2017-02-18 14:42:17,203 got process_pong
+2017-02-18 14:42:21,243 got process_pong
+2017-02-18 14:42:24,058 got process_user_typing
+2017-02-18 14:42:24,460 got process_message
+2017-02-18 14:42:24,467 output from RepeatPlugin
+2017-02-18 14:42:25,273 got process_pong
+2017-02-18 14:42:29,296 got process_pong
+2017-02-18 14:42:33,221 got process_pong
+2017-02-18 14:42:37,246 got process_pong
+2017-02-18 14:42:41,263 got process_pong
+2017-02-18 14:42:45,285 got process_pong
+2017-02-18 14:42:49,206 got process_pong
+2017-02-18 14:42:53,223 got process_pong
+2017-02-18 14:42:54,835 got process_user_typing
+2017-02-18 14:42:57,249 got process_pong
+2017-02-18 14:42:59,561 got process_user_typing
+2017-02-18 14:43:01,269 got process_pong
+2017-02-18 14:43:05,289 got process_pong
+2017-02-18 14:43:09,216 got process_pong
+2017-02-18 14:43:10,325 got process_reconnect_url
+2017-02-18 14:43:13,246 got process_pong
+2017-02-18 14:43:17,273 got process_pong
+2017-02-18 14:43:21,200 got process_pong
+2017-02-18 14:43:25,211 got process_pong
+2017-02-18 14:43:25,719 got process_user_typing
+2017-02-18 14:43:29,239 got process_pong
+2017-02-18 14:43:29,344 got process_user_typing
+2017-02-18 14:43:29,447 got process_message
+2017-02-18 14:43:29,451 output from RepeatPlugin
+2017-02-18 14:43:33,270 got process_pong
+2017-02-18 14:43:37,290 got process_pong
+2017-02-18 14:43:41,211 got process_pong
+2017-02-18 14:43:45,232 got process_pong
+2017-02-18 14:43:47,046 got process_channel_left
+2017-02-18 14:43:47,151 got process_update_thread_state
+2017-02-18 14:43:47,257 got process_message
+2017-02-18 14:43:47,362 got process_desktop_notification
+2017-02-18 14:43:49,279 got process_pong
+2017-02-18 14:43:53,299 got process_pong
+2017-02-18 14:43:57,223 got process_pong
+2017-02-18 14:44:00,438 got process_user_typing
+2017-02-18 14:44:01,247 got process_pong
+2017-02-18 14:44:03,460 got process_user_typing
+2017-02-18 14:44:05,075 got process_message
+2017-02-18 14:44:05,079 output from RepeatPlugin
+2017-02-18 14:44:05,382 got process_pong
+2017-02-18 14:44:09,200 got process_pong
+2017-02-18 14:44:13,219 got process_pong
+2017-02-18 14:44:17,249 got process_pong
+2017-02-18 14:44:21,273 got process_pong
+2017-02-18 14:44:25,292 got process_pong
+2017-02-18 14:44:29,213 got process_pong
+2017-02-18 14:44:33,240 got process_pong
+2017-02-18 14:44:37,282 got process_pong
+2017-02-18 14:44:41,203 got process_pong
+2017-02-18 14:44:45,232 got process_pong
+2017-02-18 14:44:49,252 got process_pong
+2017-02-18 14:44:53,272 got process_pong
+2017-02-18 14:44:57,295 got process_pong
+2017-02-18 14:45:01,219 got process_pong
+2017-02-18 14:45:05,243 got process_pong
+2017-02-18 14:45:09,273 got process_pong
+2017-02-18 14:45:13,289 got process_pong
+2017-02-18 14:45:17,211 got process_pong
+2017-02-18 14:45:21,233 got process_pong
+2017-02-18 14:45:25,257 got process_pong
+2017-02-18 14:45:29,276 got process_pong
+2017-02-18 14:45:33,298 got process_pong
+2017-02-18 14:45:37,220 got process_pong
+2017-02-18 14:45:41,242 got process_pong
+2017-02-18 14:45:45,263 got process_pong
+2017-02-18 14:45:47,382 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:45:47,391 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:45:48,240 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6931
+2017-02-18 14:45:48,433 Loading plugins
+2017-02-18 14:45:48,433 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:45:48,447 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x00000000037D8160>
+2017-02-18 14:45:48,447 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:45:48,448 Plugin registered: <plugins.myplugin.MyPlugin object at 0x00000000037D8D30>
+2017-02-18 14:45:48,448 Registering jobs for RepeatPlugin
+2017-02-18 14:45:48,448 No jobs registered for RepeatPlugin
+2017-02-18 14:45:48,448 Registering jobs for MyPlugin
+2017-02-18 14:45:48,448 No jobs registered for MyPlugin
+2017-02-18 14:45:48,650 got process_hello
+2017-02-18 14:45:48,753 got process_presence_change
+2017-02-18 14:45:48,858 got process_message
+2017-02-18 14:45:48,858 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'from user: "U3MP47XAB" plugin: "RepeatPlugin" command: "now I\'m just in this channel" in channel C41Q1H4BD', u'ts': u'1487457846.009230', u'user': u'U41R44L82', u'reply_to': None, u'type': u'message', u'channel': u'C41Q1H4BD'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    channel = DrumpfBot.main_channel_id
+AttributeError: class DrumpfBot has no attribute 'main_channel_id'
+2017-02-18 14:45:48,997 got process_reconnect_url
+2017-02-18 14:45:49,105 got process_pong
+2017-02-18 14:45:49,210 got process_presence_change
+2017-02-18 14:45:52,236 got process_pong
+2017-02-18 14:45:55,661 got process_user_typing
+2017-02-18 14:45:56,269 got process_pong
+2017-02-18 14:45:56,374 got process_message
+2017-02-18 14:45:56,374 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'hello', u'ts': u'1487457957.009231', u'user': u'U3MP47XAB', u'team': u'T3LC8MXMF', u'type': u'message', u'channel': u'C41Q1H4BD'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    channel = DrumpfBot.main_channel_id
+AttributeError: class DrumpfBot has no attribute 'main_channel_id'
+2017-02-18 14:46:00,296 got process_pong
+2017-02-18 14:46:04,217 got process_pong
+2017-02-18 14:46:08,234 got process_pong
+2017-02-18 14:46:10,250 got process_reconnect_url
+2017-02-18 14:46:12,265 got process_pong
+2017-02-18 14:46:16,282 got process_pong
+2017-02-18 14:46:20,203 got process_pong
+2017-02-18 14:46:24,224 got process_pong
+2017-02-18 14:46:28,249 got process_pong
+2017-02-18 14:46:32,269 got process_pong
+2017-02-18 14:46:36,290 got process_pong
+2017-02-18 14:46:40,216 got process_pong
+2017-02-18 14:46:44,239 got process_pong
+2017-02-18 14:46:49,262 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:46:49,269 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:46:50,052 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6885
+2017-02-18 14:46:50,219 Loading plugins
+2017-02-18 14:46:50,219 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:46:50,230 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000004570160>
+2017-02-18 14:46:50,232 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:46:50,232 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000004570D30>
+2017-02-18 14:46:50,232 Registering jobs for RepeatPlugin
+2017-02-18 14:46:50,232 No jobs registered for RepeatPlugin
+2017-02-18 14:46:50,232 Registering jobs for MyPlugin
+2017-02-18 14:46:50,232 No jobs registered for MyPlugin
+2017-02-18 14:46:50,433 got process_hello
+2017-02-18 14:46:50,602 got process_presence_change
+2017-02-18 14:46:50,711 got process_message
+2017-02-18 14:46:50,713 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'from user: "U3MP47XAB" plugin: "RepeatPlugin" command: "now I\'m just in this channel" in channel C41Q1H4BD', u'ts': u'1487457846.009230', u'user': u'U41R44L82', u'reply_to': None, u'type': u'message', u'channel': u'C41Q1H4BD'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    channel = DrumpfBot.main_channel_id
+AttributeError: class DrumpfBot has no attribute 'main_channel_id'
+2017-02-18 14:46:50,825 got process_reconnect_url
+2017-02-18 14:46:50,930 got process_pong
+2017-02-18 14:46:51,035 got process_presence_change
+2017-02-18 14:46:54,256 got process_pong
+2017-02-18 14:46:58,282 got process_pong
+2017-02-18 14:47:02,298 got process_pong
+2017-02-18 14:47:04,507 got process_user_typing
+2017-02-18 14:47:04,812 got process_message
+2017-02-18 14:47:04,812 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'dfs', u'ts': u'1487458025.009232', u'user': u'U3MP47XAB', u'team': u'T3LC8MXMF', u'type': u'message', u'channel': u'C41Q1H4BD'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    channel = DrumpfBot.main_channel_id
+AttributeError: class DrumpfBot has no attribute 'main_channel_id'
+2017-02-18 14:47:06,220 got process_pong
+2017-02-18 14:47:10,243 got process_pong
+2017-02-18 14:47:14,263 got process_pong
+2017-02-18 14:47:18,213 got process_pong
+2017-02-18 14:47:22,232 got process_pong
+2017-02-18 14:47:26,272 got process_pong
+2017-02-18 14:47:30,296 got process_pong
+2017-02-18 14:47:34,217 got process_pong
+2017-02-18 14:47:38,236 got process_pong
+2017-02-18 14:47:42,252 got process_pong
+2017-02-18 14:47:46,276 got process_pong
+2017-02-18 14:47:50,299 got process_pong
+2017-02-18 14:47:54,220 got process_pong
+2017-02-18 14:47:58,247 got process_pong
+2017-02-18 14:48:02,275 got process_pong
+2017-02-18 14:48:06,298 got process_pong
+2017-02-18 14:48:10,219 got process_pong
+2017-02-18 14:48:10,323 got process_reconnect_url
+2017-02-18 14:48:14,246 got process_pong
+2017-02-18 14:48:18,267 got process_pong
+2017-02-18 14:48:22,289 got process_pong
+2017-02-18 14:48:26,206 got process_pong
+2017-02-18 14:48:30,187 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:48:30,197 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:48:31,075 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6886
+2017-02-18 14:48:31,226 Loading plugins
+2017-02-18 14:48:31,226 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:48:31,243 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003708160>
+2017-02-18 14:48:31,243 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:48:31,243 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003708D30>
+2017-02-18 14:48:31,243 Registering jobs for RepeatPlugin
+2017-02-18 14:48:31,243 No jobs registered for RepeatPlugin
+2017-02-18 14:48:31,243 Registering jobs for MyPlugin
+2017-02-18 14:48:31,243 No jobs registered for MyPlugin
+2017-02-18 14:48:31,444 got process_hello
+2017-02-18 14:48:31,546 got process_presence_change
+2017-02-18 14:48:31,657 got process_message
+2017-02-18 14:48:31,660 output from RepeatPlugin
+2017-02-18 14:48:31,762 got process_reconnect_url
+2017-02-18 14:48:31,862 got process_pong
+2017-02-18 14:48:32,063 got process_presence_change
+2017-02-18 14:48:35,288 got process_pong
+2017-02-18 14:48:38,608 got process_user_typing
+2017-02-18 14:48:39,112 got process_message
+2017-02-18 14:48:39,121 output from RepeatPlugin
+2017-02-18 14:48:39,221 got process_pong
+2017-02-18 14:48:43,243 got process_pong
+2017-02-18 14:48:47,269 got process_pong
+2017-02-18 14:48:51,292 got process_pong
+2017-02-18 14:48:54,714 got process_user_typing
+2017-02-18 14:48:55,219 got process_pong
+2017-02-18 14:48:55,424 got process_message
+2017-02-18 14:48:55,430 output from RepeatPlugin
+2017-02-18 14:48:55,532 got process_desktop_notification
+2017-02-18 14:48:59,263 got process_pong
+2017-02-18 14:49:03,285 got process_pong
+2017-02-18 14:49:07,207 got process_pong
+2017-02-18 14:49:11,230 got process_pong
+2017-02-18 14:49:15,250 got process_pong
+2017-02-18 14:49:19,269 got process_pong
+2017-02-18 14:49:23,293 got process_pong
+2017-02-18 14:49:27,213 got process_pong
+2017-02-18 14:49:31,234 got process_pong
+2017-02-18 14:49:35,256 got process_pong
+2017-02-18 14:49:39,279 got process_pong
+2017-02-18 14:49:43,299 got process_pong
+2017-02-18 14:49:47,217 got process_pong
+2017-02-18 14:49:51,243 got process_pong
+2017-02-18 14:49:55,266 got process_pong
+2017-02-18 14:49:59,289 got process_pong
+2017-02-18 14:50:03,210 got process_pong
+2017-02-18 14:50:07,233 got process_pong
+2017-02-18 14:50:11,259 got process_pong
+2017-02-18 14:50:15,288 got process_pong
+2017-02-18 14:50:19,207 got process_pong
+2017-02-18 14:50:23,229 got process_pong
+2017-02-18 14:50:27,249 got process_pong
+2017-02-18 14:50:31,273 got process_pong
+2017-02-18 14:50:35,296 got process_pong
+2017-02-18 14:50:39,220 got process_pong
+2017-02-18 14:50:43,240 got process_pong
+2017-02-18 14:50:47,259 got process_pong
+2017-02-18 14:50:51,282 got process_pong
+2017-02-18 14:50:55,203 got process_pong
+2017-02-18 14:50:59,226 got process_pong
+2017-02-18 14:51:03,249 got process_pong
+2017-02-18 14:51:07,269 got process_pong
+2017-02-18 14:51:10,282 got process_reconnect_url
+2017-02-18 14:51:11,292 got process_pong
+2017-02-18 14:51:15,213 got process_pong
+2017-02-18 14:51:19,234 got process_pong
+2017-02-18 14:51:23,259 got process_pong
+2017-02-18 14:51:27,286 got process_pong
+2017-02-18 14:51:31,200 got process_pong
+2017-02-18 14:51:35,220 got process_pong
+2017-02-18 14:51:39,244 got process_pong
+2017-02-18 14:51:43,269 got process_pong
+2017-02-18 14:51:47,290 got process_pong
+2017-02-18 14:51:51,210 got process_pong
+2017-02-18 14:51:55,230 got process_pong
+2017-02-18 14:51:59,257 got process_pong
+2017-02-18 14:52:03,285 got process_pong
+2017-02-18 14:52:07,211 got process_pong
+2017-02-18 14:52:11,237 got process_pong
+2017-02-18 14:52:15,253 got process_pong
+2017-02-18 14:52:19,279 got process_pong
+2017-02-18 14:52:23,201 got process_pong
+2017-02-18 14:52:27,224 got process_pong
+2017-02-18 14:52:31,247 got process_pong
+2017-02-18 14:52:35,272 got process_pong
+2017-02-18 14:52:39,296 got process_pong
+2017-02-18 14:52:43,221 got process_pong
+2017-02-18 14:52:47,246 got process_pong
+2017-02-18 14:52:51,266 got process_pong
+2017-02-18 14:52:55,288 got process_pong
+2017-02-18 14:52:59,226 got process_pong
+2017-02-18 14:53:03,253 got process_pong
+2017-02-18 14:53:07,275 got process_pong
+2017-02-18 14:53:11,203 got process_pong
+2017-02-18 14:53:15,219 got process_pong
+2017-02-18 14:53:19,239 got process_pong
+2017-02-18 14:53:23,259 got process_pong
+2017-02-18 14:53:27,282 got process_pong
+2017-02-18 14:53:34,155 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:53:34,164 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:53:34,947 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6905
+2017-02-18 14:53:35,121 Loading plugins
+2017-02-18 14:53:35,121 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:53:35,137 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003848E80>
+2017-02-18 14:53:35,137 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:53:35,137 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003848B70>
+2017-02-18 14:53:35,138 Registering jobs for RepeatPlugin
+2017-02-18 14:53:35,138 No jobs registered for RepeatPlugin
+2017-02-18 14:53:35,138 Registering jobs for MyPlugin
+2017-02-18 14:53:35,138 No jobs registered for MyPlugin
+2017-02-18 14:53:35,338 got process_hello
+2017-02-18 14:53:35,444 got process_presence_change
+2017-02-18 14:53:35,549 got process_message
+2017-02-18 14:53:35,657 got process_reconnect_url
+2017-02-18 14:53:35,763 got process_pong
+2017-02-18 14:53:36,066 got process_presence_change
+2017-02-18 14:53:39,285 got process_pong
+2017-02-18 14:53:43,204 got process_pong
+2017-02-18 14:53:43,710 got process_user_typing
+2017-02-18 14:53:45,721 got process_message
+2017-02-18 14:53:47,236 got process_pong
+2017-02-18 14:53:47,740 got process_user_typing
+2017-02-18 14:53:51,256 got process_pong
+2017-02-18 14:53:55,280 got process_pong
+2017-02-18 14:53:57,193 got process_user_typing
+2017-02-18 14:53:59,203 got process_pong
+2017-02-18 14:54:03,239 got process_pong
+2017-02-18 14:54:07,266 got process_pong
+2017-02-18 14:54:10,280 got process_reconnect_url
+2017-02-18 14:54:11,292 got process_pong
+2017-02-18 14:54:15,210 got process_pong
+2017-02-18 14:54:19,233 got process_pong
+2017-02-18 14:54:19,638 got process_presence_change
+2017-02-18 14:54:23,260 got process_pong
+2017-02-18 14:54:27,286 got process_pong
+2017-02-18 14:54:31,203 got process_pong
+2017-02-18 14:54:33,315 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:54:33,323 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:54:34,055 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6884
+2017-02-18 14:54:34,256 Loading plugins
+2017-02-18 14:54:34,256 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:54:34,270 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003A08E80>
+2017-02-18 14:54:34,270 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:54:34,270 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003A08D30>
+2017-02-18 14:54:34,270 Registering jobs for RepeatPlugin
+2017-02-18 14:54:34,270 No jobs registered for RepeatPlugin
+2017-02-18 14:54:34,270 Registering jobs for MyPlugin
+2017-02-18 14:54:34,270 No jobs registered for MyPlugin
+2017-02-18 14:54:34,473 got process_hello
+2017-02-18 14:54:34,575 got process_presence_change
+2017-02-18 14:54:34,680 got process_message
+2017-02-18 14:54:34,789 got process_reconnect_url
+2017-02-18 14:54:34,897 got process_pong
+2017-02-18 14:54:35,000 got process_presence_change
+2017-02-18 14:54:38,220 got process_pong
+2017-02-18 14:54:39,733 got process_user_typing
+2017-02-18 14:54:42,246 got process_pong
+2017-02-18 14:54:42,851 got process_user_typing
+2017-02-18 14:54:42,956 got process_message
+2017-02-18 14:54:43,059 got process_desktop_notification
+2017-02-18 14:54:46,285 got process_pong
+2017-02-18 14:54:50,206 got process_pong
+2017-02-18 14:54:54,223 got process_pong
+2017-02-18 14:54:58,244 got process_pong
+2017-02-18 14:55:02,267 got process_pong
+2017-02-18 14:55:06,088 got process_presence_change
+2017-02-18 14:55:06,293 got process_pong
+2017-02-18 14:55:09,812 got process_user_typing
+2017-02-18 14:55:10,217 got process_pong
+2017-02-18 14:55:12,933 got process_user_typing
+2017-02-18 14:55:13,036 got process_message
+2017-02-18 14:55:14,247 got process_pong
+2017-02-18 14:55:16,963 got process_user_typing
+2017-02-18 14:55:18,273 got process_pong
+2017-02-18 14:55:22,203 got process_pong
+2017-02-18 14:55:26,234 got process_pong
+2017-02-18 14:55:30,256 got process_pong
+2017-02-18 14:55:34,276 got process_pong
+2017-02-18 14:56:37,013 got process_reconnect_url
+2017-02-18 14:56:37,115 got process_user_typing
+2017-02-18 14:56:37,219 got process_user_typing
+2017-02-18 14:56:37,321 got process_message
+2017-02-18 14:56:37,427 got process_desktop_notification
+2017-02-18 14:56:37,535 got process_user_typing
+2017-02-18 14:56:37,638 got process_pong
+2017-02-18 14:56:40,255 got process_pong
+2017-02-18 14:56:44,276 got process_pong
+2017-02-18 14:57:47,536 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 14:57:47,545 Starting new HTTPS connection (1): slack.com
+2017-02-18 14:57:48,358 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6893
+2017-02-18 14:57:48,516 Loading plugins
+2017-02-18 14:57:48,516 Importing plugins.repeat.RepeatPlugin
+2017-02-18 14:57:48,529 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003C88E80>
+2017-02-18 14:57:48,529 Importing plugins.myplugin.MyPlugin
+2017-02-18 14:57:48,529 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003C88B70>
+2017-02-18 14:57:48,529 Registering jobs for RepeatPlugin
+2017-02-18 14:57:48,529 No jobs registered for RepeatPlugin
+2017-02-18 14:57:48,529 Registering jobs for MyPlugin
+2017-02-18 14:57:48,529 No jobs registered for MyPlugin
+2017-02-18 14:57:48,730 got process_hello
+2017-02-18 14:57:48,832 got process_presence_change
+2017-02-18 14:57:48,937 got process_message
+2017-02-18 14:57:49,045 got process_reconnect_url
+2017-02-18 14:57:49,151 got process_pong
+2017-02-18 14:57:49,256 got process_presence_change
+2017-02-18 14:57:52,273 got process_pong
+2017-02-18 14:57:54,392 got process_user_typing
+2017-02-18 14:57:56,203 got process_pong
+2017-02-18 14:57:57,513 got process_user_typing
+2017-02-18 14:57:58,418 got process_message
+2017-02-18 14:57:58,627 got process_desktop_notification
+2017-02-18 14:58:00,252 got process_pong
+2017-02-18 14:58:04,275 got process_pong
+2017-02-18 14:58:08,201 got process_pong
+2017-02-18 14:58:12,226 got process_pong
+2017-02-18 14:58:16,243 got process_pong
+2017-02-18 14:58:20,266 got process_pong
+2017-02-18 14:58:24,289 got process_pong
+2017-02-18 14:58:28,217 got process_pong
+2017-02-18 14:58:32,262 got process_pong
+2017-02-18 14:58:36,282 got process_pong
+2017-02-18 14:58:40,206 got process_pong
+2017-02-18 14:58:44,229 got process_pong
+2017-02-18 14:58:45,539 got process_user_typing
+2017-02-18 14:58:47,454 got process_message
+2017-02-18 14:58:47,562 got process_desktop_notification
+2017-02-18 14:58:48,275 got process_pong
+2017-02-18 14:58:52,296 got process_pong
+2017-02-18 14:58:56,217 got process_pong
+2017-02-18 14:59:00,038 got process_user_typing
+2017-02-18 14:59:00,242 got process_pong
+2017-02-18 14:59:03,463 got process_user_typing
+2017-02-18 14:59:03,569 got process_message
+2017-02-18 14:59:04,279 got process_pong
+2017-02-18 14:59:08,295 got process_pong
+2017-02-18 14:59:10,201 got process_reconnect_url
+2017-02-18 14:59:12,217 got process_pong
+2017-02-18 14:59:16,239 got process_pong
+2017-02-18 14:59:20,259 got process_pong
+2017-02-18 14:59:24,282 got process_pong
+2017-02-18 15:00:03,283 got process_pong
+2017-02-18 15:00:05,312 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 15:00:05,321 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:00:06,131 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6876
+2017-02-18 15:00:06,371 Loading plugins
+2017-02-18 15:00:06,371 Importing plugins.repeat.RepeatPlugin
+2017-02-18 15:00:06,387 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x00000000045D0E80>
+2017-02-18 15:00:06,387 Importing plugins.myplugin.MyPlugin
+2017-02-18 15:00:06,387 Plugin registered: <plugins.myplugin.MyPlugin object at 0x00000000045D0B70>
+2017-02-18 15:00:06,387 Registering jobs for RepeatPlugin
+2017-02-18 15:00:06,387 No jobs registered for RepeatPlugin
+2017-02-18 15:00:06,387 Registering jobs for MyPlugin
+2017-02-18 15:00:06,388 No jobs registered for MyPlugin
+2017-02-18 15:00:06,589 got process_hello
+2017-02-18 15:00:06,693 got process_presence_change
+2017-02-18 15:00:06,796 got process_message
+2017-02-18 15:00:06,796 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'from user: "U3MP47XAB" plugin: "RepeatPlugin" command: "<@U41R44L82>" in channel C41Q1H4BD', u'ts': u'1487458136.009237', u'user': u'U41R44L82', u'reply_to': None, u'type': u'message', u'channel': u'C41Q1H4BD'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    print(channel)
+NameError: global name 'channel' is not defined
+2017-02-18 15:00:06,901 got process_reconnect_url
+2017-02-18 15:00:07,006 got process_pong
+2017-02-18 15:00:07,311 got process_presence_change
+2017-02-18 15:00:10,230 got process_pong
+2017-02-18 15:00:12,746 got process_user_typing
+2017-02-18 15:00:14,255 got process_pong
+2017-02-18 15:00:15,460 got process_message
+2017-02-18 15:00:15,460 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'trump selection', u'ts': u'1487458816.009245', u'user': u'U3MP47XAB', u'team': u'T3LC8MXMF', u'type': u'message', u'channel': u'C41Q1H4BD'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    print(channel)
+NameError: global name 'channel' is not defined
+2017-02-18 15:00:18,273 got process_pong
+2017-02-18 15:00:22,296 got process_pong
+2017-02-18 15:00:26,233 got process_pong
+2017-02-18 15:00:30,250 got process_pong
+2017-02-18 15:00:34,269 got process_pong
+2017-02-18 15:00:38,288 got process_pong
+2017-02-18 15:00:42,209 got process_pong
+2017-02-18 15:00:46,230 got process_pong
+2017-02-18 15:01:38,661 got process_reconnect_url
+2017-02-18 15:01:38,779 got process_pong
+2017-02-18 15:01:41,257 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 15:01:41,265 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:01:42,000 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6895
+2017-02-18 15:01:42,270 Loading plugins
+2017-02-18 15:01:42,270 Importing plugins.repeat.RepeatPlugin
+2017-02-18 15:01:42,273 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000004098E80>
+2017-02-18 15:01:42,273 Importing plugins.myplugin.MyPlugin
+2017-02-18 15:01:42,273 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000004098160>
+2017-02-18 15:01:42,273 Registering jobs for RepeatPlugin
+2017-02-18 15:01:42,273 No jobs registered for RepeatPlugin
+2017-02-18 15:01:42,273 Registering jobs for MyPlugin
+2017-02-18 15:01:42,273 No jobs registered for MyPlugin
+2017-02-18 15:01:42,476 got process_hello
+2017-02-18 15:01:42,578 got process_presence_change
+2017-02-18 15:01:42,681 got process_message
+2017-02-18 15:01:42,681 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'from user: "U3MP47XAB" plugin: "RepeatPlugin" command: "<@U41R44L82>" in channel C41Q1H4BD', u'ts': u'1487458136.009237', u'user': u'U41R44L82', u'reply_to': None, u'type': u'message', u'channel': u'C41Q1H4BD'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    print(channel)
+NameError: global name 'channel' is not defined
+2017-02-18 15:01:42,789 got process_reconnect_url
+2017-02-18 15:01:42,892 got process_pong
+2017-02-18 15:01:43,196 got process_presence_change
+2017-02-18 15:01:46,213 got process_pong
+2017-02-18 15:01:50,236 got process_pong
+2017-02-18 15:01:54,265 got process_pong
+2017-02-18 15:01:58,289 got process_pong
+2017-02-18 15:01:58,693 got process_user_typing
+2017-02-18 15:02:01,806 got process_user_typing
+2017-02-18 15:02:02,211 got process_pong
+2017-02-18 15:02:06,236 got process_pong
+2017-02-18 15:02:06,342 got process_user_typing
+2017-02-18 15:02:07,450 got process_message
+2017-02-18 15:02:07,450 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'test', u'ts': u'1487458928.009246', u'user': u'U3MP47XAB', u'team': u'T3LC8MXMF', u'type': u'message', u'channel': u'C41Q1H4BD'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    print(channel)
+NameError: global name 'channel' is not defined
+2017-02-18 15:02:10,266 got process_pong
+2017-02-18 15:02:11,477 got process_user_typing
+2017-02-18 15:02:11,582 got process_message
+2017-02-18 15:02:11,582 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'trump selection', u'ts': u'1487458932.009247', u'user': u'U3MP47XAB', u'team': u'T3LC8MXMF', u'type': u'message', u'channel': u'C41Q1H4BD'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    print(channel)
+NameError: global name 'channel' is not defined
+2017-02-18 15:02:14,298 got process_pong
+2017-02-18 15:02:18,223 got process_pong
+2017-02-18 15:02:22,243 got process_pong
+2017-02-18 15:02:26,273 got process_pong
+2017-02-18 15:02:29,890 got process_user_typing
+2017-02-18 15:02:30,292 got process_pong
+2017-02-18 15:02:31,707 got process_message
+2017-02-18 15:02:31,707 Problem in Plugin Class: RepeatPlugin: process_message 
+{u'text': u'dsf', u'ts': u'1487458952.000007', u'user': u'U3MP47XAB', u'team': u'T3LC8MXMF', u'type': u'message', u'channel': u'D41TEKNDA'}
+Traceback (most recent call last):
+  File "c:\users\cjbro\envs\drumpf\lib\site-packages\rtmbot\core.py", line 205, in do
+    func(data)
+  File "C:\Users\cjbro\CODES\pyCode\drumpf\plugins\repeat.py", line 10, in process_message
+    print(channel)
+NameError: global name 'channel' is not defined
+2017-02-18 15:02:31,809 got process_desktop_notification
+2017-02-18 15:02:34,226 got process_pong
+2017-02-18 15:02:38,247 got process_pong
+2017-02-18 15:02:42,273 got process_pong
+2017-02-18 15:02:46,296 got process_pong
+2017-02-18 15:02:50,243 got process_pong
+2017-02-18 15:02:54,269 got process_pong
+2017-02-18 15:02:58,224 got process_pong
+2017-02-18 15:03:02,249 got process_pong
+2017-02-18 15:03:06,273 got process_pong
+2017-02-18 15:03:10,201 got process_pong
+2017-02-18 15:03:10,405 got process_reconnect_url
+2017-02-18 15:03:17,855 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 15:03:17,862 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:03:18,637 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6876
+2017-02-18 15:03:18,862 Loading plugins
+2017-02-18 15:03:18,862 Importing plugins.repeat.RepeatPlugin
+2017-02-18 15:03:18,865 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003FE0E80>
+2017-02-18 15:03:18,865 Importing plugins.myplugin.MyPlugin
+2017-02-18 15:03:18,865 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003FE0160>
+2017-02-18 15:03:18,865 Registering jobs for RepeatPlugin
+2017-02-18 15:03:18,865 No jobs registered for RepeatPlugin
+2017-02-18 15:03:18,865 Registering jobs for MyPlugin
+2017-02-18 15:03:18,865 No jobs registered for MyPlugin
+2017-02-18 15:03:19,065 got process_hello
+2017-02-18 15:03:19,167 got process_presence_change
+2017-02-18 15:03:19,272 got process_message
+2017-02-18 15:03:19,378 got process_reconnect_url
+2017-02-18 15:03:19,483 got process_pong
+2017-02-18 15:03:19,585 got process_presence_change
+2017-02-18 15:03:22,201 got process_pong
+2017-02-18 15:03:26,221 got process_pong
+2017-02-18 15:03:30,255 got process_pong
+2017-02-18 15:03:32,976 got process_user_typing
+2017-02-18 15:03:34,283 got process_pong
+2017-02-18 15:03:36,799 got process_user_typing
+2017-02-18 15:03:38,207 got process_pong
+2017-02-18 15:03:39,917 got process_user_typing
+2017-02-18 15:03:41,128 got process_message
+2017-02-18 15:03:41,128 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:03:41,641 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 358
+2017-02-18 15:03:41,749 got process_message
+2017-02-18 15:03:42,269 got process_pong
+2017-02-18 15:03:46,292 got process_pong
+2017-02-18 15:03:50,217 got process_pong
+2017-02-18 15:03:54,236 got process_pong
+2017-02-18 15:03:58,286 got process_pong
+2017-02-18 15:04:02,210 got process_pong
+2017-02-18 15:04:06,233 got process_pong
+2017-02-18 15:04:10,253 got process_pong
+2017-02-18 15:04:14,272 got process_pong
+2017-02-18 15:04:18,295 got process_pong
+2017-02-18 15:04:22,216 got process_pong
+2017-02-18 15:04:26,242 got process_pong
+2017-02-18 15:04:30,266 got process_pong
+2017-02-18 15:04:34,286 got process_pong
+2017-02-18 15:04:38,204 got process_pong
+2017-02-18 15:04:42,220 got process_pong
+2017-02-18 15:04:46,240 got process_pong
+2017-02-18 15:04:50,263 got process_pong
+2017-02-18 15:04:54,286 got process_pong
+2017-02-18 15:04:58,209 got process_pong
+2017-02-18 15:05:02,226 got process_pong
+2017-02-18 15:05:06,249 got process_pong
+2017-02-18 15:05:10,272 got process_pong
+2017-02-18 15:05:14,298 got process_pong
+2017-02-18 15:05:18,216 got process_pong
+2017-02-18 15:05:22,233 got process_pong
+2017-02-18 15:05:26,262 got process_pong
+2017-02-18 15:05:30,237 got process_pong
+2017-02-18 15:05:34,259 got process_pong
+2017-02-18 15:05:38,278 got process_pong
+2017-02-18 15:05:42,295 got process_pong
+2017-02-18 15:05:46,220 got process_pong
+2017-02-18 15:05:50,243 got process_pong
+2017-02-18 15:05:54,265 got process_pong
+2017-02-18 15:05:58,400 got process_pong
+2017-02-18 15:06:02,240 got process_pong
+2017-02-18 15:06:06,301 got process_pong
+2017-02-18 15:06:10,230 got process_pong
+2017-02-18 15:06:10,335 got process_reconnect_url
+2017-02-18 15:06:14,259 got process_pong
+2017-02-18 15:06:18,280 got process_pong
+2017-02-18 15:06:22,200 got process_pong
+2017-02-18 15:06:26,221 got process_pong
+2017-02-18 15:06:30,243 got process_pong
+2017-02-18 15:06:34,257 got process_pong
+2017-02-18 15:06:38,279 got process_pong
+2017-02-18 15:06:42,201 got process_pong
+2017-02-18 15:06:46,226 got process_pong
+2017-02-18 15:06:50,249 got process_pong
+2017-02-18 15:06:54,279 got process_pong
+2017-02-18 15:06:58,201 got process_pong
+2017-02-18 15:07:02,219 got process_pong
+2017-02-18 15:07:06,240 got process_pong
+2017-02-18 15:07:10,263 got process_pong
+2017-02-18 15:07:14,289 got process_pong
+2017-02-18 15:07:18,210 got process_pong
+2017-02-18 15:07:22,233 got process_pong
+2017-02-18 15:07:26,285 got process_pong
+2017-02-18 15:07:30,210 got process_pong
+2017-02-18 15:07:34,236 got process_pong
+2017-02-18 15:07:38,250 got process_pong
+2017-02-18 15:07:42,273 got process_pong
+2017-02-18 15:07:46,296 got process_pong
+2017-02-18 15:07:50,214 got process_pong
+2017-02-18 15:07:54,237 got process_pong
+2017-02-18 15:07:58,263 got process_pong
+2017-02-18 15:08:02,298 got process_pong
+2017-02-18 15:08:06,219 got process_pong
+2017-02-18 15:08:10,244 got process_pong
+2017-02-18 15:08:14,270 got process_pong
+2017-02-18 15:08:18,292 got process_pong
+2017-02-18 15:08:22,213 got process_pong
+2017-02-18 15:08:26,233 got process_pong
+2017-02-18 15:08:30,259 got process_pong
+2017-02-18 15:08:34,278 got process_pong
+2017-02-18 15:08:38,296 got process_pong
+2017-02-18 15:08:42,221 got process_pong
+2017-02-18 15:08:46,250 got process_pong
+2017-02-18 15:08:50,278 got process_pong
+2017-02-18 15:08:54,299 got process_pong
+2017-02-18 15:08:58,220 got process_pong
+2017-02-18 15:09:02,269 got process_pong
+2017-02-18 15:09:06,286 got process_pong
+2017-02-18 15:09:10,203 got process_pong
+2017-02-18 15:09:10,315 got process_reconnect_url
+2017-02-18 15:09:14,252 got process_pong
+2017-02-18 15:09:18,276 got process_pong
+2017-02-18 15:09:22,289 got process_pong
+2017-02-18 15:09:26,214 got process_pong
+2017-02-18 15:09:30,236 got process_pong
+2017-02-18 15:09:34,259 got process_pong
+2017-02-18 15:09:38,286 got process_pong
+2017-02-18 15:09:42,206 got process_pong
+2017-02-18 15:09:46,223 got process_pong
+2017-02-18 15:09:50,247 got process_pong
+2017-02-18 15:09:54,275 got process_pong
+2017-02-18 15:09:58,299 got process_pong
+2017-02-18 15:10:02,223 got process_pong
+2017-02-18 15:10:06,239 got process_pong
+2017-02-18 15:10:10,259 got process_pong
+2017-02-18 15:10:14,279 got process_pong
+2017-02-18 15:10:18,230 got process_pong
+2017-02-18 15:10:22,250 got process_pong
+2017-02-18 15:10:26,269 got process_pong
+2017-02-18 15:10:30,289 got process_pong
+2017-02-18 15:10:34,207 got process_pong
+2017-02-18 15:10:38,232 got process_pong
+2017-02-18 15:10:42,255 got process_pong
+2017-02-18 15:10:46,275 got process_pong
+2017-02-18 15:10:50,296 got process_pong
+2017-02-18 15:10:54,219 got process_pong
+2017-02-18 15:10:58,240 got process_pong
+2017-02-18 15:11:02,263 got process_pong
+2017-02-18 15:11:06,283 got process_pong
+2017-02-18 15:11:10,295 got process_pong
+2017-02-18 15:11:14,214 got process_pong
+2017-02-18 15:11:18,239 got process_pong
+2017-02-18 15:11:22,263 got process_pong
+2017-02-18 15:11:26,285 got process_pong
+2017-02-18 15:11:30,217 got process_pong
+2017-02-18 15:11:34,233 got process_pong
+2017-02-18 15:11:38,256 got process_pong
+2017-02-18 15:11:42,280 got process_pong
+2017-02-18 15:11:46,201 got process_pong
+2017-02-18 15:11:50,224 got process_pong
+2017-02-18 15:11:54,239 got process_pong
+2017-02-18 15:11:58,259 got process_pong
+2017-02-18 15:12:02,280 got process_pong
+2017-02-18 15:12:06,204 got process_pong
+2017-02-18 15:12:10,230 got process_pong
+2017-02-18 15:12:10,332 got process_reconnect_url
+2017-02-18 15:12:14,256 got process_pong
+2017-02-18 15:12:18,270 got process_pong
+2017-02-18 15:12:22,290 got process_pong
+2017-02-18 15:12:26,209 got process_pong
+2017-02-18 15:12:30,230 got process_pong
+2017-02-18 15:12:34,247 got process_pong
+2017-02-18 15:12:38,273 got process_pong
+2017-02-18 15:12:42,295 got process_pong
+2017-02-18 15:12:46,247 got process_pong
+2017-02-18 15:12:50,270 got process_pong
+2017-02-18 15:12:54,290 got process_pong
+2017-02-18 15:12:58,207 got process_pong
+2017-02-18 15:13:02,236 got process_pong
+2017-02-18 15:13:06,256 got process_pong
+2017-02-18 15:13:10,282 got process_pong
+2017-02-18 15:13:14,207 got process_pong
+2017-02-18 15:13:18,227 got process_pong
+2017-02-18 15:13:22,243 got process_pong
+2017-02-18 15:13:26,266 got process_pong
+2017-02-18 15:13:30,286 got process_pong
+2017-02-18 15:13:34,210 got process_pong
+2017-02-18 15:13:38,227 got process_pong
+2017-02-18 15:13:42,246 got process_pong
+2017-02-18 15:13:46,260 got process_pong
+2017-02-18 15:13:50,279 got process_pong
+2017-02-18 15:13:54,200 got process_pong
+2017-02-18 15:13:58,223 got process_pong
+2017-02-18 15:14:02,246 got process_pong
+2017-02-18 15:14:06,262 got process_pong
+2017-02-18 15:14:10,280 got process_pong
+2017-02-18 15:14:14,203 got process_pong
+2017-02-18 15:14:18,226 got process_pong
+2017-02-18 15:14:22,246 got process_pong
+2017-02-18 15:14:26,269 got process_pong
+2017-02-18 15:14:30,286 got process_pong
+2017-02-18 15:14:34,207 got process_pong
+2017-02-18 15:14:38,234 got process_pong
+2017-02-18 15:23:08,924 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 15:23:08,934 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:23:09,698 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 6880
+2017-02-18 15:23:09,911 Loading plugins
+2017-02-18 15:23:09,911 Importing plugins.repeat.RepeatPlugin
+2017-02-18 15:23:09,913 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x0000000003CC0E80>
+2017-02-18 15:23:09,913 Importing plugins.myplugin.MyPlugin
+2017-02-18 15:23:09,913 Plugin registered: <plugins.myplugin.MyPlugin object at 0x0000000003CC0160>
+2017-02-18 15:23:09,913 Registering jobs for RepeatPlugin
+2017-02-18 15:23:09,913 No jobs registered for RepeatPlugin
+2017-02-18 15:23:09,913 Registering jobs for MyPlugin
+2017-02-18 15:23:09,913 No jobs registered for MyPlugin
+2017-02-18 15:23:10,115 got process_hello
+2017-02-18 15:23:10,217 got process_reconnect_url
+2017-02-18 15:23:10,332 got process_pong
+2017-02-18 15:23:10,434 got process_reconnect_url
+2017-02-18 15:23:10,740 got process_presence_change
+2017-02-18 15:23:13,259 got process_pong
+2017-02-18 15:23:17,296 got process_pong
+2017-02-18 15:23:19,717 got process_user_typing
+2017-02-18 15:23:21,232 got process_pong
+2017-02-18 15:23:24,147 got process_user_typing
+2017-02-18 15:23:25,257 got process_pong
+2017-02-18 15:23:27,167 got process_user_typing
+2017-02-18 15:23:27,473 got process_message
+2017-02-18 15:23:27,474 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:23:27,861 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 359
+2017-02-18 15:23:27,969 got process_message
+2017-02-18 15:23:29,299 got process_pong
+2017-02-18 15:23:33,223 got process_pong
+2017-02-18 15:23:37,246 got process_pong
+2017-02-18 15:23:41,273 got process_pong
+2017-02-18 15:23:45,296 got process_pong
+2017-02-18 15:23:49,216 got process_pong
+2017-02-18 15:23:53,237 got process_pong
+2017-02-18 15:23:57,259 got process_pong
+2017-02-18 15:24:01,282 got process_pong
+2017-02-18 15:24:05,204 got process_pong
+2017-02-18 15:24:09,240 got process_pong
+2017-02-18 15:24:13,262 got process_pong
+2017-02-18 15:24:17,280 got process_pong
+2017-02-18 15:24:21,201 got process_pong
+2017-02-18 15:24:25,221 got process_pong
+2017-02-18 15:24:29,244 got process_pong
+2017-02-18 15:24:33,266 got process_pong
+2017-02-18 15:24:37,292 got process_pong
+2017-02-18 15:24:41,220 got process_pong
+2017-02-18 15:24:45,250 got process_pong
+2017-02-18 15:24:49,267 got process_pong
+2017-02-18 15:24:53,292 got process_pong
+2017-02-18 15:24:57,213 got process_pong
+2017-02-18 15:25:01,237 got process_pong
+2017-02-18 15:25:05,260 got process_pong
+2017-02-18 15:25:09,282 got process_pong
+2017-02-18 15:25:10,188 got process_reconnect_url
+2017-02-18 15:25:13,204 got process_pong
+2017-02-18 15:25:17,226 got process_pong
+2017-02-18 15:25:21,253 got process_pong
+2017-02-18 15:25:25,226 got process_pong
+2017-02-18 15:25:29,249 got process_pong
+2017-02-18 15:25:33,305 got process_pong
+2017-02-18 15:25:37,223 got process_pong
+2017-02-18 15:25:41,246 got process_pong
+2017-02-18 15:25:45,267 got process_pong
+2017-02-18 15:25:49,299 got process_pong
+2017-02-18 15:25:53,221 got process_pong
+2017-02-18 15:25:57,249 got process_pong
+2017-02-18 15:26:01,273 got process_pong
+2017-02-18 15:26:05,299 got process_pong
+2017-02-18 15:26:09,226 got process_pong
+2017-02-18 15:26:13,249 got process_pong
+2017-02-18 15:26:17,273 got process_pong
+2017-02-18 15:26:21,296 got process_pong
+2017-02-18 15:26:25,234 got process_pong
+2017-02-18 15:26:29,265 got process_pong
+2017-02-18 15:26:33,286 got process_pong
+2017-02-18 15:26:37,213 got process_pong
+2017-02-18 15:26:41,230 got process_pong
+2017-02-18 15:26:45,263 got process_pong
+2017-02-18 15:26:49,290 got process_pong
+2017-02-18 15:26:53,213 got process_pong
+2017-02-18 15:26:57,239 got process_pong
+2017-02-18 15:27:01,256 got process_pong
+2017-02-18 15:27:05,276 got process_pong
+2017-02-18 15:27:09,296 got process_pong
+2017-02-18 15:27:13,219 got process_pong
+2017-02-18 15:27:17,242 got process_pong
+2017-02-18 15:27:21,266 got process_pong
+2017-02-18 15:27:25,283 got process_pong
+2017-02-18 15:27:29,201 got process_pong
+2017-02-18 15:27:33,223 got process_pong
+2017-02-18 15:27:37,246 got process_pong
+2017-02-18 15:27:41,269 got process_pong
+2017-02-18 15:27:45,288 got process_pong
+2017-02-18 15:27:49,203 got process_pong
+2017-02-18 15:27:53,220 got process_pong
+2017-02-18 15:27:57,240 got process_pong
+2017-02-18 15:28:01,260 got process_pong
+2017-02-18 15:28:05,285 got process_pong
+2017-02-18 15:28:09,206 got process_pong
+2017-02-18 15:28:10,217 got process_reconnect_url
+2017-02-18 15:28:13,240 got process_pong
+2017-02-18 15:28:17,272 got process_pong
+2017-02-18 15:28:21,240 got process_pong
+2017-02-18 15:28:25,210 got process_pong
+2017-02-18 15:28:29,226 got process_pong
+2017-02-18 15:28:33,282 got process_pong
+2017-02-18 15:28:37,206 got process_pong
+2017-02-18 15:28:41,223 got process_pong
+2017-02-18 15:28:45,240 got process_pong
+2017-02-18 15:28:49,263 got process_pong
+2017-02-18 15:28:53,285 got process_pong
+2017-02-18 15:28:57,226 got process_pong
+2017-02-18 15:29:01,250 got process_pong
+2017-02-18 15:29:05,263 got process_pong
+2017-02-18 15:29:09,290 got process_pong
+2017-02-18 15:29:13,213 got process_pong
+2017-02-18 15:29:17,230 got process_pong
+2017-02-18 15:29:21,253 got process_pong
+2017-02-18 15:29:25,272 got process_pong
+2017-02-18 15:29:29,288 got process_pong
+2017-02-18 15:29:33,213 got process_pong
+2017-02-18 15:29:37,257 got process_pong
+2017-02-18 15:29:41,282 got process_pong
+2017-02-18 15:29:45,200 got process_pong
+2017-02-18 15:29:49,226 got process_pong
+2017-02-18 15:29:53,286 got process_pong
+2017-02-18 15:29:57,217 got process_pong
+2017-02-18 15:30:01,236 got process_pong
+2017-02-18 15:30:05,269 got process_pong
+2017-02-18 15:30:09,289 got process_pong
+2017-02-18 15:30:10,196 got process_reconnect_url
+2017-02-18 15:30:13,213 got process_pong
+2017-02-18 15:30:17,233 got process_pong
+2017-02-18 15:30:21,252 got process_pong
+2017-02-18 15:30:25,286 got process_pong
+2017-02-18 15:30:29,223 got process_pong
+2017-02-18 15:30:33,247 got process_pong
+2017-02-18 15:30:37,265 got process_pong
+2017-02-18 15:30:41,290 got process_pong
+2017-02-18 15:30:45,213 got process_pong
+2017-02-18 15:30:49,234 got process_pong
+2017-02-18 15:30:53,256 got process_pong
+2017-02-18 15:30:57,276 got process_pong
+2017-02-18 15:31:01,298 got process_pong
+2017-02-18 15:31:05,219 got process_pong
+2017-02-18 15:31:09,233 got process_pong
+2017-02-18 15:31:13,256 got process_pong
+2017-02-18 15:31:17,280 got process_pong
+2017-02-18 15:31:21,207 got process_pong
+2017-02-18 15:31:25,229 got process_pong
+2017-02-18 15:31:29,249 got process_pong
+2017-02-18 15:31:33,270 got process_pong
+2017-02-18 15:31:37,296 got process_pong
+2017-02-18 15:31:41,219 got process_pong
+2017-02-18 15:31:45,240 got process_pong
+2017-02-18 15:31:49,262 got process_pong
+2017-02-18 15:31:53,279 got process_pong
+2017-02-18 15:31:57,299 got process_pong
+2017-02-18 15:32:01,220 got process_pong
+2017-02-18 15:32:05,243 got process_pong
+2017-02-18 15:32:09,267 got process_pong
+2017-02-18 15:32:13,292 got process_pong
+2017-02-18 15:32:17,203 got process_pong
+2017-02-18 15:32:21,226 got process_pong
+2017-02-18 15:32:25,253 got process_pong
+2017-02-18 15:32:29,278 got process_pong
+2017-02-18 15:32:33,200 got process_pong
+2017-02-18 15:32:37,219 got process_pong
+2017-02-18 15:32:41,240 got process_pong
+2017-02-18 15:32:45,265 got process_pong
+2017-02-18 15:32:49,288 got process_pong
+2017-02-18 15:32:53,213 got process_pong
+2017-02-18 15:32:57,236 got process_pong
+2017-02-18 15:33:01,255 got process_pong
+2017-02-18 15:33:05,273 got process_pong
+2017-02-18 15:33:09,293 got process_pong
+2017-02-18 15:33:10,200 got process_reconnect_url
+2017-02-18 15:33:13,219 got process_pong
+2017-02-18 15:33:17,244 got process_pong
+2017-02-18 15:33:21,266 got process_pong
+2017-02-18 15:33:25,283 got process_pong
+2017-02-18 15:33:29,209 got process_pong
+2017-02-18 15:33:33,230 got process_pong
+2017-02-18 15:33:37,256 got process_pong
+2017-02-18 15:33:41,275 got process_pong
+2017-02-18 15:33:45,296 got process_pong
+2017-02-18 15:33:49,217 got process_pong
+2017-02-18 15:33:53,237 got process_pong
+2017-02-18 15:33:57,257 got process_pong
+2017-02-18 15:34:01,282 got process_pong
+2017-02-18 15:34:05,203 got process_pong
+2017-02-18 15:34:09,232 got process_pong
+2017-02-18 15:34:13,247 got process_pong
+2017-02-18 15:34:17,270 got process_pong
+2017-02-18 15:34:21,289 got process_pong
+2017-02-18 15:34:25,220 got process_pong
+2017-02-18 15:34:29,240 got process_pong
+2017-02-18 15:34:33,255 got process_pong
+2017-02-18 15:34:37,273 got process_pong
+2017-02-18 15:34:41,201 got process_pong
+2017-02-18 15:34:45,220 got process_pong
+2017-02-18 15:34:49,240 got process_pong
+2017-02-18 15:34:53,263 got process_pong
+2017-02-18 15:34:57,279 got process_pong
+2017-02-18 15:35:01,293 got process_pong
+2017-02-18 15:35:05,217 got process_pong
+2017-02-18 15:35:09,242 got process_pong
+2017-02-18 15:35:13,263 got process_pong
+2017-02-18 15:35:17,286 got process_pong
+2017-02-18 15:35:21,201 got process_pong
+2017-02-18 15:35:25,226 got process_pong
+2017-02-18 15:35:29,252 got process_pong
+2017-02-18 15:35:33,272 got process_pong
+2017-02-18 15:35:37,292 got process_pong
+2017-02-18 15:35:41,227 got process_pong
+2017-02-18 15:35:45,246 got process_pong
+2017-02-18 15:35:53,924 got process_pong
+2017-02-18 15:35:57,240 got process_pong
+2017-02-18 15:36:01,286 got process_pong
+2017-02-18 15:36:05,207 got process_pong
+2017-02-18 15:36:09,232 got process_pong
+2017-02-18 15:36:10,242 got process_reconnect_url
+2017-02-18 15:36:13,289 got process_pong
+2017-02-18 15:36:17,210 got process_pong
+2017-02-18 15:36:21,233 got process_pong
+2017-02-18 15:36:25,256 got process_pong
+2017-02-18 15:36:29,276 got process_pong
+2017-02-18 15:36:33,299 got process_pong
+2017-02-18 15:36:37,217 got process_pong
+2017-02-18 15:36:41,246 got process_pong
+2017-02-18 15:36:45,270 got process_pong
+2017-02-18 15:36:49,289 got process_pong
+2017-02-18 15:36:53,211 got process_pong
+2017-02-18 15:36:57,262 got process_pong
+2017-02-18 15:37:01,283 got process_pong
+2017-02-18 15:37:05,301 got process_pong
+2017-02-18 15:37:09,229 got process_pong
+2017-02-18 15:37:13,278 got process_pong
+2017-02-18 15:37:17,211 got process_pong
+2017-02-18 15:37:21,230 got process_pong
+2017-02-18 15:37:25,252 got process_pong
+2017-02-18 15:37:29,273 got process_pong
+2017-02-18 15:37:33,293 got process_pong
+2017-02-18 15:37:37,223 got process_pong
+2017-02-18 15:37:41,240 got process_pong
+2017-02-18 15:37:45,267 got process_pong
+2017-02-18 15:37:49,292 got process_pong
+2017-02-18 15:37:53,214 got process_pong
+2017-02-18 15:37:57,239 got process_pong
+2017-02-18 15:38:01,256 got process_pong
+2017-02-18 15:38:05,269 got process_pong
+2017-02-18 15:38:09,204 got process_pong
+2017-02-18 15:38:13,259 got process_pong
+2017-02-18 15:38:17,280 got process_pong
+2017-02-18 15:38:21,299 got process_pong
+2017-02-18 15:38:25,220 got process_pong
+2017-02-18 15:38:29,237 got process_pong
+2017-02-18 15:38:33,259 got process_pong
+2017-02-18 15:38:37,279 got process_pong
+2017-02-18 15:38:41,296 got process_pong
+2017-02-18 15:38:45,217 got process_pong
+2017-02-18 15:38:49,237 got process_pong
+2017-02-18 15:38:53,257 got process_pong
+2017-02-18 15:38:57,279 got process_pong
+2017-02-18 15:39:01,201 got process_pong
+2017-02-18 15:39:05,221 got process_pong
+2017-02-18 15:39:09,240 got process_pong
+2017-02-18 15:39:10,244 got process_reconnect_url
+2017-02-18 15:39:13,262 got process_pong
+2017-02-18 15:39:17,288 got process_pong
+2017-02-18 15:39:21,207 got process_pong
+2017-02-18 15:39:25,232 got process_pong
+2017-02-18 15:39:29,250 got process_pong
+2017-02-18 15:39:33,265 got process_pong
+2017-02-18 15:39:37,285 got process_pong
+2017-02-18 15:39:41,207 got process_pong
+2017-02-18 15:39:45,232 got process_pong
+2017-02-18 15:39:49,256 got process_pong
+2017-02-18 15:39:53,278 got process_pong
+2017-02-18 15:39:57,296 got process_pong
+2017-02-18 15:40:01,213 got process_pong
+2017-02-18 15:40:05,239 got process_pong
+2017-02-18 15:40:09,273 got process_pong
+2017-02-18 15:40:13,299 got process_pong
+2017-02-18 15:40:17,220 got process_pong
+2017-02-18 15:40:21,242 got process_pong
+2017-02-18 15:40:25,266 got process_pong
+2017-02-18 15:40:29,286 got process_pong
+2017-02-18 15:40:33,206 got process_pong
+2017-02-18 15:40:37,226 got process_pong
+2017-02-18 15:40:41,249 got process_pong
+2017-02-18 15:40:45,267 got process_pong
+2017-02-18 15:40:49,286 got process_pong
+2017-02-18 15:40:53,209 got process_pong
+2017-02-18 15:40:57,232 got process_pong
+2017-02-18 15:41:01,253 got process_pong
+2017-02-18 15:41:05,275 got process_pong
+2017-02-18 15:41:09,296 got process_pong
+2017-02-18 15:41:10,204 got process_reconnect_url
+2017-02-18 15:41:13,221 got process_pong
+2017-02-18 15:41:17,239 got process_pong
+2017-02-18 15:41:21,253 got process_pong
+2017-02-18 15:41:25,273 got process_pong
+2017-02-18 15:41:29,292 got process_pong
+2017-02-18 15:41:33,216 got process_pong
+2017-02-18 15:41:37,236 got process_pong
+2017-02-18 15:41:41,256 got process_pong
+2017-02-18 15:41:45,474 got process_pong
+2017-02-18 15:41:49,236 got process_pong
+2017-02-18 15:41:53,270 got process_pong
+2017-02-18 15:41:57,200 got process_pong
+2017-02-18 15:42:01,259 got process_pong
+2017-02-18 15:42:05,201 got process_pong
+2017-02-18 15:42:09,223 got process_pong
+2017-02-18 15:42:13,270 got process_pong
+2017-02-18 15:42:17,289 got process_pong
+2017-02-18 15:42:21,211 got process_pong
+2017-02-18 15:42:25,285 got process_pong
+2017-02-18 15:42:29,252 got process_pong
+2017-02-18 15:42:33,273 got process_pong
+2017-02-18 15:42:37,211 got process_pong
+2017-02-18 15:42:41,242 got process_pong
+2017-02-18 15:42:45,266 got process_pong
+2017-02-18 15:42:49,230 got process_pong
+2017-02-18 15:42:53,259 got process_pong
+2017-02-18 15:42:57,290 got process_pong
+2017-02-18 15:43:01,210 got process_pong
+2017-02-18 15:43:05,230 got process_pong
+2017-02-18 15:43:09,250 got process_pong
+2017-02-18 15:43:13,276 got process_pong
+2017-02-18 15:43:17,233 got process_pong
+2017-02-18 15:43:21,217 got process_pong
+2017-02-18 15:43:25,237 got process_pong
+2017-02-18 15:43:29,259 got process_pong
+2017-02-18 15:43:33,282 got process_pong
+2017-02-18 15:43:37,203 got process_pong
+2017-02-18 15:43:41,223 got process_pong
+2017-02-18 15:43:45,239 got process_pong
+2017-02-18 15:43:49,256 got process_pong
+2017-02-18 15:43:53,283 got process_pong
+2017-02-18 15:43:57,211 got process_pong
+2017-02-18 15:44:01,234 got process_pong
+2017-02-18 15:44:05,260 got process_pong
+2017-02-18 15:44:09,276 got process_pong
+2017-02-18 15:44:10,180 got process_reconnect_url
+2017-02-18 15:44:13,298 got process_pong
+2017-02-18 15:44:17,217 got process_pong
+2017-02-18 15:44:21,242 got process_pong
+2017-02-18 15:44:25,263 got process_pong
+2017-02-18 15:44:29,278 got process_pong
+2017-02-18 15:44:33,299 got process_pong
+2017-02-18 15:44:37,250 got process_pong
+2017-02-18 15:44:41,275 got process_pong
+2017-02-18 15:44:45,289 got process_pong
+2017-02-18 15:44:49,232 got process_pong
+2017-02-18 15:44:53,257 got process_pong
+2017-02-18 15:44:57,276 got process_pong
+2017-02-18 15:45:01,296 got process_pong
+2017-02-18 15:45:05,213 got process_pong
+2017-02-18 15:45:09,233 got process_pong
+2017-02-18 15:45:13,253 got process_pong
+2017-02-18 15:45:17,279 got process_pong
+2017-02-18 15:45:21,299 got process_pong
+2017-02-18 15:45:25,221 got process_pong
+2017-02-18 15:45:29,240 got process_pong
+2017-02-18 15:45:33,260 got process_pong
+2017-02-18 15:45:37,293 got process_pong
+2017-02-18 15:45:41,219 got process_pong
+2017-02-18 15:45:45,240 got process_pong
+2017-02-18 15:45:49,257 got process_pong
+2017-02-18 15:45:53,280 got process_pong
+2017-02-18 15:45:57,204 got process_pong
+2017-02-18 15:46:01,226 got process_pong
+2017-02-18 15:46:05,252 got process_pong
+2017-02-18 15:46:09,272 got process_pong
+2017-02-18 15:46:13,292 got process_pong
+2017-02-18 15:46:17,213 got process_pong
+2017-02-18 15:46:21,239 got process_pong
+2017-02-18 15:46:25,265 got process_pong
+2017-02-18 15:46:29,286 got process_pong
+2017-02-18 15:46:33,203 got process_pong
+2017-02-18 15:46:37,220 got process_pong
+2017-02-18 15:46:41,242 got process_pong
+2017-02-18 15:46:45,267 got process_pong
+2017-02-18 15:46:49,289 got process_pong
+2017-02-18 15:46:53,210 got process_pong
+2017-02-18 15:46:57,232 got process_pong
+2017-02-18 15:47:01,259 got process_pong
+2017-02-18 15:47:05,282 got process_pong
+2017-02-18 15:47:09,206 got process_pong
+2017-02-18 15:47:10,211 got process_reconnect_url
+2017-02-18 15:47:13,230 got process_pong
+2017-02-18 15:47:17,246 got process_pong
+2017-02-18 15:47:21,266 got process_pong
+2017-02-18 15:47:25,288 got process_pong
+2017-02-18 15:47:29,207 got process_pong
+2017-02-18 15:47:33,229 got process_pong
+2017-02-18 15:47:37,250 got process_pong
+2017-02-18 15:47:41,270 got process_pong
+2017-02-18 15:47:45,295 got process_pong
+2017-02-18 15:47:49,217 got process_pong
+2017-02-18 15:47:53,240 got process_pong
+2017-02-18 15:47:57,259 got process_pong
+2017-02-18 15:48:01,282 got process_pong
+2017-02-18 15:48:05,296 got process_pong
+2017-02-18 15:48:09,213 got process_pong
+2017-02-18 15:48:13,242 got process_pong
+2017-02-18 15:48:17,263 got process_pong
+2017-02-18 15:48:21,285 got process_pong
+2017-02-18 15:48:25,207 got process_pong
+2017-02-18 15:48:29,223 got process_pong
+2017-02-18 15:48:33,253 got process_pong
+2017-02-18 15:48:37,282 got process_pong
+2017-02-18 15:48:41,211 got process_pong
+2017-02-18 15:48:45,236 got process_pong
+2017-02-18 15:48:49,256 got process_pong
+2017-02-18 15:48:53,275 got process_pong
+2017-02-18 15:48:57,298 got process_pong
+2017-02-18 15:49:01,223 got process_pong
+2017-02-18 15:51:59,869 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 15:51:59,881 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:52:00,680 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7066
+2017-02-18 15:52:00,895 Loading plugins
+2017-02-18 15:52:00,895 Importing plugins.repeat.RepeatPlugin
+2017-02-18 15:52:00,898 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x00000000036D0E80>
+2017-02-18 15:52:00,898 Importing plugins.myplugin.MyPlugin
+2017-02-18 15:52:00,898 Plugin registered: <plugins.myplugin.MyPlugin object at 0x00000000036D0160>
+2017-02-18 15:52:00,898 Registering jobs for RepeatPlugin
+2017-02-18 15:52:00,898 No jobs registered for RepeatPlugin
+2017-02-18 15:52:00,898 Registering jobs for MyPlugin
+2017-02-18 15:52:00,898 No jobs registered for MyPlugin
+2017-02-18 15:52:01,098 got process_hello
+2017-02-18 15:52:01,201 got process_reconnect_url
+2017-02-18 15:52:01,306 got process_pong
+2017-02-18 15:52:02,013 got process_presence_change
+2017-02-18 15:52:04,223 got process_pong
+2017-02-18 15:52:08,246 got process_pong
+2017-02-18 15:52:10,259 got process_reconnect_url
+2017-02-18 15:52:12,269 got process_pong
+2017-02-18 15:52:16,282 got process_pong
+2017-02-18 15:52:20,201 got process_pong
+2017-02-18 15:52:24,221 got process_pong
+2017-02-18 15:52:28,243 got process_pong
+2017-02-18 15:52:32,263 got process_pong
+2017-02-18 15:52:36,296 got process_pong
+2017-02-18 15:52:40,220 got process_pong
+2017-02-18 15:52:41,729 got process_user_typing
+2017-02-18 15:52:44,243 got process_pong
+2017-02-18 15:52:44,345 got process_message
+2017-02-18 15:52:44,346 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:52:44,756 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 359
+2017-02-18 15:52:44,864 got process_message
+2017-02-18 15:52:48,209 got process_pong
+2017-02-18 15:52:52,267 got process_pong
+2017-02-18 15:52:56,296 got process_pong
+2017-02-18 15:53:00,221 got process_pong
+2017-02-18 15:53:04,243 got process_pong
+2017-02-18 15:53:08,167 got process_user_typing
+2017-02-18 15:53:08,270 got process_pong
+2017-02-18 15:53:11,391 got process_user_typing
+2017-02-18 15:53:12,198 got process_message
+2017-02-18 15:53:12,200 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:53:12,612 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 359
+2017-02-18 15:53:12,719 got process_pong
+2017-02-18 15:53:12,819 got process_message
+2017-02-18 15:53:16,249 got process_pong
+2017-02-18 15:53:20,200 got process_pong
+2017-02-18 15:54:19,019 Initialized in: C:\Users\cjbro\Envs\drumpf\Scripts
+2017-02-18 15:54:19,029 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:54:19,941 https://slack.com:443 "POST /api/rtm.start HTTP/1.1" 200 7067
+2017-02-18 15:54:20,171 Loading plugins
+2017-02-18 15:54:20,171 Importing plugins.repeat.RepeatPlugin
+2017-02-18 15:54:20,174 Plugin registered: <plugins.repeat.RepeatPlugin object at 0x00000000045DAE80>
+2017-02-18 15:54:20,174 Importing plugins.myplugin.MyPlugin
+2017-02-18 15:54:20,174 Plugin registered: <plugins.myplugin.MyPlugin object at 0x00000000045DA160>
+2017-02-18 15:54:20,174 Registering jobs for RepeatPlugin
+2017-02-18 15:54:20,174 No jobs registered for RepeatPlugin
+2017-02-18 15:54:20,174 Registering jobs for MyPlugin
+2017-02-18 15:54:20,174 No jobs registered for MyPlugin
+2017-02-18 15:54:20,375 got process_hello
+2017-02-18 15:54:20,476 got process_presence_change
+2017-02-18 15:54:20,578 got process_reconnect_url
+2017-02-18 15:54:20,680 got process_pong
+2017-02-18 15:54:20,780 got process_presence_change
+2017-02-18 15:54:23,591 got process_presence_change
+2017-02-18 15:54:24,298 got process_pong
+2017-02-18 15:54:28,220 got process_pong
+2017-02-18 15:54:32,240 got process_pong
+2017-02-18 15:54:36,263 got process_pong
+2017-02-18 15:54:40,282 got process_pong
+2017-02-18 15:54:42,790 got process_presence_change
+2017-02-18 15:54:44,201 got process_pong
+2017-02-18 15:54:48,223 got process_pong
+2017-02-18 15:54:52,247 got process_pong
+2017-02-18 15:54:56,270 got process_pong
+2017-02-18 15:54:56,375 got process_user_typing
+2017-02-18 15:54:57,280 got process_message
+2017-02-18 15:55:00,299 got process_pong
+2017-02-18 15:55:00,404 got process_user_typing
+2017-02-18 15:55:02,713 got process_message
+2017-02-18 15:55:02,716 Starting new HTTPS connection (1): slack.com
+2017-02-18 15:55:03,191 https://slack.com:443 "POST /api/chat.postMessage HTTP/1.1" 200 358
+2017-02-18 15:55:03,298 got process_message
+2017-02-18 15:55:04,211 got process_pong
+2017-02-18 15:55:08,230 got process_pong
+2017-02-18 15:55:12,285 got process_pong
+2017-02-18 15:55:16,207 got process_pong
+2017-02-18 15:55:20,226 got process_pong
+2017-02-18 15:55:24,239 got process_pong
+2017-02-18 15:55:28,257 got process_pong
+2017-02-18 15:55:32,290 got process_pong
+2017-02-18 15:55:36,216 got process_pong
+2017-02-18 15:55:40,234 got process_pong
+2017-02-18 15:55:44,256 got process_pong
+2017-02-18 15:55:48,279 got process_pong
+2017-02-18 15:55:52,201 got process_pong
+2017-02-18 15:55:56,220 got process_pong
+2017-02-18 15:56:00,243 got process_pong

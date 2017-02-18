@@ -1132,32 +1132,35 @@ class DrumpfBot:
         python = sys.executable
         os.execl(python, python, * sys.argv)
 
+    def main(self):
+        READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
+        #grab user list and converts it to to a dict of ids to usernames
+        api_call = slack_client.api_call("users.list")
+
+        if api_call.get('ok'):
+            users = api_call.get('members')
+            for user in users:
+                self.user_ids_to_username[user['id']] = user['name']
+
+            channels = slack_client.api_call("channels.list").get('channels')
+            for channel in channels:
+                self.channel_ids_to_name[channel['id']] = channel['name']
+
+        if slack_client.rtm_connect():
+            print("DRUMPFBOT v1.0 connected and running!")
+
+            while True:
+                command, channel, user = self.parse_slack_output(slack_client.rtm_read())
+                if command and channel:
+                    if channel not in self.channel_ids_to_name.keys():
+                        #this (most likely) means that this channel is a PM with the bot
+                        self.handle_private_message(command, user)
+                    else:
+                        self.handle_command(command, channel, user)
+                time.sleep(READ_WEBSOCKET_DELAY)
+        else:
+            print("Connection failed. Invalid Slack token or bot ID?")
+
 if __name__ == "__main__":
     bot = DrumpfBot()
-    READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-    #grab user list and converts it to to a dict of ids to usernames
-    api_call = slack_client.api_call("users.list")
-
-    if api_call.get('ok'):
-        users = api_call.get('members')
-        for user in users:
-            bot.user_ids_to_username[user['id']] = user['name']
-
-        channels = slack_client.api_call("channels.list").get('channels')
-        for channel in channels:
-            bot.channel_ids_to_name[channel['id']] = channel['name']
-
-    if slack_client.rtm_connect():
-        print("DRUMPFBOT v1.0 connected and running!")
-
-        while True:
-            command, channel, user = bot.parse_slack_output(slack_client.rtm_read())
-            if command and channel:
-                if channel not in bot.channel_ids_to_name.keys():
-                    #this (most likely) means that this channel is a PM with the bot
-                    bot.handle_private_message(command, user)
-                else:
-                    bot.handle_command(command, channel, user)
-            time.sleep(READ_WEBSOCKET_DELAY)
-    else:
-        print("Connection failed. Invalid Slack token or bot ID?")
+    bot.main()
