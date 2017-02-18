@@ -29,7 +29,7 @@
     },
     "OAUTHLIB_RELAX_TOKEN_SCOPE": {
       "description": "Indicates that it's OK for Slack to return different OAuth scopes. Don't change this!",
-      "value": true
+      "value": "true"
     }
   },
   "formation": {
