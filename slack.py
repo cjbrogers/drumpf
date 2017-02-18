@@ -31,7 +31,7 @@ def actions():
     {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
     app.slack_client.api_call(
         "chat.postMessage",
-        channel=request.form['user'],
+        channel="C41Q1H4BD",
         text="please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]",
         as_user=True,
         attachments=attachments
