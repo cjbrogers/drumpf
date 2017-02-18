@@ -1157,12 +1157,12 @@ class DrumpfBot:
 
 @app.route("/actions/", methods=['POST'])
 def actions():
-    slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
+    app.slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
     attachments =[{"title":"TESTING Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
     {"name":"clubs","text":":clubs:","type":"button","value":"1"},
     {"name":"hearts","text":":hearts:","type":"button","value":"2"},
     {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
-    slack_client.api_call(
+    app.slack_client.api_call(
         "chat.postMessage",
         channel="C41Q1H4BD",
         as_user=True,
