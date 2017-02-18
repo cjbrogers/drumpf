@@ -57,6 +57,7 @@ class DrumpfBot:
         self.t_cards = ["t_comey","t_nasty","t_russian","t_shower"]
         self.d_cards = ["d_wall","d_clinton","d_ivanka","d_pussy"]
         self.drumpfmendous_card_first = None
+        self.first_card_sub_round = 0
 
     def handle_command(self, command, channel, user_id):
         print "handle_command(self, command, channel, user_id) "
@@ -205,17 +206,21 @@ class DrumpfBot:
         response = ""
         current_username = self.user_ids_to_username[self.player_trump_card_queue[0]]
         #we're waiting for a user to select a trump card
-        print "      $$~what's self.player_trump_card_queue[0]?: {}".format(self.player_trump_card_queue[0])
+        print "  self.player_trump_card_queue[0]: {}".format(self.player_trump_card_queue[0])
         if user_id != self.player_trump_card_queue[0]:
             print "  Waiting for <@{}> to select a trump suit".format(current_username)
             response = "Waiting for <@{}> to select a trump suit".format(current_username)
         elif user_id == self.player_trump_card_queue[0]:
+            print "  user_id == self.player_trump_card_queue[0]"
             #validate that the dealer picked a valid trump suit
             try:
                 if 0 <= int(command) <= 3:
-                    self.current_game.current_round_trump_suit = suits[int(command)]
+                    print "  0 <= int(command) <= 3"
 
-                    print "  self.current_game.current_round_trump_suit set to: {}".format(self.current_game.current_round_trump_suit)
+                    # TODO: verify the below works 2/17/2017 (James)
+                    print "  self.current_game.current_round_trump_suit WAS: {}".format(self.current_game.current_round_trump_suit)
+                    self.current_game.current_round_trump_suit = suits[int(command)]
+                    print "  self.current_game.current_round_trump_suit SET TO: {}".format(self.current_game.current_round_trump_suit)
 
                     print "  Trump suit recorded! Check the main channel."
                     response = "Trump suit recorded! Check the main channel."
@@ -358,6 +363,9 @@ class DrumpfBot:
                     print "  Card Value: ", card_value
                     card_suit = None
 
+                self.first_card_sub_round += 1
+
+
                 #otherwise valid card played
                 if self.leading_suit != None:
                     print "  self.leading_suit != None"
@@ -380,9 +388,19 @@ class DrumpfBot:
                 elif self.leading_suit == None:
                     print("  There is no sub-round trump suit set yet....")
                     if card_value.startswith("d_") or card_value.startswith("t_"):
-                        print("  {} played a Drumpf or Tremendous  Card".format(current_username))
-                        self.leading_suit = "Any"
-                        self.handle_valid_card_played(card_being_played)
+                        print("  {} played a Drumpf or Tremendous  Card first".format(current_username))
+                        # nasty card played first gets to set suit
+                        if self.first_card_sub_round == 1:
+                            print "  self.first_card_sub_round == 1"
+                            if "t_nasty" in card_value:
+                                print "  player holds t_nasty and so gets to choose trump suit"
+                                self.prompt_dealer_for_trump_suit(user_id)
+                            else:
+                                self.leading_suit = "Any"
+                                self.handle_valid_card_played(card_being_played)
+                        else:
+                            self.leading_suit = "Any"
+                            self.handle_valid_card_played(card_being_played)
                     elif card_value.startswith("vm_"):
                         print("  {} played a Visible Minority Card".format(current_username))
                         #the sub round suit stays None until a player plays a suited card
@@ -636,6 +654,7 @@ class DrumpfBot:
         self.drumpfmendous_card_first = None
         self.player_bid_queue.clear()
         self.current_game.current_round_trump_suit = None
+        self.first_card_sub_round = 0
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
         print "remove_card_from_players_hand(self, current_player_id, card_to_remove) "
@@ -663,6 +682,9 @@ class DrumpfBot:
 
         card_value_sub_round = None
         card_suit_sub_round = None
+
+        # reset after each sub-round
+        self.first_card_sub_round = 0
 
         if len(self.cards_played_for_sub_round[0]) == 2:
             card_value_sub_round = str(self.cards_played_for_sub_round[0][0])
@@ -705,7 +727,7 @@ class DrumpfBot:
             #we have to iterate over the cards to determine the winner for the sub-round
             winning_card = None
             trump_suit = self.current_game.current_round_trump_suit
-            print  "  trump_suit: ",trump_suit
+            print  "  *trump_suit = self.current_game.current_round_trump_suit: ",trump_suit
             card_value = None
             card_suit = None
             visited = False # keeps track of the case of pussy/ivanka/nasty cards all being played same round
@@ -718,6 +740,7 @@ class DrumpfBot:
                     card_suit = None
                 current_player = self.player_turn_queue_reference[idx]
                 print "  current_player: ",self.user_ids_to_username[current_player]
+                print "  card being evaluated: ",card
 
                 # handle Tremendous cards and Drumpf cards
                 if card_value.startswith("t_") or card_value.startswith("d_"):
@@ -893,7 +916,7 @@ class DrumpfBot:
                                     print "    ***SOMEHOW GOT HERE???"
                         continue
                     continue
-
+                # the card is a trump suit card
                 elif card_suit == trump_suit:
                     print "  card_suit == trump_suit <-> {} == {}".format(card_suit,trump_suit)
                     # if self.winning_sub_round_card != None:
@@ -907,13 +930,14 @@ class DrumpfBot:
                     elif self.winning_sub_round_card[1] == trump_suit:
                         print "  self.winning_sub_round_card[1] == trump_suit <-> {} == {}".format(self.winning_sub_round_card[1],trump_suit)
                         if DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
-                            print "  trump suit played beats previous trump suit"
+                            print "  trump suit played second beats previous trump suit"
                             #trump suit played beats previous trump suit
                             self.winning_sub_round_card = card
                             self.winner_for_sub_round = current_player
                             print "  {} card wins".format(self.winning_sub_round_card)
                             print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
                     else:
+                        print "  *Got to this else statement!!!"
                         self.winning_sub_round_card = card
                         self.winner_for_sub_round = current_player
                         print "  {} card wins".format(self.winning_sub_round_card)
@@ -942,8 +966,8 @@ class DrumpfBot:
 
                 else:
                     print "  ***This card gets passed by because it does not win***"
-                    print "    {} card passed by".format(self.winning_sub_round_card)
-                    print "    player {} card has been passed".format(self.winner_for_sub_round)
+                    print "    {} card passed by".format(card)
+                    print "    player {} card has been passed".format(current_player)
 
         # TODO: remember to reset all the sub-round variables for the next sub-round
 
