@@ -5,7 +5,7 @@ from flask_dance.contrib.slack import make_slack_blueprint, slack
 from flask_sslify import SSLify
 from raven.contrib.flask import Sentry
 
-import drumpfbot
+import drumpfbot as DB
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -17,9 +17,12 @@ app.config["SLACK_OAUTH_CLIENT_SECRET"] = os.environ.get("SLACK_OAUTH_CLIENT_SEC
 slack_bp = make_slack_blueprint(scope=["identify", "chat:write:bot"])
 app.register_blueprint(slack_bp, url_prefix="/login")
 
+def import_bot(bot):
+    app.bot = bot
+
 @app.route("/actions/", methods=['POST'])
 def actions():
-    drumpfbot.slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
+    app.bot.slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
 
 @app.route("/")
 def index():
