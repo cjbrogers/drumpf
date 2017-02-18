@@ -11,8 +11,6 @@ from collections import deque
 import drumpfgame as DrumpfGame
 import helper_functions
 
-import slack
-
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
@@ -1143,7 +1141,7 @@ class DrumpfBot:
 
 if __name__ == "__main__":
     bot = DrumpfBot()
-    slack.import_bot(bot)
+
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
     #grab user list and converts it to to a dict of ids to usernames
     api_call = slack_client.api_call("users.list")
