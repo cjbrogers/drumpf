@@ -1,6 +1,6 @@
 import os
 from werkzeug.contrib.fixers import ProxyFix
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, flash, render_template, request, session, abort, url_for
 from flask_dance.contrib.slack import make_slack_blueprint, slack
 from flask_sslify import SSLify
 from raven.contrib.flask import Sentry
@@ -15,6 +15,16 @@ app.config["SLACK_OAUTH_CLIENT_SECRET"] = os.environ.get("SLACK_OAUTH_CLIENT_SEC
 slack_bp = make_slack_blueprint(scope=["identify", "chat:write:bot"])
 app.register_blueprint(slack_bp, url_prefix="/login")
 
+@app.route("/actions/", methods=['POST'])
+def actions():
+    resp = slack.post("chat.postMessage", data={
+        "channel": "#drumpf-play",
+        "text": "ping",
+        "icon_emoji": ":robot_face:",
+    })
+    assert resp.ok, resp.text
+    return resp.text
+
 @app.route("/")
 def index():
     if not slack.authorized:
@@ -28,4 +38,4 @@ def index():
     return resp.text
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=5000, debug=True)
+    app.run(debug=True)
