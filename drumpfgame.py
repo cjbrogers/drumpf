@@ -3,7 +3,8 @@ import drumpfbot as DrumpfBot
 
 drumpf_deck = ["vm_blacks", "vm_hombres", "vm_muslims", "vm_thieves"]
 suits = ["diamonds", "clubs", "hearts", "spades"]
-values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
+# values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
+values = [2, 3, 4, 5, "Q", "K"]
 for suit in suits:
     for value in values:
         drumpf_deck.append([value, suit])
@@ -58,10 +59,18 @@ class Game:
             trump_value = None
             trump_suit = None
             if len(trump_card) == 2: # regular card
+                print "  *dealing with a regular card"
+
                 trump_value = str(trump_card[0])
                 print "  Trump Value: ", trump_value
+
                 trump_suit = trump_card[1]
                 print "  Trump Suit: ", trump_suit
+
+                # TODO: verify the below works 2/17/2017 (James)
+                self.bot.current_game.current_round_trump_suit = trump_suit
+                print "  self.bot.current_game.current_round_trump_suit set to: {}".format(self.bot.current_game.current_round_trump_suit)
+
             else: # special card
                 trump_value = trump_card
                 print "  Trump Value: ", trump_value
@@ -76,11 +85,10 @@ class Game:
             elif trump_value[0:3] == "vm_":
                 print "  *dealing with a vm_ card"
                 trump_suit = None
-            elif len(trump_value) == 2: #regular card
-                print "  *dealing with a regular card"
-                trump_suit = trump_suit
-                # TODO: verify the below works 2/17/2017 (James)
-                self.bot.current_game.current_round_trump_suit = trump_suit
+            # elif len(trump_value) == 2: #regular card
+            #     print "  *dealing with a regular card"
+
+
         elif len(shuffled_deck.cards) == 0:
             print "  len(shuffled_deck.cards) == 0"
             self.bot.prompt_dealer_for_trump_suit(self.players.first.id)
@@ -88,6 +96,7 @@ class Game:
             self.bot.display_cards_for_player_in_pm(player.id,
                                                     player.cards_in_hand)
         self.bot.get_bids_from_players(self.current_round, self.players)
+        self.bot.current_game.current_round_trump_suit = trump_suit
         self.bot.announce_trump_card(trump_card)
         #dealer is always index 0 of players and we will rotate the array end of each turn
 
