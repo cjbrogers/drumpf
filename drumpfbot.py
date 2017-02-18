@@ -11,28 +11,12 @@ from collections import deque
 import drumpfgame as DrumpfGame
 import helper_functions
 
-from werkzeug.contrib.fixers import ProxyFix
-from flask import Flask, redirect, url_for, request
-from flask_dance.contrib.slack import make_slack_blueprint, slack
-from flask_sslify import SSLify
-from raven.contrib.flask import Sentry
-
-app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app)
-sentry = Sentry(app)
-sslify = SSLify(app)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "supersekrit")
-app.config["SLACK_OAUTH_CLIENT_ID"] = os.environ.get("SLACK_OAUTH_CLIENT_ID")
-app.config["SLACK_OAUTH_CLIENT_SECRET"] = os.environ.get("SLACK_OAUTH_CLIENT_SECRET")
-slack_bp = make_slack_blueprint(scope=["identify", "chat:write:bot"])
-app.register_blueprint(slack_bp, url_prefix="/login")
-
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
 
 # instantiate Slack & Twilio clients
-app.slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
 suits = ["diamonds", "clubs", "hearts", "spades"]
 
@@ -1082,19 +1066,12 @@ class DrumpfBot:
         self.player_trump_card_queue.append(player_id)
         print "  self.player_trump_card_queue after append(): {}".format(self.player_trump_card_queue)
 
-        attachments =[{"title":"TESTING Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
-        {"name":"clubs","text":":clubs:","type":"button","value":"1"},
-        {"name":"hearts","text":":hearts:","type":"button","value":"2"},
-        {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
-
-
         print "  please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]"
         slack_client.api_call(
             "chat.postMessage",
             channel=player_id,
             text="please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]",
-            as_user=True,
-            attachments=attachments
+            as_user=True
         )
 
     def get_readable_list_of_players(self):
@@ -1155,61 +1132,32 @@ class DrumpfBot:
         python = sys.executable
         os.execl(python, python, * sys.argv)
 
-@app.route("/actions/", methods=['POST'])
-def actions():
-    app.slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
-    attachments =[{"title":"TESTING Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
-    {"name":"clubs","text":":clubs:","type":"button","value":"1"},
-    {"name":"hearts","text":":hearts:","type":"button","value":"2"},
-    {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
-    app.slack_client.api_call(
-        "chat.postMessage",
-        channel="C41Q1H4BD",
-        as_user=True,
-        attachments=attachments
-    )
-    return response.form['user_name']
-
-@app.route("/")
-def index():
-    if not slack.authorized:
-        return redirect(url_for("slack.login"))
-    resp = slack.post("chat.postMessage", data={
-        "channel": "#drumpf-play",
-        "text": "ping",
-        "icon_emoji": ":robot_face:",
-    })
-    assert resp.ok, resp.text
-    return resp.text
-
 if __name__ == "__main__":
-    app.run(debug=True)
-    app.bot = DrumpfBot()
-
+    bot = DrumpfBot()
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
     #grab user list and converts it to to a dict of ids to usernames
-    api_call = app.slack_client.api_call("users.list")
+    api_call = slack_client.api_call("users.list")
 
     if api_call.get('ok'):
         users = api_call.get('members')
         for user in users:
-            app.bot.user_ids_to_username[user['id']] = user['name']
+            bot.user_ids_to_username[user['id']] = user['name']
 
-        channels = app.slack_client.api_call("channels.list").get('channels')
+        channels = slack_client.api_call("channels.list").get('channels')
         for channel in channels:
-            app.bot.channel_ids_to_name[channel['id']] = channel['name']
+            bot.channel_ids_to_name[channel['id']] = channel['name']
 
-    if app.slack_client.rtm_connect():
+    if slack_client.rtm_connect():
         print("DRUMPFBOT v1.0 connected and running!")
 
         while True:
-            command, channel, user = app.bot.parse_slack_output(slack_client.rtm_read())
+            command, channel, user = bot.parse_slack_output(slack_client.rtm_read())
             if command and channel:
                 if channel not in bot.channel_ids_to_name.keys():
                     #this (most likely) means that this channel is a PM with the bot
-                    app.bot.handle_private_message(command, user)
+                    bot.handle_private_message(command, user)
                 else:
-                    app.bot.handle_command(command, channel, user)
+                    bot.handle_command(command, channel, user)
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
