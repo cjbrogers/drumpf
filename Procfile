@@ -1,1 +1,1 @@
-web: gunicorn drumpfbot:app --log-file=-
+worker: gunicorn drumpfbot:app --log-file=-
