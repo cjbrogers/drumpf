@@ -1,1 +1,1 @@
-web: python drumpfbot.py
+web: gunicorn drumpfbot:app --log-file=-
