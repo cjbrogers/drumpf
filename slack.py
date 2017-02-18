@@ -19,7 +19,7 @@ app.register_blueprint(slack_bp, url_prefix="/login")
 
 @app.route("/actions/", methods=['POST'])
 def actions():
-    drumpfbot.bot.slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
+    drumpfbot.slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
 
 @app.route("/")
 def index():
