@@ -1,6 +1,6 @@
 import os
 from werkzeug.contrib.fixers import ProxyFix
-from flask import Flask, redirect, flash, render_template, request, session, abort, url_for
+from flask import Flask, redirect, url_for
 from flask_dance.contrib.slack import make_slack_blueprint, slack
 from flask_sslify import SSLify
 from raven.contrib.flask import Sentry
@@ -17,13 +17,7 @@ app.register_blueprint(slack_bp, url_prefix="/login")
 
 @app.route("/actions/", methods=['POST'])
 def actions():
-    resp = slack.post("chat.postMessage", data={
-        "channel": "#drumpf-play",
-        "text": "ping",
-        "icon_emoji": ":robot_face:",
-    })
-    assert resp.ok, resp.text
-    return resp.text
+    print "hello Slack app"
 
 @app.route("/")
 def index():
