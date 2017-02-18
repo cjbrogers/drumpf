@@ -29,10 +29,9 @@ def actions():
     {"name":"clubs","text":":clubs:","type":"button","value":"1"},
     {"name":"hearts","text":":hearts:","type":"button","value":"2"},
     {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
-    app.slack_client.api_call(
+    return app.slack_client.api_call(
         "chat.postMessage",
         channel="C41Q1H4BD",
-        text="please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]",
         as_user=True,
         attachments=attachments
     )
