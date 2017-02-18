@@ -1,1 +1,2 @@
-worker: gunicorn drumpfbot:app --log-file=-
+web: gunicorn drumpfbot:app --log-file=-
+worker: python drumpfbot.py
