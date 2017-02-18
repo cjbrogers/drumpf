@@ -182,8 +182,8 @@ class DrumpfBot:
             title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
             attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
 
-        if command.lower().startswith("bigly"):
-            response = ">>>*bigly* (ˈbɪɡlɪ) \n_adj_\n\t\t_archaic_ comfortably habitable"
+        # if command.lower().startswith("bigly"):
+        #     response = ">>>*bigly* (ˈbɪɡlɪ) \n_adj_\n\t\t_archaic_ comfortably habitable"
 
         if command.lower().startswith("undebug"):
             self.debug = False
