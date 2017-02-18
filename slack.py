@@ -17,7 +17,12 @@ app.register_blueprint(slack_bp, url_prefix="/login")
 
 @app.route("/actions/", methods=['POST'])
 def actions():
-    print "hello Slack app"
+    resp = slack.post("chat.postMessage", data={
+        "channel": "#drumpf-play",
+        "text": "I am a banana",
+    })
+    assert resp.ok, resp.text
+    return resp.text
 
 @app.route("/")
 def index():
