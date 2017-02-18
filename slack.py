@@ -18,11 +18,24 @@ slack_bp = make_slack_blueprint(scope=["identify", "chat:write:bot"])
 app.register_blueprint(slack_bp, url_prefix="/login")
 app.slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
+
+app.api_call = app.slack_client.api_call("users.list")
 app.slack_client.rtm_connect()
 
 @app.route("/actions/", methods=['POST'])
 def actions():
     app.slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
+    attachments =[{"title":"TESTING Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
+    {"name":"clubs","text":":clubs:","type":"button","value":"1"},
+    {"name":"hearts","text":":hearts:","type":"button","value":"2"},
+    {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
+    app.slack_client.api_call(
+        "chat.postMessage",
+        channel=request.form['user'],
+        text="please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]",
+        as_user=True,
+        attachments=attachments
+    )
 
 @app.route("/")
 def index():
