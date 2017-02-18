@@ -1066,12 +1066,19 @@ class DrumpfBot:
         self.player_trump_card_queue.append(player_id)
         print "  self.player_trump_card_queue after append(): {}".format(self.player_trump_card_queue)
 
+        attachments =[{"title":"TESTING Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
+        {"name":"clubs","text":":clubs:","type":"button","value":"1"},
+        {"name":"hearts","text":":hearts:","type":"button","value":"2"},
+        {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
+
+
         print "  please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]"
         slack_client.api_call(
             "chat.postMessage",
             channel=player_id,
             text="please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]",
-            as_user=True
+            as_user=True,
+            attachments=attachments
         )
 
     def get_readable_list_of_players(self):
