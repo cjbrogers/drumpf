@@ -8,24 +8,8 @@ from slackclient import SlackClient
 from collections import defaultdict
 from collections import deque
 
-from werkzeug.contrib.fixers import ProxyFix
-from flask import Flask, redirect, url_for
-from flask_dance.contrib.slack import make_slack_blueprint, slack
-from flask_sslify import SSLify
-from raven.contrib.flask import Sentry
-
 import drumpfgame as DrumpfGame
 import helper_functions
-
-app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app)
-sentry = Sentry(app)
-sslify = SSLify(app)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "supersekrit")
-app.config["SLACK_OAUTH_CLIENT_ID"] = os.environ.get("SLACK_OAUTH_CLIENT_ID")
-app.config["SLACK_OAUTH_CLIENT_SECRET"] = os.environ.get("SLACK_OAUTH_CLIENT_SECRET")
-slack_bp = make_slack_blueprint(scope=["identify", "chat:write:bot"])
-app.register_blueprint(slack_bp, url_prefix="/login")
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -1155,29 +1139,7 @@ class DrumpfBot:
         python = sys.executable
         os.execl(python, python, * sys.argv)
 
-@app.route("/actions/", methods=['POST'])
-def actions():
-    resp = slack.post("chat.postMessage", data={
-        "channel": "#drumpf-play",
-        "text": "I am a banana",
-    })
-    assert resp.ok, resp.text
-    return resp.text
-
-@app.route("/")
-def index():
-    if not slack.authorized:
-        return redirect(url_for("slack.login"))
-    resp = slack.post("chat.postMessage", data={
-        "channel": "#drumpf-play",
-        "text": "ping",
-        "icon_emoji": ":robot_face:",
-    })
-    assert resp.ok, resp.text
-    return resp.text
-
 if __name__ == "__main__":
-    app.run(debug=True)
     bot = DrumpfBot()
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
     #grab user list and converts it to to a dict of ids to usernames

@@ -1,6 +1,6 @@
 import os
 from werkzeug.contrib.fixers import ProxyFix
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, request
 from flask_dance.contrib.slack import make_slack_blueprint, slack
 from flask_sslify import SSLify
 from raven.contrib.flask import Sentry
