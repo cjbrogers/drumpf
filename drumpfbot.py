@@ -32,7 +32,7 @@ BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
 
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+app.slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
 suits = ["diamonds", "clubs", "hearts", "spades"]
 
@@ -1184,32 +1184,32 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
-    bot = DrumpfBot()
+    app.bot = DrumpfBot()
 
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
     #grab user list and converts it to to a dict of ids to usernames
-    api_call = slack_client.api_call("users.list")
+    api_call = app.slack_client.api_call("users.list")
 
     if api_call.get('ok'):
         users = api_call.get('members')
         for user in users:
-            bot.user_ids_to_username[user['id']] = user['name']
+            app.bot.user_ids_to_username[user['id']] = user['name']
 
-        channels = slack_client.api_call("channels.list").get('channels')
+        channels = app.slack_client.api_call("channels.list").get('channels')
         for channel in channels:
-            bot.channel_ids_to_name[channel['id']] = channel['name']
+            app.bot.channel_ids_to_name[channel['id']] = channel['name']
 
-    if slack_client.rtm_connect():
+    if app.slack_client.rtm_connect():
         print("DRUMPFBOT v1.0 connected and running!")
 
         while True:
-            command, channel, user = bot.parse_slack_output(slack_client.rtm_read())
+            command, channel, user = app.bot.parse_slack_output(slack_client.rtm_read())
             if command and channel:
                 if channel not in bot.channel_ids_to_name.keys():
                     #this (most likely) means that this channel is a PM with the bot
-                    bot.handle_private_message(command, user)
+                    app.bot.handle_private_message(command, user)
                 else:
-                    bot.handle_command(command, channel, user)
+                    app.bot.handle_command(command, channel, user)
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
