@@ -1,0 +1,29 @@
+{
+  "name": "drumpf",
+  "scripts": {
+  },
+  "env": {
+    "BOT_ID": {
+      "required": true
+    },
+    "BOT_NAME": {
+      "required": true
+    },
+    "SLACK_BOT_TOKEN": {
+      "required": true
+    },
+    "WEBHOOK_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
