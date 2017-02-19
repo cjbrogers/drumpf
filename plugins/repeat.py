@@ -1,14 +1,12 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from rtmbot.core import Plugin
+from site-packages import rtmbot.core.Plugin
 # from drumpfbot import DrumpfBot
 
 
 
 class RepeatPlugin(Plugin):
-
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
     def process_message(self, data):
         if data['channel'] == "C41Q1H4BD":
