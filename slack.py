@@ -31,8 +31,8 @@ def actions():
     #     )
     payload={"text": "A very important thing has occurred! <https://alert-system.com/alerts/1234|Click here> for details!"}
     requests.post("https://hooks.slack.com/services/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",json=payload)
-    assert resp.ok, resp.text
-    return resp.text
+    # assert resp.ok, resp.text
+    # return resp.text
 
 @app.route("/")
 def index():
