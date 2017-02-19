@@ -26,7 +26,7 @@ def actions():
     # app.slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
     resp = slack.post(
         "chat.postMessage",
-        data = { "channel":"C41Q1H4BD", "as_user":"True", "text":"User has selected: something"}
+        data = { "channel":"#drumpf-play", "as_user":"True", "text":"User has selected: something"}
         )
     assert resp.ok, resp.text
     return resp.text
