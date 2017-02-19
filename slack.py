@@ -9,6 +9,7 @@ import requests
 
 from slackclient import SlackClient
 
+import drumpfbot
 from drumpfbot import DrumpfBot
 
 class FlaskApp(Flask):
