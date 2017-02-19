@@ -28,8 +28,8 @@ def actions():
         "chat.postMessage",
         data = { "channel":"C41Q1H4BD", "as_user":"True", "text":"User has selected: something"}
         )
-        assert resp.ok, resp.text
-        return resp.text
+    assert resp.ok, resp.text
+    return resp.text
 
 @app.route("/")
 def index():
