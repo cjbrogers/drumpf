@@ -2,7 +2,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from rtmbot.core import Plugin
-# from drumpfbot import DrumpfBot
 
 class TrumpSuitSelection(Plugin):
 

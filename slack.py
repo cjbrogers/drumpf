@@ -28,6 +28,7 @@ def responses():
     print request.get_json()
     payload={"text": "bananas"}
     requests.post("https://hooks.slack.com/services/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",json=payload)
+    return
 
 @app.route("/actions/", methods=['POST'])
 def actions():
