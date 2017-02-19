@@ -32,7 +32,7 @@ def responses():
     print request.get_json()
     slack_client.api_call(
         "chat.postMessage",
-        channel=self.main_channel_id,
+        channel="C41Q1H4BD",
         text="alex",
         as_user=True
     )
@@ -43,7 +43,7 @@ def actions():
     print request.get_json()
     slack_client.api_call(
         "chat.postMessage",
-        channel=self.main_channel_id,
+        channel="C41Q1H4BD",
         text="james",
         as_user=True
     )
