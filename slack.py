@@ -12,14 +12,15 @@ from slackclient import SlackClient
 import drumpfbot
 from drumpfbot import DrumpfBot
 
-class FlaskApp(Flask):
+# class FlaskApp(Flask):
+#
+#    def __init__(self, *args, **kwargs):
+#        super(FlaskApp, self).__init__(*args, **kwargs)
+#        self.bot = DrumpfBot()
+#        self.bot.main()
 
-   def __init__(self, *args, **kwargs):
-       super(FlaskApp, self).__init__(*args, **kwargs)
-       self.bot = DrumpfBot()
-       self.bot.main()
+app = Flask(__name__)
 
-app = FlaskApp(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 sentry = Sentry(app)
 sslify = SSLify(app)
@@ -29,6 +30,8 @@ app.config["SLACK_OAUTH_CLIENT_SECRET"] = os.environ.get("SLACK_OAUTH_CLIENT_SEC
 slack_bp = make_slack_blueprint(scope=["identify", "chat:write:bot"])
 app.register_blueprint(slack_bp, url_prefix="/login")
 
+app.bot = DrumpfBot()
+app.bot.main()
 # app.slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 # app.api_call = app.slack_client.api_call("users.list")
 # app.slack_client.rtm_connect()
