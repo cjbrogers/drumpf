@@ -1163,6 +1163,6 @@ class DrumpfBot:
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
 
-if __name__ == "__main__":
-    bot = DrumpfBot()
-    bot.main()
+# if __name__ == "__main__":
+#     bot = DrumpfBot()
+#     bot.main()
