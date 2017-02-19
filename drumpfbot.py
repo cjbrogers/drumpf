@@ -1125,7 +1125,7 @@ class DrumpfBot:
         player_objects = []
         for player_id in players:
             player_objects.append(DrumpfGame.Player(player_id))
-        game = DrumpfGame.Game(player_objects, bot)
+        game = DrumpfGame.Game(player_objects, self)
         game.play_round()
 
     #Restarts the current program.
