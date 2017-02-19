@@ -30,8 +30,8 @@ app.config["SLACK_OAUTH_CLIENT_SECRET"] = os.environ.get("SLACK_OAUTH_CLIENT_SEC
 slack_bp = make_slack_blueprint(scope=["identify", "chat:write:bot"])
 app.register_blueprint(slack_bp, url_prefix="/login")
 
-app.bot = DrumpfBot()
-app.bot.main()
+# bot = DrumpfBot()
+# bot.main()
 # app.slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 # app.api_call = app.slack_client.api_call("users.list")
 # app.slack_client.rtm_connect()
