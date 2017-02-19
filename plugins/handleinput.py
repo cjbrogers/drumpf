@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 from rtmbot.core import Plugin
 # from drumpfbot import DrumpfBot
 
-
-
 class TrumpSuitSelection(Plugin):
 
     def process_message(self, data):

@@ -28,7 +28,7 @@ def actions():
         "chat.postMessage",
         channel="C41Q1H4BD",
         as_user=True,
-        text="User has selected: {}".format(request.form['original_message']['attachments']['actions']['value'])
+        text="User has selected: something")
     )
 
 @app.route("/")
