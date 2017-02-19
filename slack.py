@@ -24,13 +24,12 @@ app.slack_client.rtm_connect()
 
 @app.route("/responses/", methods=['POST'])
 def responses():
-    print request.text
+    print request.form['user']
     payload={"text": "bananas"}
     requests.post("https://hooks.slack.com/services/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",json=payload)
 
 @app.route("/actions/", methods=['POST'])
 def actions():
-    print request.text
     payload={"text": "A very important thing has occurred! <https://alert-system.com/alerts/1234|Click here> for details!"}
     requests.post("https://hooks.slack.com/services/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",json=payload)
 
