@@ -1,1 +1,1 @@
-web: gunicorn slack:app --log-file=-
+web: python test.py

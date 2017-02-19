@@ -7,7 +7,7 @@ import copy
 from slackclient import SlackClient
 from collections import defaultdict
 from collections import deque
-
+from slacker import Slacker
 import drumpfgame as DrumpfGame
 import helper_functions
 
@@ -19,7 +19,7 @@ AT_BOT = "<@" + BOT_ID + ">"
 
 # instantiate Slack & Twilio clients
 slack_client = slackprovider.get_slack_client()
-
+slack = Slacker("SCPjy4piSBNiA5Yo0U2rsuo3")
 suits = ["diamonds", "clubs", "hearts", "spades"]
 
 class DrumpfBot:
@@ -1068,13 +1068,15 @@ class DrumpfBot:
         self.player_trump_card_queue.append(player_id)
         print "  self.player_trump_card_queue after append(): {}".format(self.player_trump_card_queue)
 
-        print "  please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]"
-        slack_client.api_call(
-            "chat.postMessage",
+        attachments =[{"title":"TESTING Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
+        {"name":"clubs","text":":clubs:","type":"button","value":"1"},
+        {"name":"hearts","text":":hearts:","type":"button","value":"2"},
+        {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
+        slack.chat.post_message(
             channel=player_id,
-            text="please select index for trump suit \n `0`[:diamonds:]   `1`[:clubs:]   `2`[:hearts:]   `3`[:spades:]",
-            as_user=True
-        )
+            as_user=True,
+            attachments=attachments
+            )
 
     def get_readable_list_of_players(self):
         print "get_readable_list_of_players(self) "
@@ -1125,7 +1127,7 @@ class DrumpfBot:
         player_objects = []
         for player_id in players:
             player_objects.append(DrumpfGame.Player(player_id))
-        game = DrumpfGame.Game(player_objects, self)
+        game = DrumpfGame.Game(player_objects, bot)
         game.play_round()
 
     #Restarts the current program.
@@ -1163,6 +1165,6 @@ class DrumpfBot:
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
 
-# if __name__ == "__main__":
-#     bot = DrumpfBot()
-#     bot.main()
+if __name__ == "__main__":
+    bot = DrumpfBot()
+    bot.main()
