@@ -19,7 +19,7 @@ class FlaskApp(Flask):
        self.bot = DrumpfBot()
        self.bot.main()
 
-app = Flask(__name__)
+app = FlaskApp(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 sentry = Sentry(app)
 sslify = SSLify(app)
