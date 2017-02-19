@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import os
 from werkzeug.contrib.fixers import ProxyFix
 from flask import Flask, redirect, url_for, request
@@ -24,7 +25,7 @@ app.slack_client.rtm_connect()
 
 @app.route("/responses/", methods=['POST'])
 def responses():
-    print request.form['user']
+    print request.get_json()
     payload={"text": "bananas"}
     requests.post("https://hooks.slack.com/services/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",json=payload)
 
