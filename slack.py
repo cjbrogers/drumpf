@@ -9,7 +9,14 @@ import requests
 
 from slackclient import SlackClient
 
-import drumpfbot
+from drumpfbot import DrumpfBot
+
+class FlaskApp(Flask):
+
+   def __init__(self, *args, **kwargs):
+       super(FlaskApp, self).__init__(*args, **kwargs)
+       self.bot = DrumpfBot()
+       self.bot.main()
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -62,6 +69,4 @@ def index():
     return resp.text
 
 if __name__ == "__main__":
-    bot = DrumpfBot()
-    bot.main()
     app.run(debug=True)
