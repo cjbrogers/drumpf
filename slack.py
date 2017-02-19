@@ -4,6 +4,7 @@ from flask import Flask, redirect, url_for, request
 from flask_dance.contrib.slack import make_slack_blueprint, slack
 from flask_sslify import SSLify
 from raven.contrib.flask import Sentry
+import requests
 
 from slackclient import SlackClient
 
@@ -24,10 +25,12 @@ app.slack_client.rtm_connect()
 @app.route("/actions/", methods=['POST'])
 def actions():
     # app.slack_client.rtm_send_message("drumpf-play", "I'm ALIVE!!!")
-    resp = slack.post(
-        "chat.postMessage",
-        data = { "channel":"#drumpf-play", "as_user":"True", "text":"User has selected: something"}
-        )
+    # resp = slack.post(
+    #     "chat.postMessage",
+    #     data = { "channel":"#drumpf-play", "as_user":"True", "text":"User has selected: something"}
+    #     )
+    payload={"text": "A very important thing has occurred! <https://alert-system.com/alerts/1234|Click here> for details!"}
+    requests.post("https://hooks.slack.com/services/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",json=payload)
     assert resp.ok, resp.text
     return resp.text
 
