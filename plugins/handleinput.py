@@ -6,7 +6,7 @@ from site-packages import rtmbot.core.Plugin
 
 
 
-class RepeatPlugin(Plugin):
+class TrumpSuitSelection(Plugin):
 
     def process_message(self, data):
         if data['channel'] == "C41Q1H4BD":
