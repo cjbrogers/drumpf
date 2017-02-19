@@ -28,8 +28,8 @@ def actions():
         "chat.postMessage",
         channel="C41Q1H4BD",
         as_user=True,
-        text="User has selected: something")
-    )
+        text="User has selected: something"
+        )
 
 @app.route("/")
 def index():
