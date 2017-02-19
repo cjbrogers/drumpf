@@ -16,7 +16,7 @@ def pre_install():
       </a>
     '''.format(oauth_scope, client_id)
 
- @app.route("/finish_auth", methods=["GET", "POST"])
+@app.route("/finish_auth", methods=["GET", "POST"])
 def post_install():
     # Retrieve the auth code from the request params
     auth_code = request.args['code']
