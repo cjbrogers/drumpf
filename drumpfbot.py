@@ -11,12 +11,14 @@ from collections import deque
 import drumpfgame as DrumpfGame
 import helper_functions
 
+import slackprovider
+
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
 
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+slack_client = slackprovider.get_slack_client()
 
 suits = ["diamonds", "clubs", "hearts", "spades"]
 

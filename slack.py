@@ -25,22 +25,29 @@ app.register_blueprint(slack_bp, url_prefix="/login")
 # app.api_call = app.slack_client.api_call("users.list")
 # app.slack_client.rtm_connect()
 
+slack_client = drumpfbot.slack_client
+
 @app.route("/responses/", methods=['POST'])
 def responses():
     print request.get_json()
-    resp = slack.post("chat.postMessage", data={
-        "channel": "#drumpf-play",
-        "text": "ping",
-        "icon_emoji": ":robot_face:",
-    })
-    assert resp.ok, resp.text
-    return resp.text
+    slack_client.api_call(
+        "chat.postMessage",
+        channel=self.main_channel_id,
+        text="alex",
+        as_user=True
+    )
+    return "OK"
 
 @app.route("/actions/", methods=['POST'])
 def actions():
     print request.get_json()
-    payload={"text": "A very important thing has occurred! <https://alert-system.com/alerts/1234|Click here> for details!"}
-    requests.post("https://hooks.slack.com/services/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",json=payload)
+    slack_client.api_call(
+        "chat.postMessage",
+        channel=self.main_channel_id,
+        text="james",
+        as_user=True
+    )
+    return "OK"
 
 @app.route("/")
 def index():
@@ -55,6 +62,6 @@ def index():
     return resp.text
 
 if __name__ == "__main__":
-    app.run(debug=True)
     bot = DrumpfBot()
     bot.main()
+    app.run(debug=True)
