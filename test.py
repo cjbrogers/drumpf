@@ -31,6 +31,7 @@ def post_install():
     client_secret=client_secret,
     code=auth_code
     )
+    
     # Save the bot token to an environmental variable or to your data store
     # for later use
     os.environ["SLACK_USER_TOKEN"] = auth_response['access_token']
