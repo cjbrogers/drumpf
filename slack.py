@@ -19,16 +19,20 @@ app.config["SLACK_OAUTH_CLIENT_SECRET"] = os.environ.get("SLACK_OAUTH_CLIENT_SEC
 slack_bp = make_slack_blueprint(scope=["identify", "chat:write:bot"])
 app.register_blueprint(slack_bp, url_prefix="/login")
 
-app.slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-app.api_call = app.slack_client.api_call("users.list")
-app.slack_client.rtm_connect()
+# app.slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+# app.api_call = app.slack_client.api_call("users.list")
+# app.slack_client.rtm_connect()
 
 @app.route("/responses/", methods=['POST'])
 def responses():
     print request.get_json()
-    payload={"text": "bananas"}
-    requests.post("https://hooks.slack.com/services/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",json=payload)
-    return
+    resp = slack.post("chat.postMessage", data={
+        "channel": "#drumpf-play",
+        "text": "ping",
+        "icon_emoji": ":robot_face:",
+    })
+    assert resp.ok, resp.text
+    return resp.text
 
 @app.route("/actions/", methods=['POST'])
 def actions():
