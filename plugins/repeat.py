@@ -17,7 +17,7 @@ class RepeatPlugin(Plugin):
                 {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
                 self.slack_client.api_call(
                     "chat.postMessage",
-                    channel=data['channel'],
+                    channel="C41Q1H4BD",
                     as_user=True,
                     attachments=attachments
                 )
