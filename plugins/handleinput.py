@@ -21,8 +21,3 @@ class TrumpSuitSelection(Plugin):
                     as_user=True,
                     attachments=attachments
                 )
-                # self.outputs.append(
-                #     [data['channel'], 'from user: "{}" plugin: "RepeatPlugin" command: "{}" in channel {}'.format(data['user'],
-                #         data['text'], data['channel']
-                #     )]
-                # )
