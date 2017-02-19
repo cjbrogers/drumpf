@@ -25,14 +25,9 @@ app.register_blueprint(slack_bp, url_prefix="/login")
 
 @app.route("/responses/", methods=['POST'])
 def responses():
-    print request.get_json()
-    resp = slack.post("chat.postMessage", data={
-        "channel": "#drumpf-play",
-        "text": "ping",
-        "icon_emoji": ":robot_face:",
-    })
-    assert resp.ok, resp.text
-    return resp.text
+    payload={"text": "A very important thing has occurred! <https://alert-system.com/alerts/1234|Click here> for details!"}
+    requests.post("https://hooks.slack.com/services/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",json=payload)
+    return "OK"
 
 @app.route("/actions/", methods=['POST'])
 def actions():
