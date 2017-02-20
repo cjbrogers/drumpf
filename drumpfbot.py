@@ -69,7 +69,6 @@ class DrumpfBot:
         print "  player: ", self.user_ids_to_username[user_id]
 
         attachments = None
-        #TODO restrict the channel this is in
         username = self.user_ids_to_username[user_id] #user who sent the message
 
         response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
@@ -994,7 +993,7 @@ class DrumpfBot:
         print "handle_private_message(self, command, user_id) "
         print "  command: ", command
         print "  user_id: ", user_id
-        print "  player: ", self.user_ids_to_username[user_id]
+        # print "  player: ", self.user_ids_to_username[user_id]
 
         response = ""
 
@@ -1020,8 +1019,6 @@ class DrumpfBot:
 
 
     def parse_slack_output(self, slack_rtm_output):
-        #
-        # print " parse_slack_output(self, slack_rtm_output) "
         """
             The Slack Real Time Messaging API is an events firehose.
             this parsing function returns None unless a message is
@@ -1068,7 +1065,7 @@ class DrumpfBot:
         self.player_trump_card_queue.append(player_id)
         print "  self.player_trump_card_queue after append(): {}".format(self.player_trump_card_queue)
 
-        attachments =[{"title":"TESTING Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
+        attachments =[{"title":"Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
         {"name":"clubs","text":":clubs:","type":"button","value":"1"},
         {"name":"hearts","text":":hearts:","type":"button","value":"2"},
         {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
@@ -1130,6 +1127,12 @@ class DrumpfBot:
         game = DrumpfGame.Game(player_objects, bot)
         game.play_round()
 
+    def receive_button_action(self,value,user_id):
+        self..handle_private_message(value,user_id)
+        # self.button_value = value
+        # self.user_id_sending = user_id
+
+
     #Restarts the current program.
     def restart_program(self):
         print "restart_program(self)"
@@ -1155,6 +1158,7 @@ class DrumpfBot:
 
             while True:
                 command, channel, user = self.parse_slack_output(slack_client.rtm_read())
+                # print "command: {}, user: {}".format(command,user)
                 if command and channel:
                     if channel not in self.channel_ids_to_name.keys():
                         #this (most likely) means that this channel is a PM with the bot
