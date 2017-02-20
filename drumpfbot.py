@@ -12,7 +12,7 @@ import drumpfgame as DrumpfGame
 import helper_functions
 
 import slackprovider
-
+# from receive import app
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
@@ -22,7 +22,8 @@ slack_client = slackprovider.get_slack_client()
 slack = Slacker(os.environ.get('SLACK_BOT_TOKEN'))
 suits = ["diamonds", "clubs", "hearts", "spades"]
 
-class DrumpfBot:
+
+class DrumpfBot(object):
     def __init__(self, main_channel_id='C41Q1H4BD'):
         self.users_in_game = deque([]) #[user_id, user_id...]
         self.user_ids_to_username = {} #{'USERID': 'James'}
@@ -1124,11 +1125,11 @@ class DrumpfBot:
         player_objects = []
         for player_id in players:
             player_objects.append(DrumpfGame.Player(player_id))
-        game = DrumpfGame.Game(player_objects, bot)
+        game = DrumpfGame.Game(player_objects, self)
         game.play_round()
 
     def receive_button_action(self,value,user_id):
-        self..handle_private_message(value,user_id)
+        self.handle_private_message(value,user_id)
         # self.button_value = value
         # self.user_id_sending = user_id
 
@@ -1169,6 +1170,6 @@ class DrumpfBot:
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
 
-if __name__ == "__main__":
-    bot = DrumpfBot()
-    bot.main()
+# if __name__ == "__main__":
+    # bot = DrumpfBot()
+    # app.bot.main()

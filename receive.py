@@ -5,7 +5,7 @@ from slackclient import SlackClient
 from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
 
-import redis
+from drumpfbot import DrumpfBot
 
 app = Flask(__name__)
 
@@ -13,10 +13,11 @@ app = Flask(__name__)
 
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 
-# SLACK_TOKEN = os.environ.get('SLACK_BOT_TOKEN', None)
-# slack_client = SlackClient(SLACK_TOKEN)
 
-# r = redis.StrictRedis(host='localhost', port=5000, db=0)
+class Bot:
+    def __init__(self):
+        self.bot = DrumpfBot()
+        self.bot.main()
 
 # handles interactive button responses for donny_drumpfbot
 @app.route('/actions', methods=['POST'])
@@ -26,8 +27,6 @@ def inbound():
     token = data['token']
     if token == SLACK_VERIFICATION_TOKEN:
         print 'TOKEN is good!'
-
-
         response_url = data['response_url']
         user_info = data['user']
         user_id = user_info['id']
@@ -37,11 +36,13 @@ def inbound():
 
         print 'User sending message: ',user_name
         print "value received: ",value
-        # r.set('value',value)
-        # r.set('user_id',user_id)
-        DrumpfBot().receive_button_action(value,user_id)
+        app.bot.receive_button_action(value,user_id)
     return Response(), 200
 
+@app.route('/start', methods=['POST'])
+def start():
+    bot = Bot()
+    return bot
 
 @app.route('/', methods=['GET'])
 def test():
