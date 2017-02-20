@@ -2,8 +2,8 @@ import os
 from flask import Flask, request
 from slackclient import SlackClient
 
-client_id = os.environ["SLACK_CLIENT_ID"]
-client_secret = os.environ["SLACK_CLIENT_SECRET"]
+client_id = os.environ["SLACK_OAUTH_CLIENT_ID"]
+client_secret = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 oauth_scope = os.environ["SLACK_BOT_SCOPE"]
 
 app = Flask(__name__)
@@ -26,16 +26,22 @@ def post_install():
 
     # Request the auth tokens from Slack
     auth_response = sc.api_call(
-    "oauth.access",
-    client_id=client_id,
-    client_secret=client_secret,
-    code=auth_code
+        "oauth.access",
+        client_id=client_id,
+        client_secret=client_secret,
+        code=auth_code
     )
-    
+
     # Save the bot token to an environmental variable or to your data store
     # for later use
+    print(auth_response)
+    print(auth_response['access_token'])
     os.environ["SLACK_USER_TOKEN"] = auth_response['access_token']
+    print(auth_response['bot']['bot_access_token'])
     os.environ["SLACK_BOT_TOKEN"] = auth_response['bot']['bot_access_token']
 
     # Don't forget to let the user know that auth has succeeded!
     return "Auth complete!"
+
+if __name__ == "__main__":
+    app.run(debug=True)

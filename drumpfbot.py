@@ -19,7 +19,7 @@ AT_BOT = "<@" + BOT_ID + ">"
 
 # instantiate Slack & Twilio clients
 slack_client = slackprovider.get_slack_client()
-slack = Slacker("SCPjy4piSBNiA5Yo0U2rsuo3")
+slack = Slacker(os.environ.get('SLACK_BOT_TOKEN'))
 suits = ["diamonds", "clubs", "hearts", "spades"]
 
 class DrumpfBot:
