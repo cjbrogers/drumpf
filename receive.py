@@ -15,10 +15,27 @@ slack_client = slackprovider.get_slack_client()
 slack = Slacker(os.environ.get('SLACK_BOT_TOKEN'))
 
 app = Flask(__name__)
+app.value = None
+
+def set_values(value, user, channel):
+    app.value = value
+    app.user = user
+    app.channel = channel
+
+def get_value():
+    return app.value
+
+def get_user():
+    return app.user
+
+def get_channel():
+    return app.channel
+
 
 # handles interactive button responses for donny_drumpfbot
 @app.route('/actions', methods=['POST'])
 def inbound():
+
     payload = request.form.get('payload')
     data = json.loads(payload)
     token = data['token']
@@ -33,12 +50,10 @@ def inbound():
         user_name = user_info['name']
         actions = data['actions'][0]
         value = actions['value']
-        app.value = value
-        app.uid = user_id
-        app.receive_channel = channel_id
+        set_values(value,user_id,channel_id)
 
         print 'User sending message: ',user_name
-        print "value received: ",value
+        print "Value received: ",value
         slack.chat.post_message(channel_id,"@donny_drumpfbot {}".format(value),user_name)
     return Response(), 200
 

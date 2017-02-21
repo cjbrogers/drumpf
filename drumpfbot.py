@@ -1158,16 +1158,16 @@ class DrumpfBot():
             print("DRUMPFBOT v1.0 connected and running!")
 
             while True:
-                if app.value:
+                if app.get_value() != None:
                     print "APP.VALUE!!!"
-                    command = app.value
-                    user = app.uid
-                    channel = app.receive_channel
+                    command = app.get_value()
+                    user = app.get_user()
+                    channel = app.get_channel()
                     print "command: {}, user: {}, channel: {}".format(command,user,channel)
                 else:
                     command, channel, user = self.parse_slack_output(slack_client.rtm_read())
                 if command and channel:
-                    print value
+                    # print app.value
                     if channel not in self.channel_ids_to_name.keys():
                         #this (most likely) means that this channel is a PM with the bot
                         self.handle_private_message(command, user)
