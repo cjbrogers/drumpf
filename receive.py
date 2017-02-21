@@ -5,7 +5,7 @@ from slackclient import SlackClient
 from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
 
-import drumpfbot
+# import drumpfbot
 import slackprovider
 from slacker import Slacker
 
@@ -33,9 +33,9 @@ def inbound():
         user_name = user_info['name']
         actions = data['actions'][0]
         value = actions['value']
-        drumpfbot.value = value
-        drumpfbot.uid = user_id
-        drumpfbot.receive_channel = channel_id
+        app.value = value
+        app.uid = user_id
+        app.receive_channel = channel_id
 
         print 'User sending message: ',user_name
         print "value received: ",value

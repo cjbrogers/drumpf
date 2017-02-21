@@ -12,6 +12,8 @@ import drumpfgame as DrumpfGame
 import helper_functions
 
 import slackprovider
+from receive import app
+
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -22,9 +24,9 @@ slack_client = SlackClient(slackprovider.get_slack_client())
 slack = Slacker(slackprovider.get_slack_client())
 suits = ["diamonds", "clubs", "hearts", "spades"]
 
-value = None
-uid = None
-receive_channel = None
+# value = None
+# uid = None
+# receive_channel = None
 
 class DrumpfBot():
     def __init__(self, main_channel_id='C41Q1H4BD'):
@@ -1156,10 +1158,11 @@ class DrumpfBot():
             print("DRUMPFBOT v1.0 connected and running!")
 
             while True:
-                if value:
-                    command = value
-                    user = uid
-                    channel = receive_channel
+                if app.value:
+                    print "APP.VALUE!!!"
+                    command = app.value
+                    user = app.uid
+                    channel = app.receive_channel
                     print "command: {}, user: {}, channel: {}".format(command,user,channel)
                 else:
                     command, channel, user = self.parse_slack_output(slack_client.rtm_read())
