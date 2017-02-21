@@ -5,19 +5,16 @@ from slackclient import SlackClient
 from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
 
-from drumpfbot import DrumpfBot
-
-app = Flask(__name__)
-
-# bot = DrumpfBot()
+import drumpfbot
+import slackprovider
+from slacker import Slacker
 
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 
+slack_client = slackprovider.get_slack_client()
+slack = Slacker(os.environ.get('SLACK_BOT_TOKEN'))
 
-class Bot:
-    def __init__(self):
-        self.bot = DrumpfBot()
-        self.bot.main()
+app = Flask(__name__)
 
 # handles interactive button responses for donny_drumpfbot
 @app.route('/actions', methods=['POST'])
@@ -27,22 +24,22 @@ def inbound():
     token = data['token']
     if token == SLACK_VERIFICATION_TOKEN:
         print 'TOKEN is good!'
+        # print data
         response_url = data['response_url']
+        channel_info = data['channel']
+        channel_id = channel_info['id']
         user_info = data['user']
         user_id = user_info['id']
         user_name = user_info['name']
         actions = data['actions'][0]
         value = actions['value']
+        drumpfbot.value = value
+        drumpfbot.uid = user_id
 
         print 'User sending message: ',user_name
         print "value received: ",value
-        app.bot.receive_button_action(value,user_id)
+        slack.chat.me_message(channel_id,"@donny_drumpfbot {}".format(value))
     return Response(), 200
-
-@app.route('/start', methods=['POST'])
-def start():
-    bot = Bot()
-    return bot
 
 @app.route('/', methods=['GET'])
 def test():

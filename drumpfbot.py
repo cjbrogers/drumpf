@@ -13,6 +13,7 @@ import helper_functions
 
 import slackprovider
 # from receive import app
+
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
@@ -22,8 +23,10 @@ slack_client = slackprovider.get_slack_client()
 slack = Slacker(os.environ.get('SLACK_BOT_TOKEN'))
 suits = ["diamonds", "clubs", "hearts", "spades"]
 
+value = None
+uid = None
 
-class DrumpfBot(object):
+class DrumpfBot():
     def __init__(self, main_channel_id='C41Q1H4BD'):
         self.users_in_game = deque([]) #[user_id, user_id...]
         self.user_ids_to_username = {} #{'USERID': 'James'}
@@ -994,7 +997,6 @@ class DrumpfBot(object):
         print "handle_private_message(self, command, user_id) "
         print "  command: ", command
         print "  user_id: ", user_id
-        # print "  player: ", self.user_ids_to_username[user_id]
 
         response = ""
 
@@ -1013,9 +1015,11 @@ class DrumpfBot(object):
             self.handle_trump_suit_selection(command, user_id)
 
         elif len(self.player_bid_queue):
+            print "  len(self.player_bid_queue)"
             self.handle_player_bid(command, user_id)
 
         elif len(self.player_turn_queue):
+            print "  len(self.player_turn_queue)"
             self.handle_player_turn(command, user_id)
 
 
@@ -1128,12 +1132,6 @@ class DrumpfBot(object):
         game = DrumpfGame.Game(player_objects, self)
         game.play_round()
 
-    def receive_button_action(self,value,user_id):
-        self.handle_private_message(value,user_id)
-        # self.button_value = value
-        # self.user_id_sending = user_id
-
-
     #Restarts the current program.
     def restart_program(self):
         print "restart_program(self)"
@@ -1161,6 +1159,7 @@ class DrumpfBot(object):
                 command, channel, user = self.parse_slack_output(slack_client.rtm_read())
                 # print "command: {}, user: {}".format(command,user)
                 if command and channel:
+                    print value
                     if channel not in self.channel_ids_to_name.keys():
                         #this (most likely) means that this channel is a PM with the bot
                         self.handle_private_message(command, user)
@@ -1170,6 +1169,6 @@ class DrumpfBot(object):
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
 
-# if __name__ == "__main__":
-    # bot = DrumpfBot()
-    # app.bot.main()
+if __name__ == "__main__":
+    bot = DrumpfBot()
+    bot.main()
