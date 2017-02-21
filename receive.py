@@ -35,10 +35,11 @@ def inbound():
         value = actions['value']
         drumpfbot.value = value
         drumpfbot.uid = user_id
+        drumpfbot.receive_channel = channel_id
 
         print 'User sending message: ',user_name
         print "value received: ",value
-        slack.chat.me_message(channel_id,"@donny_drumpfbot {}".format(value))
+        slack.chat.post_message(channel_id,"@donny_drumpfbot {}".format(value),user_name)
     return Response(), 200
 
 @app.route('/', methods=['GET'])

@@ -12,19 +12,19 @@ import drumpfgame as DrumpfGame
 import helper_functions
 
 import slackprovider
-# from receive import app
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
 
 # instantiate Slack & Twilio clients
-slack_client = slackprovider.get_slack_client()
-slack = Slacker(os.environ.get('SLACK_BOT_TOKEN'))
+slack_client = SlackClient(slackprovider.get_slack_client())
+slack = Slacker(slackprovider.get_slack_client())
 suits = ["diamonds", "clubs", "hearts", "spades"]
 
 value = None
 uid = None
+receive_channel = None
 
 class DrumpfBot():
     def __init__(self, main_channel_id='C41Q1H4BD'):
@@ -1156,8 +1156,13 @@ class DrumpfBot():
             print("DRUMPFBOT v1.0 connected and running!")
 
             while True:
-                command, channel, user = self.parse_slack_output(slack_client.rtm_read())
-                # print "command: {}, user: {}".format(command,user)
+                if value:
+                    command = value
+                    user = uid
+                    channel = receive_channel
+                    print "command: {}, user: {}, channel: {}".format(command,user,channel)
+                else:
+                    command, channel, user = self.parse_slack_output(slack_client.rtm_read())
                 if command and channel:
                     print value
                     if channel not in self.channel_ids_to_name.keys():
