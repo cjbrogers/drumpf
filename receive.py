@@ -1,26 +1,28 @@
 # -*- coding: utf-8 -*-
 import os
 from flask import Flask, request, Response
-app = Flask(__name__)
 
 from slackclient import SlackClient
 from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
-
 import slackprovider
 from slacker import Slacker
-
 from sqlalchemy import create_engine
 import pymysql
 import pymysql.cursors
 
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
+client_id = os.environ["SLACK_OAUTH_CLIENT_ID"]
+client_secret = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
+oauth_scope = os.environ["SLACK_BOT_SCOPE"]
 
 # slack_client = slackprovider.get_slack_client()
-slack = Slacker(os.environ.get('SLACK_USER_TOKEN'))
+# slack = Slacker(os.environ.get('SLACK_USER_TOKEN'))
 
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
+
+app = Flask(__name__)
 
 '''
 Establishes a connection to the mySQL db
@@ -101,7 +103,7 @@ def pre_signin():
 
       </a>
     '''
-    
+
 @app.route("/signin/finish", methods=["GET", "POST"])
 def post_signin():
     # Retrieve the auth code from the request params
