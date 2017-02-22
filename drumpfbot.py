@@ -12,8 +12,8 @@ import drumpfgame as DrumpfGame
 import helper_functions
 
 import slackprovider
-from receive import app
 
+import receive
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -23,10 +23,10 @@ AT_BOT = "<@" + BOT_ID + ">"
 slack_client = SlackClient(slackprovider.get_slack_client())
 slack = Slacker(slackprovider.get_slack_client())
 suits = ["diamonds", "clubs", "hearts", "spades"]
+SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 
-# value = None
-# uid = None
-# receive_channel = None
+
+
 
 class DrumpfBot():
     def __init__(self, main_channel_id='C41Q1H4BD'):
@@ -66,6 +66,7 @@ class DrumpfBot():
         self.d_cards = ["d_wall","d_clinton","d_ivanka","d_pussy"]
         self.drumpfmendous_card_first = None
         self.first_card_sub_round = 0
+        self.dealer_prompted_for_trump_suit = False
 
     def handle_command(self, command, channel, user_id):
         print "handle_command(self, command, channel, user_id) "
@@ -204,7 +205,7 @@ class DrumpfBot():
         slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True, attachments=attachments)
 
-    def handle_trump_suit_selection(self, command, user_id):
+    def handle_trump_suit_selection(self,command,user_id):
         print "handle_trump_suit_selection(command, user_id) "
         print "  command: ",command
         print "  user_id: ",user_id
@@ -730,6 +731,15 @@ class DrumpfBot():
             print "  {} card wins".format(self.winning_sub_round_card)
             print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
             return
+        # everyone played Tremendous cards, no t_russian card, so first person to play wins
+        if  all(x[0:2]=="t_" for x in self.cards_played_for_sub_round):
+            if "t_russian" not in self.cards_played_for_sub_round:
+                print("  Everyone played Tremendous cards this sub-round. First player wins.")
+                self.winning_sub_round_card = self.cards_played_for_sub_round[0]
+                print "  Winning sub-round card: ",self.winning_sub_round_card
+                self.winner_for_sub_round = self.player_turn_queue_reference[0]
+                print "  player_turn_queue_reference: ",self.winner_for_sub_round
+                return
         else:
             #we have to iterate over the cards to determine the winner for the sub-round
             winning_card = None
@@ -995,13 +1005,15 @@ class DrumpfBot():
         )
 
 
-    def handle_private_message(self, command, user_id):
+    def handle_private_message(self,command,user_id):
         print "handle_private_message(self, command, user_id) "
         print "  command: ", command
         print "  user_id: ", user_id
 
         response = ""
 
+        # if user_id == BOT_ID:
+        #     user_id = self.current_user_id
         print "  **$$**len(self.player_trump_card_queue): {}".format(len(self.player_trump_card_queue))
         print "  **$$**self.player_trump_card_queue: {}".format(self.player_trump_card_queue)
 
@@ -1033,6 +1045,7 @@ class DrumpfBot():
         """
         output_list = slack_rtm_output
         if output_list and len(output_list) > 0:
+            print output_list
             for output in output_list:
                 if output and 'text' in output and AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed
@@ -1067,6 +1080,7 @@ class DrumpfBot():
         print "prompt_dealer_for_trump_suit(self, player_id) "
         print "  player_id: ", player_id
         print "  player: ", self.user_ids_to_username[player_id]
+        self.dealer_prompted_for_trump_suit = True
 
         print "  self.player_trump_card_queue before append(): {}".format(self.player_trump_card_queue)
         self.player_trump_card_queue.append(player_id)
@@ -1158,16 +1172,8 @@ class DrumpfBot():
             print("DRUMPFBOT v1.0 connected and running!")
 
             while True:
-                if app.get_value() != None:
-                    print "APP.VALUE!!!"
-                    command = app.get_value()
-                    user = app.get_user()
-                    channel = app.get_channel()
-                    print "command: {}, user: {}, channel: {}".format(command,user,channel)
-                else:
-                    command, channel, user = self.parse_slack_output(slack_client.rtm_read())
+                command, channel, user = self.parse_slack_output(slack_client.rtm_read())
                 if command and channel:
-                    # print app.value
                     if channel not in self.channel_ids_to_name.keys():
                         #this (most likely) means that this channel is a PM with the bot
                         self.handle_private_message(command, user)
@@ -1180,3 +1186,4 @@ class DrumpfBot():
 if __name__ == "__main__":
     bot = DrumpfBot()
     bot.main()
+    # app.run(debug=True)

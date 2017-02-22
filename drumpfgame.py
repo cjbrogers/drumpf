@@ -1,14 +1,15 @@
 import random
 import drumpfbot as DrumpfBot
 
-drumpf_deck = ["vm_blacks", "vm_hombres", "vm_muslims", "vm_thieves"]
+# drumpf_deck = ["vm_blacks", "vm_hombres", "vm_muslims", "vm_thieves"]
 suits = ["diamonds", "clubs", "hearts", "spades"]
 # values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
 # # values = [2, 3, "J", "Q", "K"]
 # for suit in suits:
 #     for value in values:
 #         drumpf_deck.append([value, suit])
-drumpf_deck = drumpf_deck + ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
+# drumpf_deck = drumpf_deck + ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
+drumpf_deck = ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
 drumpf_deck = drumpf_deck + ["t_russian", "t_nasty","t_shower","t_comey"]
 
 def rotate_list(l, n):
@@ -91,7 +92,7 @@ class Game:
 
         elif len(shuffled_deck.cards) == 0:
             print "  len(shuffled_deck.cards) == 0"
-            self.bot.prompt_dealer_for_trump_suit(self.players.first.id)
+            self.bot.prompt_dealer_for_trump_suit(self.players[0].id)
         for player in self.players:
             self.bot.display_cards_for_player_in_pm(player.id,
                                                     player.cards_in_hand)
