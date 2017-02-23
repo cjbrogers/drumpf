@@ -101,7 +101,7 @@ def inbound():
 @app.route("/signin", methods=["GET"])
 def pre_signin():
     return '''
-      <a href="https://slack.com/oauth/authorize?scope=chat:write:user,identity.basic,identity.email,identity.team,identity.avatar&client_id=122416745729.127817802451">
+      <a href="https://slack.com/oauth/authorize?scope=chat:write:user&client_id=122416745729.127817802451">
 
           <img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" />
 
