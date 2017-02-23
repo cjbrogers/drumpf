@@ -1125,12 +1125,11 @@ class DrumpfBot():
             for y in range(x-5,x):
                 five_card_set.append(card[y])
             attachments = helper_functions.interactify(five_card_set)
-            slack_client.api_call(
-                "chat.postMessage",
+            slack.chat.post_message(
                 channel=player_id,
-                text="Your card(s):",
-                as_user=True, attachments=attachments
-            )
+                as_user=True,
+                attachments=attachments
+                )
         # formatted_cards = helper_functions.format_cards_to_emojis(cards)
         # self.attachments = None
         # print "  Your card(s): {}".format(formatted_cards)
