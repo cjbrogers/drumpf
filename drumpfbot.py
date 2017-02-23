@@ -244,6 +244,7 @@ class DrumpfBot():
 
                     print "  What's your bid for the round?"
                     self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
+                    return
                 else:
                     print "  That wasn't a valid index for a trump suit."
                     response = "That wasn't a valid index for a trump suit."
