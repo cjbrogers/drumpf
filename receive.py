@@ -128,8 +128,8 @@ def post_signin():
     # for later use
     print(auth_response)
     token = auth_response['access_token']
-    uid = auth_response['user']['id']
-    name = auth_response['user']['name']
+    uid = auth_response['user_id']
+    name = ""
 
     values = {"token": token, "uid": uid, "name": name}
     df = pd.DataFrame(values, index=[0])
