@@ -241,11 +241,12 @@ class DrumpfBot():
                         text="<@{}> chose :{}: for the trump suit.".format(current_username, suits[int(command)]),
                         as_user=True
                     )
-                    print "  What's your bid for the round?"
-                    self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
                     print "    self.player_trump_card_queue before pop(): {}".format(self.player_trump_card_queue)
                     self.player_trump_card_queue.pop()
                     print "    self.player_trump_card_queue after pop(): {}".format(self.player_trump_card_queue)
+                    
+                    print "  What's your bid for the round?"
+                    self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
                 else:
                     print "  That wasn't a valid index for a trump suit."
                     response = "That wasn't a valid index for a trump suit."
