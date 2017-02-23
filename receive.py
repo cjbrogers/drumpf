@@ -21,7 +21,11 @@ oauth_scope = os.environ["SLACK_BOT_SCOPE"]
 
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
+DB_USER = os.environ.get("DB_USER")
+DB_PORT = os.environ.get("DB_PORT")
+DB_NAME = os.environ.get("DB_NAME")
+DB_URL = os.environ.get("DB_URL")
 app = Flask(__name__)
 
 '''
@@ -32,11 +36,11 @@ def connect():
     # Connect to the database
     try:
         print "Attempting connection to database..."
-        connection = pymysql.connect(host='localhost',
-                                     port=3306,
-                                     user='root',
-                                     password='jamesonrogers',
-                                     db='drumpf',
+        connection = pymysql.connect(host='us-cdbr-iron-east-04.cleardb.net',
+                                     port=DB_PORT,
+                                     user=DB_USER,
+                                     password=DB_PASSWORD,
+                                     db=DB_NAME,
                                      cursorclass=pymysql.cursors.DictCursor)
     except Exception as e:
         raise
@@ -130,7 +134,7 @@ def post_signin():
     values = {"token": token, "uid": uid, "name": name}
     df = pd.DataFrame(values, index=[0])
     # engine = create_engine('mysql+pymysql://root:jamesonrogers@localhost:3306/drumpf', echo=False)
-    engine = create_engine('mysql+pymysql://b7648907a9ff02:df24d47b@us-cdbr-iron-east-04.cleardb.net/heroku_2ab2fee6b83538b', echo=False)
+    engine = create_engine(DB_URL, echo=False)
     df.to_sql(con=engine, name='user', if_exists='append', index=False)
 
     # TODO: add the above auth_response elements to a DB
