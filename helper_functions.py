@@ -14,10 +14,10 @@ def interactiformat(cards):
     formatted_cards = []
     for idx, card in enumerate(cards):
         if len(card) == 2:
-            formatted_cards.append("{}:{}:  ".format(card[0], card[1]))
+            formatted_cards.append("{}:{}:".format(card[0], card[1]))
         else:
-            formatted_cards.append(":{}:  ".format(card))
-    return "".join(formatted_cards)
+            formatted_cards.append(":{}:".format(card))
+    return formatted_cards
 
 def emojify_card(card):
     if not card:
