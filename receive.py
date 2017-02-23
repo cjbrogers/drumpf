@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import Flask, request, Response
+from flask import Flask, request, Response, render_template
 
 from slackclient import SlackClient
 from werkzeug.datastructures import ImmutableMultiDict
@@ -140,7 +140,7 @@ def post_signin():
 
 @app.route('/', methods=['GET'])
 def test():
-    return Response('It works!')
+    return render_template('index.html')
 
 
 if __name__ == "__main__":
