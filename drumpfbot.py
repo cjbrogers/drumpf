@@ -1118,7 +1118,7 @@ class DrumpfBot():
         print "  player: ", self.user_ids_to_username[player_id]
         print "  cards: ", cards
 
-        # TODO: finish this below
+        # TODO: verify this works
         if len(cards) > 5:
             for x in range(5,len(cards),5):
                 five_card_set = []

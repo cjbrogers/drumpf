@@ -28,5 +28,6 @@ def interactify(cards):
         action = {"name":card,"text":card,"type":"button","value":idx}
         actions.append(action)
     attachments =[{"title":"Your cards good sir/mam:", "fallback":"Your interface does not support interactive messages.", "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
+    print "  attachments: ",attachments
     return attachments
     # TODO: verify this ^^
