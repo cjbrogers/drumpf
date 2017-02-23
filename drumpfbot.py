@@ -1118,13 +1118,14 @@ class DrumpfBot():
         print "  player: ", self.user_ids_to_username[player_id]
         print "  cards: ", cards
 
-        # TODO: finish this below up to print value
+        # TODO: finish this below
         # if len(cards) > 5:
         for x in range(5,len(cards),5):
             five_card_set = []
-            for y in range(x-5,x):
-                five_card_set.append(card[y])
+            for y in range((x-5),x):
+                five_card_set.append(cards[y])
             attachments = helper_functions.interactify(five_card_set)
+            print "posting message"
             slack.chat.post_message(
                 channel=player_id,
                 as_user=True,
