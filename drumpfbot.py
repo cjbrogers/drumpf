@@ -242,6 +242,9 @@ class DrumpfBot():
                     self.player_trump_card_queue.pop()
                     print "    self.player_trump_card_queue after pop(): {}".format(self.player_trump_card_queue)
 
+                    for player in self.player_bid_queue:
+                        self.private_message_user(player, response)
+
                     print "  What's your bid for the round?"
                     self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
                     return
