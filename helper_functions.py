@@ -34,7 +34,7 @@ def interactify(cards):
     print "interactify(cards)"
     actions = []
     action = {}
-    for key, value in cards:
+    for key, value in cards.iteritems():
         action = {"name":value,"text":value,"type":"button","value":key}
         actions.append(action)
     values = "".join([x["text"] for x in actions])

@@ -1220,4 +1220,3 @@ class DrumpfBot():
 if __name__ == "__main__":
     bot = DrumpfBot()
     bot.main()
-    # app.run(debug=True)
