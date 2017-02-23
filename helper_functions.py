@@ -19,3 +19,14 @@ def emojify_card(card):
         return "[{}:{}:]".format(card[0], card[1])
     else:
         return ":{}:".format(card)
+
+def interactify(cards):
+    print "interactify(cards)"
+    actions = []
+    action = {}
+    for idx, card in enumerate(cards):
+        action = {"name":card,"text":card,"type":"button","value":idx}
+        actions.append(action)
+    attachments =[{"title":"Your cards good sir/mam:", "fallback":"Your interface does not support interactive messages.", "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
+    return attachments
+    # TODO: verify this ^^

@@ -634,12 +634,19 @@ class DrumpfBot():
                 self.message_main_game_channel("><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
         self.prepare_for_next_round()
         if self.current_game.current_round == self.current_game.final_round:
-            self.present_winner_for_game()
+            self.present_winner_for_game(self.user_ids_to_username[player_id],player_id)
         else:
             self.current_game.play_round()
 
-    def present_winner_for_game(self):
+    def present_winner_for_game(self, winner,pid):
         print "present_winner_for_game(self) "
+        score = self.game_scorecard[pid]
+        slack_client.api_call(
+            "chat.postMessage",
+            channel=self.main_channel_id,
+            text="And our winner for the game is *{}*! :cake: :birthday: :fireworks:\nScore: {}\n".format(winner,score),
+            as_user=True
+        )
         pass
 
     # clears all round and sub-round variables
@@ -1004,7 +1011,6 @@ class DrumpfBot():
             as_user=True, attachments=attachments
         )
 
-
     def handle_private_message(self,command,user_id):
         print "handle_private_message(self, command, user_id) "
         print "  command: ", command
@@ -1111,6 +1117,20 @@ class DrumpfBot():
         print "  player_id: ", player_id
         print "  player: ", self.user_ids_to_username[player_id]
         print "  cards: ", cards
+
+        # TODO: finish this below up to print value
+        if len(cards) > 5:
+            for x in range(5,len(cards),5):
+                five_card_set = []
+                for y in range(x-5,x):
+                    five_card_set.append(card[y])
+                attachments = helper_functions.interactify(five_card_set)
+                slack_client.api_call(
+                    "chat.postMessage",
+                    channel=player_id,
+                    text="Your card(s):",
+                    as_user=True, attachments=attachments
+                )
 
         formatted_cards = helper_functions.format_cards_to_emojis(cards)
         self.attachments = None
