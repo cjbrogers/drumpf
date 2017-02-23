@@ -1119,7 +1119,7 @@ class DrumpfBot():
         print "  cards: ", cards
 
         # TODO: verify this works
-        formatted_cards = helper_functions.format_cards_to_emojis(cards)
+        formatted_cards = helper_functions.interactiformat(cards)
         if len(cards) > 5:
             for x in range(5,len(cards),5):
                 five_card_set = []
