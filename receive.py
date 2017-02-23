@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 from flask import Flask, request, Response, render_template
-
 from slackclient import SlackClient
 from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
@@ -10,6 +9,7 @@ from slacker import Slacker
 from sqlalchemy import create_engine
 import pymysql
 import pymysql.cursors
+import pandas as pd
 
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 client_id = os.environ["SLACK_OAUTH_CLIENT_ID"]
