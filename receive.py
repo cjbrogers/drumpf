@@ -48,7 +48,7 @@ def connect():
         print "Database successfully connected."
         return connection
 
-def get_user_token(user_id):
+def get_user_token(user_id,user_name):
     connection = connect()
     try:
         with connection.cursor() as cursor:
@@ -60,6 +60,9 @@ def get_user_token(user_id):
             for user in users:
                 print user
                 if user['uid'] == user_id:
+                    if user_name != user['name']:
+                        sql = '''UPDATE `user` SET name={}'''.format(user_name)
+                        cursor.execute(sql)
                     token = user['token']
                     return token
     except Exception as e:
@@ -91,7 +94,7 @@ def inbound():
         print 'User sending message: ',user_name
         print "Value received: ",value
 
-        token = get_user_token(user_id)
+        token = get_user_token(user_id,user_name)
         slack = Slacker(token)
         slack.chat.post_message(channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
     return Response(), 200
