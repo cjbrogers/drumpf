@@ -25,9 +25,6 @@ slack = Slacker(slackprovider.get_slack_client())
 suits = ["diamonds", "clubs", "hearts", "spades"]
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 
-
-
-
 class DrumpfBot():
     def __init__(self, main_channel_id='C41Q1H4BD'):
         self.users_in_game = deque([]) #[user_id, user_id...]
@@ -1121,13 +1118,15 @@ class DrumpfBot():
 
         # TODO: verify this works
         formatted_cards = helper_functions.interactiformat(cards)
+        # the player has more than 5 cards, so we have to send them in separate messages
         if len(cards) > 5:
             print "  len(cards) > 5"
             five_card_set = []
             for idx, card in enumerate(cards):
-                if (idx % 5) != 0 and idx != 0:
+                if (idx % 5) != 0 and idx != 0: # the first set of 5 cards
+                    print "  formatted_cards[idx] = ", formatted_cards[idx]
                     five_card_set.append(formatted_cards[idx])
-                else:
+                else: # we've hit the next card that starts a new message
                     attachments = helper_functions.interactify(five_card_set)
                     print "posting message"
                     slack.chat.post_message(
@@ -1137,7 +1136,9 @@ class DrumpfBot():
                         )
                     five_card_set[:] = []
                     five_card_set.append(formatted_cards[idx])
+        # there are less than 5 cards in the players hand, so just display them
         else:
+            print "  len(cards) <= 5"
             attachments = helper_functions.interactify(formatted_cards)
             print "posting message"
             slack.chat.post_message(
