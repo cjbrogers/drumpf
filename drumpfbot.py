@@ -244,7 +244,7 @@ class DrumpfBot():
                     print "    self.player_trump_card_queue before pop(): {}".format(self.player_trump_card_queue)
                     self.player_trump_card_queue.pop()
                     print "    self.player_trump_card_queue after pop(): {}".format(self.player_trump_card_queue)
-                    
+
                     print "  What's your bid for the round?"
                     self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
                 else:
@@ -1130,13 +1130,13 @@ class DrumpfBot():
                 else:
                     five_card_set[:] = []
                     five_card_set.append(formatted_cards[idx])
-            attachments = helper_functions.interactify(five_card_set)
-            print "posting message"
-            slack.chat.post_message(
-                channel=player_id,
-                as_user=True,
-                attachments=attachments
-                )
+                attachments = helper_functions.interactify(five_card_set)
+                print "posting message"
+                slack.chat.post_message(
+                    channel=player_id,
+                    as_user=True,
+                    attachments=attachments
+                    )
         else:
             attachments = helper_functions.interactify(formatted_cards)
             print "posting message"
