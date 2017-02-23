@@ -37,7 +37,7 @@ def connect():
     try:
         print "Attempting connection to database..."
         connection = pymysql.connect(host='us-cdbr-iron-east-04.cleardb.net',
-                                     port=DB_PORT,
+                                     port=int(DB_PORT),
                                      user=DB_USER,
                                      password=DB_PASSWORD,
                                      db=DB_NAME,
