@@ -1128,15 +1128,15 @@ class DrumpfBot():
                 if (idx % 5) != 0 and idx != 0:
                     five_card_set.append(formatted_cards[idx])
                 else:
+                    attachments = helper_functions.interactify(five_card_set)
+                    print "posting message"
+                    slack.chat.post_message(
+                        channel=player_id,
+                        as_user=True,
+                        attachments=attachments
+                        )
                     five_card_set[:] = []
                     five_card_set.append(formatted_cards[idx])
-                attachments = helper_functions.interactify(five_card_set)
-                print "posting message"
-                slack.chat.post_message(
-                    channel=player_id,
-                    as_user=True,
-                    attachments=attachments
-                    )
         else:
             attachments = helper_functions.interactify(formatted_cards)
             print "posting message"
