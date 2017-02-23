@@ -1119,28 +1119,27 @@ class DrumpfBot():
         print "  cards: ", cards
 
         # TODO: finish this below up to print value
-        if len(cards) > 5:
-            for x in range(5,len(cards),5):
-                five_card_set = []
-                for y in range(x-5,x):
-                    five_card_set.append(card[y])
-                attachments = helper_functions.interactify(five_card_set)
-                slack_client.api_call(
-                    "chat.postMessage",
-                    channel=player_id,
-                    text="Your card(s):",
-                    as_user=True, attachments=attachments
-                )
-
-        formatted_cards = helper_functions.format_cards_to_emojis(cards)
-        self.attachments = None
-        print "  Your card(s): {}".format(formatted_cards)
-        slack_client.api_call(
-            "chat.postMessage",
-            channel=player_id,
-            text="Your card(s): {}".format(formatted_cards),
-            as_user=True, attachments=self.attachments
-        )
+        # if len(cards) > 5:
+        for x in range(5,len(cards),5):
+            five_card_set = []
+            for y in range(x-5,x):
+                five_card_set.append(card[y])
+            attachments = helper_functions.interactify(five_card_set)
+            slack_client.api_call(
+                "chat.postMessage",
+                channel=player_id,
+                text="Your card(s):",
+                as_user=True, attachments=attachments
+            )
+        # formatted_cards = helper_functions.format_cards_to_emojis(cards)
+        # self.attachments = None
+        # print "  Your card(s): {}".format(formatted_cards)
+        # slack_client.api_call(
+        #     "chat.postMessage",
+        #     channel=player_id,
+        #     text="Your card(s): {}".format(formatted_cards),
+        #     as_user=True, attachments=self.attachments
+        # )
 
     def announce_trump_card(self, trump_card):
         print "announce_trump_card(self, trump_card) "
