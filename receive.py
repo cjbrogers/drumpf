@@ -21,7 +21,7 @@ oauth_scope = os.environ["SLACK_BOT_SCOPE"]
 
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
-
+DATABASE_URL = os.environ.get("DATABASE_URL")
 app = Flask(__name__)
 
 '''
@@ -129,7 +129,8 @@ def post_signin():
 
     values = {"token": token, "uid": uid, "name": name}
     df = pd.DataFrame(values, index=[0])
-    engine = create_engine('mysql+pymysql://root:jamesonrogers@localhost:3306/drumpf', echo=False)
+    # engine = create_engine('mysql+pymysql://root:jamesonrogers@localhost:3306/drumpf', echo=False)
+    engine = create_engine('mysql+pymysql://b7648907a9ff02:df24d47b@'+DATABASE_URL, echo=False)
     df.to_sql(con=engine, name='user', if_exists='append', index=False)
 
     # TODO: add the above auth_response elements to a DB
