@@ -137,7 +137,7 @@ def post_signin():
     # send_to_db(token,uid,name)
 
     # Don't forget to let the user know that auth has succeeded!
-    return "<h1>Welcome to Drumpf!</h1> You can now close this window and focus on making card games great again."
+    return "<h1>Welcome to Drumpf!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."
 
 @app.route('/', methods=['GET'])
 def test():
