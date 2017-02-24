@@ -218,42 +218,42 @@ class DrumpfBot():
         elif user_id == self.player_trump_card_queue[0]:
             print "  user_id == self.player_trump_card_queue[0]"
             #validate that the dealer picked a valid trump suit
-            try:
-                if 0 <= int(command) <= 3:
-                    print "  0 <= int(command) <= 3"
+            # try:
+            if 0 <= int(command) <= 3:
+                print "  0 <= int(command) <= 3"
 
-                    # TODO: verify the below works 2/17/2017 (James)
-                    print "  self.current_game.current_round_trump_suit WAS: {}".format(self.current_game.current_round_trump_suit)
-                    self.current_game.current_round_trump_suit = suits[int(command)]
-                    print "  self.current_game.current_round_trump_suit SET TO: {}".format(self.current_game.current_round_trump_suit)
+                # TODO: verify the below works 2/17/2017 (James)
+                print "  self.current_game.current_round_trump_suit WAS: {}".format(self.current_game.current_round_trump_suit)
+                self.current_game.current_round_trump_suit = suits[int(command)]
+                print "  self.current_game.current_round_trump_suit SET TO: {}".format(self.current_game.current_round_trump_suit)
 
-                    print "  Trump suit recorded! Check the main channel."
-                    response = "Trump suit recorded! Check the main channel."
+                print "  Trump suit recorded! Check the main channel."
+                response = "Trump suit recorded! Check the main channel."
 
-                    print "  <@{}> chose :{}: for the trump suit.".format(current_username, suits[int(command)])
+                print "  <@{}> chose :{}: for the trump suit.".format(current_username, suits[int(command)])
 
-                    slack_client.api_call(
-                        "chat.postMessage",
-                        channel=self.main_channel_id,
-                        text="<@{}> chose :{}: for the trump suit.".format(current_username, suits[int(command)]),
-                        as_user=True
-                    )
-                    print "    self.player_trump_card_queue before pop(): {}".format(self.player_trump_card_queue)
-                    self.player_trump_card_queue.pop()
-                    print "    self.player_trump_card_queue after pop(): {}".format(self.player_trump_card_queue)
+                slack_client.api_call(
+                    "chat.postMessage",
+                    channel=self.main_channel_id,
+                    text="<@{}> chose :{}: for the trump suit.".format(current_username, suits[int(command)]),
+                    as_user=True
+                )
+                print "    self.player_trump_card_queue before pop(): {}".format(self.player_trump_card_queue)
+                self.player_trump_card_queue.pop()
+                print "    self.player_trump_card_queue after pop(): {}".format(self.player_trump_card_queue)
 
-                    for player in self.player_bid_queue:
-                        self.private_message_user(player, response)
+                for player in self.player_bid_queue:
+                    self.private_message_user(player, response)
 
-                    print "  What's your bid for the round?"
-                    self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
-                    return
-                else:
-                    print "  That wasn't a valid index for a trump suit."
-                    response = "That wasn't a valid index for a trump suit."
-            except:
-                print "  That's not a valid command. Please select a trump suit."
-                response = "That's not a valid command. Please select a trump suit."
+                print "  What's your bid for the round?"
+                self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
+                return
+            else:
+                print "  That wasn't a valid index for a trump suit."
+                response = "That wasn't a valid index for a trump suit."
+            # except:
+            #     print "  That's not a valid command. Please select a trump suit."
+            #     response = "That's not a valid command. Please select a trump suit."
         else:
             print "Whoops! Something went wrong."
 
@@ -531,9 +531,9 @@ class DrumpfBot():
 
                 self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
                 self.winner_for_sub_round = None
-                self.private_message_user(self.player_turn_queue[0], "Play a card `index`")
+                self.private_message_user(self.player_turn_queue[0], "Play a card")
         else:
-            self.private_message_user(self.player_turn_queue[0], "Play a card `index`")
+            self.private_message_user(self.player_turn_queue[0], "Play a card")
 
     def calculate_and_display_points_for_players(self):
         print "calculate_and_display_points_for_players(self) "
