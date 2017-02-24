@@ -30,7 +30,7 @@ def interactiformat(cards):
             formatted_cards[idx] = ":{}:".format(card)
     return formatted_cards
 
-def interactify(cards):
+def interactify(cards,first_set):
     print "interactify(cards)"
     actions = []
     action = {}
@@ -39,6 +39,10 @@ def interactify(cards):
         actions.append(action)
     values = "".join([x["text"] for x in actions])
     print "  values: ",values
-    attachments =[{"title":"Your cards good sir/mam:", "fallback":values, "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
-    print "  attachments: ",attachments
+    if first_set:
+        attachments =[{"title":"Your cards good sir/mam:", "fallback":values, "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
+        print "  attachments: ",attachments
+    else:
+        attachments =[{"title":"", "fallback":values, "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
+        print "  attachments: ",attachments
     return attachments

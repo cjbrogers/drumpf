@@ -96,8 +96,8 @@ def inbound():
 
         token = get_user_token(user_id,user_name)
         slack = Slacker(token)
-        slack.chat.post_message(channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
-    return Response(), 200
+        resp = slack.chat.post_message(channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
+    return resp
 
 # the beginning of the Sign In to Slack OAuth process.
 # we can get the user tokens from the return of this call

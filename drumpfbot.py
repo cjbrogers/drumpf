@@ -67,6 +67,7 @@ class DrumpfBot():
         self.scoreboard = ""
         self.ts = ""
         self.scores = ""
+        self.command_ts = ""
 
     def handle_command(self, command, channel, user_id):
         print "handle_command(self, command, channel, user_id) "
@@ -138,6 +139,8 @@ class DrumpfBot():
                 self.game_started = True
                 response = ">>>Starting a new game of Drumpf with players: \n" + self.get_readable_list_of_players()
 
+                self.initialize_scores()
+
                 # debbug remove after
                 if self.debug:
                     response += "\n`DEBUG MODE ACTIVE`"
@@ -202,9 +205,8 @@ class DrumpfBot():
             image_url = "https://s30.postimg.org/r28wxm89t/cards.png"
             attachments = [{"title": "Card Deck Composition", "image_url": image_url}]
 
-        slack_client.api_call("chat.postMessage", channel=channel,
+        resp = slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True, attachments=attachments)
-
 
     def handle_trump_suit_selection(self,command,user_id):
         print "handle_trump_suit_selection(command, user_id) "
@@ -311,12 +313,6 @@ class DrumpfBot():
                     self.build_scoreboard(msg)
                     self.update_scoreboard(self.scoreboard)
 
-                    # slack_client.api_call(
-                    #     "chat.postMessage",
-                    #     channel=self.main_channel_id,
-                    #     text=msg,
-                    #     as_user=True
-                    # )
                     self.player_bid_queue.popleft()
                     if len(self.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
@@ -324,19 +320,10 @@ class DrumpfBot():
                         print " ",msg
                         self.build_scoreboard(msg)
                         self.update_scoreboard(self.scoreboard)
-                        # slack_client.api_call(
-                        #     "chat.postMessage",
-                        #     channel=self.main_channel_id,
-                        #     text="All bids recorded, let's play!",
-                        #     as_user=True
-                        # )
+
                         print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
                         print "  Please select a card to play."
                         self.private_message_user(self.player_turn_queue[0], "Please select a card to play.")
-
-                        # debbug remove after
-                        if self.debug:
-                            self.message_main_game_channel("self.player_bids_for_current_round: %s" % self.player_bids_for_current_round)
 
                     else: #get the next player's bid
                         print "  What's your bid for the round?"
@@ -360,8 +347,6 @@ class DrumpfBot():
             response = "Waiting for <@{}> to play a card.".format(current_username)
         elif user_id == self.player_turn_queue[0]:
             print('  Received input from expected player: {}'.format(current_username))
-
-            #validate the int(command) index selected is within the range of cards in hand
 
             print "  self.current_game.current_round: {}".format(self.current_game.current_round)
 
@@ -507,13 +492,6 @@ class DrumpfBot():
                 print "    self.users_in_game: %s" % self.users_in_game
                 print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
 
-                # debbug remove after
-                if self.debug:
-                    self.message_main_game_channel("player_turn_queue: %s" % self.player_turn_queue) #debbug delete
-                    self.message_main_game_channel("player_bid_queue: %s" % self.player_bid_queue) #debbug delete
-                    self.message_main_game_channel("self.users_in_game: %s" % self.users_in_game) #debbug delete
-                    self.message_main_game_channel("self.player_bids_for_current_round: %s" % self.player_bids_for_current_round)
-
                 self.calculate_and_display_points_for_players()
                 self.winner_for_sub_round = None
             elif self.sub_rounds_played < self.current_game.current_round:
@@ -530,13 +508,6 @@ class DrumpfBot():
                 print "    self.users_in_game: %s" % self.users_in_game
                 print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
 
-                # debbug remove after
-                if self.debug:
-                    self.message_main_game_channel("player_turn_queue: %s" % self.player_turn_queue) #debbug delete
-                    self.message_main_game_channel("player_bid_queue: %s" % self.player_bid_queue) #debbug delete
-                    self.message_main_game_channel("self.users_in_game: %s" % self.users_in_game) #debbug delete
-                    self.message_main_game_channel("self.player_bids_for_current_round: %s" % self.player_bids_for_current_round)
-
                 while self.player_turn_queue[0] != self.winner_for_sub_round:
                     print("  *Rotating player turn queue")
                     #rotate player_turn_queue until the first player is the one who won
@@ -548,13 +519,6 @@ class DrumpfBot():
                 print "    player_bid_queue: %s" % self.player_bid_queue
                 print "    self.users_in_game: %s" % self.users_in_game
                 print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
-
-                # debbug remove after
-                if self.debug:
-                    self.message_main_game_channel("player_turn_queue: %s" % self.player_turn_queue) #debbug delete
-                    self.message_main_game_channel("player_bid_queue: %s" % self.player_bid_queue) #debbug delete
-                    self.message_main_game_channel("self.users_in_game: %s" % self.users_in_game) #debbug delete
-                    self.message_main_game_channel("self.player_bids_for_current_round: %s" % self.player_bids_for_current_round)
 
                 self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
                 self.winner_for_sub_round = None
@@ -574,23 +538,7 @@ class DrumpfBot():
             print "    idx:%s\n    players_bids:%s\n    player_points_for_round:%s\n    player_id:%s\n    current_players_bid: %s" % (idx, self.player_bids_for_current_round, self.player_points_for_round[player_id], player_id, current_players_bid)
             print "    points_off_from_bid: %s" % points_off_from_bid
 
-            # debbug remove after
-            if self.debug:
-                slack_client.api_call("chat.postMessage",
-                channel=self.main_channel_id,
-                text="idx:%s\nplayers_bids:%s\nplayer points for round:%s\nplayer_id:%s\ncurrent_players_bid: %s" % (idx,self.player_bids_for_current_round,self.player_points_for_round[player_id], player_id, current_players_bid),
-                as_user=True)
-                slack_client.api_call("chat.postMessage", channel=self.main_channel_id,
-                                  text="points_off_from_bid: %s" % points_off_from_bid, as_user=True)
-
             print "  self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
-
-            # debbug remove after
-            if self.debug:
-                slack_client.api_call("chat.postMessage",
-                channel=self.main_channel_id,
-                text="self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id],
-                as_user=True)
 
             print "  player_id: ",player_id
             print "  player: ", self.user_ids_to_username[player_id]
@@ -601,57 +549,21 @@ class DrumpfBot():
                 print "  We have a golden shower card holder!"
                 self.game_scorecard[player_id] += 175
                 print "    self.game_scorecard[player_id] + 175: %s" % self.game_scorecard[player_id]
-
-                # debbug remove after
-                if self.debug:
-                    slack_client.api_call("chat.postMessage", channel=self.main_channel_id,
-                    text="self.game_scorecard[player_id] + 175: %s" % self.game_scorecard[player_id],
-                    as_user=True)
-
             elif player_id in self.zero_point_players:
                 print "  We have a zero_points_player!"
                 self.game_scorecard[player_id] += 0
             elif points_off_from_bid == 0:
                 print "    self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
-
-                # debbug remove after
-                if self.debug:
-                    slack_client.api_call("chat.postMessage",
-                    channel=self.main_channel_id,
-                    text="self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id],
-                    as_user=True)
-
                 print "  player got their bid correct"
                 #The player got his/her bid correctly
                 self.game_scorecard[player_id] += (50 + 25 * current_players_bid)
                 print "    self.game_scorecard[player_id] + (50 + 25 * bid): %s" % self.game_scorecard[player_id]
-
-                # debbug remove after
-                if self.debug:
-                    slack_client.api_call("chat.postMessage", channel=self.main_channel_id,
-                    text="self.game_scorecard[player_id] + (50 + 25 * bid): %s" % self.game_scorecard[player_id],
-                    as_user=True)
-
             else:
                 print "  player loses points for incorrect bid"
                 #player loses 25-points for every point above or below bid
                 print "  self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
-
-                # debbug remove after
-                if self.debug:
-                    slack_client.api_call("chat.postMessage", channel=self.main_channel_id,
-                    text="self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id],
-                    as_user=True)
-
                 self.game_scorecard[player_id] -= 25 * points_off_from_bid
                 print "    self.game_scorecard[player_id] -25 * points off bid: %s" % self.game_scorecard[player_id]
-
-                # debbug remove after
-                if self.debug:
-                    slack_client.api_call("chat.postMessage",
-                    channel=self.main_channel_id,
-                    text="self.game_scorecard[player_id] -25 * points off bid: %s" % self.game_scorecard[player_id],
-                    as_user=True)
         self.scores += ">>>*Score Board*\n"
         print "  ",self.scores
         # self.build_scoreboard(msg)
@@ -662,29 +574,36 @@ class DrumpfBot():
                 msg = "><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 print "  ",msg
                 self.scores += msg
-                # self.build_scoreboard(msg)
-                # self.update_scoreboard(self.scoreboard)
-                # self.message_main_game_channel(msg)
             elif player_id in self.zero_point_players:
                 msg = "><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 print "  ",msg
                 self.scores += msg
-                # self.build_scoreboard(msg)
-                # self.update_scoreboard(self.scoreboard)
-                # self.message_main_game_channel(msg)
             else:
                 msg = "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 print "  ",msg
                 self.scores += msg
-                # self.build_scoreboard(msg)
-                # self.update_scoreboard(self.scoreboard)
-                # self.message_main_game_channel(msg)
         self.update_scores(self.scores)
+        self.pm_users_scoreboard(self.scoreboard,self.scores)
         self.prepare_for_next_round()
         if self.current_game.current_round == self.current_game.final_round:
             self.present_winner_for_game(self.user_ids_to_username[player_id],player_id)
         else:
             self.current_game.play_round()
+
+    def pm_users_scoreboard(self, board, scores, attachments=None):
+        for player_id in self.users_in_game:
+            resp_scores = slack_client.api_call(
+                "chat.postMessage",
+                channel=self.main_channel_id,
+                text=scores,
+                as_user=True, attachments=attachments
+            )
+            resp_board = slack_client.api_call(
+                "chat.postMessage",
+                channel=self.main_channel_id,
+                text=board,
+                as_user=True, attachments=attachments
+            )
 
     def initialize_scores(self, attachments=None):
         msg = ">>>*Score Board*\n>"
@@ -1027,7 +946,6 @@ class DrumpfBot():
                 # the card is a trump suit card
                 elif card_suit == trump_suit:
                     print "  card_suit == trump_suit <-> {} == {}".format(card_suit,trump_suit)
-                    # if self.winning_sub_round_card != None:
                     if self.winning_sub_round_card == None:
                         print "  self.winning_sub_round_card == ", self.winning_sub_round_card
                         self.winning_sub_round_card = card
@@ -1214,11 +1132,13 @@ class DrumpfBot():
         # TODO: verify this works
         formatted_cards = helper_functions.interactiformat(cards)
         # the player has more than 5 cards, so we have to send them in separate messages
+        self.first_set = False
         if len(cards) > 5:
             print "  len(cards) > 5"
             five_card_set = {}
             for idx, card in enumerate(cards):
                 if idx == 0: # add the first card
+                    self.first_set = True
                     print "  idx == 0"
                     print "  formatted_cards[idx] = ", formatted_cards[idx]
                     five_card_set[idx] = formatted_cards[idx]
@@ -1228,19 +1148,20 @@ class DrumpfBot():
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
                     print "  (idx % 5) == 0"
-                    attachments = helper_functions.interactify(five_card_set)
+                    attachments = helper_functions.interactify(five_card_set,self.first_set)
                     print "  *posting whole set of five"
                     slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
                         attachments=attachments
                         )
+                    self.first_set = False
                     five_card_set.clear() # clear the set
                     five_card_set[idx] = formatted_cards[idx] # add the first card of the next set
                     print "  five_card_set (first card of next set): ", five_card_set
                 if len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
                     print "  len(cards) == (idx + 1)"
-                    attachments = helper_functions.interactify(five_card_set)
+                    attachments = helper_functions.interactify(five_card_set,self.first_set)
                     print "  *posting remaining set of cards"
                     slack.chat.post_message(
                         channel=player_id,
@@ -1251,7 +1172,8 @@ class DrumpfBot():
         # there are less than 5 cards in the players hand, so just display them
         else:
             print "  len(cards) <= 5"
-            attachments = helper_functions.interactify(formatted_cards)
+            self.first_set = True
+            attachments = helper_functions.interactify(formatted_cards,self.first_set)
             print "  *posting set of 0-5"
             slack.chat.post_message(
                 channel=player_id,
@@ -1268,11 +1190,6 @@ class DrumpfBot():
             helper_functions.emojify_card(trump_card),(self.sub_rounds_played + 1))
         self.build_scoreboard(msg)
         self.update_scoreboard(self.scoreboard)
-        # self.message_main_game_channel(self.scoreboard, attachments=self.attachments)
-
-
-        # print ">>>_Sub-Round {}_".format(self.sub_rounds_played + 1)
-        # self.message_main_game_channel(">>>_Sub-Round {}_".format(self.sub_rounds_played + 1))
 
     def build_scoreboard(self,msg):
         self.scoreboard += msg
