@@ -1136,17 +1136,26 @@ class DrumpfBot():
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
                     attachments = helper_functions.interactify(five_card_set)
-                    print "posting message"
+                    print "*posting whole set of five"
                     slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
                         attachments=attachments
                         )
                     five_card_set.clear() # clear the set
-                    five_card_set[idx] = formatted_cards[idx] # add the first card
+                    five_card_set[idx] = formatted_cards[idx] # add the next card
+                    if len(cards) == (idx + 1): # if we've reached the last card
+                        attachments = helper_functions.interactify(five_card_set)
+                        print "*posting last card"
+                        slack.chat.post_message(
+                            channel=player_id,
+                            as_user=True,
+                            attachments=attachments
+                            )
+                        five_card_set.clear()
                 elif len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
                     attachments = helper_functions.interactify(five_card_set)
-                    print "posting message"
+                    print "posting remaining set of cards"
                     slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
