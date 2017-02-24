@@ -141,8 +141,8 @@ class DrumpfBot():
                 if self.debug:
                     response += "\n`DEBUG MODE ACTIVE`"
 
-                slack_client.api_call("chat.postMessage", channel=channel,
-                                      text=response, as_user=True)
+                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response, as_user=True)
+                self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return #have to do this because we want the "new game" message to come before the trump card announcement
 
@@ -201,9 +201,9 @@ class DrumpfBot():
             image_url = "https://s30.postimg.org/r28wxm89t/cards.png"
             attachments = [{"title": "Card Deck Composition", "image_url": image_url}]
 
-        resp = slack_client.api_call("chat.postMessage", channel=channel,
+        slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True, attachments=attachments)
-        self.ts = resp['ts']
+
 
     def handle_trump_suit_selection(self,command,user_id):
         print "handle_trump_suit_selection(command, user_id) "
