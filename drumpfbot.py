@@ -305,7 +305,7 @@ class DrumpfBot():
                     #valid bid
                     print "  Bid recorded! Check the main channel."
                     self.player_bids_for_current_round[user_id] =int(command)
-                    msg = "<@{}> bids `{}`.\n".format(current_username, int(command))
+                    msg = "><@{}> bids `{}`.\n".format(current_username, int(command))
                     print "  ",msg
                     response = "Bid recorded! Check the main channel."
                     self.build_scoreboard(msg)
@@ -320,7 +320,7 @@ class DrumpfBot():
                     self.player_bid_queue.popleft()
                     if len(self.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
-                        msg = "All bids recorded, let's play!\n"
+                        msg = ">All bids recorded, let's play!\n"
                         print " ",msg
                         self.build_scoreboard(msg)
                         self.update_scoreboard(self.scoreboard)
