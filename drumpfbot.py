@@ -320,7 +320,7 @@ class DrumpfBot():
                     self.player_bid_queue.popleft()
                     if len(self.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
-                        msg = ">All bids recorded, let's play!\n"
+                        msg = ">All bids recorded, let's play!\n\n"
                         print " ",msg
                         self.build_scoreboard(msg)
                         self.update_scoreboard(self.scoreboard)
@@ -490,7 +490,7 @@ class DrumpfBot():
 
             self.player_points_for_round[self.winner_for_sub_round] += 1
 
-            msg = ">*<@{}> won this sub-round with a {}*\n".format(self.winner_for_sub_round,helper_functions.emojify_card(self.winning_sub_round_card))
+            msg = ">*<@{}> won this sub-round with a {}*\n\n".format(self.winner_for_sub_round,helper_functions.emojify_card(self.winning_sub_round_card))
             print " ",msg
             self.build_scoreboard(msg)
             self.update_scoreboard(self.scoreboard)
