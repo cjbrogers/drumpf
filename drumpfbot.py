@@ -1063,7 +1063,7 @@ class DrumpfBot():
             "chat.update",
             channel=self.main_channel_id,
             text=message,
-            ts=self.ts
+            ts=self.ts,
             as_user=True, attachments=attachments
         )
 
