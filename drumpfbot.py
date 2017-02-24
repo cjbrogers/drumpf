@@ -311,7 +311,7 @@ class DrumpfBot():
                     self.player_bid_queue.popleft()
                     if len(self.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
-                        msg = "All bids recorded, let's play!\n\n"
+                        msg = "`All bids recorded, let's play!`\n\n"
                         print " ",msg
                         self.build_scoreboard(msg)
                         self.update_scoreboard(self.scoreboard)
@@ -600,7 +600,7 @@ class DrumpfBot():
     def pm_users_scores(self, scores, attachments=None):
         print "pm_users_scores(self, scores, attachments=None)"
         for player_id in self.users_in_game:
-            print "  board: ",scores
+            print "  scores: ",scores
             resp_scores = slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
@@ -633,7 +633,6 @@ class DrumpfBot():
             ts=self.ts_scores,
             as_user=True, attachments=attachments
         )
-        self.scores = ""
 
     def present_winner_for_game(self, winner,pid):
         print "present_winner_for_game(self) "
@@ -651,6 +650,7 @@ class DrumpfBot():
         print "prepare_for_next_round(self) "
         self.current_game.current_round += 1
         self.scoreboard = ""
+        self.scores = ""
         for k in self.player_bids_for_current_round.keys():
             self.player_bids_for_current_round[k] = ""
 
