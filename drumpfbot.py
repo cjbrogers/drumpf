@@ -67,6 +67,7 @@ class DrumpfBot():
         self.scoreboard = ""
         self.ts = ""
         self.scores = ""
+        self.initial_scores = ""
         self.command_ts = ""
 
     def handle_command(self, command, channel, user_id):
@@ -566,9 +567,6 @@ class DrumpfBot():
                 print "    self.game_scorecard[player_id] -25 * points off bid: %s" % self.game_scorecard[player_id]
         self.scores += ">>>*Score Board*\n"
         print "  ",self.scores
-        # self.build_scoreboard(msg)
-        # self.update_scoreboard(self.scoreboard)
-        # self.message_main_game_channel(msg)
         for player_id in self.users_in_game:
             if player_id in self.shower_card_holder:
                 msg = "><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
@@ -592,22 +590,18 @@ class DrumpfBot():
 
     def pm_users_scoreboard(self, board, scores, attachments=None):
         for player_id in self.users_in_game:
+            board_scores = board + scores
             resp_scores = slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
-                text=scores,
-                as_user=True, attachments=attachments
-            )
-            resp_board = slack_client.api_call(
-                "chat.postMessage",
-                channel=player_id,
-                text=board,
+                text=board_scores,
                 as_user=True, attachments=attachments
             )
 
     def initialize_scores(self, attachments=None):
         print "initialize_scores(self, attachments=None)"
-        msg = ">>>*Score Board*\n>"
+        msg = ""
+        msg += ">>>*Score Board*\n>"
         print "  ",msg
         for player_id in self.users_in_game:
             msg += "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
