@@ -201,8 +201,9 @@ class DrumpfBot():
             image_url = "https://s30.postimg.org/r28wxm89t/cards.png"
             attachments = [{"title": "Card Deck Composition", "image_url": image_url}]
 
-        slack_client.api_call("chat.postMessage", channel=channel,
+        resp = slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True, attachments=attachments)
+        self.ts = resp['ts']
 
     def handle_trump_suit_selection(self,command,user_id):
         print "handle_trump_suit_selection(command, user_id) "
@@ -1050,13 +1051,12 @@ class DrumpfBot():
         # TODO: remember to reset all the sub-round variables for the next sub-round
 
     def message_main_game_channel(self, message, attachments=None):
-        resp = slack_client.api_call(
+        slack_client.api_call(
             "chat.postMessage",
             channel=self.main_channel_id,
             text=message,
             as_user=True, attachments=attachments
         )
-        self.ts = resp['ts']
 
     def update_scoreboard(self, message, attachments=None):
         slack_client.api_call(
