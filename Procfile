@@ -1,2 +1,2 @@
-web: gunicorn receive:app --log-file=-
+web: gunicorn controller:app --log-file=-
 worker: python drumpfbot.py
