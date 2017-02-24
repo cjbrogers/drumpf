@@ -694,7 +694,7 @@ class DrumpfBot():
     def prepare_for_next_round(self):
         print "prepare_for_next_round(self) "
         self.current_game.current_round += 1
-
+        self.scoreboard = ""
         for k in self.player_bids_for_current_round.keys():
             self.player_bids_for_current_round[k] = ""
 
@@ -1234,12 +1234,12 @@ class DrumpfBot():
         print "announce_trump_card(self, trump_card) "
         print "  trump_card: ",trump_card
 
-        msg = ">>>*Round {}* \n The trump card is: {} \n>>>_Sub-Round {}_\n".format(
+        msg = "*Round {}* \n The trump card is: {} \n>_Sub-Round {}_\n".format(
             self.current_game.current_round,
             helper_functions.emojify_card(trump_card),(self.sub_rounds_played + 1))
         self.build_scoreboard(msg)
-
-        self.message_main_game_channel(self.scoreboard, attachments=self.attachments)
+        self.update_scoreboard(self.scoreboard)
+        # self.message_main_game_channel(self.scoreboard, attachments=self.attachments)
 
 
         # print ">>>_Sub-Round {}_".format(self.sub_rounds_played + 1)
