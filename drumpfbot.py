@@ -26,7 +26,7 @@ suits = ["diamonds", "clubs", "hearts", "spades"]
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 
 class DrumpfBot():
-    def __init__(self, main_channel_id='C41Q1H4BD'):
+    def __init__(self, main_channel_id='C4AK56EQ7'): # drumpf-play: C41Q1H4BD # drumpf-scoreboard: C4AK56EQ7
         self.users_in_game = deque([]) #[user_id, user_id...]
         self.user_ids_to_username = {} #{'USERID': 'James'}
         self.channel_ids_to_name = {} #{'CHANNELID': "#drumpf-play"}
