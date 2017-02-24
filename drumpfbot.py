@@ -92,8 +92,10 @@ class DrumpfBot():
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
             response = ""
+            resp = slack_client.api_call("chat.postMessage", channel=channel,text=response, as_user=True)
+            self.ts = resp['ts']
             self.handle_command("start game", channel, user_id)
-            # return
+            return
 
         if command.lower().startswith("create game"):
             self.game_created == True
@@ -102,6 +104,9 @@ class DrumpfBot():
                 self.users_in_game.append(user_id)
             else:
                 response = "There's already a game being made, say `@drumpfbot add me` if you want in."
+            resp = slack_client.api_call("chat.postMessage", channel=channel,text=response, as_user=True)
+            self.ts = resp['ts']
+            return
 
         if command.lower().startswith("restart"):
             response = "Application restarted."
@@ -146,10 +151,10 @@ class DrumpfBot():
                 if self.debug:
                     response += "\n`DEBUG MODE ACTIVE`"
 
-                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response, as_user=True)
-                self.ts = resp['ts']
+                resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=self.ts, as_user=True)
+                # self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
-                return #have to do this because we want the "new game" message to come before the trump card announcement
+                return
 
         if command.lower().startswith("commands") or command.lower().startswith("help"):
             response = ">>>Certainly, my liege. The available commands are: \n\n" \
