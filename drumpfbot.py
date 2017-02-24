@@ -594,21 +594,24 @@ class DrumpfBot():
         for player_id in self.users_in_game:
             resp_scores = slack_client.api_call(
                 "chat.postMessage",
-                channel=self.main_channel_id,
+                channel=player_id,
                 text=scores,
                 as_user=True, attachments=attachments
             )
             resp_board = slack_client.api_call(
                 "chat.postMessage",
-                channel=self.main_channel_id,
+                channel=player_id,
                 text=board,
                 as_user=True, attachments=attachments
             )
 
     def initialize_scores(self, attachments=None):
+        print "initialize_scores(self, attachments=None)"
         msg = ">>>*Score Board*\n>"
+        print "  ",msg
         for player_id in self.users_in_game:
             msg += "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
+        print "  ",msg
 
         resp = slack_client.api_call(
             "chat.postMessage",
