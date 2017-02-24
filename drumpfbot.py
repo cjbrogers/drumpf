@@ -85,9 +85,9 @@ class DrumpfBot():
         if command.lower().startswith("debug"):
             if command.lower().startswith("debug true"):
                 self.debug = True
-            response = "`Debug mode active.` \n"
-            slack_client.api_call("chat.postMessage", channel=channel,
-                                  text=response, as_user=True)
+            # response = "`Debug mode active.` \n"
+            # slack_client.api_call("chat.postMessage", channel=channel,
+            #                       text=response, as_user=True)
             self.game_created == True
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
@@ -318,8 +318,8 @@ class DrumpfBot():
 
                         print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
                         for player in self.current_game.players:
-                            if player.id == user_id:
-                                self.display_cards_for_player_in_pm(player.id,player.cards_in_hand)
+                            if player.id == self.player_turn_queue[0]:
+                                self.display_cards_for_player_in_pm(self.player_turn_queue[0],player.cards_in_hand)
                                 print "  Please select a card to play."
                                 self.private_message_user(self.player_turn_queue[0], "Please select a card to play.")
 
@@ -1203,7 +1203,7 @@ class DrumpfBot():
         trump = "The trump card is: {} \n".format(trump_card)
         # send the trump suit to pm
         for player_id in self.users_in_game:
-            self.private_message_user(player_id,trump)
+            self.private_message_user(player_id,helper_functions.emojify_card(trump_card))
 
     def build_scoreboard(self,msg):
         self.scoreboard += msg
