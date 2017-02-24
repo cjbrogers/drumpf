@@ -233,9 +233,10 @@ class DrumpfBot():
                 print "  Trump suit recorded! Check the main channel."
                 response = "Trump suit recorded! Check the main channel."
 
-                msg = "<@{}> chose :{}: for the trump suit.".format(current_username, suits[int(command)])
+                msg = "<@{}> chose :{}: for the trump suit.\n".format(current_username, suits[int(command)])
                 print " ",msg
-
+                self.build_scoreboard(msg)
+                self.update_scoreboard(msg)
                 slack_client.api_call(
                     "chat.postMessage",
                     channel=self.main_channel_id,
@@ -673,7 +674,7 @@ class DrumpfBot():
                 # self.update_scoreboard(self.scoreboard)
                 # self.message_main_game_channel(msg)
             else:
-                msg = "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
+                msg = "<@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 print "  ",msg
                 self.scores += msg
                 # self.build_scoreboard(msg)
