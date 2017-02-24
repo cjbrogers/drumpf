@@ -1236,7 +1236,7 @@ class DrumpfBot():
 
         msg = ">>>*Round {}* \n The trump card is: {} \n>>>_Sub-Round {}_\n".format(
             self.current_game.current_round,
-            helper_functions.emojify_card(trump_card),self.(sub_rounds_played + 1))
+            helper_functions.emojify_card(trump_card),(self.sub_rounds_played + 1))
         self.build_scoreboard(msg)
 
         self.message_main_game_channel(self.scoreboard, attachments=self.attachments)
