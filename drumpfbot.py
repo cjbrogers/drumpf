@@ -144,7 +144,6 @@ class DrumpfBot():
 
                 resp = slack_client.api_call("chat.postMessage", channel=channel,text=response, as_user=True)
                 self.ts = resp['ts']
-                self.initialize_scores()
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return #have to do this because we want the "new game" message to come before the trump card announcement
 
@@ -321,7 +320,7 @@ class DrumpfBot():
                     self.player_bid_queue.popleft()
                     if len(self.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
-                        msg = ">All bids recorded, let's play!\n\n"
+                        msg = "All bids recorded, let's play!\n\n"
                         print " ",msg
                         self.build_scoreboard(msg)
                         self.update_scoreboard(self.scoreboard)
@@ -653,7 +652,7 @@ class DrumpfBot():
                     channel=self.main_channel_id,
                     text="self.game_scorecard[player_id] -25 * points off bid: %s" % self.game_scorecard[player_id],
                     as_user=True)
-        self.scores += ">*Score Board*\n"
+        self.scores += ">>>*Score Board*\n"
         print "  ",self.scores
         # self.build_scoreboard(msg)
         # self.update_scoreboard(self.scoreboard)
@@ -674,7 +673,7 @@ class DrumpfBot():
                 # self.update_scoreboard(self.scoreboard)
                 # self.message_main_game_channel(msg)
             else:
-                msg = "<@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
+                msg = "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 print "  ",msg
                 self.scores += msg
                 # self.build_scoreboard(msg)
@@ -688,7 +687,7 @@ class DrumpfBot():
             self.current_game.play_round()
 
     def initialize_scores(self, attachments=None):
-        msg = ">*Score Board*\n>"
+        msg = ">>>*Score Board*\n>"
         for player_id in self.users_in_game:
             msg += "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
 
