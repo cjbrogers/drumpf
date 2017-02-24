@@ -219,7 +219,7 @@ class DrumpfBot():
             print "  user_id == self.player_trump_card_queue[0]"
             #validate that the dealer picked a valid trump suit
             # try:
-            if 0 <= int(command) <= 3:
+            if isinstance(command, int) and (0 <= int(command) <= 3):
                 print "  0 <= int(command) <= 3"
 
                 # TODO: verify the below works 2/17/2017 (James)
@@ -242,11 +242,12 @@ class DrumpfBot():
                 self.player_trump_card_queue.pop()
                 print "    self.player_trump_card_queue after pop(): {}".format(self.player_trump_card_queue)
 
-                for player in self.player_bid_queue:
+                for player in self.player_turn_queue_reference:
                     self.private_message_user(player, response)
 
-                print "  What's your bid for the round?"
-                self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
+                if len(self.player_bid_queue):
+                    print "  What's your bid for the round?"
+                    self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
                 return
             else:
                 print "  That wasn't a valid index for a trump suit."
