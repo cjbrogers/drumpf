@@ -140,9 +140,6 @@ def post_signin():
     engine = create_engine(DB_URL, echo=False)
     df.to_sql(con=engine, name='user', if_exists='append', index=False)
 
-    # TODO: add the above auth_response elements to a DB
-    # send_to_db(token,uid,name)
-
     # Don't forget to let the user know that auth has succeeded!
     return "<h1>Welcome to Drumpf!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."
 
@@ -179,9 +176,17 @@ def post_install():
     # for later use
     print(auth_response)
     print(auth_response['access_token'])
-    os.environ["SLACK_USER_TOKEN"] = auth_response['access_token']
+    access_token = auth_response['access_token']
     print(auth_response['bot']['bot_access_token'])
-    os.environ["SLACK_BOT_TOKEN"] = auth_response['bot']['bot_access_token']
+    bot_access_token = auth_response['bot']['bot_access_token']
+    team_id = auth_response['team_id']
+    print team_id
+
+    values = {"access_token": access_token, "bot_access_token": bot_access_token, "team_id": team_id}
+    df = pd.DataFrame(values, index=[0])
+    # engine = create_engine('mysql+pymysql://root:jamesonrogers@localhost:3306/drumpf', echo=False)
+    engine = create_engine(DB_URL, echo=False)
+    df.to_sql(con=engine, name='team', if_exists='append', index=False)
 
     # Don't forget to let the user know that auth has succeeded!
     return "Auth complete!"
