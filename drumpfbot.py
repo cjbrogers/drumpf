@@ -305,7 +305,7 @@ class DrumpfBot():
                     #valid bid
                     print "  Bid recorded! Check the main channel."
                     self.player_bids_for_current_round[user_id] =int(command)
-                    msg = "><@{}> bids `{}`.\n".format(current_username, int(command))
+                    msg = ">>><@{}> bids `{}`.\n".format(current_username, int(command))
                     print "  ",msg
                     response = "Bid recorded! Check the main channel."
                     self.build_scoreboard(msg)
@@ -468,7 +468,7 @@ class DrumpfBot():
         self.remove_card_from_players_hand(self.player_turn_queue[0], card)
 
         card_emoji = helper_functions.emojify_card(card)
-        msg = "><@{}> played {}\n".format(player_who_played_card, card_emoji)
+        msg = ">>><@{}> played {}\n".format(player_who_played_card, card_emoji)
         print " ",msg
         self.build_scoreboard(msg)
         self.update_scoreboard(self.scoreboard)
@@ -673,7 +673,7 @@ class DrumpfBot():
                 # self.update_scoreboard(self.scoreboard)
                 # self.message_main_game_channel(msg)
             else:
-                msg = "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
+                msg = ">>><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 print "  ",msg
                 self.scores += msg
                 # self.build_scoreboard(msg)
