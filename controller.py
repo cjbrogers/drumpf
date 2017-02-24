@@ -158,7 +158,8 @@ def pre_install():
 
 @app.route("/auth/finish", methods=["GET", "POST"])
 def post_install():
-    redirect_uri = '''https%3A%2F%2F43ff30f2.ngrok.io%2Ffinish_auth'''
+    # redirect_uri = '''https%3A%2F%2F43ff30f2.ngrok.io%2Ffinish_auth'''
+    redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
     # Retrieve the auth code from the request params
     auth_code = request.args['code']
 
