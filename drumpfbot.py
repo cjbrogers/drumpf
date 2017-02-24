@@ -13,7 +13,7 @@ import helper_functions
 
 import slackprovider
 
-import receive
+import controller
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")

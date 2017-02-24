@@ -146,6 +146,45 @@ def post_signin():
     # Don't forget to let the user know that auth has succeeded!
     return "<h1>Welcome to Drumpf!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."
 
+# the beggining of the Add to Slack button OAuth process
+@app.route("/auth", methods=["GET"])
+def pre_install():
+    redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
+    return '''
+      <a href="https://slack.com/oauth/authorize?scope={0}&client_id={1}&redirect_uri={2}">
+          <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
+      </a>
+    '''.format(oauth_scope, client_id, redirect_uri)
+
+@app.route("/auth/finish", methods=["GET", "POST"])
+def post_install():
+    redirect_uri = '''https%3A%2F%2F43ff30f2.ngrok.io%2Ffinish_auth'''
+    # Retrieve the auth code from the request params
+    auth_code = request.args['code']
+
+    # An empty string is a valid token for this request
+    sc = SlackClient("")
+
+    # Request the auth tokens from Slack
+    auth_response = sc.api_call(
+        "oauth.access",
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri=redirect_uri,
+        code=auth_code
+    )
+
+    # Save the bot token to an environmental variable or to your data store
+    # for later use
+    print(auth_response)
+    print(auth_response['access_token'])
+    os.environ["SLACK_USER_TOKEN"] = auth_response['access_token']
+    print(auth_response['bot']['bot_access_token'])
+    os.environ["SLACK_BOT_TOKEN"] = auth_response['bot']['bot_access_token']
+
+    # Don't forget to let the user know that auth has succeeded!
+    return "Auth complete!"
+
 @app.route('/', methods=['GET'])
 def test():
     return render_template('index.html')

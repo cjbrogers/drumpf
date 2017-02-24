@@ -42,4 +42,3 @@ def interactify(cards):
     attachments =[{"title":"Your cards good sir/mam:", "fallback":values, "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
     print "  attachments: ",attachments
     return attachments
-    # TODO: verify this ^^
