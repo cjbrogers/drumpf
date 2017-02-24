@@ -219,7 +219,7 @@ class DrumpfBot():
             print "  user_id == self.player_trump_card_queue[0]"
             #validate that the dealer picked a valid trump suit
             # try:
-            if isinstance(command, int) and (0 <= int(command) <= 3):
+            if (0 <= int(command) <= 3):
                 print "  0 <= int(command) <= 3"
 
                 # TODO: verify the below works 2/17/2017 (James)
