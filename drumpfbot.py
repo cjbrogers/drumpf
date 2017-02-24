@@ -85,7 +85,7 @@ class DrumpfBot():
         if command.lower().startswith("debug"):
             if command.lower().startswith("debug true"):
                 self.debug = True
-            response = ">>>`Debug mode active.` \n"
+            response = "`Debug mode active.` \n"
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=response, as_user=True)
             self.game_created == True
@@ -589,8 +589,10 @@ class DrumpfBot():
             self.current_game.play_round()
 
     def pm_users_scoreboard(self, board, scores, attachments=None):
+        print "pm_users_scoreboard(self, board, scores, attachments=None)"
         for player_id in self.users_in_game:
             board_scores = board + scores
+            print "  board scores: ",board_scores
             resp_scores = slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
