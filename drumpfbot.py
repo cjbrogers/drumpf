@@ -66,6 +66,7 @@ class DrumpfBot():
         self.dealer_prompted_for_trump_suit = False
         self.scoreboard = ""
         self.ts = ""
+        self.scores = ""
 
     def handle_command(self, command, channel, user_id):
         print "handle_command(self, command, channel, user_id) "
@@ -82,7 +83,7 @@ class DrumpfBot():
         if command.lower().startswith("debug"):
             if command.lower().startswith("debug true"):
                 self.debug = True
-            response = ">>>Now entering debug mode. \n"
+            response = ">>>`Debug mode active.` \n"
             slack_client.api_call("chat.postMessage", channel=channel,
                                   text=response, as_user=True)
             self.game_created == True
@@ -143,6 +144,7 @@ class DrumpfBot():
 
                 resp = slack_client.api_call("chat.postMessage", channel=channel,text=response, as_user=True)
                 self.ts = resp['ts']
+                self.initialize_scores()
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return #have to do this because we want the "new game" message to come before the trump card announcement
 
@@ -650,35 +652,62 @@ class DrumpfBot():
                     channel=self.main_channel_id,
                     text="self.game_scorecard[player_id] -25 * points off bid: %s" % self.game_scorecard[player_id],
                     as_user=True)
-        msg = ">*Score Board*\n"
-        print "  ",msg
-        self.build_scoreboard(msg)
-        self.update_scoreboard(self.scoreboard)
+        self.scores += ">*Score Board*\n"
+        print "  ",self.scores
+        # self.build_scoreboard(msg)
+        # self.update_scoreboard(self.scoreboard)
         # self.message_main_game_channel(msg)
         for player_id in self.users_in_game:
             if player_id in self.shower_card_holder:
                 msg = "><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 print "  ",msg
-                self.build_scoreboard(msg)
-                self.update_scoreboard(self.scoreboard)
+                self.scores += msg
+                # self.build_scoreboard(msg)
+                # self.update_scoreboard(self.scoreboard)
                 # self.message_main_game_channel(msg)
             elif player_id in self.zero_point_players:
                 msg = "><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 print "  ",msg
-                self.build_scoreboard(msg)
-                self.update_scoreboard(self.scoreboard)
+                self.scores += msg
+                # self.build_scoreboard(msg)
+                # self.update_scoreboard(self.scoreboard)
                 # self.message_main_game_channel(msg)
             else:
                 msg = "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
                 print "  ",msg
-                self.build_scoreboard(msg)
-                self.update_scoreboard(self.scoreboard)
+                self.scores += msg
+                # self.build_scoreboard(msg)
+                # self.update_scoreboard(self.scoreboard)
                 # self.message_main_game_channel(msg)
+        self.update_scores(self.scores)
         self.prepare_for_next_round()
         if self.current_game.current_round == self.current_game.final_round:
             self.present_winner_for_game(self.user_ids_to_username[player_id],player_id)
         else:
             self.current_game.play_round()
+
+    def initialize_scores(self, attachemts=None):
+        msg = ">*Score Board*\n>"
+        for player_id in self.users_in_game:
+            msg += "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
+
+        resp = slack_client.api_call(
+            "chat.postMessage",
+            channel=self.main_channel_id,
+            text=msg,
+            as_user=True, attachments=attachments
+        )
+        self.ts_scores = resp['ts']
+
+    def update_scores(self, message, attachments=None):
+        slack_client.api_call(
+            "chat.update",
+            channel=self.main_channel_id,
+            text=message,
+            ts=self.ts_scores,
+            as_user=True, attachments=attachments
+        )
+        self.scores = ""
 
     def present_winner_for_game(self, winner,pid):
         print "present_winner_for_game(self) "
