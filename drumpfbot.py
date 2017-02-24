@@ -239,12 +239,6 @@ class DrumpfBot():
                 print " ",msg
                 self.build_scoreboard(msg)
                 self.update_scoreboard(msg)
-                slack_client.api_call(
-                    "chat.postMessage",
-                    channel=self.main_channel_id,
-                    text=msg,
-                    as_user=True
-                )
 
                 print "    self.player_trump_card_queue before pop(): {}".format(self.player_trump_card_queue)
 
@@ -582,10 +576,9 @@ class DrumpfBot():
                 self.scores += msg
 
         self.update_scores(self.scores)
-        self.build_scoreboard(self.scores)
 
-        self.update_scoreboard(self.scoreboard)
         self.pm_users_scoreboard(self.scoreboard)
+        self.pm_users_scores(self.scores)
 
         self.prepare_for_next_round()
         if self.current_game.current_round == self.current_game.final_round:
@@ -594,13 +587,24 @@ class DrumpfBot():
             self.current_game.play_round()
 
     def pm_users_scoreboard(self, board, attachments=None):
-        print "pm_users_scoreboard(self, board, scores, attachments=None)"
+        print "pm_users_scoreboard(self, board, attachments=None)"
         for player_id in self.users_in_game:
             print "  board: ",board
             resp_scores = slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
                 text=board,
+                as_user=True, attachments=attachments
+            )
+
+    def pm_users_scores(self, scores, attachments=None):
+        print "pm_users_scores(self, scores, attachments=None)"
+        for player_id in self.users_in_game:
+            print "  board: ",scores
+            resp_scores = slack_client.api_call(
+                "chat.postMessage",
+                channel=player_id,
+                text=scores,
                 as_user=True, attachments=attachments
             )
 
