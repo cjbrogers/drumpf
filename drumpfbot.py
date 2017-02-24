@@ -64,6 +64,8 @@ class DrumpfBot():
         self.drumpfmendous_card_first = None
         self.first_card_sub_round = 0
         self.dealer_prompted_for_trump_suit = False
+        self.scoreboard = ""
+        self.ts = ""
 
     def handle_command(self, command, channel, user_id):
         print "handle_command(self, command, channel, user_id) "
@@ -300,24 +302,31 @@ class DrumpfBot():
                     #valid bid
                     print "  Bid recorded! Check the main channel."
                     self.player_bids_for_current_round[user_id] =int(command)
-                    print "  <@{}> bids `{}`.".format(current_username, int(command))
+                    msg = "<@{}> bids `{}`.\n".format(current_username, int(command))
+                    print "  ",msg
                     response = "Bid recorded! Check the main channel."
-                    slack_client.api_call(
-                        "chat.postMessage",
-                        channel=self.main_channel_id,
-                        text="<@{}> bids `{}`.".format(current_username, int(command)),
-                        as_user=True
-                    )
+                    self.build_scoreboard(msg)
+                    self.update_scoreboard(self.scoreboard)
+
+                    # slack_client.api_call(
+                    #     "chat.postMessage",
+                    #     channel=self.main_channel_id,
+                    #     text=msg,
+                    #     as_user=True
+                    # )
                     self.player_bid_queue.popleft()
                     if len(self.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
-                        print "  All bids recorded, let's play!"
-                        slack_client.api_call(
-                            "chat.postMessage",
-                            channel=self.main_channel_id,
-                            text="All bids recorded, let's play!",
-                            as_user=True
-                        )
+                        msg = "All bids recorded, let's play!\n"
+                        print " ",msg
+                        self.build_scoreboard(msg)
+                        self.update_scoreboard(self.scoreboard)
+                        # slack_client.api_call(
+                        #     "chat.postMessage",
+                        #     channel=self.main_channel_id,
+                        #     text="All bids recorded, let's play!",
+                        #     as_user=True
+                        # )
                         print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
                         print "  Please select a card to play."
                         self.private_message_user(self.player_turn_queue[0], "Please select a card to play.")
@@ -456,8 +465,11 @@ class DrumpfBot():
         self.remove_card_from_players_hand(self.player_turn_queue[0], card)
 
         card_emoji = helper_functions.emojify_card(card)
-        print "  ><@{}> played {}".format(player_who_played_card, card_emoji)
-        self.message_main_game_channel("><@{}> played {}".format(player_who_played_card, card_emoji))
+        msg = "><@{}> played {}\n".format(player_who_played_card, card_emoji)
+        print " ",msg
+        self.build_scoreboard(msg)
+        self.update_scoreboard(self.scoreboard)
+        # self.message_main_game_channel(msg)
 
         self.cards_played_for_sub_round.append(card)
         print("  Cards played for sub-round: {}".format(self.cards_played_for_sub_round))
@@ -475,9 +487,11 @@ class DrumpfBot():
 
             self.player_points_for_round[self.winner_for_sub_round] += 1
 
-            print "  >*<@{}> won this sub-round with a {}*".format(self.winner_for_sub_round,helper_functions.emojify_card(self.winning_sub_round_card))
-            self.message_main_game_channel(">*<@{}> won this sub-round with a {}*".format(
-                self.winner_for_sub_round, helper_functions.emojify_card(self.winning_sub_round_card)), attachments=self.attachments)
+            msg = ">*<@{}> won this sub-round with a {}*\n".format(self.winner_for_sub_round,helper_functions.emojify_card(self.winning_sub_round_card))
+            print " ",msg
+            self.build_scoreboard(msg)
+            self.update_scoreboard(self.scoreboard)
+            # self.message_main_game_channel(msg, attachments=self.attachments)
 
             #reset all sub-round variables
             self.leading_suit = None
@@ -500,7 +514,11 @@ class DrumpfBot():
                 self.calculate_and_display_points_for_players()
                 self.winner_for_sub_round = None
             elif self.sub_rounds_played < self.current_game.current_round:
-                self.message_main_game_channel(">_Sub-Round {}_".format(self.sub_rounds_played + 1))
+                msg = ">_Sub-Round {}_\n".format(self.sub_rounds_played + 1)
+                self.build_scoreboard(msg)
+                self.update_scoreboard(self.scoreboard)
+                # self.message_main_game_channel(msg)
+
                 #initialize another turn queue cause there are more cards to play
                 self.player_turn_queue = copy.copy(self.users_in_game)
 
@@ -543,7 +561,10 @@ class DrumpfBot():
 
     def calculate_and_display_points_for_players(self):
         print "calculate_and_display_points_for_players(self) "
-        self.message_main_game_channel("*Round {} over!* _calculating points..._".format(self.current_game.current_round))
+        msg = "*Round {} over!* _calculating points..._\n".format(self.current_game.current_round)
+        self.build_scoreboard(msg)
+        self.update_scoreboard(self.scoreboard)
+        # self.message_main_game_channel(msg)
         for idx, player_id in enumerate(self.users_in_game):
             current_players_bid = self.player_bids_for_current_round[player_id]
             points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
@@ -628,18 +649,30 @@ class DrumpfBot():
                     channel=self.main_channel_id,
                     text="self.game_scorecard[player_id] -25 * points off bid: %s" % self.game_scorecard[player_id],
                     as_user=True)
-
-        self.message_main_game_channel(">*Score Board*")
+        msg = ">*Score Board*\n"
+        print "  ",msg
+        self.build_scoreboard(msg)
+        self.update_scoreboard(self.scoreboard)
+        # self.message_main_game_channel(msg)
         for player_id in self.users_in_game:
             if player_id in self.shower_card_holder:
-                print "  ><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
-                self.message_main_game_channel("><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
+                msg = "><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
+                print "  ",msg
+                self.build_scoreboard(msg)
+                self.update_scoreboard(self.scoreboard)
+                # self.message_main_game_channel(msg)
             elif player_id in self.zero_point_players:
-                print "  ><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
-                self.message_main_game_channel("><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
+                msg = "><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
+                print "  ",msg
+                self.build_scoreboard(msg)
+                self.update_scoreboard(self.scoreboard)
+                # self.message_main_game_channel(msg)
             else:
-                print "  ><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
-                self.message_main_game_channel("><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id]))
+                msg = "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
+                print "  ",msg
+                self.build_scoreboard(msg)
+                self.update_scoreboard(self.scoreboard)
+                # self.message_main_game_channel(msg)
         self.prepare_for_next_round()
         if self.current_game.current_round == self.current_game.final_round:
             self.present_winner_for_game(self.user_ids_to_username[player_id],player_id)
@@ -783,9 +816,12 @@ class DrumpfBot():
                             print "    {} card played in round".format("t_comey")
                             comey_card_idx = self.cards_played_for_sub_round.index("t_comey")
                             if idx < comey_card_idx:
-                                print "    {} card steals {} card...".format(self.cards_played_for_sub_round[comey_card_idx],card_value)
+                                msg = "{} card steals {} card...\n".format(self.cards_played_for_sub_round[comey_card_idx],helper_functions.emojify_card(card_value))
+                                print "  ",msg
 
-                                self.message_main_game_channel("{} card steals {} card...".format(helper_functions.emojify_card(self.cards_played_for_sub_round[comey_card_idx]),helper_functions.emojify_card(card_value)))
+                                # self.message_main_game_channel(msg)
+                                self.build_scoreboard(msg)
+                                self.update_scoreboard(self.scoreboard)
 
                                 self.winning_sub_round_card = self.cards_played_for_sub_round[comey_card_idx]
                                 self.winner_for_sub_round = self.player_turn_queue_reference[comey_card_idx]
@@ -801,9 +837,11 @@ class DrumpfBot():
                         elif "t_nasty" in self.cards_played_for_sub_round:
                             nasty_card_idx = self.cards_played_for_sub_round.index("t_nasty")
                             if idx < nasty_card_idx:
-                                print "  {} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
+                                msg = "{} card negates {} card...\n".format(helper_functions.emojify_card(self.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
 
-                                self.message_main_game_channel("{} card negates {} card...".format(helper_functions.emojify_card(self.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value)))
+                                # self.message_main_game_channel(msg)
+                                self.build_scoreboard(msg)
+                                self.update_scoreboard(self.scoreboard)
 
                                 self.winning_sub_round_card = self.cards_played_for_sub_round[nasty_card_idx]
                                 self.winner_for_sub_round = self.player_turn_queue_reference[nasty_card_idx]
@@ -832,9 +870,12 @@ class DrumpfBot():
                             hombres_card_idx = self.cards_played_for_sub_round.index("vm_hombres")
                             if idx < hombres_card_idx:
 
-                                print "    {} card steals {}".format(self.cards_played_for_sub_round[hombres_card_idx],card_value)
+                                msg = "{} card steals {}\n".format(helper_functions.emojify_card(self.cards_played_for_sub_round[hombres_card_idx]),helper_functions.emojify_card(card_value))
 
-                                self.message_main_game_channel("{} card steals {}".format(helper_functions.emojify_card(self.cards_played_for_sub_round[hombres_card_idx]),helper_functions.emojify_card(card_value)))
+                                print "  ",msg
+                                self.build_scoreboard(msg)
+                                self.update_scoreboard(self.scoreboard)
+                                # self.message_main_game_channel(msg)
 
                                 self.winning_sub_round_card = self.cards_played_for_sub_round[hombres_card_idx]
                                 self.winner_for_sub_round = self.player_turn_queue_reference[hombres_card_idx]
@@ -850,9 +891,12 @@ class DrumpfBot():
                         elif "t_nasty" in self.cards_played_for_sub_round:
                             nasty_card_idx = self.cards_played_for_sub_round.index("t_nasty")
                             if idx < nasty_card_idx:
-                                print "  {} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
+                                msg = "{} card negates {} card...\n".format(helper_functions.emojify_card(self.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
+                                print "  ",msg
 
-                                self.message_main_game_channel("{} card negates {} card...".format(helper_functions.emojify_card(self.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value)))
+                                self.build_scoreboard(msg)
+                                self.update_scoreboard(self.scoreboard)
+                                # self.message_main_game_channel(msg)
 
                                 self.winning_sub_round_card = self.cards_played_for_sub_round[nasty_card_idx]
                                 self.winner_for_sub_round = self.player_turn_queue_reference[nasty_card_idx]
@@ -887,9 +931,11 @@ class DrumpfBot():
                                 nasty_card_idx = self.cards_played_for_sub_round.index("t_nasty")
                                 if idx < nasty_card_idx:
                                     visited = True
-                                    print "  *{} card negates {} card...".format(self.cards_played_for_sub_round[nasty_card_idx],card_value)
+                                    msg = "*{} card negates {} card...\n".format(helper_functions.emojify_card(self.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
 
-                                    self.message_main_game_channel("{} card negates {} card...".format(helper_functions.emojify_card(self.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value)))
+                                    self.build_scoreboard(msg)
+                                    self.update_scoreboard(self.scoreboard)
+                                    # self.message_main_game_channel(msg)
 
                                     self.winning_sub_round_card = self.cards_played_for_sub_round[nasty_card_idx]
                                     self.winner_for_sub_round = self.player_turn_queue_reference[nasty_card_idx]
@@ -1004,10 +1050,20 @@ class DrumpfBot():
         # TODO: remember to reset all the sub-round variables for the next sub-round
 
     def message_main_game_channel(self, message, attachments=None):
-        slack_client.api_call(
+        resp = slack_client.api_call(
             "chat.postMessage",
             channel=self.main_channel_id,
             text=message,
+            as_user=True, attachments=attachments
+        )
+        self.ts = resp['ts']
+
+    def update_scoreboard(self, message, attachments=None):
+        slack_client.api_call(
+            "chat.update",
+            channel=self.main_channel_id,
+            text=message,
+            ts=self.ts
             as_user=True, attachments=attachments
         )
 
@@ -1178,15 +1234,20 @@ class DrumpfBot():
         print "announce_trump_card(self, trump_card) "
         print "  trump_card: ",trump_card
 
-        print ">>>*Round {}* \n The trump card is: {} \n".format(
+        msg = ">>>*Round {}* \n The trump card is: {} \n>>>_Sub-Round {}_\n".format(
             self.current_game.current_round,
-            helper_functions.emojify_card(trump_card))
-        self.message_main_game_channel(">>>*Round {}* \n The trump card is: {} \n".format(
-            self.current_game.current_round,
-            helper_functions.emojify_card(trump_card)), attachments=self.attachments)
+            helper_functions.emojify_card(trump_card),self.(sub_rounds_played + 1))
+        self.build_scoreboard(msg)
 
-        print ">>>_Sub-Round {}_".format(self.sub_rounds_played + 1)
-        self.message_main_game_channel(">>>_Sub-Round {}_".format(self.sub_rounds_played + 1))
+        self.message_main_game_channel(self.scoreboard, attachments=self.attachments)
+
+
+        # print ">>>_Sub-Round {}_".format(self.sub_rounds_played + 1)
+        # self.message_main_game_channel(">>>_Sub-Round {}_".format(self.sub_rounds_played + 1))
+
+    def build_scoreboard(self,msg):
+        self.scoreboard += msg
+        return
 
     #takes an array of player_ids and the channel the game request originated from
     def play_game_of_drumpf_on_slack(self, players, channel):
