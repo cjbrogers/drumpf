@@ -1128,10 +1128,13 @@ class DrumpfBot():
             print "  len(cards) > 5"
             five_card_set = {}
             for idx, card in enumerate(cards):
-                if (idx % 5) != 0 and idx != 0: # the first set of 5 cards
+                if idx == 0: # add the first card
                     print "  formatted_cards[idx] = ", formatted_cards[idx]
                     five_card_set[idx] = formatted_cards[idx]
-                else: # we've hit the next card that starts a new message
+                elif (idx % 5) != 0: # add the next 4
+                    print "  formatted_cards[idx] = ", formatted_cards[idx]
+                    five_card_set[idx] = formatted_cards[idx]
+                else: # we've hit the 5th card that starts a new message
                     attachments = helper_functions.interactify(five_card_set)
                     print "posting message"
                     slack.chat.post_message(
@@ -1140,7 +1143,7 @@ class DrumpfBot():
                         attachments=attachments
                         )
                     five_card_set.clear()
-                    five_card_set[idx] = formatted_cards[idx]
+                    # five_card_set[idx] = formatted_cards[idx]
         # there are less than 5 cards in the players hand, so just display them
         else:
             print "  len(cards) <= 5"
