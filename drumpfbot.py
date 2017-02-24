@@ -686,7 +686,7 @@ class DrumpfBot():
         else:
             self.current_game.play_round()
 
-    def initialize_scores(self, attachemts=None):
+    def initialize_scores(self, attachments=None):
         msg = ">*Score Board*\n>"
         for player_id in self.users_in_game:
             msg += "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
