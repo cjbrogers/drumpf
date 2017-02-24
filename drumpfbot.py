@@ -607,7 +607,7 @@ class DrumpfBot():
     def initialize_scores(self, attachments=None):
         print "initialize_scores(self, attachments=None)"
         msg = ""
-        msg += ">>>*Score Board*>"
+        msg += ">>>*Score Board*"
         print "  ",msg
         for player_id in self.users_in_game:
             msg += "\n><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
