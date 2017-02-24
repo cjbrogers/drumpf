@@ -313,8 +313,8 @@ class DrumpfBot():
                             as_user=True
                         )
                         print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
-                        print "  Please select a card `index` to play."
-                        self.private_message_user(self.player_turn_queue[0], "Please select a card `index` to play.")
+                        print "  Please select a card to play."
+                        self.private_message_user(self.player_turn_queue[0], "Please select a card to play.")
 
                         # debbug remove after
                         if self.debug:
@@ -1125,11 +1125,11 @@ class DrumpfBot():
         # the player has more than 5 cards, so we have to send them in separate messages
         if len(cards) > 5:
             print "  len(cards) > 5"
-            five_card_set = []
+            five_card_set = {}
             for idx, card in enumerate(cards):
                 if (idx % 5) != 0 and idx != 0: # the first set of 5 cards
                     print "  formatted_cards[idx] = ", formatted_cards[idx]
-                    five_card_set.append(formatted_cards[idx])
+                    five_card_set[idx] = formatted_cards[idx]
                 else: # we've hit the next card that starts a new message
                     attachments = helper_functions.interactify(five_card_set)
                     print "posting message"
@@ -1138,8 +1138,8 @@ class DrumpfBot():
                         as_user=True,
                         attachments=attachments
                         )
-                    five_card_set[:] = []
-                    five_card_set.append(formatted_cards[idx])
+                    five_card_set.clear()
+                    five_card_set[idx] = formatted_cards[idx]
         # there are less than 5 cards in the players hand, so just display them
         else:
             print "  len(cards) <= 5"
