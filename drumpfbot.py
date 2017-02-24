@@ -317,8 +317,11 @@ class DrumpfBot():
                         self.update_scoreboard(self.scoreboard)
 
                         print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
-                        print "  Please select a card to play."
-                        self.private_message_user(self.player_turn_queue[0], "Please select a card to play.")
+                        for player in self.current_game.players:
+                            if player.id == user_id:
+                                self.display_cards_for_player_in_pm(player.id,player.cards_in_hand)
+                                print "  Please select a card to play."
+                                self.private_message_user(self.player_turn_queue[0], "Please select a card to play.")
 
                     else: #get the next player's bid
                         print "  What's your bid for the round?"
