@@ -581,22 +581,23 @@ class DrumpfBot():
                 print "  ",msg
                 self.scores += msg
         self.update_scores(self.scores)
-        self.pm_users_scoreboard(self.scoreboard,self.scores)
+        self.build_scoreboard(self.scores)
+
+        self.pm_users_scoreboard(self.scoreboard)
         self.prepare_for_next_round()
         if self.current_game.current_round == self.current_game.final_round:
             self.present_winner_for_game(self.user_ids_to_username[player_id],player_id)
         else:
             self.current_game.play_round()
 
-    def pm_users_scoreboard(self, board, scores, attachments=None):
+    def pm_users_scoreboard(self, board, attachments=None):
         print "pm_users_scoreboard(self, board, scores, attachments=None)"
         for player_id in self.users_in_game:
-            board_scores = board + scores
-            print "  board scores: ",board_scores
+            print "  board: ",board
             resp_scores = slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
-                text=board_scores,
+                text=board,
                 as_user=True, attachments=attachments
             )
 
@@ -606,7 +607,7 @@ class DrumpfBot():
         msg += ">>>*Score Board*\n>"
         print "  ",msg
         for player_id in self.users_in_game:
-            msg += "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
+            msg += "<@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
         print "  ",msg
 
         resp = slack_client.api_call(
