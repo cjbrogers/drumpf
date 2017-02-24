@@ -1129,60 +1129,45 @@ class DrumpfBot():
             five_card_set = {}
             for idx, card in enumerate(cards):
                 if idx == 0: # add the first card
+                    print "  idx == 0"
                     print "  formatted_cards[idx] = ", formatted_cards[idx]
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) != 0: # add the next 4
+                    print "  (idx % 5) != 0"
                     print "  formatted_cards[idx] = ", formatted_cards[idx]
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
+                    print "  (idx % 5) == 0"
                     attachments = helper_functions.interactify(five_card_set)
-                    print "*posting whole set of five"
+                    print "  *posting whole set of five"
                     slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
                         attachments=attachments
                         )
                     five_card_set.clear() # clear the set
-                    five_card_set[idx] = formatted_cards[idx] # add the next card
-                    if len(cards) == (idx + 1): # if we've reached the last card
-                        attachments = helper_functions.interactify(five_card_set)
-                        print "*posting last card"
-                        slack.chat.post_message(
-                            channel=player_id,
-                            as_user=True,
-                            attachments=attachments
-                            )
-                        five_card_set.clear()
-                elif len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
+                    five_card_set[idx] = formatted_cards[idx] # add the first card of the next set
+                    print "  five_card_set (first card of next set): ", five_card_set
+                if len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
+                    print "  len(cards) == (idx + 1)"
                     attachments = helper_functions.interactify(five_card_set)
-                    print "posting remaining set of cards"
+                    print "  *posting remaining set of cards"
                     slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
                         attachments=attachments
                         )
                     five_card_set.clear()
-                else:
-                    print "How the heck did we get here?"
         # there are less than 5 cards in the players hand, so just display them
         else:
             print "  len(cards) <= 5"
             attachments = helper_functions.interactify(formatted_cards)
-            print "posting message"
+            print "  *posting set of 0-5"
             slack.chat.post_message(
                 channel=player_id,
                 as_user=True,
                 attachments=attachments
                 )
-        # formatted_cards = helper_functions.format_cards_to_emojis(cards)
-        # self.attachments = None
-        # print "  Your card(s): {}".format(formatted_cards)
-        # slack_client.api_call(
-        #     "chat.postMessage",
-        #     channel=player_id,
-        #     text="Your card(s): {}".format(formatted_cards),
-        #     as_user=True, attachments=self.attachments
-        # )
 
     def announce_trump_card(self, trump_card):
         print "announce_trump_card(self, trump_card) "
