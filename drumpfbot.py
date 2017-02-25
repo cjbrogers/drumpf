@@ -689,8 +689,8 @@ class DrumpfBot():
                     if card == card_to_remove:
                         idx_of_card_to_remove = idx
                 player.cards_in_hand.pop(idx_of_card_to_remove)
-                if len(player.cards_in_hand) > 0:
-                    self.display_cards_for_player_in_pm(player.id, player.cards_in_hand)
+                # if len(player.cards_in_hand) > 0:
+                #     self.display_cards_for_player_in_pm(player.id, player.cards_in_hand)
 
     def determine_winner_for_sub_round(self, card):
         print "determine_winner_for_sub_round(self, card) "
