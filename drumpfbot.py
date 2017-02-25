@@ -1079,7 +1079,7 @@ class DrumpfBot():
                     if 'ts' in output:
                         return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
                     else:
-                        return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user']
+                        return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
         return None, None, None
 
     def get_bids_from_players(self, current_round, players):
