@@ -227,13 +227,13 @@ class DrumpfBot():
                 self.current_game.current_round_trump_suit = suits[int(command)]
                 print "  self.current_game.current_round_trump_suit SET TO: {}".format(self.current_game.current_round_trump_suit)
 
-                print "  Trump suit recorded! Check the main channel."
-                response = "Trump suit recorded! Check the main channel."
+                # print "  Trump suit recorded! Check the main channel."
+                # response = "Trump suit recorded! Check the main channel."
 
                 msg = "<@{}> chose :{}: for the trump suit.\n".format(current_username, suits[int(command)])
                 print " ",msg
                 self.build_scoreboard(msg)
-                self.update_scoreboard(msg)
+                self.update_scoreboard(self.scoreboard)
 
                 print "    self.player_trump_card_queue before pop(): {}".format(self.player_trump_card_queue)
 
