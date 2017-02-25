@@ -92,7 +92,6 @@ class DrumpfBot():
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
             response = ""
-            self.ts = ts
             self.handle_command("start game", channel, user_id, ts)
 
         if command.lower().startswith("create game"):
@@ -146,7 +145,8 @@ class DrumpfBot():
                 if self.debug:
                     response += "\n`DEBUG MODE ACTIVE`"
 
-                resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=self.ts, as_user=True)
+                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
+                self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return
 
