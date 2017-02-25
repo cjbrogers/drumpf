@@ -284,9 +284,9 @@ class DrumpfBot():
 
     def present_bid_buttons(self, player_id):
         button_indices = []
-        for pid in self.users_in_game:
-            if pid == player_id:
-                for idx, card in enumerate(pid.cards_in_hand):
+        for player in self.current_game.players:
+            if player.id == player_id:
+                for idx, card in enumerate(player.cards_in_hand):
                     button_indices.append(idx)
         button_set = []
         for idx in button_indices:
