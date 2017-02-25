@@ -70,7 +70,7 @@ class DrumpfBot():
         self.initial_scores = ""
         self.command_ts = ""
 
-    def handle_command(self, command, channel, user_id):
+    def handle_command(self, command, channel, user_id, ts):
         print "handle_command(self, command, channel, user_id) "
         print "  command: ", command
         print "  channel: ", channel
@@ -92,10 +92,8 @@ class DrumpfBot():
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
             response = ""
-            resp = slack_client.api_call("chat.postMessage", channel=channel,text=response, as_user=True)
-            self.ts = resp['ts']
+            self.ts = ts
             self.handle_command("start game", channel, user_id)
-            return
 
         if command.lower().startswith("create game"):
             self.game_created == True
@@ -104,9 +102,7 @@ class DrumpfBot():
                 self.users_in_game.append(user_id)
             else:
                 response = "There's already a game being made, say `@drumpfbot add me` if you want in."
-            resp = slack_client.api_call("chat.postMessage", channel=channel,text=response, as_user=True)
-            self.ts = resp['ts']
-            return
+            self.ts = ts
 
         if command.lower().startswith("restart"):
             response = "Application restarted."
@@ -130,8 +126,7 @@ class DrumpfBot():
                 else:
                     self.users_in_game.append(user_id)
                     response = "Added <@{}> to the game!".format(username)
-                    response += "\nWe're good to go! Type `@drumpfbot start game` to get your Drumpf on."
-
+                    response += "\n_We're good to go! Type `@drumpfbot start game` to get your Drumpf on._"
 
         if command.lower().startswith("start game"):
             print "Users in game: ", self.users_in_game
@@ -152,7 +147,6 @@ class DrumpfBot():
                     response += "\n`DEBUG MODE ACTIVE`"
 
                 resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=self.ts, as_user=True)
-                # self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return
 
@@ -1083,7 +1077,7 @@ class DrumpfBot():
                     # return text after the @ mention, whitespace removed
                     #example return: (u'hi', u'C2F154UTE', )
                     return output['text'].split(AT_BOT)[1].strip().lower(), \
-                           output['channel'], output['user']
+                           output['channel'], output['user'], output['ts']
         return None, None, None
 
     def get_bids_from_players(self, current_round, players):
@@ -1250,13 +1244,13 @@ class DrumpfBot():
             print("DRUMPFBOT v1.0 connected and running!")
 
             while True:
-                command, channel, user = self.parse_slack_output(slack_client.rtm_read())
+                command, channel, user, ts = self.parse_slack_output(slack_client.rtm_read())
                 if command and channel:
                     if channel not in self.channel_ids_to_name.keys():
                         #this (most likely) means that this channel is a PM with the bot
                         self.handle_private_message(command, user)
                     else:
-                        self.handle_command(command, channel, user)
+                        self.handle_command(command, channel, user, ts)
                 time.sleep(READ_WEBSOCKET_DELAY)
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
