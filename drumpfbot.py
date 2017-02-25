@@ -141,10 +141,6 @@ class DrumpfBot():
 
                 self.initialize_scores()
 
-                # debbug remove after
-                if self.debug:
-                    response += "\n`DEBUG MODE ACTIVE`"
-
                 resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
                 self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
@@ -256,7 +252,10 @@ class DrumpfBot():
                 else:
                     msg = "Play a card."
                     print "  ",msg
-                    self.private_message_user(self.player_turn_queue[0],msg)
+                    for player in self.current_game.players:
+                        if player.id == self.player_turn_queue[0]:
+                            self.display_cards_for_player_in_pm(self.player_turn_queue[0],player.cards_in_hand)
+                            self.private_message_user(self.player_turn_queue[0], "Play a card.")
                 return
             else:
                 print "  That wasn't a valid index for a trump suit."
@@ -519,9 +518,15 @@ class DrumpfBot():
 
                 self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
                 self.winner_for_sub_round = None
-                self.private_message_user(self.player_turn_queue[0], "Play a card")
+                for player in self.current_game.players:
+                    if player.id == self.player_turn_queue[0]:
+                        self.display_cards_for_player_in_pm(self.player_turn_queue[0],player.cards_in_hand)
+                        self.private_message_user(self.player_turn_queue[0], "Play a card.")
         else:
-            self.private_message_user(self.player_turn_queue[0], "Play a card")
+            for player in self.current_game.players:
+                if player.id == self.player_turn_queue[0]:
+                    self.display_cards_for_player_in_pm(self.player_turn_queue[0],player.cards_in_hand)
+                    self.private_message_user(self.player_turn_queue[0], "Play a card.")
 
     def calculate_and_display_points_for_players(self):
         print "calculate_and_display_points_for_players(self) "
