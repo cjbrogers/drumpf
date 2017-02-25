@@ -1063,13 +1063,13 @@ class DrumpfBot():
             self.handle_player_turn(command, user_id)
 
 
-    def parse_slack_output(self, slack_rtm_output, tstamp):
+    def parse_slack_output(self):
         """
             The Slack Real Time Messaging API is an events firehose.
             this parsing function returns None unless a message is
             directed at the Bot, based on its ID.
         """
-        output_list = slack_rtm_output
+        output_list = slack_client.rtm_read()
         if output_list and len(output_list) > 0:
             print output_list
             for output in output_list:
@@ -1079,8 +1079,8 @@ class DrumpfBot():
                     if 'ts' in output:
                         return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
                     else:
-                        return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], tstamp
-        return None, None, None
+                        return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
+        return None, None, None, None
 
     def get_bids_from_players(self, current_round, players):
         print "get_bids_from_players(self, current_round, players) "
@@ -1246,7 +1246,7 @@ class DrumpfBot():
             print("DRUMPFBOT v1.0 connected and running!")
 
             while True:
-                command, channel, user, ts = self.parse_slack_output(slack_client.rtm_read(), None)
+                command, channel, user, ts = self.parse_slack_output()
                 if command and channel:
                     if channel not in self.channel_ids_to_name.keys():
                         #this (most likely) means that this channel is a PM with the bot
