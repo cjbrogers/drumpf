@@ -249,6 +249,8 @@ class DrumpfBot():
                     msg = "What's your bid for the round?"
                     print "  ",msg
                     self.private_message_user(self.player_bid_queue[0], msg)
+                    # TODO: implement bidding buttons
+                    self.present_bid_buttons(self.player_bid_queue[0])
                 else:
                     msg = "Play a card."
                     print "  ",msg
@@ -278,6 +280,37 @@ class DrumpfBot():
                     return None
                 else:
                     return user_object.cards_in_hand[index]
+
+    def present_bid_buttons(self, player_id):
+        button_indices = []
+        for pid in self.users_in_game:
+            if pid == player_id:
+                for idx, card in enumerate(pid.cards_in_hand):
+                    button_indices.append(idx)
+        button_set = []
+        for idx in button_indices:
+            if idx == 0:
+                button_set.append(idx)
+            elif (idx % 5) != 0:
+                button_set.append(idx)
+            elif (idx % 5) == 0:
+                attachments = helper_functions.buttonify_bids(button_set)
+                slack.chat.post_message(
+                    channel=player_id,
+                    as_user=True,
+                    attachments=attachments
+                    )
+                button_set[:] = []
+                button_set.append(idx)
+            if (idx + 1) == len(button_set):
+                attachments = helper_functions.buttonify_bids(button_set)
+                slack.chat.post_message(
+                    channel=player_id,
+                    as_user=True,
+                    attachments=attachments
+                    )
+                button_set[:] = []
+        return
 
     def handle_player_bid(self, command, user_id):
         print "handle_player_bid(self, command, user_id) "
@@ -322,8 +355,11 @@ class DrumpfBot():
                                 self.private_message_user(self.player_turn_queue[0], "Please select a card to play.")
 
                     else: #get the next player's bid
-                        print "  What's your bid for the round?"
-                        self.private_message_user(self.player_bid_queue[0], "What's your bid for the round?")
+                        msg = "What's your bid for the round?"
+                        print "  ",msg
+                        self.private_message_user(self.player_bid_queue[0], msg)
+                        # TODO: implement bidding buttons
+                        self.present_bid_buttons(self.player_bid_queue[0])
             except:
                 response = "That wasn't a valid bid."
 
@@ -1108,6 +1144,8 @@ class DrumpfBot():
                 text="What's your bid for the round?",
                 as_user=True
             )
+            # TODO: implement bidding buttons
+            self.present_bid_buttons(self.player_bid_queue[0])
 
     def prompt_dealer_for_trump_suit(self, player_id):
         print "prompt_dealer_for_trump_suit(self, player_id) "
