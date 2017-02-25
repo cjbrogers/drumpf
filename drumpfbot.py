@@ -1076,8 +1076,10 @@ class DrumpfBot():
                 if output and 'text' in output and AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed
                     #example return: (u'hi', u'C2F154UTE', )
-                    return output['text'].split(AT_BOT)[1].strip().lower(), \
-                           output['channel'], output['user'], output['ts']
+                    if 'ts' in output:
+                        return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
+                    else:
+                        return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user']
         return None, None, None
 
     def get_bids_from_players(self, current_round, players):
