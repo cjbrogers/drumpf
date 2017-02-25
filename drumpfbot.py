@@ -246,11 +246,12 @@ class DrumpfBot():
                     self.private_message_user(player, msg)
 
                 if len(self.player_bid_queue):
+                    self.present_bid_buttons(self.player_bid_queue[0])
                     msg = "What's your bid for the round?"
                     print "  ",msg
-                    self.private_message_user(self.player_bid_queue[0], msg)
+                    # self.private_message_user(self.player_bid_queue[0], msg)
                     # TODO: implement bidding buttons
-                    self.present_bid_buttons(self.player_bid_queue[0])
+
                 else:
                     msg = "Play a card."
                     print "  ",msg
@@ -357,9 +358,10 @@ class DrumpfBot():
                     else: #get the next player's bid
                         msg = "What's your bid for the round?"
                         print "  ",msg
-                        self.private_message_user(self.player_bid_queue[0], msg)
-                        # TODO: implement bidding buttons
                         self.present_bid_buttons(self.player_bid_queue[0])
+                        # self.private_message_user(self.player_bid_queue[0], msg)
+                        # TODO: implement bidding buttons
+
             except:
                 response = "That wasn't a valid bid."
 
@@ -1137,15 +1139,16 @@ class DrumpfBot():
         self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
         self.users_in_game.rotate(-1)
         if not self.drumpfmendous_card_first:
-            print "  What's your bid for the round?"
-            slack_client.api_call(
-                "chat.postMessage",
-                channel=self.player_bid_queue[0],
-                text="What's your bid for the round?",
-                as_user=True
-            )
-            # TODO: implement bidding buttons
             self.present_bid_buttons(self.player_bid_queue[0])
+            # print "  What's your bid for the round?"
+            # slack_client.api_call(
+            #     "chat.postMessage",
+            #     channel=self.player_bid_queue[0],
+            #     text="What's your bid for the round?",
+            #     as_user=True
+            # )
+            # TODO: implement bidding buttons
+
 
     def prompt_dealer_for_trump_suit(self, player_id):
         print "prompt_dealer_for_trump_suit(self, player_id) "

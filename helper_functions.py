@@ -47,14 +47,18 @@ def interactify(cards,first_set):
         print "  attachments: ",attachments
     return attachments
 
-def buttonify_bids(bid_set):
+def buttonify_bids(bid_set,first_set):
     print "buttonify_bids(bid_set)"
     actions = []
     action = {}
     for bid in bid_set:
         action = {"name":str(bid),"text":str(bid),"type":"button","value":int(bid)}
         actions.append(action)
-    attachments =[{"title":"", "fallback":values, "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
-    print "  attachments: ",attachments
-    
+    if first_set:
+        attachments =[{"title":"What's your bid for the round?", "fallback":"Place a bid.", "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
+        print "  attachments: ",attachments
+    else:
+        attachments =[{"title":"", "fallback":"Place a bid.", "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
+        print "  attachments: ",attachments
+
     return attachments
