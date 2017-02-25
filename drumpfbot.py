@@ -71,7 +71,7 @@ class DrumpfBot():
         self.command_ts = ""
 
     def handle_command(self, command, channel, user_id, ts):
-        print "handle_command(self, command, channel, user_id) "
+        print "handle_command(self, command, channel, user_id, ts) "
         print "  command: ", command
         print "  channel: ", channel
         print "  user_id: ", user_id
@@ -93,7 +93,7 @@ class DrumpfBot():
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
             response = ""
             self.ts = ts
-            self.handle_command("start game", channel, user_id)
+            self.handle_command("start game", channel, user_id, ts)
 
         if command.lower().startswith("create game"):
             self.game_created == True
