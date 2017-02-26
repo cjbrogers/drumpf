@@ -288,6 +288,7 @@ class DrumpfBot():
             if player.id == player_id:
                 for idx, card in enumerate(player.cards_in_hand):
                     button_indices.append(idx)
+                button_indices.append(len(player.cards_in_hand))
         self.first_set = False
         button_set = []
         for idx in button_indices:
