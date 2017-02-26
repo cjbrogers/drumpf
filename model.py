@@ -1,3 +1,4 @@
+import os
 from sqlalchemy import create_engine
 import pymysql
 import pymysql.cursors
@@ -8,7 +9,6 @@ DB_USER = os.environ.get("DB_USER")
 DB_PORT = os.environ.get("DB_PORT")
 DB_NAME = os.environ.get("DB_NAME")
 DB_URL = os.environ.get("DB_URL")
-
 
 '''
 Establishes a connection to the Heroku ClearDB mySQL db
