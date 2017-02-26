@@ -68,8 +68,8 @@ def post_signin():
     # Request the auth tokens from Slack
     auth_response = sc.api_call(
         "oauth.access",
-        CLIENT_ID=CLIENT_ID,
-        CLIENT_SECRET=CLIENT_SECRET,
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
         code=auth_code
     )
 
@@ -110,8 +110,8 @@ def post_install():
     # Request the auth tokens from Slack
     auth_response = sc.api_call(
         "oauth.access",
-        CLIENT_ID=CLIENT_ID,
-        CLIENT_SECRET=CLIENT_SECRET,
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
         redirect_uri=redirect_uri,
         code=auth_code
     )
