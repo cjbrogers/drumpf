@@ -3,16 +3,11 @@ import os
 import sys
 import time
 import copy
-
 from slackclient import SlackClient
-from collections import defaultdict
-from collections import deque
+from collections import defaultdict, deque
 from slacker import Slacker
 import drumpfgame as DrumpfGame
 import helper_functions
-
-import slackprovider
-
 import controller
 
 # starterbot's ID as an environment variable
@@ -249,9 +244,6 @@ class DrumpfBot():
                     self.present_bid_buttons(self.player_bid_queue[0])
                     msg = "What's your bid for the round?"
                     print "  ",msg
-                    # self.private_message_user(self.player_bid_queue[0], msg)
-                    # TODO: implement bidding buttons
-
                 else:
                     msg = "Play a card."
                     print "  ",msg
@@ -373,9 +365,6 @@ class DrumpfBot():
                         msg = "What's your bid for the round?"
                         print "  ",msg
                         self.present_bid_buttons(self.player_bid_queue[0])
-                        # self.private_message_user(self.player_bid_queue[0], msg)
-                        # TODO: implement bidding buttons
-
             except:
                 response = "That wasn't a valid bid."
 
@@ -1061,8 +1050,6 @@ class DrumpfBot():
                     print "    {} card passed by".format(card)
                     print "    player {} card has been passed".format(current_player)
 
-        # TODO: remember to reset all the sub-round variables for the next sub-round
-
     def message_main_game_channel(self, message, attachments=None):
         slack_client.api_call(
             "chat.postMessage",
@@ -1154,15 +1141,6 @@ class DrumpfBot():
         self.users_in_game.rotate(-1)
         if not self.drumpfmendous_card_first:
             self.present_bid_buttons(self.player_bid_queue[0])
-            # print "  What's your bid for the round?"
-            # slack_client.api_call(
-            #     "chat.postMessage",
-            #     channel=self.player_bid_queue[0],
-            #     text="What's your bid for the round?",
-            #     as_user=True
-            # )
-            # TODO: implement bidding buttons
-
 
     def prompt_dealer_for_trump_suit(self, player_id):
         print "prompt_dealer_for_trump_suit(self, player_id) "
@@ -1200,7 +1178,6 @@ class DrumpfBot():
         print "  player: ", self.user_ids_to_username[player_id]
         print "  cards: ", cards
 
-        # TODO: verify this works
         formatted_cards = helper_functions.interactiformat(cards)
         # the player has more than 5 cards, so we have to send them in separate messages
         self.first_set = False

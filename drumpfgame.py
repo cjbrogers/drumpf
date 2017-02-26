@@ -1,5 +1,4 @@
 import random
-import drumpfbot as DrumpfBot
 
 drumpf_deck = ["vm_blacks", "vm_hombres", "vm_muslims", "vm_thieves"]
 suits = ["diamonds", "clubs", "hearts", "spades"]
@@ -68,7 +67,6 @@ class Game:
                 trump_suit = trump_card[1]
                 print "  Trump Suit: ", trump_suit
 
-                # TODO: verify the below works 2/17/2017 (James)
                 self.bot.current_game.current_round_trump_suit = trump_suit
                 print "  self.bot.current_game.current_round_trump_suit set to: {}".format(self.bot.current_game.current_round_trump_suit)
 

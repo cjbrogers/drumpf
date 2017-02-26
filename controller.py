@@ -4,7 +4,6 @@ from flask import Flask, request, Response, render_template
 from slackclient import SlackClient
 from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
-import slackprovider
 from slacker import Slacker
 from sqlalchemy import create_engine
 import pymysql
@@ -12,9 +11,9 @@ import pymysql.cursors
 import pandas as pd
 
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
-client_id = os.environ["SLACK_OAUTH_CLIENT_ID"]
-client_secret = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
-oauth_scope = os.environ["SLACK_BOT_SCOPE"]
+CLIENT_ID = os.environ["SLACK_OAUTH_CLIENT_ID"]
+CLIENT_SECRET = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
+OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
@@ -101,7 +100,7 @@ def inbound():
 @app.route("/signin", methods=["GET"])
 def pre_signin():
     return '''
-      <a href="https://slack.com/oauth/authorize?scope=chat:write:user&client_id=122416745729.127817802451">
+      <a href="https://slack.com/oauth/authorize?scope=chat:write:user&CLIENT_ID=122416745729.127817802451">
 
           <img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" />
 
@@ -119,8 +118,8 @@ def post_signin():
     # Request the auth tokens from Slack
     auth_response = sc.api_call(
         "oauth.access",
-        client_id=client_id,
-        client_secret=client_secret,
+        CLIENT_ID=CLIENT_ID,
+        CLIENT_SECRET=CLIENT_SECRET,
         code=auth_code
     )
 
@@ -133,7 +132,6 @@ def post_signin():
 
     values = {"token": token, "uid": uid, "name": name}
     df = pd.DataFrame(values, index=[0])
-    # engine = create_engine('mysql+pymysql://root:jamesonrogers@localhost:3306/drumpf', echo=False)
     engine = create_engine(DB_URL, echo=False)
     df.to_sql(con=engine, name='user', if_exists='append', index=False)
 
@@ -145,14 +143,13 @@ def post_signin():
 def pre_install():
     redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
     return '''
-      <a href="https://slack.com/oauth/authorize?scope={0}&client_id={1}&redirect_uri={2}">
+      <a href="https://slack.com/oauth/authorize?scope={0}&CLIENT_ID={1}&redirect_uri={2}">
           <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
       </a>
-    '''.format(oauth_scope, client_id, redirect_uri)
+    '''.format(OAUTH_SCOPE, CLIENT_ID, redirect_uri)
 
 @app.route("/auth/finish", methods=["GET", "POST"])
 def post_install():
-    # redirect_uri = '''https%3A%2F%2F43ff30f2.ngrok.io%2Ffinish_auth'''
     redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
     # Retrieve the auth code from the request params
     auth_code = request.args['code']
@@ -163,8 +160,8 @@ def post_install():
     # Request the auth tokens from Slack
     auth_response = sc.api_call(
         "oauth.access",
-        client_id=client_id,
-        client_secret=client_secret,
+        CLIENT_ID=CLIENT_ID,
+        CLIENT_SECRET=CLIENT_SECRET,
         redirect_uri=redirect_uri,
         code=auth_code
     )
@@ -181,7 +178,6 @@ def post_install():
 
     values = {"access_token": access_token, "bot_access_token": bot_access_token, "team_id": team_id}
     df = pd.DataFrame(values, index=[0])
-    # engine = create_engine('mysql+pymysql://root:jamesonrogers@localhost:3306/drumpf', echo=False)
     engine = create_engine(DB_URL, echo=False)
     df.to_sql(con=engine, name='team', if_exists='append', index=False)
 
