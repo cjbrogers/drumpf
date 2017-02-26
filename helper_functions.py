@@ -55,10 +55,10 @@ def buttonify_bids(bid_set,first_set):
         action = {"name":str(bid),"text":str(bid),"type":"button","value":int(bid)}
         actions.append(action)
     if first_set:
-        attachments =[{"title":"What's your bid for the round?", "fallback":"Place a bid.", "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
+        attachments =[{"title":"What's your bid for the round?", "fallback":"Place a bid.", "callback_id":"buttonify_bids", "attachment_type":"default", "actions":actions}]
         print "  attachments: ",attachments
     else:
-        attachments =[{"title":"", "fallback":"Place a bid.", "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
+        attachments =[{"title":"", "fallback":"Place a bid.", "callback_id":"buttonify_bids", "attachment_type":"default", "actions":actions}]
         print "  attachments: ",attachments
 
     return attachments
