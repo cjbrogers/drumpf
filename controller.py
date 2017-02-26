@@ -174,8 +174,6 @@ def post_install():
     print(auth_response['bot']['bot_access_token'])
     bot_access_token = auth_response['bot']['bot_access_token']
     team_id = auth_response['team_id']
-    print team_id
-
     values = {"access_token": access_token, "bot_access_token": bot_access_token, "team_id": team_id}
     df = pd.DataFrame(values, index=[0])
     engine = create_engine(DB_URL, echo=False)
