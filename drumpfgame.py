@@ -84,9 +84,6 @@ class Game:
             elif trump_value[0:3] == "vm_":
                 print "  *dealing with a vm_ card"
                 trump_suit = None
-            # elif len(trump_value) == 2: #regular card
-            #     print "  *dealing with a regular card"
-
 
         elif len(shuffled_deck.cards) == 0:
             print "  len(shuffled_deck.cards) == 0"
