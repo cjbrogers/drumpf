@@ -16,9 +16,6 @@ client_id = os.environ["SLACK_OAUTH_CLIENT_ID"]
 client_secret = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 oauth_scope = os.environ["SLACK_BOT_SCOPE"]
 
-# slack_client = slackprovider.get_slack_client()
-# slack = Slacker(os.environ.get('SLACK_USER_TOKEN'))
-
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
 DB_PASSWORD = os.environ.get("DB_PASSWORD")

@@ -1,3 +1,5 @@
+import os
+
 def format_cards_to_emojis(cards):
     print "format_cards_to_emojis(cards) "
     print "  cards: ",cards
@@ -62,3 +64,7 @@ def buttonify_bids(bid_set,first_set):
         print "  attachments: ",attachments
 
     return attachments
+
+def get_slack_client():
+    token = os.environ.get('SLACK_BOT_TOKEN')
+    return token

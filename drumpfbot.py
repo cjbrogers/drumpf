@@ -20,8 +20,8 @@ BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
 
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(slackprovider.get_slack_client())
-slack = Slacker(slackprovider.get_slack_client())
+slack_client = SlackClient(helper_functions.get_slack_client())
+slack = Slacker(helper_functions.get_slack_client())
 suits = ["diamonds", "clubs", "hearts", "spades"]
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 
