@@ -291,30 +291,40 @@ class DrumpfBot():
                 button_indices.append(len(player.cards_in_hand))
         self.first_set = False
         button_set = []
-        for idx in button_indices:
-            if idx == 0:
-                self.first_set = True
-                button_set.append(idx)
-            elif (idx % 5) != 0:
-                button_set.append(idx)
-            elif (idx % 5) == 0:
-                attachments = helper_functions.buttonify_bids(button_set,self.first_set)
-                slack.chat.post_message(
-                    channel=player_id,
-                    as_user=True,
-                    attachments=attachments
-                    )
-                self.first_set = False
-                button_set[:] = []
-                button_set.append(idx)
-            if idx == len(button_set):
-                attachments = helper_functions.buttonify_bids(button_set,self.first_set)
-                slack.chat.post_message(
-                    channel=player_id,
-                    as_user=True,
-                    attachments=attachments
-                    )
-                button_set[:] = []
+        if len(button_indices) > 5:
+            for idx in button_indices:
+                if idx == 0:
+                    self.first_set = True
+                    button_set.append(idx)
+                elif (idx % 5) != 0:
+                    button_set.append(idx)
+                elif (idx % 5) == 0:
+                    attachments = helper_functions.buttonify_bids(button_set,self.first_set)
+                    slack.chat.post_message(
+                        channel=player_id,
+                        as_user=True,
+                        attachments=attachments
+                        )
+                    self.first_set = False
+                    button_set[:] = []
+                    button_set.append(idx)
+                if idx == len(button_set):
+                    attachments = helper_functions.buttonify_bids(button_set,self.first_set)
+                    slack.chat.post_message(
+                        channel=player_id,
+                        as_user=True,
+                        attachments=attachments
+                        )
+                    button_set[:] = []
+        else:
+            self.first_set = True
+            attachments = helper_functions.buttonify_bids(button_indices,self.first_set)
+            slack.chat.post_message(
+                channel=player_id,
+                as_user=True,
+                attachments=attachments
+                )
+            self.first_set = False
         return
 
     def handle_player_bid(self, command, user_id):
