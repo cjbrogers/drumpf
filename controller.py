@@ -50,7 +50,7 @@ def inbound():
 @app.route("/signin", methods=["GET"])
 def pre_signin():
     return '''
-      <a href="https://slack.com/oauth/authorize?scope=chat:write:user&CLIENT_ID=122416745729.127817802451">
+      <a href="https://slack.com/oauth/authorize?scope=chat:write:user&client_id=122416745729.127817802451">
 
           <img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" />
 
@@ -93,7 +93,7 @@ def post_signin():
 def pre_install():
     redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
     return '''
-      <a href="https://slack.com/oauth/authorize?scope={0}&CLIENT_ID={1}&redirect_uri={2}">
+      <a href="https://slack.com/oauth/authorize?scope={0}&client_id={1}&redirect_uri={2}">
           <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
       </a>
     '''.format(OAUTH_SCOPE, CLIENT_ID, redirect_uri)
