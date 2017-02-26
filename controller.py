@@ -186,7 +186,7 @@ def post_install():
 
 @app.route('/', methods=['GET'])
 def test():
-    return render_template('../Views/index.html')
+    return render_template('./Views/index.html')
 
 
 if __name__ == "__main__":
