@@ -307,7 +307,7 @@ class DrumpfBot():
                 self.first_set = False
                 button_set[:] = []
                 button_set.append(idx)
-            if (idx + 1) == len(button_set):
+            if idx == len(button_set):
                 attachments = helper_functions.buttonify_bids(button_set,self.first_set)
                 slack.chat.post_message(
                     channel=player_id,
