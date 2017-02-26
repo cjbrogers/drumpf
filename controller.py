@@ -5,10 +5,8 @@ from slackclient import SlackClient
 from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
 from slacker import Slacker
-from sqlalchemy import create_engine
-import pymysql
-import pymysql.cursors
 import pandas as pd
+import model
 
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 CLIENT_ID = os.environ["SLACK_OAUTH_CLIENT_ID"]
@@ -17,56 +15,8 @@ OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
-DB_PASSWORD = os.environ.get("DB_PASSWORD")
-DB_USER = os.environ.get("DB_USER")
-DB_PORT = os.environ.get("DB_PORT")
-DB_NAME = os.environ.get("DB_NAME")
-DB_URL = os.environ.get("DB_URL")
+
 app = Flask(__name__)
-
-'''
-Establishes a connection to the mySQL db
-@return [connection]
-'''
-def connect():
-    # Connect to the database
-    try:
-        print "Attempting connection to database..."
-        connection = pymysql.connect(host='us-cdbr-iron-east-04.cleardb.net',
-                                     port=int(DB_PORT),
-                                     user=DB_USER,
-                                     password=DB_PASSWORD,
-                                     db=DB_NAME,
-                                     cursorclass=pymysql.cursors.DictCursor)
-    except Exception as e:
-        raise
-    else:
-        print "Database successfully connected."
-        return connection
-
-def get_user_token(user_id,user_name):
-    connection = connect()
-    try:
-        with connection.cursor() as cursor:
-            # Read a single record
-            sql = '''SELECT * FROM `user`'''
-            cursor.execute(sql)
-            users = cursor.fetchall()
-            print users
-            for user in users:
-                print user
-                if user['uid'] == user_id:
-                    if user_name != user['name']:
-                        sql = '''UPDATE `user` SET name={}'''.format(user_name)
-                        cursor.execute(sql)
-                    token = user['token']
-                    return token
-    except Exception as e:
-        raise
-    else:
-        print "Data successfully stored."
-    finally:
-        connection.close()
 
 # handles interactive button responses for donny_drumpfbot
 @app.route('/actions', methods=['POST'])
@@ -90,7 +40,7 @@ def inbound():
         print 'User sending message: ',user_name
         print "Value received: ",value
 
-        token = get_user_token(user_id,user_name)
+        token = model.get_user_token(user_id,user_name)
         slack = Slacker(token)
         resp = slack.chat.post_message(channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
     return Response(), 200
@@ -132,8 +82,8 @@ def post_signin():
 
     values = {"token": token, "uid": uid, "name": name}
     df = pd.DataFrame(values, index=[0])
-    engine = create_engine(DB_URL, echo=False)
-    df.to_sql(con=engine, name='user', if_exists='append', index=False)
+    engine = model.get_engine()
+    model.send_to_db(df,engine,'user')
 
     # Don't forget to let the user know that auth has succeeded!
     return "<h1>Welcome to Drumpf!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."
@@ -175,9 +125,10 @@ def post_install():
     bot_access_token = auth_response['bot']['bot_access_token']
     team_id = auth_response['team_id']
     values = {"access_token": access_token, "bot_access_token": bot_access_token, "team_id": team_id}
+
     df = pd.DataFrame(values, index=[0])
-    engine = create_engine(DB_URL, echo=False)
-    df.to_sql(con=engine, name='team', if_exists='append', index=False)
+    engine = model.get_engine()
+    model.send_to_db(df,engine,'team')
 
     # Don't forget to let the user know that auth has succeeded!
     return "Auth complete!"
