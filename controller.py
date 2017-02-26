@@ -57,6 +57,7 @@ def pre_signin():
       </a>
     '''
 
+# end of the Slack signin process, appending relevant user information including tokens into the db
 @app.route("/signin/finish", methods=["GET", "POST"])
 def post_signin():
     # Retrieve the auth code from the request params
@@ -98,6 +99,7 @@ def pre_install():
       </a>
     '''.format(OAUTH_SCOPE, CLIENT_ID, redirect_uri)
 
+# completes the ouath add to slack process, adding relevant tokens to the database
 @app.route("/auth/finish", methods=["GET", "POST"])
 def post_install():
     redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
@@ -133,6 +135,7 @@ def post_install():
     # Don't forget to let the user know that auth has succeeded!
     return "Auth complete!"
 
+# main index of webpage https://drumpfbot.herokuapp.com
 @app.route('/', methods=['GET'])
 def test():
     return render_template('index.html')

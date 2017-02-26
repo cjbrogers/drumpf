@@ -549,8 +549,8 @@ class DrumpfBot():
                     print("  *Rotating player turn queue")
                     #rotate player_turn_queue until the first player is the one who won
                     self.player_turn_queue.rotate(1)
-                    self.player_bid_queue.rotate(1)
-                    self.users_in_game.rotate(1)
+                    # self.player_bid_queue.rotate(1)
+                    # self.users_in_game.rotate(1)
 
                 print "    player_turn_queue: %s" % self.player_turn_queue
                 print "    player_bid_queue: %s" % self.player_bid_queue
