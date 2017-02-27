@@ -730,6 +730,6 @@ class DrumpfBot():
 
 if __name__ == "__main__":
     bot = DrumpfBot()
-    bid = Bid(bot)
     score = Scoring(bot)
+    bid = Bid(bot,score)
     bot.main()

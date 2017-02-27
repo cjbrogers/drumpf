@@ -9,8 +9,9 @@ slack = Slacker(helper_functions.get_slack_client())
 
 class Bid():
 
-    def __init__(self,bot):
+    def __init__(self,bot,score):
         self.bot = bot
+        self.score = score
 
     def present_bid_buttons(self, player_id):
         button_indices = []
@@ -81,16 +82,16 @@ class Bid():
                     msg = "><@{}> bids `{}`.\n".format(current_username, int(command))
                     print "  ",msg
                     response = "Bid recorded! Check the main channel."
-                    score.build_scoreboard(msg)
-                    score.update_scoreboard(self.bot.scoreboard)
+                    self.score.build_scoreboard(msg)
+                    self.score.update_scoreboard(self.bot.scoreboard)
 
                     self.bot.player_bid_queue.popleft()
                     if len(self.bot.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
                         msg = "`All bids recorded, let's play!`\n\n"
                         print " ",msg
-                        score.build_scoreboard(msg)
-                        score.update_scoreboard(self.bot.scoreboard)
+                        self.score.build_scoreboard(msg)
+                        self.score.update_scoreboard(self.bot.scoreboard)
 
                         print "    self.bot.player_bids_for_current_round: %s" % self.bot.player_bids_for_current_round
                         for player in self.bot.current_game.players:
