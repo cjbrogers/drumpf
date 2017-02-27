@@ -25,9 +25,13 @@ class Player:
         self.points = 0
         self.id = id
         self.cards_in_hand = []
+        self.builder_cards_in_hand = []
 
     def receive_card(self, card):
         self.cards_in_hand.append(card)
+
+    def receive_builder_card(self, card):
+        self.builder_cards_in_hand.append(card)
 
 class Deck: #preshuffled deck
     def __init__(self):
@@ -43,13 +47,14 @@ class Deck: #preshuffled deck
         return self.builder_cards.pop()
 
 class Game:
-    def __init__(self, players, bot):
+    def __init__(self, players, bot, bid):
         #[Player1, Player2, Player3, ...etc]
         self.players = deque(players)
         self.final_round = 60/len(players) #i.e. 12 rounds for 5 players
         self.current_round = 1
         self.current_round_trump_suit = None
         self.bot = bot
+        self.bid = bid
         self.bot.current_game = self
 
     # 1) creates a new shuffled deck
@@ -102,7 +107,7 @@ class Game:
         for player in self.players:
             self.bot.display_cards_for_player_in_pm(player.id,
                                                     player.cards_in_hand)
-        self.bot.get_bids_from_players(self.current_round, self.players)
+        self.bid.get_bids_from_players(self.current_round, self.players)
         self.bot.current_game.current_round_trump_suit = trump_suit
         self.bot.announce_trump_card(trump_card)
         self.players.rotate(1)

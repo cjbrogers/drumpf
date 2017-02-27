@@ -6,9 +6,11 @@ import copy
 from slackclient import SlackClient
 from collections import defaultdict, deque
 from slacker import Slacker
-import drumpfgame as DrumpfGame
+import game as DrumpfGame
 import helper_functions
 import controller
+from scoring import Scoring
+from bidding import Bid
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -17,11 +19,10 @@ AT_BOT = "<@" + BOT_ID + ">"
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(helper_functions.get_slack_client())
 slack = Slacker(helper_functions.get_slack_client())
-suits = ["diamonds", "clubs", "hearts", "spades"]
-SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
+SUITS = ["diamonds", "clubs", "hearts", "spades"]
 
 class DrumpfBot():
-    def __init__(self, main_channel_id='C4AK56EQ7'): # drumpf-play: C41Q1H4BD # drumpf-scoreboard: C4AK56EQ7
+    def __init__(self, main_channel_id='C4AK56EQ7'): # drumpf-scoreboard: C4AK56EQ7
         self.users_in_game = deque([]) #[user_id, user_id...]
         self.user_ids_to_username = {} #{'USERID': 'James'}
         self.channel_ids_to_name = {} #{'CHANNELID': "#drumpf-play"}
@@ -140,7 +141,7 @@ class DrumpfBot():
                 self.game_started = True
                 response = ">>>Starting a new game of Drumpf with players: \n" + self.get_readable_list_of_players()
 
-                self.initialize_scores()
+                score.initialize_scores()
 
                 resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
                 self.ts = resp['ts']
@@ -221,16 +222,16 @@ class DrumpfBot():
                 print "  0 <= int(command) <= 3"
 
                 print "  self.current_game.current_round_trump_suit WAS: {}".format(self.current_game.current_round_trump_suit)
-                self.current_game.current_round_trump_suit = suits[int(command)]
+                self.current_game.current_round_trump_suit = SUITS[int(command)]
                 print "  self.current_game.current_round_trump_suit SET TO: {}".format(self.current_game.current_round_trump_suit)
 
                 # print "  Trump suit recorded! Check the main channel."
                 # response = "Trump suit recorded! Check the main channel."
 
-                msg = "<@{}> chose :{}: for the trump suit.\n".format(current_username, suits[int(command)])
+                msg = "<@{}> chose :{}: for the trump suit.\n".format(current_username, SUITS[int(command)])
                 print " ",msg
-                self.build_scoreboard(msg)
-                self.update_scoreboard(self.scoreboard)
+                score.build_scoreboard(msg)
+                score.update_scoreboard(self.scoreboard)
 
                 print "    self.player_trump_card_queue before pop(): {}".format(self.player_trump_card_queue)
 
@@ -243,7 +244,7 @@ class DrumpfBot():
                     self.private_message_user(player, msg)
 
                 if len(self.player_bid_queue):
-                    self.present_bid_buttons(self.player_bid_queue[0])
+                    bid.present_bid_buttons(self.player_bid_queue[0])
                     msg = "What's your bid for the round?"
                     print "  ",msg
                 else:
@@ -275,102 +276,6 @@ class DrumpfBot():
                     return None
                 else:
                     return user_object.cards_in_hand[index]
-
-    def present_bid_buttons(self, player_id):
-        button_indices = []
-        for player in self.current_game.players:
-            if player.id == player_id:
-                for idx, card in enumerate(player.cards_in_hand):
-                    button_indices.append(idx)
-                button_indices.append(len(player.cards_in_hand))
-        self.first_set = False
-        button_set = []
-        if len(button_indices) > 5:
-            for idx in button_indices:
-                if idx == 0:
-                    self.first_set = True
-                    button_set.append(idx)
-                elif (idx % 5) != 0:
-                    button_set.append(idx)
-                elif (idx % 5) == 0:
-                    attachments = helper_functions.buttonify_bids(button_set,self.first_set)
-                    slack.chat.post_message(
-                        channel=player_id,
-                        as_user=True,
-                        attachments=attachments
-                        )
-                    self.first_set = False
-                    button_set[:] = []
-                    button_set.append(idx)
-                if (idx+1) == len(button_indices):
-                    attachments = helper_functions.buttonify_bids(button_set,self.first_set)
-                    slack.chat.post_message(
-                        channel=player_id,
-                        as_user=True,
-                        attachments=attachments
-                        )
-                    button_set[:] = []
-        else:
-            self.first_set = True
-            attachments = helper_functions.buttonify_bids(button_indices,self.first_set)
-            slack.chat.post_message(
-                channel=player_id,
-                as_user=True,
-                attachments=attachments
-                )
-            self.first_set = False
-        return
-
-    def handle_player_bid(self, command, user_id):
-        print "handle_player_bid(self, command, user_id) "
-        print "  command: ", command
-        print "  user_id: ", user_id
-        print "  player: ", self.user_ids_to_username[user_id]
-
-        current_username = self.user_ids_to_username[self.player_bid_queue[0]]
-        #we're waiting for the first player in queue to bid
-        if user_id != self.player_bid_queue[0]:
-            print "  We're still waiting on <@{}> to bid.".format(current_username)
-            response = "We're still waiting on <@{}> to bid.".format(current_username)
-        elif user_id == self.player_bid_queue[0]:
-            #expected user to bid
-            try:
-                if 0 > int(command) > self.current_game.current_round:
-                    print "  You can't bid that amount you turkey!"
-                    response = "You can't bid that amount you turkey!"
-                else:
-                    #valid bid
-                    print "  Bid recorded! Check the main channel."
-                    self.player_bids_for_current_round[user_id] =int(command)
-                    msg = "><@{}> bids `{}`.\n".format(current_username, int(command))
-                    print "  ",msg
-                    response = "Bid recorded! Check the main channel."
-                    self.build_scoreboard(msg)
-                    self.update_scoreboard(self.scoreboard)
-
-                    self.player_bid_queue.popleft()
-                    if len(self.player_bid_queue) == 0:
-                        #everyone bidded, time to play sub_round
-                        msg = "`All bids recorded, let's play!`\n\n"
-                        print " ",msg
-                        self.build_scoreboard(msg)
-                        self.update_scoreboard(self.scoreboard)
-
-                        print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
-                        for player in self.current_game.players:
-                            if player.id == self.player_turn_queue[0]:
-                                self.display_cards_for_player_in_pm(self.player_turn_queue[0],player.cards_in_hand)
-                                print "  Please select a card to play."
-                                self.private_message_user(self.player_turn_queue[0], "Please select a card to play.")
-
-                    else: #get the next player's bid
-                        msg = "What's your bid for the round?"
-                        print "  ",msg
-                        self.present_bid_buttons(self.player_bid_queue[0])
-            except:
-                response = "That wasn't a valid bid."
-
-        self.private_message_user(user_id, response)
 
     def handle_player_turn(self, command, user_id):
         print "handle_player_turn(self, command, user_id) "
@@ -494,8 +399,8 @@ class DrumpfBot():
         card_emoji = helper_functions.emojify_card(card)
         msg = "><@{}> played {}\n".format(player_who_played_card, card_emoji)
         print " ",msg
-        self.build_scoreboard(msg)
-        self.update_scoreboard(self.scoreboard)
+        score.build_scoreboard(msg)
+        score.update_scoreboard(self.scoreboard)
         # self.message_main_game_channel(msg)
 
         self.cards_played_for_sub_round.append(card)
@@ -510,14 +415,14 @@ class DrumpfBot():
             self.sub_rounds_played += 1
 
             print("  >Everyone played, time to determine winner for sub-round")
-            self.determine_winner_for_sub_round(card)
+            score.determine_winner_for_sub_round(card)
 
             self.player_points_for_round[self.winner_for_sub_round] += 1
 
             msg = ">*<@{}> won this sub-round with a {}*\n\n".format(self.winner_for_sub_round,helper_functions.emojify_card(self.winning_sub_round_card))
             print " ",msg
-            self.build_scoreboard(msg)
-            self.update_scoreboard(self.scoreboard)
+            score.build_scoreboard(msg)
+            score.update_scoreboard(self.scoreboard)
             # self.message_main_game_channel(msg, attachments=self.attachments)
 
             #reset all sub-round variables
@@ -531,12 +436,12 @@ class DrumpfBot():
                 print "    self.users_in_game: %s" % self.users_in_game
                 print "    self.player_bids_for_current_round: %s" % self.player_bids_for_current_round
 
-                self.calculate_and_display_points_for_players()
+                score.calculate_and_display_points_for_players()
                 self.winner_for_sub_round = None
             elif self.sub_rounds_played < self.current_game.current_round:
                 msg = ">_Sub-Round {}_\n".format(self.sub_rounds_played + 1)
-                self.build_scoreboard(msg)
-                self.update_scoreboard(self.scoreboard)
+                score.build_scoreboard(msg)
+                score.update_scoreboard(self.scoreboard)
                 # self.message_main_game_channel(msg)
 
                 #initialize another turn queue cause there are more cards to play
@@ -570,130 +475,6 @@ class DrumpfBot():
                 if player.id == self.player_turn_queue[0]:
                     self.display_cards_for_player_in_pm(self.player_turn_queue[0],player.cards_in_hand)
                     self.private_message_user(self.player_turn_queue[0], "Play a card.")
-
-    def calculate_and_display_points_for_players(self):
-        print "calculate_and_display_points_for_players(self) "
-        msg = "*Round {} over!* _calculating points..._\n".format(self.current_game.current_round)
-        self.build_scoreboard(msg)
-        self.update_scoreboard(self.scoreboard)
-        # self.message_main_game_channel(msg)
-        for idx, player_id in enumerate(self.users_in_game):
-            current_players_bid = self.player_bids_for_current_round[player_id]
-            points_off_from_bid = abs(current_players_bid - self.player_points_for_round[player_id])
-            print "    idx:%s\n    players_bids:%s\n    player_points_for_round:%s\n    player_id:%s\n    current_players_bid: %s" % (idx, self.player_bids_for_current_round, self.player_points_for_round[player_id], player_id, current_players_bid)
-            print "    points_off_from_bid: %s" % points_off_from_bid
-
-            print "  self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
-
-            print "  player_id: ",player_id
-            print "  player: ", self.user_ids_to_username[player_id]
-            print "  current_players_bid: ",current_players_bid
-            print "  points_off_from_bid: ",points_off_from_bid
-
-            if player_id in self.shower_card_holder and player_id not in self.zero_point_players:
-                print "  We have a golden shower card holder!"
-                self.game_scorecard[player_id] += 175
-                print "    self.game_scorecard[player_id] + 175: %s" % self.game_scorecard[player_id]
-            elif player_id in self.zero_point_players:
-                print "  We have a zero_points_player!"
-                self.game_scorecard[player_id] += 0
-            elif points_off_from_bid == 0:
-                print "    self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
-                print "  player got their bid correct"
-                #The player got his/her bid correctly
-                self.game_scorecard[player_id] += (50 + 25 * current_players_bid)
-                print "    self.game_scorecard[player_id] + (50 + 25 * bid): %s" % self.game_scorecard[player_id]
-            else:
-                print "  player loses points for incorrect bid"
-                #player loses 25-points for every point above or below bid
-                print "  self.game_scorecard[player_id]: %s" % self.game_scorecard[player_id]
-                self.game_scorecard[player_id] -= 25 * points_off_from_bid
-                print "    self.game_scorecard[player_id] -25 * points off bid: %s" % self.game_scorecard[player_id]
-        self.scores += ">>>*Score Board*\n"
-        print "  ",self.scores
-        for player_id in self.users_in_game:
-            if player_id in self.shower_card_holder:
-                msg = "><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
-                print "  ",msg
-                self.scores += msg
-            elif player_id in self.zero_point_players:
-                msg = "><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
-                print "  ",msg
-                self.scores += msg
-            else:
-                msg = "><@{}>: *{} Points*\n".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
-                print "  ",msg
-                self.scores += msg
-
-        self.update_scores(self.scores)
-
-        self.pm_users_scoreboard(self.scoreboard)
-        self.pm_users_scores(self.scores)
-
-        self.prepare_for_next_round()
-        if self.current_game.current_round == self.current_game.final_round:
-            self.present_winner_for_game(self.user_ids_to_username[player_id],player_id)
-        else:
-            self.current_game.play_round()
-
-    def pm_users_scoreboard(self, board, attachments=None):
-        print "pm_users_scoreboard(self, board, attachments=None)"
-        for player_id in self.users_in_game:
-            print "  board: ",board
-            resp_scores = slack_client.api_call(
-                "chat.postMessage",
-                channel=player_id,
-                text=board,
-                as_user=True, attachments=attachments
-            )
-
-    def pm_users_scores(self, scores, attachments=None):
-        print "pm_users_scores(self, scores, attachments=None)"
-        for player_id in self.users_in_game:
-            print "  scores: ",scores
-            resp_scores = slack_client.api_call(
-                "chat.postMessage",
-                channel=player_id,
-                text=scores,
-                as_user=True, attachments=attachments
-            )
-
-    def initialize_scores(self, attachments=None):
-        print "initialize_scores(self, attachments=None)"
-        msg = ""
-        msg += ">>>*Score Board*"
-        print "  ",msg
-        for player_id in self.users_in_game:
-            msg += "\n><@{}>: *{} Points*".format(self.user_ids_to_username[player_id], self.game_scorecard[player_id])
-        print "  ",msg
-
-        resp = slack_client.api_call(
-            "chat.postMessage",
-            channel=self.main_channel_id,
-            text=msg,
-            as_user=True, attachments=attachments
-        )
-        self.ts_scores = resp['ts']
-
-    def update_scores(self, message, attachments=None):
-        slack_client.api_call(
-            "chat.update",
-            channel=self.main_channel_id,
-            text=message,
-            ts=self.ts_scores,
-            as_user=True, attachments=attachments
-        )
-
-    def present_winner_for_game(self, winner,pid):
-        print "present_winner_for_game(self) "
-        score = self.game_scorecard[pid]
-        slack_client.api_call(
-            "chat.postMessage",
-            channel=self.main_channel_id,
-            text="And our winner for the game is *{}*! :cake: :birthday: :fireworks:\nScore: {}\n".format(winner,score),
-            as_user=True
-        )
-        pass
 
     # clears all round and sub-round variables
     def prepare_for_next_round(self):
@@ -735,340 +516,12 @@ class DrumpfBot():
                     if card == card_to_remove:
                         idx_of_card_to_remove = idx
                 player.cards_in_hand.pop(idx_of_card_to_remove)
-                # if len(player.cards_in_hand) > 0:
-                #     self.display_cards_for_player_in_pm(player.id, player.cards_in_hand)
-
-    def determine_winner_for_sub_round(self, card):
-        print "determine_winner_for_sub_round(self, card) "
-        self.winning_sub_round_card = None
-        print("  Players in game: {}".format(self.users_in_game))
-        print("  Cards played: {}".format(self.cards_played_for_sub_round))
-        num_cards_played = len(self.cards_played_for_sub_round)
-
-        card_value_sub_round = None
-        card_suit_sub_round = None
-
-        # reset after each sub-round
-        self.first_card_sub_round = 0
-
-        if len(self.cards_played_for_sub_round[0]) == 2:
-            card_value_sub_round = str(self.cards_played_for_sub_round[0][0])
-            card_suit_sub_round = self.cards_played_for_sub_round[0][1]
-        else:
-            card_value_sub_round = str(self.cards_played_for_sub_round[0])
-            card_suit_sub_round = None
-        print "  card_value_sub_round: ",card_value_sub_round
-        print "  card_suit_sub_round: ",card_suit_sub_round
-        # everyone has played VM cards, first person to play one wins
-        if  all(x[0:3]=="vm_" for x in self.cards_played_for_sub_round):
-            print("  Everyone played visible minority cards this sub-round. First player wins.")
-            self.winning_sub_round_card = self.cards_played_for_sub_round[0]
-            print "  Winning sub-round card: ",self.winning_sub_round_card
-            self.winner_for_sub_round = self.player_turn_queue_reference[0]
-            print "  player_turn_queue_reference: ",self.winner_for_sub_round
-            return
-        # make sure the t_shower card holder gets set
-        if "t_shower" in self.cards_played_for_sub_round:
-            t_shower_idx = self.cards_played_for_sub_round.index("t_shower")
-            print "  {} card present...".format(self.cards_played_for_sub_round[t_shower_idx])
-            self.shower_card_holder.append(self.player_turn_queue_reference[t_shower_idx])
-            print "  shower_card_holder: ", self.shower_card_holder
-        # make sure the vm_blacks card holder gets set
-        if "vm_blacks" in self.cards_played_for_sub_round:
-            vm_blacks_idx = self.cards_played_for_sub_round.index("vm_blacks")
-            print "  {} card present...".format(self.cards_played_for_sub_round[vm_blacks_idx])
-            self.zero_point_players.append(self.player_turn_queue_reference[vm_blacks_idx])
-            print "  zero_point_players: ", self.zero_point_players
-        # Russian Blackmail card wins in every situation
-        if "t_russian" in self.cards_played_for_sub_round:
-            t_russian_idx = self.cards_played_for_sub_round.index("t_russian")
-            print "  {} card present...".format(self.cards_played_for_sub_round[t_russian_idx])
-            self.winning_sub_round_card = self.cards_played_for_sub_round[t_russian_idx]
-            self.winner_for_sub_round = self.player_turn_queue_reference[t_russian_idx]
-            print "  {} card wins".format(self.winning_sub_round_card)
-            print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-            return
-        # everyone played Tremendous cards, no t_russian card, so first person to play wins
-        if  all(x[0:2]=="t_" for x in self.cards_played_for_sub_round):
-            if "t_russian" not in self.cards_played_for_sub_round:
-                print("  Everyone played Tremendous cards this sub-round. First player wins.")
-                self.winning_sub_round_card = self.cards_played_for_sub_round[0]
-                print "  Winning sub-round card: ",self.winning_sub_round_card
-                self.winner_for_sub_round = self.player_turn_queue_reference[0]
-                print "  player_turn_queue_reference: ",self.winner_for_sub_round
-                return
-        else:
-            #we have to iterate over the cards to determine the winner for the sub-round
-            winning_card = None
-            trump_suit = self.current_game.current_round_trump_suit
-            print  "  *trump_suit = self.current_game.current_round_trump_suit: ",trump_suit
-            card_value = None
-            card_suit = None
-            visited = False # keeps track of the case of pussy/ivanka/nasty cards all being played same round
-            for idx, card in enumerate(self.cards_played_for_sub_round):
-                if len(card) == 2:
-                    card_value = str(card[0])
-                    card_suit = card[1]
-                else:
-                    card_value = str(card)
-                    card_suit = None
-                current_player = self.player_turn_queue_reference[idx]
-                print "  current_player: ",self.user_ids_to_username[current_player]
-                print "  card being evaluated: ",card
-
-                # handle Tremendous cards and Drumpf cards
-                if card_value.startswith("t_") or card_value.startswith("d_"):
-                    # comey card steals Clinton's Email Server card
-                    if card_value.startswith("d_clinton"):
-                        print "  handling {} card...".format(card_value)
-                        if "t_comey" in self.cards_played_for_sub_round:
-                            print "    {} card played in round".format("t_comey")
-                            comey_card_idx = self.cards_played_for_sub_round.index("t_comey")
-                            if idx < comey_card_idx:
-                                msg = "{} card steals {} card...\n".format(self.cards_played_for_sub_round[comey_card_idx],helper_functions.emojify_card(card_value))
-                                print "  ",msg
-
-                                # self.message_main_game_channel(msg)
-                                self.build_scoreboard(msg)
-                                self.update_scoreboard(self.scoreboard)
-
-                                self.winning_sub_round_card = self.cards_played_for_sub_round[comey_card_idx]
-                                self.winner_for_sub_round = self.player_turn_queue_reference[comey_card_idx]
-                                print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                return
-                            else:
-                                self.winning_sub_round_card = card
-                                self.winner_for_sub_round = current_player
-                                print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                return
-                        elif "t_nasty" in self.cards_played_for_sub_round:
-                            nasty_card_idx = self.cards_played_for_sub_round.index("t_nasty")
-                            if idx < nasty_card_idx:
-                                msg = "{} card negates {} card...\n".format(helper_functions.emojify_card(self.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
-
-                                # self.message_main_game_channel(msg)
-                                self.build_scoreboard(msg)
-                                self.update_scoreboard(self.scoreboard)
-
-                                self.winning_sub_round_card = self.cards_played_for_sub_round[nasty_card_idx]
-                                self.winner_for_sub_round = self.player_turn_queue_reference[nasty_card_idx]
-                                print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                return
-                            else:
-                                print "  {} card wins".format(card)
-                                self.winning_sub_round_card = card
-                                self.winner_for_sub_round = current_player
-                                print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                return
-                        else:
-                            self.winning_sub_round_card = card
-                            self.winner_for_sub_round = current_player
-                            print "  {} card wins".format(self.winning_sub_round_card)
-                            print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                            return
-
-                    # The Wall card can be usurped by the Bad Hombres
-                    elif card_value.startswith("d_wall"):
-                        print "  handling {} card...".format(card_value)
-                        if "vm_hombres" in self.cards_played_for_sub_round:
-                            print "  *vm_hombres card present..."
-                            hombres_card_idx = self.cards_played_for_sub_round.index("vm_hombres")
-                            if idx < hombres_card_idx:
-
-                                msg = "{} card steals {}\n".format(helper_functions.emojify_card(self.cards_played_for_sub_round[hombres_card_idx]),helper_functions.emojify_card(card_value))
-
-                                print "  ",msg
-                                self.build_scoreboard(msg)
-                                self.update_scoreboard(self.scoreboard)
-                                # self.message_main_game_channel(msg)
-
-                                self.winning_sub_round_card = self.cards_played_for_sub_round[hombres_card_idx]
-                                self.winner_for_sub_round = self.player_turn_queue_reference[hombres_card_idx]
-                                print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                return
-                            else:
-                                self.winning_sub_round_card = card
-                                self.winner_for_sub_round = current_player
-                                print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                return
-                        elif "t_nasty" in self.cards_played_for_sub_round:
-                            nasty_card_idx = self.cards_played_for_sub_round.index("t_nasty")
-                            if idx < nasty_card_idx:
-                                msg = "{} card negates {} card...\n".format(helper_functions.emojify_card(self.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
-                                print "  ",msg
-
-                                self.build_scoreboard(msg)
-                                self.update_scoreboard(self.scoreboard)
-                                # self.message_main_game_channel(msg)
-
-                                self.winning_sub_round_card = self.cards_played_for_sub_round[nasty_card_idx]
-                                self.winner_for_sub_round = self.player_turn_queue_reference[nasty_card_idx]
-                                print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                return
-                            else:
-                                self.winning_sub_round_card = card
-                                self.winner_for_sub_round = current_player
-                                print "  {} card wins".format(card)
-                                print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                return
-                        else:
-                            self.winning_sub_round_card = card
-                            self.winner_for_sub_round = current_player
-                            print "  {} card wins".format(card)
-                            print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                            return
-                    # the regular old Drumpf cards
-                    elif card_value.startswith("d_pussy") or card_value.startswith("d_ivanka"):
-                        print "  handling {} card...".format(card_value)
-                        # the non-negated Drumpf wins
-                        if visited:
-                            print "  *visited==True"
-                            self.winning_sub_round_card = card
-                            self.winner_for_sub_round = current_player
-                            print "  {} card wins".format(self.winning_sub_round_card)
-                            print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                            return
-                        else:
-                            if "t_nasty" in self.cards_played_for_sub_round:
-                                nasty_card_idx = self.cards_played_for_sub_round.index("t_nasty")
-                                if idx < nasty_card_idx:
-                                    visited = True
-                                    msg = "*{} card negates {} card...\n".format(helper_functions.emojify_card(self.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
-
-                                    self.build_scoreboard(msg)
-                                    self.update_scoreboard(self.scoreboard)
-                                    # self.message_main_game_channel(msg)
-
-                                    self.winning_sub_round_card = self.cards_played_for_sub_round[nasty_card_idx]
-                                    self.winner_for_sub_round = self.player_turn_queue_reference[nasty_card_idx]
-                                    print "  {} card wins".format(self.winning_sub_round_card)
-                                    print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                    return
-                                else:
-                                    self.winning_sub_round_card = card
-                                    self.winner_for_sub_round = current_player
-                                    print "  {} card wins".format(self.winning_sub_round_card)
-                                    print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                    return
-                            else:
-                                self.winning_sub_round_card = card
-                                self.winner_for_sub_round = current_player
-                                print "  {} card wins".format(self.winning_sub_round_card)
-                                print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                return
-
-                    elif card_value.startswith("t_nasty") or card_value.startswith("t_comey"):
-                        print "  handling {} card...".format(card_value)
-                        print "  *this card is a pass card since no other trumping or stealing cards have been played"
-                        continue
-
-                elif card_value[0:3] == "vm_":
-                    print "  handling {} card...".format(card_value)
-                    if "muslims" in card_value or "thieves" in card_value or "hombres" in card_value:
-                        # to get to this point, t_comey or t_nasty or t_shower must be the only other card and played first, so the VM card wins
-                        if self.winning_sub_round_card == None:
-                            print "  *No self.winning_sub_round_card set so the remaining VM card must be the winner"
-                            self.winning_sub_round_card = card
-                            self.winner_for_sub_round = current_player
-                            print "  {} card wins".format(self.winning_sub_round_card)
-                            print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                        continue
-
-                    if "blacks" in card_value:
-                        # self.zero_point_players.append(current_player)
-
-                        # to get to this point, t_comey or t_nasty or t_shower must be the only other card and played first, so no winner is present.
-                        if self.winning_sub_round_card == None:
-                            for t_card in self.t_cards:
-                                if t_card == "t_russian":
-                                    print "    *passing on t_russian card"
-                                    pass
-                                elif t_card in self.cards_played_for_sub_round:
-                                    t_idx = self.cards_played_for_sub_round.index(t_card)
-                                    if t_idx < idx:
-                                        print "  a t_card has been played before the vm_blacks card, so it wins"
-                                        self.winning_sub_round_card = self.cards_played_for_sub_round[t_idx]
-                                        self.winner_for_sub_round = self.player_turn_queue_reference[t_idx]
-                                        print "  {} card wins".format(self.winning_sub_round_card)
-                                        print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                                        return
-                                else:
-                                    print "    ***SOMEHOW GOT HERE???"
-                        continue
-                    continue
-                # the card is a trump suit card
-                elif card_suit == trump_suit:
-                    print "  card_suit == trump_suit <-> {} == {}".format(card_suit,trump_suit)
-                    if self.winning_sub_round_card == None:
-                        print "  self.winning_sub_round_card == ", self.winning_sub_round_card
-                        self.winning_sub_round_card = card
-                        self.winner_for_sub_round = current_player
-                        print "  {} card wins".format(self.winning_sub_round_card)
-                        print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-
-                    elif self.winning_sub_round_card[1] == trump_suit:
-                        print "  self.winning_sub_round_card[1] == trump_suit <-> {} == {}".format(self.winning_sub_round_card[1],trump_suit)
-                        if DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
-                            print "  trump suit played second beats previous trump suit"
-                            #trump suit played beats previous trump suit
-                            self.winning_sub_round_card = card
-                            self.winner_for_sub_round = current_player
-                            print "  {} card wins".format(self.winning_sub_round_card)
-                            print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                    else:
-                        print "  *Got to this else statement!!!"
-                        self.winning_sub_round_card = card
-                        self.winner_for_sub_round = current_player
-                        print "  {} card wins".format(self.winning_sub_round_card)
-                        print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                elif card_suit == self.leading_suit:
-                    print "  card_suit == self.leading_suit <-> {} == {}".format(card_suit,self.leading_suit)
-                    if self.winning_sub_round_card == None:
-                        print "  no self.winning_sub_round_card"
-                        self.winning_sub_round_card = card
-                        self.winner_for_sub_round = current_player
-                        print "  {} card wins".format(self.winning_sub_round_card)
-                        print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-                    elif DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.winning_sub_round_card):
-                        print "  the card index of {} is greater than the index of the winning sub-round card ({})".format(card,self.winning_sub_round_card)
-                        self.winning_sub_round_card = card
-                        self.winner_for_sub_round = current_player
-                        print "  {} card wins".format(self.winning_sub_round_card)
-                        print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-
-                elif self.winning_sub_round_card == None:
-                    print "  *The remaining card must be the winner"
-                    self.winning_sub_round_card = card
-                    self.winner_for_sub_round = current_player
-                    print "  {} card wins".format(self.winning_sub_round_card)
-                    print "  player {} wins".format(self.user_ids_to_username[self.winner_for_sub_round])
-
-                else:
-                    print "  ***This card gets passed by because it does not win***"
-                    print "    {} card passed by".format(card)
-                    print "    player {} card has been passed".format(current_player)
 
     def message_main_game_channel(self, message, attachments=None):
         slack_client.api_call(
             "chat.postMessage",
             channel=self.main_channel_id,
             text=message,
-            as_user=True, attachments=attachments
-        )
-
-    def update_scoreboard(self, message, attachments=None):
-        slack_client.api_call(
-            "chat.update",
-            channel=self.main_channel_id,
-            text=message,
-            ts=self.ts,
             as_user=True, attachments=attachments
         )
 
@@ -1087,8 +540,6 @@ class DrumpfBot():
 
         response = ""
 
-        # if user_id == BOT_ID:
-        #     user_id = self.current_user_id
         print "  **$$**len(self.player_trump_card_queue): {}".format(len(self.player_trump_card_queue))
         print "  **$$**self.player_trump_card_queue: {}".format(self.player_trump_card_queue)
 
@@ -1098,19 +549,17 @@ class DrumpfBot():
         print "  **$$**len(self.player_turn_queue): {}".format(len(self.player_turn_queue))
         print "  **$$**self.player_turn_queue: {}".format(self.player_turn_queue)
 
-
         if len(self.player_trump_card_queue):
             print "  len(self.player_trump_card_queue)"
             self.handle_trump_suit_selection(command, user_id)
 
         elif len(self.player_bid_queue):
             print "  len(self.player_bid_queue)"
-            self.handle_player_bid(command, user_id)
+            bid.handle_player_bid(command, user_id)
 
         elif len(self.player_turn_queue):
             print "  len(self.player_turn_queue)"
             self.handle_player_turn(command, user_id)
-
 
     def parse_slack_output(self):
         """
@@ -1130,22 +579,6 @@ class DrumpfBot():
                     else:
                         return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
         return None, None, None, None
-
-    def get_bids_from_players(self, current_round, players):
-        print "get_bids_from_players(self, current_round, players) "
-        print "  current_round: ", current_round
-        print "  players: ", players
-
-        self.player_bid_queue = deque([player.id for player in players])
-        self.player_turn_queue = deque([player.id for player in players])
-        #the player after the dealer should be first to bid, so we rotate the queue
-        print "  *rotating self.player_bid_queue; self.player_turn_queue; self.users_in_game"
-        self.player_bid_queue.rotate(-1)
-        self.player_turn_queue.rotate(-1)
-        self.player_turn_queue_reference = copy.copy(self.player_turn_queue)
-        self.users_in_game.rotate(-1)
-        if not self.drumpfmendous_card_first:
-            self.present_bid_buttons(self.player_bid_queue[0])
 
     def prompt_dealer_for_trump_suit(self, player_id):
         print "prompt_dealer_for_trump_suit(self, player_id) "
@@ -1241,16 +674,12 @@ class DrumpfBot():
         msg = "*Round {}* \n The trump card is: {} \n>_Sub-Round {}_\n".format(
             self.current_game.current_round,
             helper_functions.emojify_card(trump_card),(self.sub_rounds_played + 1))
-        self.build_scoreboard(msg)
-        self.update_scoreboard(self.scoreboard)
+        score.build_scoreboard(msg)
+        score.update_scoreboard(self.scoreboard)
         trump = "The trump card is: {} \n".format(helper_functions.emojify_card(trump_card))
         # send the trump suit to pm
         for player_id in self.users_in_game:
             self.private_message_user(player_id,trump)
-
-    def build_scoreboard(self,msg):
-        self.scoreboard += msg
-        return
 
     #takes an array of player_ids and the channel the game request originated from
     def play_game_of_drumpf_on_slack(self, players, channel):
@@ -1261,7 +690,7 @@ class DrumpfBot():
         player_objects = []
         for player_id in players:
             player_objects.append(DrumpfGame.Player(player_id))
-        game = DrumpfGame.Game(player_objects, self)
+        game = DrumpfGame.Game(player_objects, self, bid)
         game.play_round()
 
     #Restarts the current program.
@@ -1301,4 +730,6 @@ class DrumpfBot():
 
 if __name__ == "__main__":
     bot = DrumpfBot()
+    bid = Bid(bot)
+    score = Scoring(bot)
     bot.main()
