@@ -1,4 +1,5 @@
 import random
+from collections import deque
 
 drumpf_deck = ["vm_blacks", "vm_hombres", "vm_muslims", "vm_thieves"]
 suits = ["diamonds", "clubs", "hearts", "spades"]
