@@ -1,6 +1,7 @@
 from slackclient import SlackClient
 from slacker import Slacker
 import helper_functions
+from collections import deque
 
 slack_client = SlackClient(helper_functions.get_slack_client())
 slack = Slacker(helper_functions.get_slack_client())
