@@ -52,7 +52,6 @@ class DrumpfBot():
         self.attachments = None
         self.game_started = False
         self.game_created = False
-        self.debug = False
         self.vm_cards = ["vm_blacks","vm_hombres","vm_thieves","vm_muslims"]
         self.t_cards = ["t_comey","t_nasty","t_russian","t_shower"]
         self.d_cards = ["d_wall","d_clinton","d_ivanka","d_pussy"]
@@ -64,6 +63,7 @@ class DrumpfBot():
         self.scores = ""
         self.initial_scores = ""
         self.command_ts = ""
+        self.winning_points = None
 
     def handle_command(self, command, channel, user_id, ts):
         print "handle_command(self, command, channel, user_id, ts) "
@@ -78,8 +78,10 @@ class DrumpfBot():
         response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
 
         if command.lower().startswith("debug"):
-            if command.lower().startswith("debug true"):
-                self.debug = True
+            if command.lower().startswith("debug 500"):
+                self.winning_points = 500
+            if command.lower().startswith("debug 1000"):
+                self.winning_points = 1000
             # response = "`Debug mode active.` \n"
             # slack_client.api_call("chat.postMessage", channel=channel,
             #                       text=response, as_user=True)
@@ -90,6 +92,10 @@ class DrumpfBot():
             self.handle_command("start game", channel, user_id, ts)
 
         if command.lower().startswith("create game"):
+            if command.lower().startswith("create game 500"):
+                self.winning_points = 500
+            if command.lower().startswith("create game 1000"):
+                self.winning_points = 1000
             self.game_created == True
             if len(self.users_in_game) == 0:
                 response = "<@{}> Wants to play a game of drumpf! Type `@drumpfbot add me` to play.".format(username)
@@ -166,10 +172,6 @@ class DrumpfBot():
 
         if command.lower().startswith("bigly"):
             response = ">>>*bigly* (ˈbɪɡlɪ) \n_adj_\n\t\t_archaic_ comfortably habitable"
-
-        if command.lower().startswith("undebug"):
-            self.debug = False
-            response = ">>>successfully undebugged"
 
         if command.lower().startswith("what's a joker?"):
             response = ">>>This is: \n"

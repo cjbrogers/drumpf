@@ -49,17 +49,24 @@ def inbound():
 # we can get the user tokens from the return of this call
 @app.route("/signin", methods=["GET"])
 def pre_signin():
+
+    redirect_uri1 = "https://drumpfbot.herokuapp.com/signin/finish"
+    redirect_uri2 = "https://drumpfbot.herokuapp.com/auth/finish"
     return '''
-      <a href="https://slack.com/oauth/authorize?scope=chat:write:user&client_id=122416745729.127817802451">
+      <a href="https://slack.com/oauth/authorize?scope=chat:write:user&client_id=122416745729.127817802451&redirect_uri={0}">
 
           <img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" />
 
       </a>
-    '''
+       <a href="https://slack.com/oauth/authorize?scope={1}&client_id={2}&redirect_uri={3}">
+           <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
+       </a>
+    '''.format(redirect_uri1,OAUTH_SCOPE,CLIENT_ID,redirect_uri2)
 
 # end of the Slack signin process, appending relevant user information including tokens into the db
 @app.route("/signin/finish", methods=["GET", "POST"])
 def post_signin():
+    redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
     # Retrieve the auth code from the request params
     auth_code = request.args['code']
 
@@ -71,6 +78,7 @@ def post_signin():
         "oauth.access",
         client_id=CLIENT_ID,
         client_secret=CLIENT_SECRET,
+        redirect_uri=redirect_uri,
         code=auth_code
     )
 

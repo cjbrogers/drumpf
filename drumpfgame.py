@@ -4,13 +4,18 @@ from collections import deque
 drumpf_deck = ["vm_blacks", "vm_hombres", "vm_muslims", "vm_thieves"]
 suits = ["diamonds", "clubs", "hearts", "spades"]
 values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
-# # values = [2, 3, "J", "Q", "K"]
 for suit in suits:
     for value in values:
         drumpf_deck.append([value, suit])
-drumpf_deck = drumpf_deck + ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
-# drumpf_deck = ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
-drumpf_deck = drumpf_deck + ["t_russian", "t_nasty","t_shower","t_comey"]
+drumpf_deck = drumpf_deck + ["d_pussy","d_wall","d_clinton","d_ivanka"]
+drumpf_deck = drumpf_deck + ["t_russian","t_nasty","t_shower","t_comey"]
+
+builder_deck = ["b_bannon","b_altfact","b_pence","b_media","b_obama","b_eric"]
+builder_deck += ["b_wall","b_wall","b_wall","b_wall","b_wall","b_wall"]
+builder_deck += ["b_green","b_green","b_green","b_green","b_green","b_green"]
+builder_deck += ["b_deport","b_deport","b_deport","b_deport","b_deport","b_deport"]
+builder_deck += ["b_immig","b_immig","b_immig","b_immig","b_immig","b_immig"]
+
 
 def rotate_list(l, n):
     return l[-n:] + l[:-n]
@@ -27,10 +32,15 @@ class Player:
 class Deck: #preshuffled deck
     def __init__(self):
         self.cards = drumpf_deck[:]
+        self.builder_cards = builder_deck[:]
         random.shuffle(self.cards)
+        random.shuffle(self.builder_cards)
 
     def deal_card(self):
         return self.cards.pop()
+
+    def deal_builder_card(self):
+        return self.builder_cards.pop()
 
 class Game:
     def __init__(self, players, bot):
