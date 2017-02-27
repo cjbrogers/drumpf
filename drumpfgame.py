@@ -94,6 +94,7 @@ class Game:
         self.bot.get_bids_from_players(self.current_round, self.players)
         self.bot.current_game.current_round_trump_suit = trump_suit
         self.bot.announce_trump_card(trump_card)
+        self.players.rotate(1)
         #dealer is always index 0 of players and we will rotate the array end of each turn
 
     def deal_single_card_to_each_player(self, deck):
