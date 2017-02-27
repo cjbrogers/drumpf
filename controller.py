@@ -66,7 +66,7 @@ def pre_signin():
 # end of the Slack signin process, appending relevant user information including tokens into the db
 @app.route("/signin/finish", methods=["GET", "POST"])
 def post_signin():
-    redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
+    redirect_uri = "https://drumpfbot.herokuapp.com/signin/finish"
     # Retrieve the auth code from the request params
     auth_code = request.args['code']
 
