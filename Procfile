@@ -1,2 +1,2 @@
-web: gunicorn drumpfgame/controller:app --log-file=-
-worker: python drumpfgame/bot.py
+web: gunicorn controller:app --log-file=-
+worker: python app/bot.py
