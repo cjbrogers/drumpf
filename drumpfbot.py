@@ -707,7 +707,7 @@ class DrumpfBot():
 
         self.sub_rounds_played = 0
         self.winning_sub_round_card = None
-        self.winer_for_sub_round = None
+        self.winner_for_sub_round = None
         self.cards_played_for_sub_round = []
         self.zero_point_players = []
         self.shower_card_holder = []
@@ -715,6 +715,9 @@ class DrumpfBot():
         self.player_bid_queue.clear()
         self.current_game.current_round_trump_suit = None
         self.first_card_sub_round = 0
+
+        self.player_turn_queue.rotate(1)
+        # self.player_bid_queue.rotate(1)
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
         print "remove_card_from_players_hand(self, current_player_id, card_to_remove) "
