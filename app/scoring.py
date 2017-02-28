@@ -11,10 +11,19 @@ class Scoring():
         self.bot = bot
 
     def build_scoreboard(self,msg):
+        """
+        Concatenates the incoming message to a continuous string of scoreboard data
+        Args: [msg] the message to be concatenated
+        Returns:
+        """
         self.bot.scoreboard += msg
         return
 
     def update_scoreboard(self, message, attachments=None):
+        """
+        Posts the updated scoreboard to the main channel
+        Args: [msg] the message to post
+        """
         slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,
@@ -24,6 +33,9 @@ class Scoring():
         )
 
     def calculate_and_display_points_for_players(self):
+        """
+        Handles the logic for calculating players points
+        """
         print "calculate_and_display_points_for_players(self) "
         msg = "*Round {} over!* _calculating points..._\n".format(self.bot.current_game.current_round)
         self.build_scoreboard(msg)
@@ -89,6 +101,10 @@ class Scoring():
             self.bot.current_game.play_round()
 
     def pm_users_scoreboard(self, board, attachments=None):
+        """
+        Private messages the relevant users the scoreboard
+        Args: [board] the scoreboard
+        """
         print "pm_users_scoreboard(self, board, attachments=None)"
         for player_id in self.bot.users_in_game:
             print "  board: ",board
@@ -100,6 +116,10 @@ class Scoring():
             )
 
     def pm_users_scores(self, scores, attachments=None):
+        """
+        Private messages the relevant users the scores
+        Args: [scores] the players scores
+        """
         print "pm_users_scores(self, scores, attachments=None)"
         for player_id in self.bot.users_in_game:
             print "  scores: ",scores
@@ -111,6 +131,9 @@ class Scoring():
             )
 
     def initialize_scores(self, attachments=None):
+        """
+        Initializes the score output (0,0) to begin
+        """
         print "initialize_scores(self, attachments=None)"
         msg = ""
         msg += ">>>*Score Board*"
@@ -128,6 +151,10 @@ class Scoring():
         self.bot.ts_scores = resp['ts']
 
     def update_scores(self, message, attachments=None):
+        """
+        Posts the updated scores to the main channel
+        Args: [message] the score data to send
+        """
         slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,
@@ -137,6 +164,10 @@ class Scoring():
         )
 
     def determine_winner_for_sub_round(self, card):
+        """
+        Handles all logic pertaining to determining a winner for a sub-round
+        Args: [card] the card to evaluate
+        """
         print "determine_winner_for_sub_round(self, card) "
         self.bot.winning_sub_round_card = None
         print("  Players in game: {}".format(self.bot.users_in_game))
@@ -454,6 +485,11 @@ class Scoring():
                     print "    player {} card has been passed".format(current_player)
 
     def present_winner_for_game(self,winner,pid):
+        """
+        Presents a winner for the game, posting to the main Slack channel
+        Args: [winner] the game winner's name (string )
+        Args: [pid] the id of the winner
+        """
         print "present_winner_for_game(self) "
         score = self.bot.game_scorecard[pid]
         slack_client.api_call(

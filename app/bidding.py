@@ -14,6 +14,11 @@ class Bid():
         self.score = score
 
     def present_bid_buttons(self, player_id):
+        """
+        Presents the bidding buttons to the user (max 5 at a time due to Slack's API restrictions)
+        Args: [player_id] the player's id of whom to post the bid buttons to
+        Returns:
+        """
         button_indices = []
         for player in self.bot.current_game.players:
             if player.id == player_id:
@@ -59,6 +64,11 @@ class Bid():
         return
 
     def handle_player_bid(self, command, user_id):
+        """
+        Deals with the logic for handling player bidding
+        Args: [command] the bid command (int)
+        Args: [user_id] the id of the user in question
+        """
         print "handle_player_bid(self, command, user_id) "
         print "  command: ", command
         print "  user_id: ", user_id
@@ -110,6 +120,11 @@ class Bid():
         self.bot.private_message_user(user_id, response)
 
     def get_bids_from_players(self, current_round, players):
+        """
+        Gets the bids of the players
+        Args: [current_round] the current round of the game
+        Args: [players] the players in the game
+        """
         print "get_bids_from_players(self, current_round, players) "
         print "  current_round: ", current_round
         print "  players: ", players
