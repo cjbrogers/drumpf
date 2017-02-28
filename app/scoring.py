@@ -429,6 +429,13 @@ class Scoring():
                                         print "  {} card wins".format(self.bot.winning_sub_round_card)
                                         print "  player {} wins".format(self.bot.user_ids_to_username[self.bot.winner_for_sub_round])
                                         return
+                                    else:
+                                        print "  a t_card has been played after the vm_blacks card, so it loses"
+                                        self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[idx]
+                                        self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[idx]
+                                        print "  {} card wins".format(self.bot.winning_sub_round_card)
+                                        print "  player {} wins".format(self.bot.user_ids_to_username[self.bot.winner_for_sub_round])
+                                        return
                                 else:
                                     print "    ***SOMEHOW GOT HERE???"
                         continue
