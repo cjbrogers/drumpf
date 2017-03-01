@@ -102,11 +102,11 @@ class Scoring():
         elif self.winning_scores:
             if len(self.winning_scores) > 1:
                 self.winning_score = max(self.winning_scores.values())
-                winner = self.winning_scores.index(self.winning_score)
+                winner = self.winning_scores.keys()[self.winning_scores.values().index(self.winning_score)]
                 self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
             else:
                 self.winning_score = self.winning_scores[0]
-                winner = self.winning_scores.index(self.winning_score)
+                winner = self.winning_scores.keys()[self.winning_scores.values().index(self.winning_score)]
                 self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
         else:
             self.bot.current_game.play_round()
