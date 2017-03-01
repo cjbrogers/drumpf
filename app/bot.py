@@ -261,6 +261,7 @@ class DrumpfBot():
             [timestamp_list] (list(str)) the timestamps to remove the messages of
         Returns:
         """
+        print "remove_pms(self,user_id,timestamp_list):"
         for uid,tstamp in timestamp_list.iteritems():
             slack_client.api_call(
                 "chat.delete",
@@ -278,7 +279,6 @@ class DrumpfBot():
             [attachments] (list) a list of attachments to append to the message -optional, defaults to None
         Returns:
         """
-        print "private_message_user(self, user_id, message, attachments=None)"
         slack_client.api_call(
             "chat.postMessage",
             channel=user_id,
