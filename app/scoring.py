@@ -29,7 +29,7 @@ class Scoring():
             channel=self.bot.main_channel_id,
             text=message,
             ts=self.bot.ts,
-            as_user=True, attachments=attachments
+            attachments=attachments
         )
 
     def calculate_and_display_points_for_players(self):
