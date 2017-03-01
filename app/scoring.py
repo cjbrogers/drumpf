@@ -507,10 +507,14 @@ class Scoring():
         print "present_winner_for_game(self) "
         score = self.bot.game_scorecard[pid]
         response = "And our winner for the game is *{}*!\n:cake: :birthday: :fireworks: *Score: `{}`* :fireworks: :birthday: :cake:\n".format(winner,score)
+        image_url = "https://media.giphy.com/media/YTbZzCkRQCEJa/giphy.gif"
+        attachments = [{"title": "Celebrate good times!", "image_url": image_url}
         slack_client.api_call(
-            "chat.postMessage",
+            "chat.update",
             channel=self.bot.main_channel_id,
             text=response,
+            ts=self.bot.ts,
+            attachments = attachments,
             as_user=True
         )
         for player in self.bot.current_game.players:
