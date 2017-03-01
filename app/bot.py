@@ -88,7 +88,7 @@ class DrumpfBot():
 
         attachments = None
         username = self.user_ids_to_username[user_id] #user who sent the message
-        self.ts = ts
+
         response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
 
         if command.lower().startswith("debug"):
@@ -96,14 +96,9 @@ class DrumpfBot():
                 self.winning_points = 500
             if command.lower().startswith("debug 1000"):
                 self.winning_points = 1000
-            response = "`Debug mode active.` \n"
-            slack_client.api_call("chat.update", channel=channel,
-                                  text=response, ts=self.ts, as_user=True)
-            # self.ts = resp['ts']
             self.game_created == True
             self.users_in_game.append(user_id)
-            self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
-            response = ""
+            self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 donny_drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Testicle U44V02PDY
             self.handle_command("start game", channel, user_id, ts)
             return
 
@@ -166,7 +161,8 @@ class DrumpfBot():
                 self.game_started = True
                 response = ">>>Starting a new game of Drumpf!\n"
                 score.initialize_scores()
-                resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=ts,as_user=True)
+                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
+                self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return
 
