@@ -116,7 +116,8 @@ class Scoring():
                 "chat.update",
                 channel=player_id,
                 text=board,
-                ts=self.bot.ts_scoreboard[player_id],
+                ts=self.bot.ts_scoreboard,
+                as_user=True,
                 attachments=attachments
             )
 
@@ -169,7 +170,7 @@ class Scoring():
                 text=msg,
                 as_user=True, attachments=attachments
             )
-            self.bot.ts_scoreboard[player_id] = resp['ts']
+            self.bot.ts_scoreboard = resp['ts']
 
 
     def update_scores(self, message, attachments=None):

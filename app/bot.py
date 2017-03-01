@@ -69,7 +69,7 @@ class DrumpfBot():
         self.command_ts = ""
         self.winning_points = None
         self.timestamps = {}
-        self.ts_scoreboard = {}
+        self.ts_scoreboard = ""
 
     def handle_command(self, command, channel, user_id, ts):
         """
