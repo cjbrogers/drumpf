@@ -47,7 +47,7 @@ class Deck: #preshuffled deck
         return self.builder_cards.pop()
 
 class Game:
-    def __init__(self, players, bot, bid):
+    def __init__(self, players, bot, bid, trump, dm):
         #[Player1, Player2, Player3, ...etc]
         self.players = deque(players)
         self.final_round = 60/len(players) #i.e. 12 rounds for 5 players
@@ -56,6 +56,8 @@ class Game:
         self.bot = bot
         self.bid = bid
         self.bot.current_game = self
+        self.trump = trump
+        self.dm = dm
 
     # 1) creates a new shuffled deck
     # 2) deals cards to the players depending on the round #
@@ -94,7 +96,7 @@ class Game:
             if trump_value[0:2] == "d_" or trump_value[0:2] == "t_":
                 print "  *dealing with a d_ or t_ card"
                 self.bot.drumpfmendous_card_first = True
-                self.bot.prompt_dealer_for_trump_suit(self.players[0].id)
+                self.trump.prompt_dealer_for_trump_suit(self.players[0].id)
 
             # or visible minority card
             elif trump_value[0:3] == "vm_":
@@ -103,13 +105,13 @@ class Game:
 
         elif len(shuffled_deck.cards) == 0:
             print "  len(shuffled_deck.cards) == 0"
-            self.bot.prompt_dealer_for_trump_suit(self.players[0].id)
+            self.trump.prompt_dealer_for_trump_suit(self.players[0].id)
         for player in self.players:
-            self.bot.display_cards_for_player_in_pm(player.id,
+            self.dm.display_cards_for_player_in_pm(player.id,
                                                     player.cards_in_hand)
         self.bid.get_bids_from_players(self.current_round, self.players)
         self.bot.current_game.current_round_trump_suit = trump_suit
-        self.bot.announce_trump_card(trump_card)
+        self.trump.announce_trump_card(trump_card)
         self.players.rotate(1)
         #dealer is always index 0 of players and we will rotate the array end of each turn
 

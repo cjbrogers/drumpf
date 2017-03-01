@@ -232,7 +232,7 @@ class DrumpfBot():
         player_objects = []
         for player_id in players:
             player_objects.append(DrumpfGame.Player(player_id))
-        game = DrumpfGame.Game(player_objects, self, bid)
+        game = DrumpfGame.Game(player_objects, self, bid, trump, dm)
         game.play_round()
 
     def prepare_for_next_round(self):
