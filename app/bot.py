@@ -242,24 +242,40 @@ class DrumpfBot():
         Returns:
         """
         print "prepare_for_next_round(self) "
-        self.bot.current_game.current_round += 1
-        self.bot.scoreboard = ""
-        self.bot.scores = ""
-        for k in self.bot.player_bids_for_current_round.keys():
-            self.bot.player_bids_for_current_round[k] = ""
-        self.bot.player_points_for_round = defaultdict(int)
-        self.bot.leading_suit = None
-        self.bot.sub_rounds_played = 0
-        self.bot.winning_sub_round_card = None
-        self.bot.winner_for_sub_round = None
-        self.bot.cards_played_for_sub_round = []
-        self.bot.zero_point_players = []
-        self.bot.shower_card_holder = []
-        self.bot.drumpfmendous_card_first = None
-        self.bot.player_bid_queue.clear()
-        self.bot.current_game.current_round_trump_suit = None
-        self.bot.first_card_sub_round = 0
-        self.bot.player_turn_queue.rotate(1)
+        self.current_game.current_round += 1
+        self.scoreboard = ""
+        self.scores = ""
+        for k in self.player_bids_for_current_round.keys():
+            self.player_bids_for_current_round[k] = ""
+        self.player_points_for_round = defaultdict(int)
+        self.leading_suit = None
+        self.sub_rounds_played = 0
+        self.winning_sub_round_card = None
+        self.winner_for_sub_round = None
+        self.cards_played_for_sub_round = []
+        self.zero_point_players = []
+        self.shower_card_holder = []
+        self.drumpfmendous_card_first = None
+        self.player_bid_queue.clear()
+        self.current_game.current_round_trump_suit = None
+        self.first_card_sub_round = 0
+        self.player_turn_queue.rotate(1)
+
+    def private_message_user(self, user_id, message, attachments=None):
+        """Posts a private message to a user channel
+
+        Args:
+            [user_id] (str) id of the player
+            [message] (str) the message to post
+            [attachments] (list) a list of attachments to append to the message -optional, defaults to None
+        Returns:
+        """
+        slack_client.api_call(
+            "chat.postMessage",
+            channel=user_id,
+            text=message,
+            as_user=True, attachments=attachments
+        )
 
     def restart_program(self):
         """
