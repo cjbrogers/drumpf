@@ -92,6 +92,8 @@ class DrumpfBot():
         response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
 
         if command.lower().startswith("debug"):
+            if command.lower().startswith("debug 100"):
+                self.winning_points = 100
             if command.lower().startswith("debug 500"):
                 self.winning_points = 500
             if command.lower().startswith("debug 1000"):
