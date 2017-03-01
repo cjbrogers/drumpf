@@ -104,6 +104,10 @@ class Scoring():
                 self.winning_score = max(self.winning_score)
                 winner = self.bot.game_scorecard.index(self.winning_score)
                 self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
+            else:
+                self.winning_score = self.winning_score[0]
+                winner = self.bot.game_scorecard.index(self.winning_score)
+                self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
         else:
             self.bot.current_game.play_round()
 
