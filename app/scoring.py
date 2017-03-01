@@ -508,7 +508,7 @@ class Scoring():
         score = self.bot.game_scorecard[pid]
         response = "And our winner for the game is *{}*!\n:cake: :birthday: :fireworks: *Score: `{}`* :fireworks: :birthday: :cake:\n".format(winner,score)
         image_url = "https://media.giphy.com/media/YTbZzCkRQCEJa/giphy.gif"
-        attachments = [{"title": "Celebrate good times!", "image_url": image_url}
+        attachments = [{"title": "Celebrate good times!", "image_url": image_url}]
         slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,
