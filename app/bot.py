@@ -69,6 +69,7 @@ class DrumpfBot():
         self.command_ts = ""
         self.winning_points = None
         self.timestamps = {}
+        self.ts_scoreboard = {}
 
     def handle_command(self, command, channel, user_id, ts):
         """
@@ -100,7 +101,7 @@ class DrumpfBot():
                 self.winning_points = 1000
             response = "`Debug mode active.` \n"
             slack_client.api_call("chat.update", channel=channel,
-                                  text=response, ts=self.ts)
+                                  text=response,as_user=True, ts=self.ts)
             self.game_created == True
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY

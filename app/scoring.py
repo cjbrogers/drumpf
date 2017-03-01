@@ -116,7 +116,7 @@ class Scoring():
                 "chat.update",
                 channel=player_id,
                 text=board,
-                ts=self.bot.ts_scoreboard,
+                ts=self.bot.ts_scoreboard[player_id],
                 as_user=True, attachments=attachments
             )
 
@@ -155,6 +155,22 @@ class Scoring():
             as_user=True, attachments=attachments
         )
         self.bot.ts_scores = resp['ts']
+
+    def initialize_scoreboard(self, msg, attachments=None):
+        """
+        Initializes the scoreboard output and displays to pm
+        """
+        print "initialize_scoreboard(self, msg, attachments=None)"
+        print "  msg: ",msg
+        for player_id in self.bot.users_in_game:
+            resp = slack_client.api_call(
+                "chat.postMessage",
+                channel=player_id,
+                text=msg,
+                as_user=True, attachments=attachments
+            )
+            self.bot.ts_scoreboard[player_id] = resp['ts']
+
 
     def update_scores(self, message, attachments=None):
         """

@@ -122,7 +122,8 @@ class TrumpSuit():
             helper_functions.emojify_card(trump_card),(self.bot.sub_rounds_played + 1))
         self.score.build_scoreboard(msg)
         # self.score.update_scoreboard(self.bot.scoreboard)
-        self.score.pm_users_scoreboard(self.bot.scoreboard)
+        # self.score.pm_users_scoreboard(self.bot.scoreboard)
+        self.score.initialize_scoreboard(msg)
         trump = "The trump card is: {} \n".format(helper_functions.emojify_card(trump_card))
         # send the trump suit to pm
         # for player_id in self.bot.users_in_game:
