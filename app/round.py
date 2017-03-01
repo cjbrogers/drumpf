@@ -112,7 +112,7 @@ class Round():
                             print "  self.bot.first_card_sub_round == 1"
                             if "t_nasty" in card_value:
                                 print "  player holds t_nasty and so gets to choose trump suit"
-                                self.bot.prompt_dealer_for_trump_suit(user_id)
+                                self.trump.prompt_dealer_for_trump_suit(user_id)
                             else:
                                 self.bot.leading_suit = "Any"
                                 self.handle_valid_card_played(card_being_played)
