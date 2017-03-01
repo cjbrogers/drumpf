@@ -17,8 +17,6 @@ import round
 from round import Round
 import trump_suit
 from trump_suit import TrumpSuit
-import display_messages
-from display_messages import DisplayMessages
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -268,6 +266,71 @@ class DrumpfBot():
             as_user=True, attachments=attachments
         )
 
+    def display_cards_for_player_in_pm(self, player_id, cards):
+        """Displays the cards for the players in a private message
+
+        Args:
+            [player_id] (str) id of the player
+            [cards] (str) the cards to display
+        Returns:
+        """
+        print "display_cards_for_player_in_pm(self, player_id, cards) "
+        print "  player_id: ", player_id
+        print "  player: ", self.user_ids_to_username[player_id]
+        print "  cards: ", cards
+
+        formatted_cards = helper_functions.interactiformat(cards)
+        # the player has more than 5 cards, so we have to send them in separate messages
+        self.first_set = False
+        if len(cards) > 5:
+            print "  len(cards) > 5"
+            five_card_set = {}
+            for idx, card in enumerate(cards):
+                if idx == 0: # add the first card
+                    self.first_set = True
+                    print "  idx == 0"
+                    print "  formatted_cards[idx] = ", formatted_cards[idx]
+                    five_card_set[idx] = formatted_cards[idx]
+                elif (idx % 5) != 0: # add the next 4
+                    print "  (idx % 5) != 0"
+                    print "  formatted_cards[idx] = ", formatted_cards[idx]
+                    five_card_set[idx] = formatted_cards[idx]
+                elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
+                    print "  (idx % 5) == 0"
+                    attachments = helper_functions.interactify(five_card_set,self.first_set)
+                    print "  *posting whole set of five"
+                    slack.chat.post_message(
+                        channel=player_id,
+                        as_user=True,
+                        attachments=attachments
+                        )
+                    self.first_set = False
+                    five_card_set.clear() # clear the set
+                    five_card_set[idx] = formatted_cards[idx] # add the first card of the next set
+                    print "  five_card_set (first card of next set): ", five_card_set
+                if len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
+                    print "  len(cards) == (idx + 1)"
+                    attachments = helper_functions.interactify(five_card_set,self.first_set)
+                    print "  *posting remaining set of cards"
+                    slack.chat.post_message(
+                        channel=player_id,
+                        as_user=True,
+                        attachments=attachments
+                        )
+                    five_card_set.clear()
+        # there are less than 5 cards in the players hand, so just display them
+        else:
+            print "  len(cards) <= 5"
+            self.first_set = True
+            attachments = helper_functions.interactify(formatted_cards,self.first_set)
+            print "  *posting set of 0-5"
+            slack.chat.post_message(
+                channel=player_id,
+                as_user=True,
+                attachments=attachments
+                )
+
+
     def play_game_of_drumpf_on_slack(self, players, channel):
         """Takes an array of player_ids and the channel the game request originated from
 
@@ -377,5 +440,4 @@ if __name__ == "__main__":
     trump = TrumpSuit(bot,score)
     round_ = Round(bot,score)
     bid = Bid(bot,score)
-    dm = DisplayMessages(bot,bid,trump,round_)
     bot.main()

@@ -147,7 +147,6 @@ class Round():
         print " ",msg
         self.score.build_scoreboard(msg)
         self.score.update_scoreboard(self.bot.scoreboard)
-        # self.bot.message_main_game_channel(msg)
 
         self.bot.cards_played_for_sub_round.append(card)
         print("  Cards played for sub-round: {}".format(self.bot.cards_played_for_sub_round))
@@ -169,7 +168,6 @@ class Round():
             print " ",msg
             self.score.build_scoreboard(msg)
             self.score.update_scoreboard(self.bot.scoreboard)
-            # self.bot.message_main_game_channel(msg, attachments=self.bot.attachments)
 
             #reset all sub-round variables
             self.bot.leading_suit = None
@@ -188,7 +186,6 @@ class Round():
                 msg = ">_Sub-Round {}_\n".format(self.bot.sub_rounds_played + 1)
                 self.score.build_scoreboard(msg)
                 self.score.update_scoreboard(self.bot.scoreboard)
-                # self.bot.message_main_game_channel(msg)
 
                 #initialize another turn queue cause there are more cards to play
                 self.bot.player_turn_queue = copy.copy(self.bot.users_in_game)
