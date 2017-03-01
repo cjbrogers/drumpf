@@ -167,7 +167,7 @@ class Scoring():
                 "chat.postMessage",
                 channel=player_id,
                 text=msg,
-                as_user=True, attachments=attachments
+                attachments=attachments
             )
             self.bot.ts_scoreboard[player_id] = resp['ts']
 
