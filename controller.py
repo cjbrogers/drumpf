@@ -43,6 +43,9 @@ def inbound():
         token = model.get_user_token(user_id,user_name)
         slack = Slacker(token)
         resp = slack.chat.post_message(channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
+        if 'ts' in resp:
+            ts = resp['ts']
+            slack.chat.delete(channel=channel_id,ts=ts,as_user=True)
     return Response(), 200
 
 # the beginning of the Sign In to Slack OAuth process.
