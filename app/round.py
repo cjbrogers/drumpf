@@ -2,9 +2,10 @@ import helper_functions
 
 class Round():
 
-    def __init__(self,bot,score):
+    def __init__(self,bot,score,trump):
         self.bot = bot
         self.score = score
+        self.trump = trump
 
     def get_card_being_played(self, user_id, index): # -> ex. ['K', 'spades']
         """Takes the users id and index of the card being played and returns the actual card as a string
@@ -96,7 +97,7 @@ class Round():
                     elif card_suit == self.bot.leading_suit:
                         #card played same suit as sub_round_suit
                         self.handle_valid_card_played(card_being_played)
-                    elif self.bot.player_hand_contains_suit(user_id, self.bot.leading_suit) == False:
+                    elif self.trump.player_hand_contains_suit(user_id, self.bot.leading_suit) == False:
                         #any card is valid, because player doesn't have the initial suit
                         self.handle_valid_card_played(card_being_played)
                     else:
