@@ -251,36 +251,36 @@ class DrumpfBot():
             print "  len(self.player_trump_card_queue)"
             trump.handle_trump_suit_selection(command, user_id)
             self.timestamps[user_id] = str(ts)
-            self.remove_pms(self.timestamps)
+            # self.remove_pms(self.timestamps)
 
         elif len(self.player_bid_queue):
             print "  len(self.player_bid_queue)"
             bid.handle_player_bid(command, user_id)
             self.timestamps[user_id] = str(ts)
-            self.remove_pms(self.timestamps)
+            # self.remove_pms(self.timestamps)
 
         elif len(self.player_turn_queue):
             print "  len(self.player_turn_queue)"
             round_.handle_player_turn(command, user_id)
             self.timestamps[user_id] = str(ts)
-            self.remove_pms(self.timestamps)
+            # self.remove_pms(self.timestamps)
 
-    def remove_pms(self,timestamp_list):
-        """Removes private messages posted by a user
-
-        Args:
-            [user_id] (str) id of the player
-            [timestamp_list] (list(str)) the timestamps to remove the messages of
-        Returns:
-        """
-        print "remove_pms(self,user_id,timestamp_list):"
-        for uid,tstamp in timestamp_list.iteritems():
-            slack_client.api_call(
-                "chat.delete",
-                channel=uid,
-                ts=tstamp,
-                as_user=True
-            )
+    # def remove_pms(self,timestamp_list):
+    #     """Removes private messages posted by a user
+    #
+    #     Args:
+    #         [user_id] (str) id of the player
+    #         [timestamp_list] (list(str)) the timestamps to remove the messages of
+    #     Returns:
+    #     """
+    #     print "remove_pms(self,user_id,timestamp_list):"
+    #     for uid,tstamp in timestamp_list.iteritems():
+    #         slack_client.api_call(
+    #             "chat.delete",
+    #             channel=uid,
+    #             ts=tstamp,
+    #             as_user=True
+    #         )
 
     def private_message_user(self, user_id, message, attachments=None):
         """Posts a private message to a user channel
