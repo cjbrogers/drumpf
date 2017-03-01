@@ -7,9 +7,10 @@ SUITS = ["diamonds", "clubs", "hearts", "spades"]
 
 class TrumpSuit():
 
-    def __init__(self,bot,score):
+    def __init__(self,bot,score,bid):
         self.bot = bot
         self.score = score
+        self.bid = bid
 
     def handle_trump_suit_selection(self,command,user_id):
         """Takes incoming command along with the user id and validates/sets trump suit
@@ -60,7 +61,7 @@ class TrumpSuit():
                     self.bot.private_message_user(player, msg)
 
                 if len(self.bot.player_bid_queue):
-                    bid.present_bid_buttons(self.bot.player_bid_queue[0])
+                    self.bid.present_bid_buttons(self.bot.player_bid_queue[0])
                     msg = "What's your bid for the round?"
                     print "  ",msg
                 else:

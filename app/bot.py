@@ -437,7 +437,7 @@ class DrumpfBot():
 if __name__ == "__main__":
     bot = DrumpfBot()
     score = Scoring(bot)
-    trump = TrumpSuit(bot,score)
     round_ = Round(bot,score)
     bid = Bid(bot,score)
+    trump = TrumpSuit(bot,score,bid)
     bot.main()
