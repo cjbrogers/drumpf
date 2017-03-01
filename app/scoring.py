@@ -40,7 +40,7 @@ class Scoring():
         msg = "*Round {} over!* _calculating points..._\n".format(self.bot.current_game.current_round)
         self.build_scoreboard(msg)
         self.update_scoreboard(self.bot.scoreboard)
-        self.winning_score = []
+        self.winning_scores = {}
         for idx, player_id in enumerate(self.bot.users_in_game):
             current_players_bid = self.bot.player_bids_for_current_round[player_id]
             points_off_from_bid = abs(current_players_bid - self.bot.player_points_for_round[player_id])
@@ -74,7 +74,7 @@ class Scoring():
                 self.bot.game_scorecard[player_id] -= 25 * points_off_from_bid
                 print "    self.bot.game_scorecard[player_id] -25 * points off bid: %s" % self.bot.game_scorecard[player_id]
             if self.bot.game_scorecard[player_id] > self.bot.winning_points:
-                self.winning_score.append(self.bot.game_scorecard[player_id])
+                self.winning_scores[player_id] = self.bot.game_scorecard[player_id]
         self.bot.scores += ">>>*Score Board*\n"
         print "  ",self.bot.scores
         for player_id in self.bot.users_in_game:
@@ -99,14 +99,14 @@ class Scoring():
         self.bot.prepare_for_next_round()
         if self.bot.current_game.current_round == self.bot.current_game.final_round:
             self.present_winner_for_game(self.bot.user_ids_to_username[player_id],player_id)
-        elif self.winning_score:
-            if len(self.winning_score) > 1:
-                self.winning_score = max(self.winning_score)
-                winner = self.bot.game_scorecard.index(self.winning_score)
+        elif self.winning_scores:
+            if len(self.winning_scores) > 1:
+                self.winning_score = max(self.winning_scores.values())
+                winner = self.winning_scores.index(self.winning_score)
                 self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
             else:
-                self.winning_score = self.winning_score[0]
-                winner = self.bot.game_scorecard.index(self.winning_score)
+                self.winning_score = self.winning_scores[0]
+                winner = self.winning_scores.index(self.winning_score)
                 self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
         else:
             self.bot.current_game.play_round()
