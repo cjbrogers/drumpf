@@ -48,7 +48,8 @@ class TrumpSuit():
                 msg = "<@{}> chose :{}: for the trump suit.\n".format(current_username, SUITS[int(command)])
                 print " ",msg
                 self.score.build_scoreboard(msg)
-                self.score.update_scoreboard(self.bot.scoreboard)
+                # self.score.update_scoreboard(self.bot.scoreboard)
+                self.score.pm_users_scoreboard(self.bot.scoreboard)
 
                 print "    self.bot.player_trump_card_queue before pop(): {}".format(self.bot.player_trump_card_queue)
 
@@ -120,7 +121,8 @@ class TrumpSuit():
             self.bot.current_game.current_round,
             helper_functions.emojify_card(trump_card),(self.bot.sub_rounds_played + 1))
         self.score.build_scoreboard(msg)
-        self.score.update_scoreboard(self.bot.scoreboard)
+        # self.score.update_scoreboard(self.bot.scoreboard)
+        self.score.pm_users_scoreboard(self.bot.scoreboard)
         trump = "The trump card is: {} \n".format(helper_functions.emojify_card(trump_card))
         # send the trump suit to pm
         for player_id in self.bot.users_in_game:

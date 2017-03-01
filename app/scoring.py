@@ -39,7 +39,9 @@ class Scoring():
         print "calculate_and_display_points_for_players(self) "
         msg = "*Round {} over!* _calculating points..._\n".format(self.bot.current_game.current_round)
         self.build_scoreboard(msg)
-        self.update_scoreboard(self.bot.scoreboard)
+        # self.update_scoreboard(self.bot.scoreboard)
+        self.pm_users_scoreboard(self.bot.scoreboard)
+
         for idx, player_id in enumerate(self.bot.users_in_game):
             current_players_bid = self.bot.player_bids_for_current_round[player_id]
             points_off_from_bid = abs(current_players_bid - self.bot.player_points_for_round[player_id])
@@ -90,8 +92,8 @@ class Scoring():
 
         self.update_scores(self.bot.scores)
 
-        self.pm_users_scoreboard(self.bot.scoreboard)
-        self.pm_users_scores(self.bot.scores)
+        # self.pm_users_scoreboard(self.bot.scoreboard)
+        # self.pm_users_scores(self.bot.scores)
 
         self.bot.prepare_for_next_round()
         if self.bot.current_game.current_round == self.bot.current_game.final_round:
@@ -262,7 +264,8 @@ class Scoring():
                                 msg = "{} card steals {} card...\n".format(self.bot.cards_played_for_sub_round[comey_card_idx],helper_functions.emojify_card(card_value))
                                 print "  ",msg
                                 self.build_scoreboard(msg)
-                                self.update_scoreboard(self.bot.scoreboard)
+                                # self.update_scoreboard(self.bot.scoreboard)
+                                self.pm_users_scoreboard(self.bot.scoreboard)
 
                                 self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[comey_card_idx]
                                 self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[comey_card_idx]
@@ -280,7 +283,8 @@ class Scoring():
                             if idx < nasty_card_idx:
                                 msg = "{} card negates {} card...\n".format(helper_functions.emojify_card(self.bot.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
                                 self.build_scoreboard(msg)
-                                self.update_scoreboard(self.bot.scoreboard)
+                                # self.update_scoreboard(self.bot.scoreboard)
+                                self.pm_users_scoreboard(self.bot.scoreboard)
 
                                 self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[nasty_card_idx]
                                 self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[nasty_card_idx]
@@ -313,7 +317,8 @@ class Scoring():
 
                                 print "  ",msg
                                 self.build_scoreboard(msg)
-                                self.update_scoreboard(self.bot.scoreboard)
+                                # self.update_scoreboard(self.bot.scoreboard)
+                                self.pm_users_scoreboard(self.bot.scoreboard)
 
                                 self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[hombres_card_idx]
                                 self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[hombres_card_idx]
@@ -333,7 +338,8 @@ class Scoring():
                                 print "  ",msg
 
                                 self.build_scoreboard(msg)
-                                self.update_scoreboard(self.bot.scoreboard)
+                                # self.update_scoreboard(self.bot.scoreboard)
+                                self.pm_users_scoreboard(self.bot.scoreboard)
                                 self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[nasty_card_idx]
                                 self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[nasty_card_idx]
                                 print "  {} card wins".format(self.bot.winning_sub_round_card)
@@ -370,7 +376,8 @@ class Scoring():
                                     msg = "*{} card negates {} card...\n".format(helper_functions.emojify_card(self.bot.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
 
                                     self.build_scoreboard(msg)
-                                    self.update_scoreboard(self.bot.scoreboard)
+                                    # self.update_scoreboard(self.bot.scoreboard)
+                                    self.pm_users_scoreboard(self.bot.scoreboard)
                                     self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[nasty_card_idx]
                                     self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[nasty_card_idx]
                                     print "  {} card wins".format(self.bot.winning_sub_round_card)

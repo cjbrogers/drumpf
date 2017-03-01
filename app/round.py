@@ -148,7 +148,8 @@ class Round():
         msg = "><@{}> played {}\n".format(player_who_played_card, card_emoji)
         print " ",msg
         self.score.build_scoreboard(msg)
-        self.score.update_scoreboard(self.bot.scoreboard)
+        # self.score.update_scoreboard(self.bot.scoreboard)
+        self.score.pm_users_scoreboard(self.bot.scoreboard)
 
         self.bot.cards_played_for_sub_round.append(card)
         print("  Cards played for sub-round: {}".format(self.bot.cards_played_for_sub_round))
@@ -169,7 +170,8 @@ class Round():
             msg = ">*<@{}> won this sub-round with a {}*\n\n".format(self.bot.winner_for_sub_round,helper_functions.emojify_card(self.bot.winning_sub_round_card))
             print " ",msg
             self.score.build_scoreboard(msg)
-            self.score.update_scoreboard(self.bot.scoreboard)
+            # self.score.update_scoreboard(self.bot.scoreboard)
+            self.score.pm_users_scoreboard(self.bot.scoreboard)
 
             #reset all sub-round variables
             self.bot.leading_suit = None
@@ -187,7 +189,8 @@ class Round():
             elif self.bot.sub_rounds_played < self.bot.current_game.current_round:
                 msg = ">_Sub-Round {}_\n".format(self.bot.sub_rounds_played + 1)
                 self.score.build_scoreboard(msg)
-                self.score.update_scoreboard(self.bot.scoreboard)
+                # self.score.update_scoreboard(self.bot.scoreboard)
+                self.score.pm_users_scoreboard(self.bot.scoreboard)
 
                 #initialize another turn queue cause there are more cards to play
                 self.bot.player_turn_queue = copy.copy(self.bot.users_in_game)

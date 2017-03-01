@@ -92,14 +92,15 @@ class DrumpfBot():
         response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
 
         if command.lower().startswith("debug"):
+            print "  ts=",ts
+            self.ts = ts
             if command.lower().startswith("debug 500"):
                 self.winning_points = 500
             if command.lower().startswith("debug 1000"):
                 self.winning_points = 1000
             response = "`Debug mode active.` \n"
             slack_client.api_call("chat.update", channel=channel,
-                                  text=response, ts=ts)
-            self.ts = ts
+                                  text=response, ts=self.ts)
             self.game_created == True
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
