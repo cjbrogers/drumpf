@@ -68,6 +68,7 @@ class DrumpfBot():
         self.initial_scores = ""
         self.command_ts = ""
         self.winning_points = None
+        self.timestamps = []
 
     def handle_command(self, command, channel, user_id, ts):
         """
@@ -214,7 +215,8 @@ class DrumpfBot():
         resp = slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True, attachments=attachments)
 
-    def handle_private_message(self,command,user_id):
+    def handle_private_message(self,command,user_id,ts):
+        self.timestamps.append(ts)
         """Controls how a private message incoming from a user is handled
 
         Args:
@@ -227,7 +229,6 @@ class DrumpfBot():
         print "  user_id: ", user_id
 
         response = ""
-
         print "  **$$**len(self.player_trump_card_queue): {}".format(len(self.player_trump_card_queue))
         print "  **$$**self.player_trump_card_queue: {}".format(self.player_trump_card_queue)
 
@@ -240,14 +241,33 @@ class DrumpfBot():
         if len(self.player_trump_card_queue):
             print "  len(self.player_trump_card_queue)"
             trump.handle_trump_suit_selection(command, user_id)
+            self.remove_pms(user_id, self.timestamps)
 
         elif len(self.player_bid_queue):
             print "  len(self.player_bid_queue)"
             bid.handle_player_bid(command, user_id)
+            self.remove_pms(user_id, self.timestamps)
 
         elif len(self.player_turn_queue):
             print "  len(self.player_turn_queue)"
             round_.handle_player_turn(command, user_id)
+            self.remove_pms(user_id, self.timestamps)
+
+    def remove_pms(self,user_id,timestamp_list):
+        """Removes private messages posted by a user
+
+        Args:
+            [user_id] (str) id of the player
+            [timestamp_list] (list(str)) the timestamps to remove the messages of
+        Returns:
+        """
+        for ts in timestamp_list:
+            slack_client.api_call(
+                "chat.delete",
+                channel=user_id,
+                ts=ts,
+                as_user=True
+            )
 
     def private_message_user(self, user_id, message, attachments=None):
         """Posts a private message to a user channel
@@ -426,7 +446,7 @@ class DrumpfBot():
                 if command and channel:
                     if channel not in self.channel_ids_to_name.keys():
                         #this (most likely) means that this channel is a PM with the bot
-                        self.handle_private_message(command, user)
+                        self.handle_private_message(command, user, ts)
                     else:
                         self.handle_command(command, channel, user, ts)
                 time.sleep(READ_WEBSOCKET_DELAY)
