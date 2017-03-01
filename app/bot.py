@@ -69,7 +69,6 @@ class DrumpfBot():
         self.command_ts = ""
         self.winning_points = None
         self.timestamps = {}
-        self.ts_scoreboard = ""
 
     def handle_command(self, command, channel, user_id, ts):
         """
@@ -93,15 +92,14 @@ class DrumpfBot():
         response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
 
         if command.lower().startswith("debug"):
-            print "  ts=",ts
-            self.ts = ts
             if command.lower().startswith("debug 500"):
                 self.winning_points = 500
             if command.lower().startswith("debug 1000"):
                 self.winning_points = 1000
             response = "`Debug mode active.` \n"
             slack_client.api_call("chat.update", channel=channel,
-                                  text=response,as_user=True, ts=self.ts)
+                                  text=response, ts=ts, as_user=True)
+            self.ts = resp['ts']
             self.game_created == True
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
@@ -168,11 +166,8 @@ class DrumpfBot():
                 self.game_started = True
                 response = ">>>Starting a new game of Drumpf!\n"
                 score.initialize_scores()
-
-                score.initialize_scoreboard()
-                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
+                resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=self.ts,as_user=True)
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
-                self.ts = resp['ts']
                 return
 
         if command.lower().startswith("commands") or command.lower().startswith("help"):
@@ -255,36 +250,36 @@ class DrumpfBot():
             print "  len(self.player_trump_card_queue)"
             trump.handle_trump_suit_selection(command, user_id)
             self.timestamps[user_id] = str(ts)
-            # self.remove_pms(self.timestamps)
+            self.remove_pms(self.timestamps)
 
         elif len(self.player_bid_queue):
             print "  len(self.player_bid_queue)"
             bid.handle_player_bid(command, user_id)
             self.timestamps[user_id] = str(ts)
-            # self.remove_pms(self.timestamps)
+            self.remove_pms(self.timestamps)
 
         elif len(self.player_turn_queue):
             print "  len(self.player_turn_queue)"
             round_.handle_player_turn(command, user_id)
             self.timestamps[user_id] = str(ts)
-            # self.remove_pms(self.timestamps)
+            self.remove_pms(self.timestamps)
 
-    # def remove_pms(self,timestamp_list):
-    #     """Removes private messages posted by a user
-    #
-    #     Args:
-    #         [user_id] (str) id of the player
-    #         [timestamp_list] (list(str)) the timestamps to remove the messages of
-    #     Returns:
-    #     """
-    #     print "remove_pms(self,user_id,timestamp_list):"
-    #     for uid,tstamp in timestamp_list.iteritems():
-    #         slack_client.api_call(
-    #             "chat.delete",
-    #             channel=uid,
-    #             ts=tstamp,
-    #             as_user=True
-    #         )
+    def remove_pms(self,timestamp_list):
+        """Removes private messages posted by a user
+
+        Args:
+            [user_id] (str) id of the player
+            [timestamp_list] (list(str)) the timestamps to remove the messages of
+        Returns:
+        """
+        print "remove_pms(self,user_id,timestamp_list):"
+        for uid,tstamp in timestamp_list.iteritems():
+            slack_client.api_call(
+                "chat.delete",
+                channel=uid,
+                ts=tstamp,
+                as_user=True
+            )
 
     def private_message_user(self, user_id, message, attachments=None):
         """Posts a private message to a user channel

@@ -48,8 +48,7 @@ class TrumpSuit():
                 msg = "<@{}> chose :{}: for the trump suit.\n".format(current_username, SUITS[int(command)])
                 print " ",msg
                 self.score.build_scoreboard(msg)
-                # self.score.update_scoreboard(self.bot.scoreboard)
-                self.score.pm_users_scoreboard(self.bot.scoreboard)
+                self.score.update_scoreboard(self.bot.scoreboard)
 
                 print "    self.bot.player_trump_card_queue before pop(): {}".format(self.bot.player_trump_card_queue)
 
@@ -57,9 +56,9 @@ class TrumpSuit():
 
                 print "    self.bot.player_trump_card_queue after pop(): {}".format(self.bot.player_trump_card_queue)
 
-                # for player in self.bot.player_turn_queue_reference:
-                #     self.bot.private_message_user(player, response)
-                #     self.bot.private_message_user(player, msg)
+                for player in self.bot.player_turn_queue_reference:
+                    self.bot.private_message_user(player, response)
+                    self.bot.private_message_user(player, msg)
 
                 if len(self.bot.player_bid_queue):
                     self.bid.present_bid_buttons(self.bot.player_bid_queue[0])
@@ -121,13 +120,11 @@ class TrumpSuit():
             self.bot.current_game.current_round,
             helper_functions.emojify_card(trump_card),(self.bot.sub_rounds_played + 1))
         self.score.build_scoreboard(msg)
-        # self.score.update_scoreboard(self.bot.scoreboard)
-        # self.score.pm_users_scoreboard(self.bot.scoreboard)
-        self.score.initialize_scoreboard(self.bot.scoreboard)
+        self.score.update_scoreboard(self.bot.scoreboard)
         trump = "The trump card is: {} \n".format(helper_functions.emojify_card(trump_card))
         # send the trump suit to pm
-        # for player_id in self.bot.users_in_game:
-        #     self.bot.private_message_user(player_id,trump)
+        for player_id in self.bot.users_in_game:
+            self.bot.private_message_user(player_id,trump)
 
     def player_hand_contains_suit(self, user_id, suit):
         """Determines if the player has the leading suit in hand or not
