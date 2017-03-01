@@ -113,9 +113,10 @@ class Scoring():
         for player_id in self.bot.users_in_game:
             print "  board: ",board
             resp_scores = slack_client.api_call(
-                "chat.postMessage",
+                "chat.update",
                 channel=player_id,
                 text=board,
+                ts=self.bot.ts_scoreboard,
                 as_user=True, attachments=attachments
             )
 
