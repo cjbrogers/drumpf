@@ -68,7 +68,7 @@ class DrumpfBot():
         self.initial_scores = ""
         self.command_ts = ""
         self.winning_points = None
-        self.timestamps = {}
+        # self.timestamps = {}
 
     def handle_command(self, command, channel, user_id, ts):
         """
@@ -96,14 +96,16 @@ class DrumpfBot():
                 self.winning_points = 500
             if command.lower().startswith("debug 1000"):
                 self.winning_points = 1000
-            # response = "`Debug mode active.` \n"
-            # slack_client.api_call("chat.postMessage", channel=channel,
-            #                       text=response, as_user=True)
+            response = "`Debug mode active.` \n"
+            slack_client.api_call("chat.update", channel=channel,
+                                  text=response, ts=ts, as_user=True)
+            self.ts = resp['ts']
             self.game_created == True
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
             response = ""
             self.handle_command("start game", channel, user_id, ts)
+            return
 
         if command.lower().startswith("create game"):
             if command.lower().startswith("create game 500"):
@@ -112,11 +114,19 @@ class DrumpfBot():
                 self.winning_points = 1000
             self.game_created == True
             if len(self.users_in_game) == 0:
-                response = "<@{}> Wants to play a game of drumpf! Type `@drumpfbot add me` to play.".format(username)
+                response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
+                title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
+                attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
+                slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
+
+                response = "<@{}> Wants to play a game of drumpf!".format(username)
+                attachments =[{"title":"Add me to the game:", "fallback":"Add me to the game:", "callback_id":"add me", "attachment_type":"default", "actions":{"name":"add me","text":"add me","type":"button","value":"{} add me".format(AT_BOT)}}]
                 self.users_in_game.append(user_id)
+                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
+                self.ts = resp['ts']
+                return
             else:
                 response = "There's already a game being made, say `@drumpfbot add me` if you want in."
-            self.ts = ts
 
         if command.lower().startswith("restart"):
             response = "Application restarted."
@@ -141,6 +151,8 @@ class DrumpfBot():
                     self.users_in_game.append(user_id)
                     response = "Added <@{}> to the game!".format(username)
                     response += "\n_We're good to go! Type `@drumpfbot start game` to get your Drumpf on._"
+                    resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=self.ts,as_user=True)
+                    return
 
         if command.lower().startswith("start game"):
             print "Users in game: ", self.users_in_game
@@ -153,11 +165,8 @@ class DrumpfBot():
             else:
                 self.game_started = True
                 response = ">>>Starting a new game of Drumpf!\n"
-
                 score.initialize_scores()
-
-                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
-                self.ts = resp['ts']
+                resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=self.ts,as_user=True)
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return
 
@@ -180,7 +189,7 @@ class DrumpfBot():
             attachments = [{"title": "@drumpfbot How To Reference - Click here to learn more", "title_link": title_link}]
 
         if command.lower().startswith("rules") or command.lower().startswith("game rules"):
-            response = ">>>Right away, master. Here are the rules: \n\n"
+            response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
             title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
             attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
 
@@ -240,37 +249,37 @@ class DrumpfBot():
         if len(self.player_trump_card_queue):
             print "  len(self.player_trump_card_queue)"
             trump.handle_trump_suit_selection(command, user_id)
-            self.timestamps[user_id] = str(ts)
-            self.remove_pms(self.timestamps)
+            # self.timestamps[user_id] = str(ts)
+            # self.remove_pms(self.timestamps)
 
         elif len(self.player_bid_queue):
             print "  len(self.player_bid_queue)"
             bid.handle_player_bid(command, user_id)
-            self.timestamps[user_id] = str(ts)
-            self.remove_pms(self.timestamps)
+            # self.timestamps[user_id] = str(ts)
+            # self.remove_pms(self.timestamps)
 
         elif len(self.player_turn_queue):
             print "  len(self.player_turn_queue)"
             round_.handle_player_turn(command, user_id)
-            self.timestamps[user_id] = str(ts)
-            self.remove_pms(self.timestamps)
+            # self.timestamps[user_id] = str(ts)
+            # self.remove_pms(self.timestamps)
 
-    def remove_pms(self,timestamp_list):
-        """Removes private messages posted by a user
-
-        Args:
-            [user_id] (str) id of the player
-            [timestamp_list] (list(str)) the timestamps to remove the messages of
-        Returns:
-        """
-        print "remove_pms(self,user_id,timestamp_list):"
-        for uid,tstamp in timestamp_list.iteritems():
-            slack_client.api_call(
-                "chat.delete",
-                channel=uid,
-                ts=tstamp,
-                as_user=True
-            )
+    # def remove_pms(self,timestamp_list):
+    #     """Removes private messages posted by a user
+    #
+    #     Args:
+    #         [user_id] (str) id of the player
+    #         [timestamp_list] (list(str)) the timestamps to remove the messages of
+    #     Returns:
+    #     """
+    #     print "remove_pms(self,user_id,timestamp_list):"
+    #     for uid,tstamp in timestamp_list.iteritems():
+    #         slack_client.api_call(
+    #             "chat.delete",
+    #             channel=uid,
+    #             ts=tstamp,
+    #             as_user=True
+    #         )
 
     def private_message_user(self, user_id, message, attachments=None):
         """Posts a private message to a user channel
