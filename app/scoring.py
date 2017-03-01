@@ -73,7 +73,7 @@ class Scoring():
                 print "  self.bot.game_scorecard[player_id]: %s" % self.bot.game_scorecard[player_id]
                 self.bot.game_scorecard[player_id] -= 25 * points_off_from_bid
                 print "    self.bot.game_scorecard[player_id] -25 * points off bid: %s" % self.bot.game_scorecard[player_id]
-            if self.bot.game_scorecard[player_id] > self.bot.winning_points:
+            if self.bot.game_scorecard[player_id] >= self.bot.winning_points:
                 self.winning_scores[player_id] = self.bot.game_scorecard[player_id]
         self.bot.scores += ">>>*Score Board*\n"
         print "  ",self.bot.scores
@@ -105,7 +105,7 @@ class Scoring():
                 winner = self.winning_scores.keys()[self.winning_scores.values().index(self.winning_score)]
                 self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
             else:
-                self.winning_score = self.winning_scores[0]
+                self.winning_score = self.winning_scores.values()[0]
                 winner = self.winning_scores.keys()[self.winning_scores.values().index(self.winning_score)]
                 self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
         else:
