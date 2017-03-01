@@ -17,7 +17,6 @@ class Scoring():
         Returns:
         """
         self.bot.scoreboard += msg
-        self.up
         return
     def update_scoreboard(self, message, attachments=None):
         """
