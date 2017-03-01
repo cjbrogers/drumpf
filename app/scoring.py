@@ -506,7 +506,7 @@ class Scoring():
         """
         print "present_winner_for_game(self) "
         score = self.bot.game_scorecard[pid]
-        response = "And our winner for the game is *{}*! :cake: :birthday: :fireworks:\n*Score*: :cake: :birthday: :fireworks: `{}` :cake: :birthday: :fireworks:\n".format(winner,score)
+        response = "And our winner for the game is *{}*!\n:cake: :birthday: :fireworks: *Score: `{}`* :fireworks: :birthday: :cake:\n".format(winner,score)
         slack_client.api_call(
             "chat.postMessage",
             channel=self.bot.main_channel_id,
