@@ -68,7 +68,7 @@ class DrumpfBot():
         self.initial_scores = ""
         self.command_ts = ""
         self.winning_points = None
-        self.timestamps = []
+        self.timestamps = {}
 
     def handle_command(self, command, channel, user_id, ts):
         """
@@ -216,7 +216,7 @@ class DrumpfBot():
                               text=response, as_user=True, attachments=attachments)
 
     def handle_private_message(self,command,user_id,ts):
-        self.timestamps.append(ts)
+        self.timestamps[user_id] = str(ts)
         """Controls how a private message incoming from a user is handled
 
         Args:
@@ -261,11 +261,11 @@ class DrumpfBot():
             [timestamp_list] (list(str)) the timestamps to remove the messages of
         Returns:
         """
-        for ts in timestamp_list:
+        for uid,tstamp in timestamp_list.iteritems():
             slack_client.api_call(
                 "chat.delete",
-                channel=user_id,
-                ts=ts,
+                channel=uid,
+                ts=tstamp,
                 as_user=True
             )
 
@@ -278,6 +278,7 @@ class DrumpfBot():
             [attachments] (list) a list of attachments to append to the message -optional, defaults to None
         Returns:
         """
+        print "private_message_user(self, user_id, message, attachments=None)"
         slack_client.api_call(
             "chat.postMessage",
             channel=user_id,
