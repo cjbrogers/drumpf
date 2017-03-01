@@ -96,16 +96,14 @@ class DrumpfBot():
                 self.winning_points = 500
             if command.lower().startswith("debug 1000"):
                 self.winning_points = 1000
-            response = "`Debug mode active.` \n"
-            slack_client.api_call("chat.update", channel=channel,
-                                  text=response, ts=ts, as_user=True)
-            self.ts = resp['ts']
+            # response = "`Debug mode active.` \n"
+            # slack_client.api_call("chat.postMessage", channel=channel,
+            #                       text=response, as_user=True)
             self.game_created == True
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 Gordi-bot U42H6H9L5 Slackbot USLACKBOT drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Test Icle U44V02PDY
             response = ""
             self.handle_command("start game", channel, user_id, ts)
-            return
 
         if command.lower().startswith("create game"):
             if command.lower().startswith("create game 500"):
@@ -114,19 +112,11 @@ class DrumpfBot():
                 self.winning_points = 1000
             self.game_created == True
             if len(self.users_in_game) == 0:
-                response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
-                title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
-                attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
-                slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
-
-                response = "<@{}> Wants to play a game of drumpf!".format(username)
-                attachments =[{"title":"Add me to the game:", "fallback":"Add me to the game:", "callback_id":"add me", "attachment_type":"default", "actions":{"name":"add me","text":"add me","type":"button","value":"{} add me".format(AT_BOT)}}]
+                response = "<@{}> Wants to play a game of drumpf! Type `@drumpfbot add me` to play.".format(username)
                 self.users_in_game.append(user_id)
-                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
-                self.ts = resp['ts']
-                return
             else:
                 response = "There's already a game being made, say `@drumpfbot add me` if you want in."
+            self.ts = ts
 
         if command.lower().startswith("restart"):
             response = "Application restarted."
@@ -151,8 +141,6 @@ class DrumpfBot():
                     self.users_in_game.append(user_id)
                     response = "Added <@{}> to the game!".format(username)
                     response += "\n_We're good to go! Type `@drumpfbot start game` to get your Drumpf on._"
-                    resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=self.ts,as_user=True)
-                    return
 
         if command.lower().startswith("start game"):
             print "Users in game: ", self.users_in_game
@@ -165,8 +153,11 @@ class DrumpfBot():
             else:
                 self.game_started = True
                 response = ">>>Starting a new game of Drumpf!\n"
+
                 score.initialize_scores()
-                resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=self.ts,as_user=True)
+
+                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
+                self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return
 
@@ -189,7 +180,7 @@ class DrumpfBot():
             attachments = [{"title": "@drumpfbot How To Reference - Click here to learn more", "title_link": title_link}]
 
         if command.lower().startswith("rules") or command.lower().startswith("game rules"):
-            response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
+            response = ">>>Right away, master. Here are the rules: \n\n"
             title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
             attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
 
