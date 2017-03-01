@@ -97,8 +97,8 @@ class DrumpfBot():
             if command.lower().startswith("debug 1000"):
                 self.winning_points = 1000
             response = "`Debug mode active.` \n"
-            resp = slack_client.api_call("chat.postMessage", channel=channel,
-                                  text=response, as_user=True)
+            slack_client.api_call("chat.update", channel=channel,
+                                  text=response, ts=ts, as_user=True)
             self.ts = resp['ts']
             self.game_created == True
             self.users_in_game.append(user_id)
