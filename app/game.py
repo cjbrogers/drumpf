@@ -47,7 +47,7 @@ class Deck: #preshuffled deck
         return self.builder_cards.pop()
 
 class Game:
-    def __init__(self, players, bot, bid, trump, dm):
+    def __init__(self, players, bot, bid, trump):
         #[Player1, Player2, Player3, ...etc]
         self.players = deque(players)
         self.final_round = 60/len(players) #i.e. 12 rounds for 5 players
@@ -57,7 +57,6 @@ class Game:
         self.bid = bid
         self.bot.current_game = self
         self.trump = trump
-        self.dm = dm
 
     # 1) creates a new shuffled deck
     # 2) deals cards to the players depending on the round #
@@ -107,7 +106,7 @@ class Game:
             print "  len(shuffled_deck.cards) == 0"
             self.trump.prompt_dealer_for_trump_suit(self.players[0].id)
         for player in self.players:
-            self.dm.display_cards_for_player_in_pm(player.id,
+            self.bot.display_cards_for_player_in_pm(player.id,
                                                     player.cards_in_hand)
         self.bid.get_bids_from_players(self.current_round, self.players)
         self.bot.current_game.current_round_trump_suit = trump_suit
