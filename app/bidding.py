@@ -91,7 +91,7 @@ class Bid():
                     self.bot.player_bids_for_current_round[user_id] =int(command)
                     msg = "><@{}> bids `{}`.\n".format(current_username, int(command))
                     print "  ",msg
-                    response = "Bid recorded! Check the main channel."
+                    msg += "Bid recorded! Check the main channel.\n"
                     self.score.build_scoreboard(msg)
                     # self.score.update_scoreboard(self.bot.scoreboard)
                     self.score.pm_users_scoreboard(self.bot.scoreboard)

@@ -168,6 +168,8 @@ class DrumpfBot():
                 self.game_started = True
                 response = ">>>Starting a new game of Drumpf!\n"
                 score.initialize_scores()
+
+                score.initialize_scoreboard()
                 resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 self.ts = resp['ts']
