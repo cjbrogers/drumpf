@@ -217,6 +217,57 @@ class DrumpfBot():
         resp = slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True, attachments=attachments)
 
+    def handle_private_message(self,command,user_id):
+        """Controls how a private message incoming from a user is handled
+
+        Args:
+            [command] (str) incoming command to handle
+            [user_id] (str) the id of the player
+        Returns:
+        """
+        print "handle_private_message(self, command, user_id) "
+        print "  command: ", command
+        print "  user_id: ", user_id
+
+        response = ""
+
+        print "  **$$**len(self.player_trump_card_queue): {}".format(len(self.player_trump_card_queue))
+        print "  **$$**self.player_trump_card_queue: {}".format(self.player_trump_card_queue)
+
+        print "  **$$**len(self.player_bid_queue): {}".format(len(self.player_bid_queue))
+        print "  **$$**self.player_bid_queue: {}".format(self.player_bid_queue)
+
+        print "  **$$**len(self.player_turn_queue): {}".format(len(self.player_turn_queue))
+        print "  **$$**self.player_turn_queue: {}".format(self.player_turn_queue)
+
+        if len(self.player_trump_card_queue):
+            print "  len(self.player_trump_card_queue)"
+            trump.handle_trump_suit_selection(command, user_id)
+
+        elif len(self.player_bid_queue):
+            print "  len(self.player_bid_queue)"
+            bid.handle_player_bid(command, user_id)
+
+        elif len(self.player_turn_queue):
+            print "  len(self.player_turn_queue)"
+            round_.handle_player_turn(command, user_id)
+
+    def private_message_user(self, user_id, message, attachments=None):
+        """Posts a private message to a user channel
+
+        Args:
+            [user_id] (str) id of the player
+            [message] (str) the message to post
+            [attachments] (list) a list of attachments to append to the message -optional, defaults to None
+        Returns:
+        """
+        slack_client.api_call(
+            "chat.postMessage",
+            channel=user_id,
+            text=message,
+            as_user=True, attachments=attachments
+        )
+
     def play_game_of_drumpf_on_slack(self, players, channel):
         """Takes an array of player_ids and the channel the game request originated from
 
@@ -260,22 +311,6 @@ class DrumpfBot():
         self.current_game.current_round_trump_suit = None
         self.first_card_sub_round = 0
         self.player_turn_queue.rotate(1)
-
-    def private_message_user(self, user_id, message, attachments=None):
-        """Posts a private message to a user channel
-
-        Args:
-            [user_id] (str) id of the player
-            [message] (str) the message to post
-            [attachments] (list) a list of attachments to append to the message -optional, defaults to None
-        Returns:
-        """
-        slack_client.api_call(
-            "chat.postMessage",
-            channel=user_id,
-            text=message,
-            as_user=True, attachments=attachments
-        )
 
     def restart_program(self):
         """
