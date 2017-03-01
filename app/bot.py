@@ -216,7 +216,6 @@ class DrumpfBot():
                               text=response, as_user=True, attachments=attachments)
 
     def handle_private_message(self,command,user_id,ts):
-        self.timestamps[user_id] = str(ts)
         """Controls how a private message incoming from a user is handled
 
         Args:
@@ -241,19 +240,22 @@ class DrumpfBot():
         if len(self.player_trump_card_queue):
             print "  len(self.player_trump_card_queue)"
             trump.handle_trump_suit_selection(command, user_id)
-            self.remove_pms(user_id, self.timestamps)
+            self.timestamps[user_id] = str(ts)
+            self.remove_pms(self.timestamps)
 
         elif len(self.player_bid_queue):
             print "  len(self.player_bid_queue)"
             bid.handle_player_bid(command, user_id)
-            self.remove_pms(user_id, self.timestamps)
+            self.timestamps[user_id] = str(ts)
+            self.remove_pms(self.timestamps)
 
         elif len(self.player_turn_queue):
             print "  len(self.player_turn_queue)"
             round_.handle_player_turn(command, user_id)
-            self.remove_pms(user_id, self.timestamps)
+            self.timestamps[user_id] = str(ts)
+            self.remove_pms(self.timestamps)
 
-    def remove_pms(self,user_id,timestamp_list):
+    def remove_pms(self,timestamp_list):
         """Removes private messages posted by a user
 
         Args:
