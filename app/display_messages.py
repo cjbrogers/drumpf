@@ -89,18 +89,18 @@ class DisplayMessages():
         """
         print "display_cards_for_player_in_pm(self, player_id, cards) "
         print "  player_id: ", player_id
-        print "  player: ", self.user_ids_to_username[player_id]
+        print "  player: ", self.bot.user_ids_to_username[player_id]
         print "  cards: ", cards
 
         formatted_cards = helper_functions.interactiformat(cards)
         # the player has more than 5 cards, so we have to send them in separate messages
-        self.first_set = False
+        self.bot.first_set = False
         if len(cards) > 5:
             print "  len(cards) > 5"
             five_card_set = {}
             for idx, card in enumerate(cards):
                 if idx == 0: # add the first card
-                    self.first_set = True
+                    self.bot.first_set = True
                     print "  idx == 0"
                     print "  formatted_cards[idx] = ", formatted_cards[idx]
                     five_card_set[idx] = formatted_cards[idx]
@@ -110,20 +110,20 @@ class DisplayMessages():
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
                     print "  (idx % 5) == 0"
-                    attachments = helper_functions.interactify(five_card_set,self.first_set)
+                    attachments = helper_functions.interactify(five_card_set,self.bot.first_set)
                     print "  *posting whole set of five"
                     slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
                         attachments=attachments
                         )
-                    self.first_set = False
+                    self.bot.first_set = False
                     five_card_set.clear() # clear the set
                     five_card_set[idx] = formatted_cards[idx] # add the first card of the next set
                     print "  five_card_set (first card of next set): ", five_card_set
                 if len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
                     print "  len(cards) == (idx + 1)"
-                    attachments = helper_functions.interactify(five_card_set,self.first_set)
+                    attachments = helper_functions.interactify(five_card_set,self.bot.first_set)
                     print "  *posting remaining set of cards"
                     slack.chat.post_message(
                         channel=player_id,
@@ -134,8 +134,8 @@ class DisplayMessages():
         # there are less than 5 cards in the players hand, so just display them
         else:
             print "  len(cards) <= 5"
-            self.first_set = True
-            attachments = helper_functions.interactify(formatted_cards,self.first_set)
+            self.bot.first_set = True
+            attachments = helper_functions.interactify(formatted_cards,self.bot.first_set)
             print "  *posting set of 0-5"
             slack.chat.post_message(
                 channel=player_id,
