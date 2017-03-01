@@ -96,6 +96,8 @@ class Scoring():
         self.bot.prepare_for_next_round()
         if self.bot.current_game.current_round == self.bot.current_game.final_round:
             self.present_winner_for_game(self.bot.user_ids_to_username[player_id],player_id)
+        elif self.bot.game_scorecard[player_id] > self.bot.winning_points:
+            self.present_winner_for_game(self.bot.user_ids_to_username[player_id],player_id)
         else:
             self.bot.current_game.play_round()
 
