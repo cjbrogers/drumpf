@@ -122,7 +122,7 @@ class DrumpfBot():
                 slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
 
                 response = "<@{}> Wants to play a game of drumpf!".format(username)
-                attachments =[{"title":"Add me to the game:", "fallback":"Add me to the game:", "callback_id":"add me", "attachment_type":"default", "actions":{"name":"add me","text":"add me","type":"button","value":"{} add me".format(AT_BOT)}}]
+                attachments =[{"title":"Add me to the game:", "fallback":"Add me to the game:", "callback_id":"add me", "attachment_type":"default", "actions":[{"name":"add me","text":"add me","type":"button","value":"{} add me".format(AT_BOT)}]}]
                 self.users_in_game.append(user_id)
                 resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
                 self.ts = resp['ts']
