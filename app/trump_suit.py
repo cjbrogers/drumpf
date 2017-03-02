@@ -49,7 +49,9 @@ class TrumpSuit():
                 print " ",msg
                 self.score.build_scoreboard(msg)
                 self.score.update_scoreboard(self.bot.scoreboard)
-                self.score.pm_users_scoreboard(self.bot.scoreboard)
+                # self.score.pm_users_scoreboard(self.bot.scoreboard)
+                for player_id in self.bot.users_in_game:
+                    self.bot.private_message_user(player_id,msg)
 
                 print "    self.bot.player_trump_card_queue before pop(): {}".format(self.bot.player_trump_card_queue)
 

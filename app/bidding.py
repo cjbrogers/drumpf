@@ -91,21 +91,15 @@ class Bid():
                     self.bot.player_bids_for_current_round[user_id] =int(command)
                     msg = "><@{}> bids `{}`.\n".format(current_username, int(command))
                     print "  ",msg
-                    msg += "`Bid recorded!`\n"
                     self.score.build_scoreboard(msg)
                     # self.score.update_scoreboard(self.bot.scoreboard)
-                    self.score.pm_users_scoreboard(self.bot.scoreboard)
+                    # self.score.pm_users_scoreboard(self.bot.scoreboard)
+                    for player_id in self.bot.users_in_game:
+                        self.bot.private_message_user(player_id,msg)
 
                     self.bot.player_bid_queue.popleft()
                     if len(self.bot.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
-                        
-                        # msg = "`All bids recorded, let's play!`\n\n"
-                        # print " ",msg
-                        # self.score.build_scoreboard(msg)
-                        # # self.score.update_scoreboard(self.bot.scoreboard)
-                        # self.score.pm_users_scoreboard(self.bot.scoreboard)
-
                         print "    self.bot.player_bids_for_current_round: %s" % self.bot.player_bids_for_current_round
                         for player in self.bot.current_game.players:
                             if player.id == self.bot.player_turn_queue[0]:
