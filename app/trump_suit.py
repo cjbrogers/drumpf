@@ -61,12 +61,9 @@ class TrumpSuit():
 
                 for player in self.bot.player_turn_queue_reference:
                     self.bot.private_message_user(player, response)
-                    self.bot.private_message_user(player, msg)
 
                 if len(self.bot.player_bid_queue):
                     self.bid.present_bid_buttons(self.bot.player_bid_queue[0])
-                    msg = "What's your bid for the round?"
-                    print "  ",msg
                 else:
                     msg = "Play a card."
                     print "  ",msg
