@@ -1,2 +1,2 @@
-web: gunicorn controller:app --log-file=-
+web: gunicorn app/views:app --log-file=-
 worker: python app/bot.py
