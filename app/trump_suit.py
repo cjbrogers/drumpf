@@ -123,10 +123,10 @@ class TrumpSuit():
         self.score.build_scoreboard(msg)
         self.score.update_scoreboard(self.bot.scoreboard)
         self.score.pm_users_scoreboard(self.bot.scoreboard)
-        trump = "The trump card is: {} \n".format(helper_functions.emojify_card(trump_card))
-        # send the trump suit to pm
-        for player_id in self.bot.users_in_game:
-            self.bot.private_message_user(player_id,trump)
+        # trump = "The trump card is: {} \n".format(helper_functions.emojify_card(trump_card))
+        # # send the trump suit to pm
+        # for player_id in self.bot.users_in_game:
+        #     self.bot.private_message_user(player_id,trump)
 
     def player_hand_contains_suit(self, user_id, suit):
         """Determines if the player has the leading suit in hand or not
