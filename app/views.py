@@ -6,7 +6,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
 from slacker import Slacker
 import pandas as pd
-import model
+import models
 
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 CLIENT_ID = os.environ["SLACK_OAUTH_CLIENT_ID"]
@@ -40,7 +40,7 @@ def inbound():
         print 'User sending message: ',user_name
         print "Value received: ",value
 
-        token = model.get_user_token(user_id,user_name)
+        token = models.get_user_token(user_id,user_name)
         slack_client = SlackClient(token)
         resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
 
@@ -95,8 +95,8 @@ def post_signin():
 
     values = {"token": token, "uid": uid, "name": name}
     df = pd.DataFrame(values, index=[0])
-    engine = model.get_engine()
-    model.send_to_db(df,engine,'user')
+    engine = models.get_engine()
+    models.send_to_db(df,engine,'user')
 
     # Don't forget to let the user know that auth has succeeded!
     return "<h1>Welcome to Drumpf!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."
@@ -141,8 +141,8 @@ def post_install():
     values = {"access_token": access_token, "bot_access_token": bot_access_token, "team_id": team_id}
 
     df = pd.DataFrame(values, index=[0])
-    engine = model.get_engine()
-    model.send_to_db(df,engine,'team')
+    engine = models.get_engine()
+    models.send_to_db(df,engine,'team')
 
     # Don't forget to let the user know that auth has succeeded!
     return "Auth complete!"
