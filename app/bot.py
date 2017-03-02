@@ -101,6 +101,7 @@ class DrumpfBot():
             self.game_created == True
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 donny_drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Testicle U44V02PDY
+            slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
             self.handle_command("start game", channel, user_id, ts)
             return
 
@@ -112,6 +113,7 @@ class DrumpfBot():
             if command.lower().startswith("create game 1000"):
                 self.winning_points = 1000
             self.game_created == True
+            slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
             if len(self.users_in_game) == 0:
                 response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
                 title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
