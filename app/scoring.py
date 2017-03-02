@@ -537,5 +537,5 @@ class Scoring():
             as_user=True
         )
         for player in self.bot.current_game.players:
-            self.bot.private_message_user(player.id,response)
+            self.bot.private_message_user(player.id,response,attachments)
         return
