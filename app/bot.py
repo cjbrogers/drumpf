@@ -2,12 +2,13 @@
 import os
 import sys
 import time
-from slackclient import SlackClient
 from collections import defaultdict, deque
+
+from slackclient import SlackClient
 from slacker import Slacker
+
 import game as DrumpfGame
 import helper_functions
-import controller
 import scoring
 from scoring import Scoring
 import bidding
