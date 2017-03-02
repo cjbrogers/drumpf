@@ -63,7 +63,7 @@ class Bid():
             self.bot.first_set = False
         return
 
-    def handle_player_bid(self, command, user_id, ts):
+    def handle_player_bid(self, command, user_id):
         """
         Deals with the logic for handling player bidding
         Args: [command] the bid command (int)
