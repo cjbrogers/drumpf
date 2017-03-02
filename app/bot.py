@@ -257,7 +257,7 @@ class DrumpfBot():
 
         elif len(self.player_bid_queue):
             print "  len(self.player_bid_queue)"
-            bid.handle_player_bid(command, user_id)
+            bid.handle_player_bid(command, user_id, ts)
             # self.timestamps[user_id] = str(ts)
             # self.remove_pms(self.timestamps)
 
@@ -284,7 +284,7 @@ class DrumpfBot():
     #             as_user=True
     #         )
 
-    def private_message_user(self, user_id, message, attachments=None):
+    def private_message_user(self, user_id, message, ts, attachments=None):
         """Posts a private message to a user channel
 
         Args:
@@ -294,9 +294,10 @@ class DrumpfBot():
         Returns:
         """
         slack_client.api_call(
-            "chat.postMessage",
+            "chat.update",
             channel=user_id,
             text=message,
+            ts=ts,
             as_user=True, attachments=attachments
         )
 

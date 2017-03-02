@@ -63,7 +63,7 @@ class Bid():
             self.bot.first_set = False
         return
 
-    def handle_player_bid(self, command, user_id):
+    def handle_player_bid(self, command, user_id, ts):
         """
         Deals with the logic for handling player bidding
         Args: [command] the bid command (int)
@@ -109,8 +109,8 @@ class Bid():
                         for player in self.bot.current_game.players:
                             if player.id == self.bot.player_turn_queue[0]:
                                 self.bot.display_cards_for_player_in_pm(self.bot.player_turn_queue[0],player.cards_in_hand)
-                                print "  Please select a card to play."
-                                self.bot.private_message_user(self.bot.player_turn_queue[0], "Please select a card to play.")
+                                print "  Play a card."
+                                self.bot.private_message_user(self.bot.player_turn_queue[0], "Play a card.")
                         return
 
                     else: #get the next player's bid
