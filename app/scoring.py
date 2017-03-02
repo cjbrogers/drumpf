@@ -1,6 +1,7 @@
 from slackclient import SlackClient
 import helper_functions
 import game as DrumpfGame
+import random
 
 slack_client = SlackClient(helper_functions.get_slack_client())
 
@@ -507,7 +508,9 @@ class Scoring():
         print "present_winner_for_game(self) "
         score = self.bot.game_scorecard[pid]
         response = "And our winner for the game is *{}*!\n:cake: :birthday: :fireworks: *Score: `{}`* :fireworks: :birthday: :cake:\n".format(winner,score)
-        image_url = "https://media.giphy.com/media/YTbZzCkRQCEJa/giphy.gif"
+        image_urls = ["https://media.giphy.com/media/ytwDCq9aT3cgEyyYVO/giphy.gif","https://media.giphy.com/media/YTbZzCkRQCEJa/giphy.gif","https://media.giphy.com/media/jMBmFMAwbA3mg/giphy.gif","https://media.giphy.com/media/l0MYxef0mpdcnQnvi/source.gif","https://media.giphy.com/media/3o7TKtsBMu4xzIV808/giphy.gif","https://media.giphy.com/media/l3q2Z6S6n38zjPswo/giphy.gif","https://media.giphy.com/media/kmqCVSHi5phMk/giphy.gif","https://media.giphy.com/media/9X5zV9eHAqAus/giphy.gif","https://media.giphy.com/media/Xv0Y0A2GsrZ3G/giphy.gif"]
+        random.shuffle(image_urls)
+        image_url = image_urls[0]
         attachments = [{"title": "Celebrate good times!", "image_url": image_url}]
         slack_client.api_call(
             "chat.update",
