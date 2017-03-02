@@ -111,11 +111,13 @@ class Bid():
                                 self.bot.display_cards_for_player_in_pm(self.bot.player_turn_queue[0],player.cards_in_hand)
                                 print "  Please select a card to play."
                                 self.bot.private_message_user(self.bot.player_turn_queue[0], "Please select a card to play.")
+                        return
 
                     else: #get the next player's bid
                         msg = "What's your bid for the round?"
                         print "  ",msg
                         self.present_bid_buttons(self.bot.player_bid_queue[0])
+                        return
             except:
                 response = "That wasn't a valid bid."
 
