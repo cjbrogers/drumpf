@@ -41,11 +41,12 @@ def inbound():
         print "Value received: ",value
 
         token = model.get_user_token(user_id,user_name)
-        slack = Slacker(token)
-        resp = slack.chat.post_message(channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
+        slack_client = SlackClient(token)
+        resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
+
         if resp['ts']:
             ts = resp['ts']
-            slack.chat.delete(channel=channel_id,ts=ts,as_user=True)
+            slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
     return Response(), 200
 
 # the beginning of the Sign In to Slack OAuth process.

@@ -105,6 +105,8 @@ class DrumpfBot():
             return
 
         if command.lower().startswith("create game"):
+            if command.lower().startswith("create game 250"):
+                self.winning_points = 250
             if command.lower().startswith("create game 500"):
                 self.winning_points = 500
             if command.lower().startswith("create game 1000"):
