@@ -95,7 +95,7 @@ class Scoring():
 
         self.update_scores(self.bot.scores)
 
-        self.pm_users_scoreboard(self.bot.scoreboard)
+        # self.pm_users_scoreboard(self.bot.scoreboard)
         self.pm_users_scores(self.bot.scores)
 
         self.bot.prepare_for_next_round()

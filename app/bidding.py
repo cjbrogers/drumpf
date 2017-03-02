@@ -99,11 +99,12 @@ class Bid():
                     self.bot.player_bid_queue.popleft()
                     if len(self.bot.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
-                        msg = "`All bids recorded, let's play!`\n\n"
-                        print " ",msg
-                        self.score.build_scoreboard(msg)
-                        # self.score.update_scoreboard(self.bot.scoreboard)
-                        self.score.pm_users_scoreboard(self.bot.scoreboard)
+                        
+                        # msg = "`All bids recorded, let's play!`\n\n"
+                        # print " ",msg
+                        # self.score.build_scoreboard(msg)
+                        # # self.score.update_scoreboard(self.bot.scoreboard)
+                        # self.score.pm_users_scoreboard(self.bot.scoreboard)
 
                         print "    self.bot.player_bids_for_current_round: %s" % self.bot.player_bids_for_current_round
                         for player in self.bot.current_game.players:
