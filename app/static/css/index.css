@@ -51,7 +51,7 @@ h4 {
    color: #FFF;
    text-decoration: underline;
 }
-img {
+img.img-responsive {
   display: block;
   max-width: 100%;
   height: auto;
