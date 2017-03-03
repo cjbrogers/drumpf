@@ -23,6 +23,7 @@ def connect():
                                      user=DB_USER,
                                      password=DB_PASSWORD,
                                      db=DB_NAME,
+                                     autocommit=True,
                                      cursorclass=pymysql.cursors.DictCursor)
     except Exception as e:
         raise
@@ -62,8 +63,9 @@ def get_user_token(user_id,user_name):
                 print user
                 if user['uid'] == user_id:
                     if user_name != user['name']:
-                        sql = " UPDATE user SET name={} WHERE uid='{}' ".format(user_name,user['uid'])
-                        cursor.execute(sql)
+                        sql = "UPDATE user SET name=%s WHERE uid=%s"
+                        data = (user_name,user_id)
+                        cursor.execute(sql,data)
                     token = user['token']
                     return token
     except Exception as e:
