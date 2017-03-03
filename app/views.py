@@ -53,19 +53,9 @@ def inbound():
 # we can get the user tokens from the return of this call
 @app.route("/signin", methods=["GET"])
 def pre_signin():
-
     redirect_uri1 = "https://drumpfbot.herokuapp.com/signin/finish"
     redirect_uri2 = "https://drumpfbot.herokuapp.com/auth/finish"
-    return '''
-      <a href="https://slack.com/oauth/authorize?scope=chat:write:user&client_id=122416745729.127817802451&redirect_uri={0}">
-
-          <img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" />
-
-      </a>
-       <a href="https://slack.com/oauth/authorize?scope={1}&client_id={2}&redirect_uri={3}">
-           <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
-       </a>
-    '''.format(redirect_uri1,OAUTH_SCOPE,CLIENT_ID,redirect_uri2)
+    return render_template("slack.html", redirect_uri1=redirect_uri1,redirect_uri2=redirect_uri2,OAUTH_SCOPE=OAUTH_SCOPE,CLIENT_ID=CLIENT_ID)
 
 # end of the Slack signin process, appending relevant user information including tokens into the db
 @app.route("/signin/finish", methods=["GET", "POST"])
@@ -99,7 +89,7 @@ def post_signin():
     models.send_to_db(df,engine,'user')
 
     # Don't forget to let the user know that auth has succeeded!
-    return "<h1>Welcome to Drumpf!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."
+    return "<h1>Welcome to Drumpf! on Slack!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."
 
 # the beggining of the Add to Slack button OAuth process
 @app.route("/auth", methods=["GET"])
@@ -117,10 +107,8 @@ def post_install():
     redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
     # Retrieve the auth code from the request params
     auth_code = request.args['code']
-
     # An empty string is a valid token for this request
     sc = SlackClient("")
-
     # Request the auth tokens from Slack
     auth_response = sc.api_call(
         "oauth.access",
@@ -129,7 +117,6 @@ def post_install():
         redirect_uri=redirect_uri,
         code=auth_code
     )
-
     # Save the bot token to an environmental variable or to your data store
     # for later use
     print(auth_response)
@@ -139,19 +126,15 @@ def post_install():
     bot_access_token = auth_response['bot']['bot_access_token']
     team_id = auth_response['team_id']
     values = {"access_token": access_token, "bot_access_token": bot_access_token, "team_id": team_id}
-
     df = pd.DataFrame(values, index=[0])
     engine = models.get_engine()
     models.send_to_db(df,engine,'team')
-
-    # Don't forget to let the user know that auth has succeeded!
     return "Auth complete!"
 
 # main index of webpage https://drumpfbot.herokuapp.com
 @app.route('/', methods=['GET'])
 def test():
     return render_template('index.html')
-
 
 if __name__ == "__main__":
     app.run(debug=True)
