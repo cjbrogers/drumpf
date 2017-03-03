@@ -114,7 +114,7 @@ def post_install():
         "oauth.access",
         client_id=CLIENT_ID,
         client_secret=CLIENT_SECRET,
-        redirect_uri=redirect_uri,
+        # redirect_uri=redirect_uri,
         code=auth_code
     )
     # Save the bot token to an environmental variable or to your data store
