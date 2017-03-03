@@ -153,8 +153,9 @@ class DrumpfBot():
                 else:
                     self.users_in_game.append(user_id)
                     response = "Added <@{}> to the game!".format(username)
-                    response += "\n_We're good to go! Type `@drumpfbot start game` to get your Drumpf on._"
-                    resp = slack_client.api_call("chat.update", channel=channel,text=response,ts=self.ts,as_user=True)
+                    response += "\n_We're good to go!_"
+                    attachments =[{"title":"Start the game:", "fallback":"Start the game:", "callback_id":"start game", "attachment_type":"default", "actions":[{"name":"start game","text":"start game","type":"button","value":"start game"}]}]
+                    resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
                     return
 
         if command.lower().startswith("start game"):
