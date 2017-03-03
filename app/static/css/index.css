@@ -15,7 +15,7 @@ nav {
 }
 nav a{color: white;}
 .navbar .navbar-nav {
-    display: inline-block;
+    /*display: inline-block;*/
     float: none;
 }
 .navbar .navbar-collapse {
