@@ -14,7 +14,13 @@ nav {
     font-family: 'Alef', sans-serif;
 }
 nav a{color: white;}
-
+.navbar .navbar-nav {
+    display: inline-block;
+    float: none;
+}
+.navbar .navbar-collapse {
+    text-align: center;
+}
 .navbar-toggle {
     background-color: white;
 }
