@@ -62,7 +62,7 @@ def get_user_token(user_id,user_name):
                 print user
                 if user['uid'] == user_id:
                     if user_name != user['name']:
-                        sql = '''UPDATE `user` SET name={}'''.format(user_name)
+                        sql = '''UPDATE `user` SET name={} WHERE uid={}'''.format(user_name,user_id)
                         cursor.execute(sql)
                     token = user['token']
                     return token
