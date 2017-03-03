@@ -133,8 +133,10 @@ def post_install():
 
 # main index of webpage https://drumpfbot.herokuapp.com
 @app.route('/', methods=['GET'])
-def test():
-    return render_template('index.html')
+def index():
+    redirect_uri1 = "https://drumpfbot.herokuapp.com/signin/finish"
+    redirect_uri2 = "https://drumpfbot.herokuapp.com/auth/finish"
+    return render_template('index.html',redirect_uri1=redirect_uri1,redirect_uri2=redirect_uri2,OAUTH_SCOPE=OAUTH_SCOPE,CLIENT_ID=CLIENT_ID)
 
 if __name__ == "__main__":
     app.run(debug=True)
