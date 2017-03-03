@@ -1,172 +1,104 @@
 <!doctype html>
 <html>
 <head>
-    <title>The Game of Drumpf!</title>
+  <title>The Game of Drumpf!</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans|Roboto" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Alef:700" rel="stylesheet">
+  <!-- Active Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Nunito+Sans|Roboto" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Alef:700" rel="stylesheet">
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
-    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/static/css/index.css" type="text/css">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 
+  <!-- External style sheets -->
+  <link rel="stylesheet" href="/static/css/index.css" type="text/css">
 
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
 
-<!-- /*<style>
-body {
-    background-color: #a1a1a1;
-    font-family: 'Alef', sans-serif;
-    text-align: center;
-    margin: 0 auto;
-}
-nav {
-    background-color: #0a1026;
-    width: inherit;
-    max-height: 30px;
-    margin: 0 auto;
-    color: white;
-    font-size: 1.2vw;
-    font-family: 'Alef', sans-serif;
-}
-nav a{color: white;}
-.navbar .navbar-nav {
-    display: inline-block;
-    float: none;
-}
-.navbar .navbar-collapse {
-    text-align: center;
-}
-.navbar-toggle {
-    background-color: white;
-}
-.page {
-    width: 75%;
-    margin: 0 auto;
-}
-.container-box {
-    position: relative;
-    display: inline-block;
-}
-.text-box {
-    position: absolute;
-    height: 100%;
-    text-align: center;
-    width: 100%;
-}
-.text-box:before {
-   content: '';
-   display: inline-block;
-   height: 90%;
-   vertical-align: bottom;
-   /*margin-top: 100px;*/
-}
-h4 {
-   display: inline-block;
-   font-size: 1.5vw;
-   color: #FFF;
-   text-decoration: underline;
-}
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-</style>*/ -->
-
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </head>
+
 <body>
+  <div class="page container">
+    <nav class="navbar navbar-fixed-top">
+        <div class="row">
+          <div class="col-sm-12">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only"> Toggle navigation</span>
+              <span class="icon-bar"> </span>
+              <span class="icon-bar"> </span>
+              <span class="icon-bar"> </span>
+            </button>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class=""><a href="#">THE GAME</a> </li>
+                <li> <a href="#how">HOW TO PLAY</a> </li>
+                <li> <a href="#special">SPECIAL CARDS</a> </li>
+                <li> <a href="#kickstarter">KICKSTARTER</a> </li>
+                <li class="navbar-right"><a href="/signin">SLACK</a> </li>
+              </ul> <!--nav navbar-nav-->
+            </div> <!--navbar-collapse collapse-->
+        </div> <!--col-sm-12-->
+      </div> <!--row-->
+    </nav>
 
-
-<div class="page container">
-  <nav class="navbar navbar-fixed-top">
-      <div class="row">
-        <div class="col-sm-12">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only"> Toggle navigation</span>
-            <span class="icon-bar"> </span>
-            <span class="icon-bar"> </span>
-            <span class="icon-bar"> </span>
-          </button>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-              <li class=""><a href="#">THE GAME</a> </li>
-              <li> <a href="#how">HOW TO PLAY</a> </li>
-              <li> <a href="#special">SPECIAL CARDS</a> </li>
-              <li> <a href="#kickstarter">KICKSTARTER</a> </li>
-              <li class="navbar-right"><a href="/signin">SLACK</a> </li>
-            </ul> <!--nav navbar-nav-->
-          </div> <!--navbar-collapse collapse-->
-
-      </div> <!--col-sm-12-->
-    </div> <!--row-->
-  </nav>
-
-  <section>
-  <div class="row banner">
-    <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px; margin-top:50px">
-      <img src="http://cjbrogers.com/drumpf/images/banner.PNG" class="img-responsive">
-    </div>
-  </div>
-  </section>
-
-  <section id="kickstarter">
-  <div class="row">
-    <div class="col-md-12 container-box" style="padding-left: 0px;  padding-right: 0px;">
-      <div class="text-box">
-        <a href="#"><h4>KICKSTARTER</h4></a>
+    <section>
+    <div class="row banner">
+      <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px; margin-top:50px">
+        <img src="/static/img/banner.PNG" class="img-responsive">
       </div>
-      <img class="img-responsive" src="http://cjbrogers.com/drumpf/images/kickstarter.PNG" >
     </div>
-  </div>
-  </section>
-
-  <section id="how">
-  <div class="row setup">
-    <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
-      <img src="http://cjbrogers.com/drumpf/images/set-upA.PNG" class="img-responsive">
+    </section>
+    <section id="kickstarter">
+    <div class="row">
+      <div class="col-md-12 container-box" style="padding-left: 0px;  padding-right: 0px;">
+        <div class="text-box">
+          <a href="#"><h4>KICKSTARTER</h4></a>
+        </div>
+        <img class="img-responsive" src="/static/img/kickstarter.PNG" >
+      </div>
     </div>
-  </div>
-  </section>
-
-  <section>
-  <div class="row setup">
-    <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
-      <img src="http://cjbrogers.com/drumpf/images/set-upB.PNG" class="img-responsive">
+    </section>
+    <section id="how">
+    <div class="row setup">
+      <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
+        <img src="/static/img/set-upA.PNG" class="img-responsive">
+      </div>
     </div>
-  </div>
-  </section>
-
-  <section>
-  <div class="row special">
-    <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
-      <img src="http://cjbrogers.com/drumpf/images/special.PNG" class="img-responsive">
+    </section>
+    <section>
+    <div class="row setup">
+      <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
+        <img src="/static/img/set-upB.PNG" class="img-responsive">
+      </div>
     </div>
-  </div>
-  </section>
-
-  <section id="special">
-  <div class="row special-cards">
-    <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
-      <img src="http://cjbrogers.com/drumpf/images/specialcards.PNG" class="img-responsive">
+    </section>
+    <section>
+    <div class="row special">
+      <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
+        <img src="/static/img/special.PNG" class="img-responsive">
+      </div>
     </div>
-  </div>
-  </section>
-
-  <section>
-  <div class="row footer">
-    <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
-      <img src="http://cjbrogers.com/drumpf/images/footer.PNG" class="img-responsive">
+    </section>
+    <section id="special">
+    <div class="row special-cards">
+      <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
+        <img src="/static/img/specialcards.PNG" class="img-responsive">
+      </div>
     </div>
-  </div>
-  </section>
-</div> <!--page container-->
-
+    </section>
+    <section>
+    <div class="row footer">
+      <div class="col-md-12" style="padding-left: 0px;  padding-right: 0px;">
+        <img src="/static/img/footer.PNG" class="img-responsive">
+      </div>
+    </div>
+    </section>
+  </div> <!--page container-->
 </body>
+
 </html>
