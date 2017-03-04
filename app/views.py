@@ -54,7 +54,7 @@ def inbound():
 def events():
 
     # challenge = request.form.get('challenge')
-    challenge = =request.args.get('challenge')
+    challenge = request.args.get('challenge')
     print challenge
     # challenge = data['challenge']
     # if challenge == SLACK_VERIFICATION_TOKEN:
@@ -79,7 +79,7 @@ def events():
     # if resp['ts']:
     #     ts = resp['ts']
     #     slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
-    return challenge
+    return Response(200 "OK"), challenge
 
 # the beginning of the Sign In to Slack OAuth process.
 # we can get the user tokens from the return of this call
