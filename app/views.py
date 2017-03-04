@@ -53,9 +53,9 @@ def inbound():
 @app.route('/events', methods=['POST'])
 def events():
 
-    payload = request.form.get('payload')
-    data = json.loads(payload)
-    challenge = data['challenge']
+    challenge = request.form.get('challenge')
+    # data = json.loads(payload)
+    # challenge = data['challenge']
     # if challenge == SLACK_VERIFICATION_TOKEN:
     #     print 'TOKEN is good!'
         # print data
