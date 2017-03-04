@@ -53,35 +53,8 @@ def inbound():
 @app.route('/events', methods=['POST'])
 def events():
 
-    # challenge = request.form.get('challenge')
-    data = json.loads(request.form)
-    print data
-    print data['challenge']
-    print data['token']
-    print data['type']
-    # challenge = data['challenge']
-    # if challenge == SLACK_VERIFICATION_TOKEN:
-    #     print 'TOKEN is good!'
-        # print data
-        # response_url = data['response_url']
-        # channel_info = data['channel']
-        # channel_id = channel_info['id']
-        # user_info = data['user']
-        # user_id = user_info['id']
-        # user_name = user_info['name']
-        # actions = data['actions'][0]
-        # value = actions['value']
-        # print "Channel ID: ",channel_id
-        # print 'User sending message: ',user_name
-        # print "Value received: ",value
-        #
-        # token = models.get_user_token(user_id,user_name)
-        # slack_client = SlackClient(token)
-        # resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
-
-    # if resp['ts']:
-    #     ts = resp['ts']
-    #     slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
+    challenge = request.form.get(u'challenge')
+    print challenge
     return challenge
 
 # the beginning of the Sign In to Slack OAuth process.
