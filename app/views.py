@@ -53,7 +53,7 @@ def inbound():
 @app.route('/events', methods=['POST'])
 def events():
 
-    challenge = request.form.get(u'challenge')
+    challenge = request.args["challenge"]
     print challenge
     return challenge
 
