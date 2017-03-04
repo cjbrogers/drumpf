@@ -154,7 +154,9 @@ class DrumpfBot():
                     self.users_in_game.append(user_id)
                     response = "Added <@{}> to the game!".format(username)
                     response += "\n_We're good to go!_"
-                    attachments =[{"title":"Start the game:", "fallback":"Start the game:", "callback_id":"start game", "attachment_type":"default", "actions":[{"name":"start game","text":"start game","type":"button","value":"start game"}]}]
+                    attachments = None
+                    if len(self.users_in_game) == 2:
+                        attachments =[{"title":"Start the game:", "fallback":"Start the game:", "callback_id":"start game", "attachment_type":"default", "actions":[{"name":"start game","text":"start game","type":"button","value":"start game"}]}]
                     resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
                     return
 
