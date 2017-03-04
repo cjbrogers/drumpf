@@ -2,6 +2,7 @@
 import os
 from flask import Flask, request, Response, render_template
 from slackclient import SlackClient
+from slackeventsapi import SlackEventAdapter
 from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
 from slacker import Slacker
@@ -15,11 +16,12 @@ OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
 BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
+slack_events_adapter = SlackEventAdapter(SLACK_VERIFICATION_TOKEN, "/events")
 
 app = Flask(__name__)
 
 # handles interactive button responses for donny_drumpfbot
-@app.route('/actions', methods=['POST'])
+@slack_events_adapter.server.route('/actions', methods=['POST'])
 def inbound():
 
     payload = request.form.get('payload')
@@ -49,24 +51,16 @@ def inbound():
             slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
     return Response(), 200
 
-# handles interactive button responses for donny_drumpfbot
-@app.route('/events', methods=['POST'])
-def events():
-
-    challenge = request.form[u"challenge"]
-    print challenge
-    return challenge
-
 # the beginning of the Sign In to Slack OAuth process.
 # we can get the user tokens from the return of this call
-@app.route("/signin", methods=["GET"])
+@slack_events_adapter.server.route("/signin", methods=["GET"])
 def pre_signin():
     redirect_uri1 = "https://drumpfbot.herokuapp.com/signin/finish"
     redirect_uri2 = "https://drumpfbot.herokuapp.com/auth/finish"
     return render_template("slack.html", redirect_uri1=redirect_uri1,redirect_uri2=redirect_uri2,OAUTH_SCOPE=OAUTH_SCOPE,CLIENT_ID=CLIENT_ID)
 
 # end of the Slack signin process, appending relevant user information including tokens into the db
-@app.route("/signin/finish", methods=["GET", "POST"])
+@slack_events_adapter.server.route("/signin/finish", methods=["GET", "POST"])
 def post_signin():
     redirect_uri = "https://drumpfbot.herokuapp.com/signin/finish"
     # Retrieve the auth code from the request params
@@ -100,7 +94,7 @@ def post_signin():
     return "<h1>Welcome to Drumpf! on Slack!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."
 
 # the beggining of the Add to Slack button OAuth process
-@app.route("/auth", methods=["GET"])
+@slack_events_adapter.server.route("/auth", methods=["GET"])
 def pre_install():
     redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
     return '''
@@ -110,7 +104,7 @@ def pre_install():
     '''.format(OAUTH_SCOPE, CLIENT_ID, redirect_uri)
 
 # completes the ouath add to slack process, adding relevant tokens to the database
-@app.route("/auth/finish", methods=["GET", "POST"])
+@slack_events_adapter.server.route("/auth/finish", methods=["GET", "POST"])
 def post_install():
     redirect_uri = "https://drumpfbot.herokuapp.com/auth/finish"
     # Retrieve the auth code from the request params
@@ -133,18 +127,23 @@ def post_install():
     print(auth_response['bot']['bot_access_token'])
     bot_access_token = auth_response['bot']['bot_access_token']
     team_id = auth_response['team_id']
+    team_name = auth_response.get("team_name")
     values = {"access_token": access_token, "bot_access_token": bot_access_token, "team_id": team_id}
     df = pd.DataFrame(values, index=[0])
     engine = models.get_engine()
     models.send_to_db(df,engine,'team')
     return "Auth complete!"
 
+@slack_events_adapter.on("message")
+def handle_message(event_data):
+    print event_data
+
 # main index of webpage https://drumpfbot.herokuapp.com
-@app.route('/', methods=['GET'])
+@slack_events_adapter.server.route('/', methods=['GET'])
 def index():
     redirect_uri1 = "https://drumpfbot.herokuapp.com/signin/finish"
     redirect_uri2 = "https://drumpfbot.herokuapp.com/auth/finish"
     return render_template('index.html',redirect_uri1=redirect_uri1,redirect_uri2=redirect_uri2,OAUTH_SCOPE=OAUTH_SCOPE,CLIENT_ID=CLIENT_ID)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    slack_events_adapter.start(debug=True)
