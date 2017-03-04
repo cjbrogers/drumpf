@@ -50,11 +50,12 @@ def inbound():
     return Response(), 200
 
 # handles interactive button responses for donny_drumpfbot
-@app.route('/events', methods=['POST'])
+@app.route('/events', methods=['POST', 'GET'])
 def events():
 
-    challenge = request.form.get('challenge')
-    # data = json.loads(payload)
+    # challenge = request.form.get('challenge')
+    challenge = json.loads(request.args.get('challenge'))
+    print challenge
     # challenge = data['challenge']
     # if challenge == SLACK_VERIFICATION_TOKEN:
     #     print 'TOKEN is good!'
