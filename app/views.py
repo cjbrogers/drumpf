@@ -54,7 +54,7 @@ def inbound():
 def events():
 
     # challenge = request.form.get('challenge')
-    challenge = request.args.get('challenge')
+    challenge = request.form.get('challenge')
     print challenge
     # challenge = data['challenge']
     # if challenge == SLACK_VERIFICATION_TOKEN:
