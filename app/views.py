@@ -50,12 +50,15 @@ def inbound():
     return Response(), 200
 
 # handles interactive button responses for donny_drumpfbot
-@app.route('/events', methods=['POST', 'GET'])
+@app.route('/events', methods=['POST'])
 def events():
 
     # challenge = request.form.get('challenge')
-    challenge = request.form.get('challenge')
-    print challenge
+    data = json.loads(request.form)
+    print data
+    print data['challenge']
+    print data['token']
+    print data['type']
     # challenge = data['challenge']
     # if challenge == SLACK_VERIFICATION_TOKEN:
     #     print 'TOKEN is good!'
@@ -79,7 +82,7 @@ def events():
     # if resp['ts']:
     #     ts = resp['ts']
     #     slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
-    return Response(200), challenge
+    return challenge
 
 # the beginning of the Sign In to Slack OAuth process.
 # we can get the user tokens from the return of this call
