@@ -52,8 +52,9 @@ def inbound():
 # handles interactive button responses for donny_drumpfbot
 @app.route('/events', methods=['POST'])
 def events():
-    print request.form
-    return Response(200)
+    data = json.loads(request.data)
+    print data
+    return data.get('challenge'), 200, {"content-type": "application/json"}
 
 # the beginning of the Sign In to Slack OAuth process.
 # we can get the user tokens from the return of this call
