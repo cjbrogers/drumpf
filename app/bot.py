@@ -473,6 +473,7 @@ class DrumpfBot():
                 api_call = self.slack_client.api_call("users.list")
 
                 if api_call.get('ok'):
+                    print "OKIE DOKIE"
                     self.BOT_ID = models.get_bot_user_id(token['bot_access_token'])
                     self.AT_BOT = "<@" + self.BOT_ID + ">"
                     users = api_call.get('members')
