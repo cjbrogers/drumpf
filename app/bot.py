@@ -465,6 +465,7 @@ class DrumpfBot():
         tokens = models.get_bot_access_tokens()
         for token in tokens:
             try:
+                print token
                 self.slack_client = SlackClient(token)
                 self.slack = Slacker(token)
                 api_call = self.slack_client.api_call("users.list")
