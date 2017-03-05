@@ -469,7 +469,7 @@ class DrumpfBot():
             channels = slack_client.api_call("channels.list").get('channels')
             for channel in channels:
                 self.channel_ids_to_name[channel['id']] = channel['name']
-                if "drumpf-scoreboard" not in channel:
+                if "drumpf-scoreboard" not in channel['name']:
                     self.make_channel()
                     users = self.list_users
                     for user in users:
