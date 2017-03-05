@@ -126,7 +126,7 @@ def get_bot_user_id(token):
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT DISTINCT bot_user_id FROM `users` WHERE token=%s"
+            sql = "SELECT DISTINCT bot_user_id FROM `users` WHERE bot_access_token=%s"
             data = (token)
             cursor.execute(sql,data)
             users = cursor.fetchall()
