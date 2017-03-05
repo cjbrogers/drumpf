@@ -26,6 +26,8 @@ class DrumpfBot():
     def __init__(self): # drumpf-scoreboard: C4AK56EQ7
         self.BOT_ID = ""
         self.AT_BOT = ""
+        self.slack_client = None
+        self.slack = None
         self.users_in_game = deque([]) #[user_id, user_id...]
         self.user_ids_to_username = {} #{'USERID': 'James'}
         self.channel_ids_to_name = {} #{'CHANNELID': "#drumpf-play"}
