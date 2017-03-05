@@ -483,6 +483,8 @@ class DrumpfBot():
                         users = self.list_users
                         for user in users:
                             self.join_channel
+                    else:
+                        self.main_channel_id = self.channel_ids_to_name.index('drumpf-scoreboard')
             except:
                 print "exception on token retrieval attempt"
             else:
