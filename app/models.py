@@ -50,7 +50,7 @@ def send_to_db(df,engine,name):
 Retrieves the Slack user token from the database
 @return [token] users oauth token
 '''
-def get_user_token(user_id,user_name):
+def get_user_token(user_id,user_name=None):
     connection = connect()
     try:
         with connection.cursor() as cursor:
@@ -62,7 +62,7 @@ def get_user_token(user_id,user_name):
             for user in users:
                 print user
                 if user['uid'] == user_id:
-                    if user_name != user['name']:
+                    if user_name != user['name'] and user_name != None:
                         sql = "UPDATE user SET name=%s WHERE uid=%s"
                         data = (user_name,user_id)
                         cursor.execute(sql,data)

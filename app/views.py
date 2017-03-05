@@ -54,7 +54,17 @@ def inbound():
 def events():
     data = json.loads(request.data)
     print data
-    return data.get('challenge'), 200, {"content-type": "application/json"}
+    token = data['token']
+    if token == SLACK_VERIFICATION_TOKEN:
+        if data['event']['text']:
+            if 'create game' in data['event']['text']:
+                ts = data['event']['ts']
+                channel = data['event']['channel']
+                user_id = data['event']['user']
+                token = models.get_user_token(user_id)
+                slack_client = SlackClient(token)
+                slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+    return Response(), 200
 
 # the beginning of the Sign In to Slack OAuth process.
 # we can get the user tokens from the return of this call
