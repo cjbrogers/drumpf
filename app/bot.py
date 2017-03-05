@@ -456,13 +456,7 @@ class DrumpfBot():
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
         return None, None, None, None
 
-    def main(self):
-        """
-            Opens a Slack RTM API websocket connection
-        """
-        READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-        #grab user list and converts it to to a dict of ids to usernames
-
+    def initialize(self):
         # instantiate Slack clients
         tokens = models.get_bot_access_tokens()
         for token in tokens:
@@ -494,6 +488,14 @@ class DrumpfBot():
             else:
                 print "successful token retrieval"
                 break
+
+    def main(self):
+        """
+            Opens a Slack RTM API websocket connection
+        """
+        READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
+        #grab user list and converts it to to a dict of ids to usernames
+
         if self.slack_client.rtm_connect():
             print("DRUMPFBOT v1.0 connected and running!")
             while True:
@@ -510,6 +512,7 @@ class DrumpfBot():
 
 if __name__ == "__main__":
     bot = DrumpfBot()
+    bot.initialize()
     score = Scoring(bot)
     bid = Bid(bot,score)
     trump = TrumpSuit(bot,score,bid)
