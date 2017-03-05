@@ -1,0 +1,79 @@
+Dvrumpf Specs
+
+Navigation:
+
+Link: <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+
+font-family:Rubik
+font-weight: 300
+font-size: 15px
+line-height: 17px
+text-transform: capitalize
+color: white
+letter-space: 4px
+
+H1/Intro:
+
+Link: <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
+font-family:Poppins
+font-weight: 200
+font-size: 23px
+line-height: 40px
+color: white	
+
+
+Text Links:
+
+Link: <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+
+font-family:Rubik
+font-weight: 300
+font-size: 15px
+line-height: 17px
+text-transform: capitalize
+color: white
+letter-space: 4px
+
+H2:
+
+Link: <link href="https://fonts.googleapis.com/css?family=Teko" rel="stylesheet">
+
+font-family:Teko
+font-weight: 300
+font-size: 40px
+line-height: 25px
+text-transform: capitalize
+color: white
+letter-space: 6px
+
+H3:
+
+Link: <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+
+font-family:Rubik
+font-weight: 100
+font-size: 22px
+line-height: 25px
+color: white
+
+Paragraph:	
+
+Link: <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
+font-family:Poppins
+font-weight: 200
+font-size: 15px
+line-height: 25px
+color: white
+
+COLOUR:
+
+Blue: #0a1026
+
+Grey: #d3d3d3
+
+Red: #d42627
+
+Dark Blue: #050409
+
