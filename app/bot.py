@@ -449,8 +449,10 @@ class DrumpfBot():
                     # return text after the @ mention, whitespace removed
                     #example return: (u'hi', u'C2F154UTE', )
                     if 'ts' in output:
+                        print "SELF.AT_BOT: ",self.AT_BOT
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
                     else:
+                        print "SELF.AT_BOT2: ",self.AT_BOT
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
         return None, None, None, None
 
