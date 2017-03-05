@@ -19,16 +19,13 @@ from round import Round
 import trump_suit
 from trump_suit import TrumpSuit
 
-# starterbot's ID as an environment variable
-BOT_ID = models.get_bot_user_id
-AT_BOT = "<@" + BOT_ID + ">"
 
-# instantiate Slack & Twilio clients
-slack_client = SlackClient(helper_functions.get_slack_client())
-slack = Slacker(helper_functions.get_slack_client())
 
 class DrumpfBot():
+
     def __init__(self): # drumpf-scoreboard: C4AK56EQ7
+        self.BOT_ID = ""
+        self.AT_BOT = ""
         self.users_in_game = deque([]) #[user_id, user_id...]
         self.user_ids_to_username = {} #{'USERID': 'James'}
         self.channel_ids_to_name = {} #{'CHANNELID': "#drumpf-play"}
@@ -104,7 +101,7 @@ class DrumpfBot():
             self.users_in_game.append(user_id)
             self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 donny_drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Testicle U44V02PDY
             print "  ts=",ts
-            slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+            self.slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
             self.handle_command("start game", channel, user_id, ts)
             return
 
@@ -116,17 +113,17 @@ class DrumpfBot():
             if command.lower().startswith("create game 1000"):
                 self.winning_points = 1000
             self.game_created == True
-            slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+            self.slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
             if len(self.users_in_game) == 0:
                 response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
                 title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
                 attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
-                slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
+                self.slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
 
                 response = "<@{}> Wants to play a game of drumpf!".format(username)
                 attachments =[{"title":"Click the button below to add yourself to the game:", "fallback":"Add me to the game:", "callback_id":"add me", "attachment_type":"default", "actions":[{"name":"add me","text":"add me","type":"button","value":"add me"}]}]
                 self.users_in_game.append(user_id)
-                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
+                resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
                 self.ts = resp['ts']
                 return
             else:
@@ -134,7 +131,7 @@ class DrumpfBot():
 
         if command.lower().startswith("restart"):
             response = "Application restarted."
-            slack_client.api_call("chat.postMessage", channel=channel,
+            self.slack_client.api_call("chat.postMessage", channel=channel,
                                   text=response, as_user=True, attachments=attachments)
             return self.restart_program()
 
@@ -158,7 +155,7 @@ class DrumpfBot():
                     attachments = None
                     if len(self.users_in_game) == 2:
                         attachments =[{"title":"Start the game:", "fallback":"Start the game:", "callback_id":"start game", "attachment_type":"default", "actions":[{"name":"start game","text":"start game","type":"button","value":"start game"}]}]
-                    resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
+                    resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
                     return
 
         if command.lower().startswith("start game"):
@@ -173,7 +170,7 @@ class DrumpfBot():
                 self.game_started = True
                 response = ">>>Starting a new game of Drumpf!\n"
                 score.initialize_scores()
-                resp = slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
+                resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
                 self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return
@@ -229,7 +226,7 @@ class DrumpfBot():
             image_url = "https://s30.postimg.org/r28wxm89t/cards.png"
             attachments = [{"title": "Card Deck Composition", "image_url": image_url}]
 
-        resp = slack_client.api_call("chat.postMessage", channel=channel,
+        resp = self.slack_client.api_call("chat.postMessage", channel=channel,
                               text=response, as_user=True, attachments=attachments)
 
     def handle_private_message(self,command,user_id,ts):
@@ -275,7 +272,7 @@ class DrumpfBot():
             [attachments] (list) a list of attachments to append to the message -optional, defaults to None
         Returns:
         """
-        slack_client.api_call(
+        self.slack_client.api_call(
             "chat.postMessage",
             channel=user_id,
             text=message,
@@ -315,7 +312,7 @@ class DrumpfBot():
                     print "  (idx % 5) == 0"
                     attachments = helper_functions.interactify(five_card_set,self.first_set)
                     print "  *posting whole set of five"
-                    slack.chat.post_message(
+                    self.slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
                         attachments=attachments
@@ -328,7 +325,7 @@ class DrumpfBot():
                     print "  len(cards) == (idx + 1)"
                     attachments = helper_functions.interactify(five_card_set,self.first_set)
                     print "  *posting remaining set of cards"
-                    slack.chat.post_message(
+                    self.slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
                         attachments=attachments
@@ -340,7 +337,7 @@ class DrumpfBot():
             self.first_set = True
             attachments = helper_functions.interactify(formatted_cards,self.first_set)
             print "  *posting set of 0-5"
-            slack.chat.post_message(
+            self.slack.chat.post_message(
                 channel=player_id,
                 as_user=True,
                 attachments=attachments
@@ -396,7 +393,7 @@ class DrumpfBot():
             Creates a new channel for Drumpfbot to reside
         """
         print "make_channel(self)"
-        resp = slack.channels.create(
+        resp = self.slack.channels.create(
             name="drumpf-scoreboard",
             )
         print "  resp['channel']['id']:",resp['channel']['id']
@@ -410,7 +407,7 @@ class DrumpfBot():
                     [users] (list) A list of user id's in the Slack team
         """
         print "list_users(self)"
-        resp = slack.users.list()
+        resp = self.slack.users.list()
         members = resp['members']
         users = []
         for member in members:
@@ -423,7 +420,7 @@ class DrumpfBot():
             Adds the users in the Slack team to the main Drumpf channel
         """
         print "join_channel(self)"
-        resp = slack.channels.join(
+        resp = self.slack.channels.join(
             name=self.main_channel_id,
             )
 
@@ -442,17 +439,17 @@ class DrumpfBot():
             this parsing function returns None unless a message is
             directed at the Bot, based on its ID.
         """
-        output_list = slack_client.rtm_read()
+        output_list = self.slack_client.rtm_read()
         if output_list and len(output_list) > 0:
             print output_list
             for output in output_list:
-                if output and 'text' in output and AT_BOT in output['text']:
+                if output and 'text' in output and self.AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed
                     #example return: (u'hi', u'C2F154UTE', )
                     if 'ts' in output:
-                        return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
+                        return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
                     else:
-                        return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
+                        return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
         return None, None, None, None
 
     def main(self):
@@ -461,24 +458,37 @@ class DrumpfBot():
         """
         READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
         #grab user list and converts it to to a dict of ids to usernames
-        api_call = slack_client.api_call("users.list")
 
-        if api_call.get('ok'):
-            users = api_call.get('members')
-            for user in users:
-                self.user_ids_to_username[user['id']] = user['name']
+        # instantiate Slack clients
+        tokens = models.get_bot_access_tokens()
+        for token in tokens:
+            try:
+                self.slack_client = SlackClient(token)
+                self.slack = Slacker(token)
+                api_call = self.slack_client.api_call("users.list")
 
-            channels = slack_client.api_call("channels.list").get('channels')
-            for channel in channels:
-                self.channel_ids_to_name[channel['id']] = channel['name']
-            print "  channels:",channels
-            if "drumpf-scoreboard" not in [channel['name'] for channel in channels]:
-                self.make_channel()
-                users = self.list_users
-                for user in users:
-                    self.join_channel
+                if api_call.get('ok'):
+                    self.BOT_ID = models.get_bot_user_id(token)
+                    self.AT_BOT = "<@" + self.BOT_ID + ">"
+                    users = api_call.get('members')
+                    for user in users:
+                        self.user_ids_to_username[user['id']] = user['name']
 
-        if slack_client.rtm_connect():
+                    channels = self.slack_client.api_call("channels.list").get('channels')
+                    for channel in channels:
+                        self.channel_ids_to_name[channel['id']] = channel['name']
+                    print "  channels:",channels
+                    if "drumpf-scoreboard" not in [channel['name'] for channel in channels]:
+                        self.make_channel()
+                        users = self.list_users
+                        for user in users:
+                            self.join_channel
+            except:
+                print "unsuccessful token retrieval attempt"
+            else:
+                print "successful token retrieval"
+
+        if self.slack_client.rtm_connect():
             print("DRUMPFBOT v1.0 connected and running!")
             while True:
                 command, channel, user, ts = self.parse_slack_output()

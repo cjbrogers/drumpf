@@ -66,6 +66,6 @@ def buttonify_bids(bid_set,first_set):
 
     return attachments
 
-def get_slack_client():
-    token = models.get_bot_access_token
-    return token
+# def get_slack_client():
+#     tokens = models.get_bot_access_tokens()
+#     return tokens

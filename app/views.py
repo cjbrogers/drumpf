@@ -13,9 +13,6 @@ CLIENT_ID = os.environ["SLACK_OAUTH_CLIENT_ID"]
 CLIENT_SECRET = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
-BOT_ID = models.get_bot_user_id
-AT_BOT = "<@" + BOT_ID + ">"
-
 app = Flask(__name__)
 
 # handles interactive button responses for donny_drumpfbot
@@ -40,13 +37,23 @@ def inbound():
         print 'User sending message: ',user_name
         print "Value received: ",value
 
-        token = models.get_access_token(user_id,user_name)
-        slack_client = SlackClient(token)
-        resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
+        tokens = models.get_access_tokens()
+        for token in tokens:
+            try:
+                slack_client = SlackClient(token)
+                BOT_ID = models.get_bot_user_id(token)
+                AT_BOT = "<@" + BOT_ID + ">"
+                api_call = self.slack_client.api_call("users.list")
+                if api_call.get('ok'):
+                    resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
+                    if resp['ts']:
+                        ts = resp['ts']
+                        slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
+            except:
+                print "unsuccessful token retrieval attempt"
+            else:
+                print "successful token retrieval"
 
-        if resp['ts']:
-            ts = resp['ts']
-            slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
     return Response(), 200
 
 # handles interactive button responses for donny_drumpfbot
@@ -61,9 +68,15 @@ def events():
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
-                token = models.get_access_token(user_id)
-                slack_client = SlackClient(token)
-                slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+                tokens = models.get_access_tokens()
+                for token in tokens:
+                    try:
+                        slack_client = SlackClient(token)
+                        resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+                    except:
+                        print "unsuccessful token retrieval attempt"
+                    else:
+                        print "successful token retrieval"
     return Response(), 200
 
 # the beginning of the Sign In to Slack OAuth process.
