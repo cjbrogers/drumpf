@@ -443,7 +443,7 @@ class DrumpfBot():
         """
         output_list = self.slack_client.rtm_read()
         if output_list and len(output_list) > 0:
-            print output_list
+            # print output_list
             for output in output_list:
                 if output and 'text' in output and self.AT_BOT in output['text']:
                     # return text after the @ mention, whitespace removed

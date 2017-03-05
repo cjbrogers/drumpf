@@ -70,8 +70,8 @@ def get_access_token(user_id):
             data = (user_id)
             cursor.execute(sql,data)
             token = cursor.fetchall()
-            print token[0]
-            return token[0]
+            print token
+            return token
             # for user in users:
             #     print user
                 # if user['user_id'] == user_id:
