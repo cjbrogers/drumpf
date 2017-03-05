@@ -7,6 +7,7 @@ from collections import defaultdict, deque
 from slackclient import SlackClient
 from slacker import Slacker
 
+import models
 import game as DrumpfGame
 import helper_functions
 import scoring
@@ -19,7 +20,7 @@ import trump_suit
 from trump_suit import TrumpSuit
 
 # starterbot's ID as an environment variable
-BOT_ID = os.environ.get("BOT_ID")
+BOT_ID = models.get_bot_user_id
 AT_BOT = "<@" + BOT_ID + ">"
 
 # instantiate Slack & Twilio clients
@@ -398,6 +399,7 @@ class DrumpfBot():
         resp = slack.channels.create(
             name="drumpf-scoreboard",
             )
+        print "  resp['channel']['id']:",resp['channel']['id']
         self.main_channel_id = resp['channel']['id']
 
     def list_users(self):
@@ -470,7 +472,7 @@ class DrumpfBot():
             for channel in channels:
                 self.channel_ids_to_name[channel['id']] = channel['name']
             print "  channels:",channels
-            if "drumpf-scoreboard" not in channels:
+            if "drumpf-scoreboard" not in [channel['name'] for channel in channels]:
                 self.make_channel()
                 users = self.list_users
                 for user in users:

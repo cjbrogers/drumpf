@@ -13,7 +13,7 @@ CLIENT_ID = os.environ["SLACK_OAUTH_CLIENT_ID"]
 CLIENT_SECRET = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
-BOT_ID = os.environ.get("BOT_ID")
+BOT_ID = models.get_bot_user_id
 AT_BOT = "<@" + BOT_ID + ">"
 
 app = Flask(__name__)
@@ -40,7 +40,7 @@ def inbound():
         print 'User sending message: ',user_name
         print "Value received: ",value
 
-        token = models.get_user_token(user_id,user_name)
+        token = models.get_access_token(user_id,user_name)
         slack_client = SlackClient(token)
         resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
 
@@ -61,7 +61,7 @@ def events():
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
-                token = models.get_user_token(user_id)
+                token = models.get_access_token(user_id)
                 slack_client = SlackClient(token)
                 slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
     return Response(), 200
@@ -96,14 +96,18 @@ def post_signin():
     # Save the bot token to an environmental variable or to your data store
     # for later use
     print(auth_response)
-    token = auth_response['access_token']
-    uid = auth_response['user_id']
+    access_token = auth_response['access_token']
+    user_id = auth_response['user_id']
+    team_id = auth_response['team_id']
+    team_name = auth_response['team_name']
+    bot_access_token = auth_response['bot']['bot_access_token']
+    bot_user_id = auth_response['bot']['bot_user_id']
     name = ""
 
-    values = {"token": token, "uid": uid, "name": name}
+    values = {"user_id": user_id, "name": name, "access_token": access_token,"bot_access_token": bot_access_token, "bot_user_id": bot_user_id, "team_id": team_id, "team_name": team_name}
     df = pd.DataFrame(values, index=[0])
     engine = models.get_engine()
-    models.send_to_db(df,engine,'user')
+    models.send_to_db(df,engine,'users')
 
     # Don't forget to let the user know that auth has succeeded!
     return "<h1>Welcome to Drumpf! on Slack!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."

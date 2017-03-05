@@ -10,11 +10,14 @@ DB_PORT = os.environ.get("DB_PORT")
 DB_NAME = os.environ.get("DB_NAME")
 DB_URL = os.environ.get("DB_URL")
 
-'''
-Establishes a connection to the Heroku ClearDB mySQL db
-@return [connection]
-'''
+
 def connect():
+    '''
+    Establishes a connection to the Heroku ClearDB mySQL db
+
+        Returns:
+                [connection] database connection object
+    '''
     # Connect to the database
     try:
         print "Attempting connection to database..."
@@ -31,46 +34,112 @@ def connect():
         print "Database successfully connected."
         return connection
 
-'''
-Creates and returns sqlalchemy engine for database storage
-@return [engine]
-'''
 def get_engine():
+    '''
+    Creates and returns sqlalchemy engine for database storage
+        Returns:
+                [engine] the sqlalchemy engine
+    '''
     engine = create_engine(DB_URL, echo=False)
     return engine
 
-'''
-Sends the data in the pandas dataframe to a table
-@params [df,engine,name] pandas dataframe/sqlalchemy engine/table name
-'''
 def send_to_db(df,engine,name):
+    '''
+    Sends the data in the pandas dataframe to a table
+
+        Args:
+            [df,engine,name] pandas dataframe/sqlalchemy engine/table name
+    '''
     df.to_sql(con=engine, name=name, if_exists='append', index=False)
 
-'''
-Retrieves the Slack user token from the database
-@return [token] users oauth token
-'''
-def get_user_token(user_id,user_name=None):
+def get_access_token(user_id,user_name=None):
+    '''
+    Retrieves the Slack user access token from the database
+
+    Args:
+            [user_id] the id of the user to query in the db
+
+    Returns:
+            [token] (string) users oauth token
+    '''
     connection = connect()
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = '''SELECT * FROM `user`'''
+            sql = '''SELECT * FROM `users`'''
             cursor.execute(sql)
             users = cursor.fetchall()
             print users
             for user in users:
                 print user
-                if user['uid'] == user_id:
+                if user['user_id'] == user_id:
                     if user_name != user['name'] and user_name != None:
-                        sql = "UPDATE user SET name=%s WHERE uid=%s"
+                        sql = "UPDATE user SET name=%s WHERE user_id=%s"
                         data = (user_name,user_id)
                         cursor.execute(sql,data)
-                    token = user['token']
+                    token = user['access_token']
                     return token
     except Exception as e:
         raise
     else:
-        print "Data successfully stored."
+        print "Success retrieving user access token."
+    finally:
+        connection.close()
+
+def get_bot_access_token(user_id):
+    '''
+    Retrieves the Slack bot access token from the database
+
+    Args:
+            [user_id] the id of the user to query in the db
+
+    Returns:
+            [token] (string) bot oauth token
+    '''
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            # Read a single record
+            sql = '''SELECT * FROM `users`'''
+            cursor.execute(sql)
+            users = cursor.fetchall()
+            for user in users:
+                print user
+                if user['user_id'] == user_id:
+                    token = user['bot_access_token']
+                    return token
+    except Exception as e:
+        raise
+    else:
+        print "Success retrieving bot access token."
+    finally:
+        connection.close()
+
+def get_bot_user_id(user_id):
+    '''
+    Retrieves the Slack bot user id
+
+    Args:
+            [user_id] the id of the user to query in the db
+
+    Returns:
+            [bot_user_id] (string) bot user id
+    '''
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            # Read a single record
+            sql = '''SELECT * FROM `users`'''
+            cursor.execute(sql)
+            users = cursor.fetchall()
+            for user in users:
+                print user
+                if user['user_id'] == user_id:
+                    bot_user_id = user['bot_user_id']
+                    return bot_user_id
+    except Exception as e:
+        raise
+    else:
+        print "Success retrieving bot user id."
     finally:
         connection.close()
