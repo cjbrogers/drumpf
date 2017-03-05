@@ -469,11 +469,12 @@ class DrumpfBot():
             channels = slack_client.api_call("channels.list").get('channels')
             for channel in channels:
                 self.channel_ids_to_name[channel['id']] = channel['name']
-                if "drumpf-scoreboard" not in channel['name']:
-                    self.make_channel()
-                    users = self.list_users
-                    for user in users:
-                        self.join_channel
+            print "  channels:",channels
+            if "drumpf-scoreboard" not in channels:
+                self.make_channel()
+                users = self.list_users
+                for user in users:
+                    self.join_channel
 
         if slack_client.rtm_connect():
             print("DRUMPFBOT v1.0 connected and running!")
