@@ -44,12 +44,10 @@ def inbound():
             try:
                 BOT_ID = models.get_bot_user_id(token["bot_access_token"])
                 AT_BOT = "<@" + BOT_ID + ">"
-                api_call = self.slack_client.api_call("users.list")
-                if api_call.get('ok'):
-                    resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
-                    if resp['ts']:
-                        ts = resp['ts']
-                        slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
+                resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
+                if resp['ts']:
+                    ts = resp['ts']
+                    slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
             except:
                 print "unsuccessful token retrieval attempt"
             else:
@@ -69,9 +67,10 @@ def events():
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
-                token = models.get_access_token(user_id)
+                access_token = models.get_access_token(user_id)
+
                 try:
-                    slack_client = SlackClient(token)
+                    slack_client = SlackClient(access_token)
                     resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
                 except:
                     print "unsuccessful token retrieval attempt"
