@@ -40,8 +40,8 @@ def inbound():
         tokens = models.get_access_tokens()
         for token in tokens:
             try:
-                slack_client = SlackClient(token)
-                BOT_ID = models.get_bot_user_id(token)
+                slack_client = SlackClient(token["access_token"])
+                BOT_ID = models.get_bot_user_id(token["access_token"])
                 AT_BOT = "<@" + BOT_ID + ">"
                 api_call = self.slack_client.api_call("users.list")
                 if api_call.get('ok'):
@@ -71,7 +71,7 @@ def events():
                 tokens = models.get_access_tokens()
                 for token in tokens:
                     try:
-                        slack_client = SlackClient(token)
+                        slack_client = SlackClient(token["access_token"])
                         resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
                     except:
                         print "unsuccessful token retrieval attempt"
