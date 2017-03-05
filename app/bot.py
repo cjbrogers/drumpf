@@ -467,11 +467,11 @@ class DrumpfBot():
             try:
                 print token['bot_access_token']
                 self.slack_client = SlackClient(token['bot_access_token'])
-                self.slack = Slacker(token)
+                self.slack = Slacker(token['bot_access_token'])
                 api_call = self.slack_client.api_call("users.list")
 
                 if api_call.get('ok'):
-                    self.BOT_ID = models.get_bot_user_id(token)
+                    self.BOT_ID = models.get_bot_user_id(token['bot_access_token'])
                     self.AT_BOT = "<@" + self.BOT_ID + ">"
                     users = api_call.get('members')
                     for user in users:
@@ -487,11 +487,10 @@ class DrumpfBot():
                         for user in users:
                             self.join_channel
             except:
-                print "unsuccessful token retrieval attempt"
+                print "exception on token retrieval attempt"
             else:
                 print "successful token retrieval"
                 break
-        print self.slack_client
         if self.slack_client.rtm_connect():
             print("DRUMPFBOT v1.0 connected and running!")
             while True:
