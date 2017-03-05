@@ -52,7 +52,7 @@ def send_to_db(df,engine,name):
     '''
     df.to_sql(con=engine, name=name, if_exists='append', index=False)
 
-def get_access_tokens():
+def get_access_token(user_id):
     '''
     Retrieves the Slack user access token from the database
 
@@ -60,17 +60,18 @@ def get_access_tokens():
             [user_id] the id of the user to query in the db
 
     Returns:
-            [tokens] (list) users oauth tokens
+            [tokens] (string) users oauth token
     '''
     connection = connect()
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT DISTINCT access_token FROM `users`"
-            cursor.execute(sql)
-            tokens = cursor.fetchall()
-            print tokens
-            return tokens
+            sql = "SELECT DISTINCT access_token FROM `users` WHERE user_id=%s"
+            data = (user_id)
+            cursor.execute(sql,data)
+            token = cursor.fetchall()
+            print token['access_token']
+            return token['access_token']
             # for user in users:
             #     print user
                 # if user['user_id'] == user_id:
@@ -117,7 +118,7 @@ def get_bot_user_id(token):
     Retrieves the Slack bot user id
 
     Args:
-            [user_id] the id of the user to query in the db
+            [token] the bot access token
 
     Returns:
             [bot_user_id] (string) bot user id

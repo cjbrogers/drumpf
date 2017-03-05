@@ -37,11 +37,12 @@ def inbound():
         print 'User sending message: ',user_name
         print "Value received: ",value
 
-        tokens = models.get_access_tokens()
+        access_token = models.get_access_token(user_id)
+        slack_client = SlackClient(access_token)
+        tokens = models.get_bot_access_tokens()
         for token in tokens:
             try:
-                slack_client = SlackClient(token["access_token"])
-                BOT_ID = models.get_bot_user_id(token["access_token"])
+                BOT_ID = models.get_bot_user_id(token["bot_access_token"])
                 AT_BOT = "<@" + BOT_ID + ">"
                 api_call = self.slack_client.api_call("users.list")
                 if api_call.get('ok'):
@@ -68,15 +69,14 @@ def events():
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
-                tokens = models.get_access_tokens()
-                for token in tokens:
-                    try:
-                        slack_client = SlackClient(token["access_token"])
-                        resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
-                    except:
-                        print "unsuccessful token retrieval attempt"
-                    else:
-                        print "successful token retrieval"
+                token = models.get_access_token(user_id)
+                try:
+                    slack_client = SlackClient(token)
+                    resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+                except:
+                    print "unsuccessful token retrieval attempt"
+                else:
+                    print "successful token retrieval"
     return Response(), 200
 
 # the beginning of the Sign In to Slack OAuth process.
