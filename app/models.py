@@ -129,12 +129,11 @@ def get_bot_user_id(token):
             sql = "SELECT DISTINCT bot_user_id FROM `users` WHERE bot_access_token=%s"
             data = (token)
             cursor.execute(sql,data)
-            users = cursor.fetchall()
-            for user in users:
-                print user
-                if user['user_id'] == user_id:
-                    bot_user_id = user['bot_user_id']
-                    return bot_user_id
+            response = cursor.fetchall()
+            print response
+            bot_user_id = response['bot_user_id']
+            print bot_user_id
+            return bot_user_id
     except Exception as e:
         raise
     else:
