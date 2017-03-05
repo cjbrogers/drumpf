@@ -489,6 +489,7 @@ class DrumpfBot():
                 print "unsuccessful token retrieval attempt"
             else:
                 print "successful token retrieval"
+                break
 
         if self.slack_client.rtm_connect():
             print("DRUMPFBOT v1.0 connected and running!")
