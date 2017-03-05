@@ -475,6 +475,7 @@ class DrumpfBot():
                 if api_call.get('ok'):
                     print "OKIE DOKIE"
                     self.BOT_ID = models.get_bot_user_id(token['bot_access_token'])
+                    print "self.BOT_ID: ", self.BOT_ID
                     self.AT_BOT = "<@" + self.BOT_ID + ">"
                     users = api_call.get('members')
                     for user in users:
