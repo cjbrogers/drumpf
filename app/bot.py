@@ -450,7 +450,7 @@ class DrumpfBot():
                     # return text after the @ mention, whitespace removed
                     #example return: (u'hi', u'C2F154UTE', )
                     if 'ts' in output:
-                        print "SELF.AT_BOT: ",self.AT_BOT
+                        # print "  SELF.AT_BOT: ",self.AT_BOT
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
                     else:
                         print "SELF.AT_BOT2: ",self.AT_BOT
@@ -469,9 +469,9 @@ class DrumpfBot():
                 api_call = self.slack_client.api_call("users.list")
 
                 if api_call.get('ok'):
-                    print "OKIE DOKIE"
+                    print "  OKIE DOKIE"
                     self.BOT_ID = models.get_bot_user_id(token['bot_access_token'])
-                    print "self.BOT_ID: ", self.BOT_ID
+                    print "  self.BOT_ID: ", self.BOT_ID
                     self.AT_BOT = "<@" + self.BOT_ID + ">"
                     users = api_call.get('members')
                     for user in users:
@@ -486,13 +486,13 @@ class DrumpfBot():
                         for user in users:
                             self.join_channel
                     else:
-                        print "No existing drumpf-scoreboard channel..."
+                        print "  No existing drumpf-scoreboard channel..."
                         self.main_channel_id = self.channel_ids_to_name.index('#drumpf-scoreboard')
-                        print "self.main_channel_id: ",self.main_channel_id
+                        print "  self.main_channel_id: ",self.main_channel_id
             except:
-                print "exception on token retrieval attempt"
+                print "  Exception on token retrieval attempt"
             else:
-                print "successful token retrieval"
+                print "  Successful token retrieval"
                 break
 
     def main(self):

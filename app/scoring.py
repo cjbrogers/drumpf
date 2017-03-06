@@ -9,7 +9,9 @@ import models
 class Scoring():
 
     def __init__(self,bot):
+        print "Initializing Scoring() class."
         self.bot = bot
+        self.slack_client = ""
         tokens = models.get_bot_access_tokens()
         for token in tokens:
             try:
@@ -18,12 +20,13 @@ class Scoring():
                 self.slack_client = SlackClient(token['bot_access_token'])
                 api_call = self.slack_client.api_call("users.list")
                 if api_call.get('ok'):
-                    print "A-OK, gang!"
+                    print "  A-OK, gang!"
             except:
-                print "exception on token retrieval attempt"
+                print "  exception on token retrieval attempt"
             else:
-                print "successful token retrieval"
+                print "  successful token retrieval"
                 break
+        print "  self.slack_client",self.slack_client
 
     def build_scoreboard(self,msg):
         """
@@ -173,7 +176,7 @@ class Scoring():
         for player_id in self.bot.users_in_game:
             msg += "\n><@{}>: *{} Points*".format(self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
         print "  ",msg
-
+        print "  self.slack_client: ",self.slack_client
         resp = self.slack_client.api_call(
             "chat.postMessage",
             channel=self.bot.main_channel_id,
@@ -188,7 +191,7 @@ class Scoring():
         Args:
             [message] (str) the score data to send
         """
-
+        print "update_scores(self, message, attachments=None)"
         self.slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,
