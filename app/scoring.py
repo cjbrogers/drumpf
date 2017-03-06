@@ -15,7 +15,7 @@ class Scoring():
         tokens = models.get_bot_access_tokens()
         for token in tokens:
             try:
-                print "bot_access_token: ",token['bot_access_token']
+                print "  bot_access_token: ",token['bot_access_token']
                 self.BOT_TOKEN = token['bot_access_token']
                 self.slack_client = SlackClient(token['bot_access_token'])
                 test_call = self.slack_client.api_call("users.list")
