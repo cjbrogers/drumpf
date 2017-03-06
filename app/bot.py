@@ -470,12 +470,14 @@ class DrumpfBot():
                     print "  OKIE DOKIE"
                     self.BOT_ID = models.get_bot_user_id(token['bot_access_token'])
                     self.AT_BOT = "<@" + self.BOT_ID + ">"
-                    users = api_call.get('members')
-                    for user in users:
-                        self.user_ids_to_username[user['id']] = user['name']
+                    members = self.slack_client.api_call('users.list').get('members')
+                    for member in members:
+                        print "  member['id']: ",member['id']
+                        self.user_ids_to_username[member['id']] = member['name']
 
                     channels = self.slack_client.api_call("channels.list").get('channels')
                     for channel in channels:
+                        print "  channel",channel
                         self.channel_ids_to_name[channel['id']] = channel['name']
 
                     print "  self.channel_ids_to_name",self.channel_ids_to_name
