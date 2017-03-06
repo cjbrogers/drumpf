@@ -163,7 +163,7 @@ class Scoring():
             text=msg,
             as_user=True, attachments=attachments
         )
-        self.bot.ts_scores = resp['ts']
+        self.bot.ts_scores = resp['event']['ts']
 
     def update_scores(self, message, attachments=None):
         """
