@@ -15,18 +15,17 @@ class Scoring():
         tokens = models.get_bot_access_tokens()
         for token in tokens:
             try:
-                print token['bot_access_token']
+                print "bot_access_token: ",token['bot_access_token']
                 self.BOT_TOKEN = token['bot_access_token']
                 self.slack_client = SlackClient(token['bot_access_token'])
-                api_call = self.slack_client.api_call("users.list")
-                if api_call.get('ok'):
+                test_call = self.slack_client.api_call("users.list")
+                if test_call.get('ok'):
                     print "  A-OK, gang!"
             except:
                 print "  exception on token retrieval attempt"
             else:
                 print "  successful token retrieval"
                 break
-        print "  self.slack_client",self.slack_client
 
     def build_scoreboard(self,msg):
         """
