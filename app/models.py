@@ -62,6 +62,7 @@ def get_access_token(user_id):
     Returns:
             [tokens] (string) users oauth token
     '''
+    print "get_access_token(user_id)"
     connection = connect()
     try:
         with connection.cursor() as cursor:
@@ -92,12 +93,10 @@ def get_bot_access_tokens():
     '''
     Retrieves the Slack bot access token from the database
 
-    Args:
-            [user_id] the id of the user to query in the db
-
     Returns:
             [tokens] (list) bot oauth tokens
     '''
+    print "get_bot_access_tokens"
     connection = connect()
     try:
         with connection.cursor() as cursor:
@@ -124,6 +123,7 @@ def get_bot_user_id(token):
     Returns:
             [bot_user_id] (string) bot user id
     '''
+    print "get_bot_user_id(token)"
     connection = connect()
     try:
         with connection.cursor() as cursor:

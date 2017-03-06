@@ -59,23 +59,29 @@ def inbound():
 @app.route('/events', methods=['POST'])
 def events():
     data = json.loads(request.data)
-    print data
+    # print data
     token = data['token']
     if token == SLACK_VERIFICATION_TOKEN:
-        if data['event']['text']:
-            if 'create game' in data['event']['text']:
-                ts = data['event']['ts']
-                channel = data['event']['channel']
-                user_id = data['event']['user']
-                access_token = models.get_access_token(user_id)
-
-                try:
-                    slack_client = SlackClient(access_token)
-                    resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
-                except:
-                    print "unsuccessful token retrieval attempt"
-                else:
-                    print "successful token retrieval"
+        try:
+            if data['event']['text']:
+                if 'create game' in data['event']['text']:
+                    ts = data['event']['ts']
+                    channel = data['event']['channel']
+                    user_id = data['event']['user']
+                    access_token = models.get_access_token(user_id)
+                    try:
+                        slack_client = SlackClient(access_token)
+                        resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+                    except:
+                        print "unsuccessful token retrieval attempt"
+                    else:
+                        print "successful token retrieval"
+        except:
+            print "no data['event']['ts']"
+        else:
+            print "Event successfully registered."
+    else:
+        print "Verification token mismatch"
     return Response(), 200
 
 # the beginning of the Sign In to Slack OAuth process.
