@@ -9,7 +9,7 @@ class Scoring():
 
     def __init__(self,bot):
         self.bot = bot
-        self.slack_client = self.bot.slack_client
+        self.bot_token = self.bot.BOT_TOKEN
 
     def build_scoreboard(self,msg):
         """
@@ -26,7 +26,8 @@ class Scoring():
         Args:
             [msg] (str) the message to post
         """
-        self.slack_client.api_call(
+        slack_client = SlackClient(self.bot_token)
+        slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,
             text=message,
@@ -123,7 +124,8 @@ class Scoring():
         print "pm_users_scoreboard(self, board, attachments=None)"
         for player_id in self.bot.users_in_game:
             print "  board: ",board
-            resp_scores = self.slack_client.api_call(
+            slack_client = SlackClient(self.bot_token)
+            resp_scores = slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
                 text=board,
@@ -139,7 +141,8 @@ class Scoring():
         print "pm_users_scores(self, scores, attachments=None)"
         for player_id in self.bot.users_in_game:
             print "  scores: ",scores
-            resp_scores = self.slack_client.api_call(
+            slack_client = SlackClient(self.bot_token)
+            resp_scores = slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
                 text=scores,
@@ -156,14 +159,14 @@ class Scoring():
         for player_id in self.bot.users_in_game:
             msg += "\n><@{}>: *{} Points*".format(self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
         print "  ",msg
-
-        resp = self.slack_client.api_call(
+        slack_client = SlackClient(self.bot_token)
+        resp = slack_client.api_call(
             "chat.postMessage",
             channel=self.bot.main_channel_id,
             text=msg,
             as_user=True, attachments=attachments
         )
-        self.bot.ts_scores = resp['event']['ts']
+        self.bot.ts_scores = resp['ts']
 
     def update_scores(self, message, attachments=None):
         """
@@ -171,7 +174,8 @@ class Scoring():
         Args:
             [message] (str) the score data to send
         """
-        self.slack_client.api_call(
+        slack_client = SlackClient(self.bot_token)
+        slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,
             text=message,
@@ -528,7 +532,8 @@ class Scoring():
         random.shuffle(image_urls)
         image_url = image_urls[0]
         attachments = [{"title": "Celebrate good times!", "image_url": image_url}]
-        self.slack_client.api_call(
+        slack_client = SlackClient(self.bot_token)
+        slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,
             text=response,

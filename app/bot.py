@@ -26,6 +26,7 @@ class DrumpfBot():
     def __init__(self): # drumpf-scoreboard: C4AK56EQ7
         self.BOT_ID = ""
         self.AT_BOT = ""
+        self.BOT_TOKEN = ""
         self.slack_client = None
         self.slack = None
         self.users_in_game = deque([]) #[user_id, user_id...]
@@ -462,6 +463,7 @@ class DrumpfBot():
         for token in tokens:
             try:
                 print token['bot_access_token']
+                self.BOT_TOKEN = token['bot_access_token']
                 self.slack_client = SlackClient(token['bot_access_token'])
                 self.slack = Slacker(token['bot_access_token'])
                 api_call = self.slack_client.api_call("users.list")
