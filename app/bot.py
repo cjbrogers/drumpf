@@ -487,7 +487,7 @@ class DrumpfBot():
                             self.join_channel
                     else:
                         print "No existing drumpf-scoreboard channel..."
-                        self.main_channel_id = self.channel_ids_to_name.index('drumpf-scoreboard')
+                        self.main_channel_id = self.channel_ids_to_name.index('#drumpf-scoreboard')
                         print "self.main_channel_id: ",self.main_channel_id
             except:
                 print "exception on token retrieval attempt"
