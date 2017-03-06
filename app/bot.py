@@ -457,7 +457,7 @@ class DrumpfBot():
         return None, None, None, None
 
     def initialize(self):
-        # instantiate Slack clients
+        print "initialize(self)"
         tokens = models.get_bot_access_tokens()
         for token in tokens:
             try:
@@ -478,7 +478,7 @@ class DrumpfBot():
                     for channel in channels:
                         self.channel_ids_to_name[channel['id']] = channel['name']
 
-                    print "self.channel_ids_to_name",self.channel_ids_to_name
+                    print "  self.channel_ids_to_name",self.channel_ids_to_name
                     if "drumpf-scoreboard" not in [channel['name'] for channel in channels]:
                         self.make_channel()
                         users = self.list_users
