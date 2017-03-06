@@ -477,14 +477,16 @@ class DrumpfBot():
                     channels = self.slack_client.api_call("channels.list").get('channels')
                     for channel in channels:
                         self.channel_ids_to_name[channel['id']] = channel['name']
-                    if "#drumpf-scoreboard" not in [channel['name'] for channel in channels]:
+
+                    print "self.channel_ids_to_name",self.channel_ids_to_name
+                    if "drumpf-scoreboard" not in [channel['name'] for channel in channels]:
                         self.make_channel()
                         users = self.list_users
                         for user in users:
                             self.join_channel
                     else:
                         print "  No existing #drumpf-scoreboard channel..."
-                        self.main_channel_id = self.channel_ids_to_name.keys()[self.channel_ids_to_name.values().index('#drumpf-scoreboard')]
+                        self.main_channel_id = self.channel_ids_to_name.keys()[self.channel_ids_to_name.values().index('drumpf-scoreboard')]
                         print "  self.main_channel_id: ",self.main_channel_id
             except:
                 print "  Exception on token retrieval attempt"
