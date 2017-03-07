@@ -456,10 +456,10 @@ class DrumpfBot():
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
         return None, None, None, None
 
-    def initialize(self, user_id, channel):
+    def initialize(self, user_id, channel_id):
         print "initialize(self, user_id, channel)"
         print "  user_id",user_id
-        print "  channel",channel
+        print "  channel",channel_id
 
         token = models.get_bot_access_token(user_id)
         # for token in tokens:
@@ -490,7 +490,7 @@ class DrumpfBot():
                         self.join_channel
                 else:
                     print "  Existing #drumpf-scoreboard channel found..."
-                    self.main_channel_id = channel['id']
+                    self.main_channel_id = channel_id
                     # self.main_channel_id = self.channel_ids_to_name.keys()[self.channel_ids_to_name.values().index('drumpf-scoreboard')]
                     print "  self.main_channel_id: ",self.main_channel_id
         except Exception as e:

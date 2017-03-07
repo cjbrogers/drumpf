@@ -89,12 +89,13 @@ def events():
                     bid = Bid(bot,score)
                     trump = TrumpSuit(bot,score,bid)
                     round_ = Round(bot,score,trump)
-                    bot.main(score, bid, trump, round_)
                 except:
                     print "  create game not in data['event']['text']"
                 else:
                     print "  successful token retrieval"
-                    break
+                finally:
+                    return Response(), 200
+                    bot.main(score, bid, trump, round_)
     except Exception as e:
         raise
     else:
