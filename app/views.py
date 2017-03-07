@@ -7,19 +7,9 @@ import json, requests
 from slacker import Slacker
 import pandas as pd
 
-from celery import Celery
-
+import tasks
 import models
-import bot
-from bot import DrumpfBot
-import scoring
-from scoring import Scoring
-import bidding
-from bidding import Bid
-import round
-from round import Round
-import trump_suit
-from trump_suit import TrumpSuit
+
 
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 CLIENT_ID = os.environ["SLACK_OAUTH_CLIENT_ID"]
@@ -27,31 +17,6 @@ CLIENT_SECRET = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
 app = Flask(__name__)
-
-def make_celery(app):
-    app.config['CELERY_BROKER_URL'] = os.environ.get('RABBITMQ_BIGWIG_URL')
-    celery = Celery(app.name, broker=os.environ.get('RABBITMQ_BIGWIG_URL'))
-    celery.conf.update(app.config)
-    TaskBase = celery.Task
-    class ContextTask(TaskBase):
-        abstract = True
-        def __call__(self,*args,**kwargs):
-            with app.app_context():
-                return TaskBase.__call__(self,*args,**kwargs)
-    celery.Task = ContextTask
-    return celery
-
-celery = make_celery(app)
-
-@celery.task
-def launch_bot(user_id,channel):
-    bot = DrumpfBot()
-    bot.initialize(user_id, channel)
-    score = Scoring(bot, user_id)
-    bid = Bid(bot,score)
-    trump = TrumpSuit(bot,score,bid)
-    round_ = Round(bot,score,trump)
-    bot.main(score, bid, trump, round_)
 
 # handles interactive button responses for donny_drumpfbot
 @app.route('/actions', methods=['POST'])
@@ -113,8 +78,8 @@ def events():
                 except:
                     print "  create game not in data['event']['text']"
                 else:
-                    print "  successful bot initialization"
-                    launch_bot.delay(user_id,channel)
+                    print "  successful deletion of 'create game' instance"
+                    tasks.launch_bot.delay(user_id,channel)
                     return Response(), 200
     except Exception as e:
         raise
