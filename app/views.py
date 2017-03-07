@@ -75,7 +75,7 @@ def events():
     # if token == SLACK_VERIFICATION_TOKEN:
     try:
         for k,v in data['event'].iteritems():
-            if 'create game' in v:
+            if 'create game' in str(v):
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
