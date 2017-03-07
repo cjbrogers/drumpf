@@ -7,6 +7,8 @@ import json, requests
 from slacker import Slacker
 import pandas as pd
 
+from celery import Celery
+
 import models
 import bot
 from bot import DrumpfBot
@@ -24,7 +26,12 @@ CLIENT_ID = os.environ["SLACK_OAUTH_CLIENT_ID"]
 CLIENT_SECRET = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
-app = Flask(__name__)
+# app = Flask(__name__)
+app = Celery('tasks', broker='amqp://guest@localhost//')
+
+@app.task
+launch_bot(bot, score, bid, trump, round_):
+    bot.main(score, bid, trump, round_)
 
 # handles interactive button responses for donny_drumpfbot
 @app.route('/actions', methods=['POST'])
@@ -94,7 +101,8 @@ def events():
                 else:
                     print "  successful bot initialization"
                 finally:
-                    return Response(), 200, bot.main(score, bid, trump, round_)
+                    launch_bot.delay(bot,score,bid,trump,round_)
+                    return Response(), 200
     except Exception as e:
         raise
     else:

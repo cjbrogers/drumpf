@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath app views:app -w 1 --threads 2
+web: gunicorn --pythonpath app views:app 
