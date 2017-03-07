@@ -107,7 +107,7 @@ def get_bot_access_token(user_id):
             cursor.execute(sql,data)
             token = cursor.fetchall()
             print "  token (raw): ",token
-            return token['bot_access_token']
+            return token[0]['bot_access_token']
     except Exception as e:
         raise
     else:
