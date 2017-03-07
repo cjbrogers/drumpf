@@ -12,7 +12,7 @@ from trump_suit import TrumpSuit
 import celery
 app = celery.Celery('example')
 import os
-app.conf.update(BROKER_URL=os.environ['RABBITMQ_BIGWIG_URL']
+app.conf.update(BROKER_URL=os.environ['RABBITMQ_BIGWIG_URL'])
 
 @app.task
 def launch_bot(user_id,channel):
