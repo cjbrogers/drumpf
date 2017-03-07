@@ -7,6 +7,7 @@ contextlib2==0.5.4
 Flask==0.12
 Flask-Dance==0.10.1
 Flask-SSLify==0.1.5
+futures>=3.0.5
 gevent>=1.2.1
 greenlet>=0.4.12
 gunicorn==19.6.0
