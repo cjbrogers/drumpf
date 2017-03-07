@@ -522,7 +522,7 @@ class DrumpfBot():
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # bot = DrumpfBot()
     # bot.initialize()
     # score = Scoring(bot)
