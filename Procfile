@@ -1,1 +1,1 @@
-honcho start -d -f ./app
+honcho -d -f ./app/Procfile start
