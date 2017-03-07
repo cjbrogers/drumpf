@@ -8,6 +8,8 @@ from slacker import Slacker
 import pandas as pd
 
 import models
+import bot
+from bot import DrumpfBot
 import scoring
 from scoring import Scoring
 import bidding
@@ -92,8 +94,9 @@ def events():
                         print "unsuccessful token retrieval attempt"
                     else:
                         print "successful token retrieval"
-        except:
+        except Exception as e:
             print "no data['event']['text']"
+            raise
         else:
             print "Event successfully registered."
     else:
