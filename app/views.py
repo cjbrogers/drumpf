@@ -30,7 +30,7 @@ OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 app = Celery('tasks', broker='amqp://guest@localhost//')
 
 @app.task
-launch_bot(bot, score, bid, trump, round_):
+def launch_bot(bot, score, bid, trump, round_):
     bot.main(score, bid, trump, round_)
 
 # handles interactive button responses for donny_drumpfbot
