@@ -1,2 +1,2 @@
 web: gunicorn --pythonpath app views:app
-worker: celery worker --app=tasks.app
+worker: celery worker --pythonpath app --app=tasks.app
