@@ -1,0 +1,2 @@
+web: gunicorn views:app
+worker: python tasks.py celery worker -B -l info
