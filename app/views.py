@@ -6,7 +6,16 @@ from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
 from slacker import Slacker
 import pandas as pd
+
 import models
+import scoring
+from scoring import Scoring
+import bidding
+from bidding import Bid
+import round
+from round import Round
+import trump_suit
+from trump_suit import TrumpSuit
 
 SLACK_VERIFICATION_TOKEN = os.environ.get('SLACK_VERIFICATION_TOKEN')
 CLIENT_ID = os.environ["SLACK_OAUTH_CLIENT_ID"]
@@ -72,12 +81,19 @@ def events():
                     try:
                         slack_client = SlackClient(access_token)
                         resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+                        bot = DrumpfBot()
+                        bot.initialize()
+                        score = Scoring(bot)
+                        bid = Bid(bot,score)
+                        trump = TrumpSuit(bot,score,bid)
+                        round_ = Round(bot,score,trump)
+                        bot.main(score, bid, trump, round_)
                     except:
                         print "unsuccessful token retrieval attempt"
                     else:
                         print "successful token retrieval"
         except:
-            print "no data['event']['ts']"
+            print "no data['event']['text']"
         else:
             print "Event successfully registered."
     else:

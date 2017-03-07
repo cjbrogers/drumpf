@@ -172,7 +172,7 @@ class DrumpfBot():
             else:
                 self.game_started = True
                 response = ">>>Starting a new game of Drumpf!\n"
-                score.initialize_scores()
+                self.score.initialize_scores()
                 resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
                 self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
@@ -256,15 +256,15 @@ class DrumpfBot():
 
         if len(self.player_trump_card_queue):
             print "  len(self.player_trump_card_queue)"
-            trump.handle_trump_suit_selection(command, user_id)
+            self.trump.handle_trump_suit_selection(command, user_id)
 
         elif len(self.player_bid_queue):
             print "  len(self.player_bid_queue)"
-            bid.handle_player_bid(command, user_id)
+            self.bid.handle_player_bid(command, user_id)
 
         elif len(self.player_turn_queue):
             print "  len(self.player_turn_queue)"
-            round_.handle_player_turn(command, user_id)
+            self.round_.handle_player_turn(command, user_id)
 
     def private_message_user(self, user_id, message, attachments=None):
         """Posts a private message to a user channel
@@ -490,16 +490,21 @@ class DrumpfBot():
                         print "  No existing #drumpf-scoreboard channel..."
                         self.main_channel_id = self.channel_ids_to_name.keys()[self.channel_ids_to_name.values().index('drumpf-scoreboard')]
                         print "  self.main_channel_id: ",self.main_channel_id
-            except:
+            except Exception as e:
                 print "  Exception on token retrieval attempt"
+                raise
             else:
                 print "  Successful token retrieval"
                 break
 
-    def main(self):
+    def main(self, score, bid, trump, round_):
         """
             Opens a Slack RTM API websocket connection
         """
+        self.score = score
+        self.bid = bid
+        self.trump = trump
+        self.round_ = round_
         READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
         #grab user list and converts it to to a dict of ids to usernames
 
@@ -518,10 +523,10 @@ class DrumpfBot():
             print("Connection failed. Invalid Slack token or bot ID?")
 
 if __name__ == "__main__":
-    bot = DrumpfBot()
-    bot.initialize()
-    score = Scoring(bot)
-    bid = Bid(bot,score)
-    trump = TrumpSuit(bot,score,bid)
-    round_ = Round(bot,score,trump)
-    bot.main()
+    # bot = DrumpfBot()
+    # bot.initialize()
+    # score = Scoring(bot)
+    # bid = Bid(bot,score)
+    # trump = TrumpSuit(bot,score,bid)
+    # round_ = Round(bot,score,trump)
+    # bot.main()
