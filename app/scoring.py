@@ -3,7 +3,7 @@ import helper_functions
 import game as DrumpfGame
 import random
 
-slack_client = SlackClient(helper_functions.get_slack_client())
+# slack_client = SlackClient(helper_functions.get_slack_client())
 
 class Scoring():
 
@@ -25,6 +25,7 @@ class Scoring():
         Args:
             [msg] (str) the message to post
         """
+        slack_client = SlackClient(self.bot.BOT_TOKEN)
         slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,
@@ -122,6 +123,7 @@ class Scoring():
         print "pm_users_scoreboard(self, board, attachments=None)"
         for player_id in self.bot.users_in_game:
             print "  board: ",board
+            slack_client = SlackClient(self.bot.BOT_TOKEN)
             resp_scores = slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
@@ -138,6 +140,7 @@ class Scoring():
         print "pm_users_scores(self, scores, attachments=None)"
         for player_id in self.bot.users_in_game:
             print "  scores: ",scores
+            slack_client = SlackClient(self.bot.BOT_TOKEN)
             resp_scores = slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
@@ -152,11 +155,10 @@ class Scoring():
         print "initialize_scores(self, attachments=None)"
         msg = ""
         msg += ">>>*Score Board*"
-        print "  ",msg
         for player_id in self.bot.users_in_game:
             msg += "\n><@{}>: *{} Points*".format(self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
         print "  ",msg
-
+        slack_client = SlackClient(self.bot.BOT_TOKEN)
         resp = slack_client.api_call(
             "chat.postMessage",
             channel=self.bot.main_channel_id,
@@ -171,6 +173,7 @@ class Scoring():
         Args:
             [message] (str) the score data to send
         """
+        slack_client = SlackClient(self.bot.BOT_TOKEN)
         slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,
@@ -528,6 +531,7 @@ class Scoring():
         random.shuffle(image_urls)
         image_url = image_urls[0]
         attachments = [{"title": "Celebrate good times!", "image_url": image_url}]
+        slack_client = SlackClient(self.bot.BOT_TOKEN)
         slack_client.api_call(
             "chat.update",
             channel=self.bot.main_channel_id,

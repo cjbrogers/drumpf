@@ -4,14 +4,17 @@ import helper_functions
 from collections import deque
 import copy
 
-slack_client = SlackClient(helper_functions.get_slack_client())
-slack = Slacker(helper_functions.get_slack_client())
+# slack_client = SlackClient(helper_functions.get_slack_client())
+# slack = Slacker(helper_functions.get_slack_client())
 
 class Bid():
 
     def __init__(self,bot,score):
         self.bot = bot
+        self.slack_client = self.bot.slack_client
+        self.slack = self.bot.slack
         self.score = score
+        self.slack_client = self.bot.slack_client
 
     def present_bid_buttons(self, player_id):
         """
@@ -36,7 +39,7 @@ class Bid():
                     button_set.append(idx)
                 elif (idx % 5) == 0:
                     attachments = helper_functions.buttonify_bids(button_set,self.bot.first_set)
-                    slack.chat.post_message(
+                    self.slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
                         attachments=attachments
@@ -46,7 +49,7 @@ class Bid():
                     button_set.append(idx)
                 if (idx+1) == len(button_indices):
                     attachments = helper_functions.buttonify_bids(button_set,self.bot.first_set)
-                    slack.chat.post_message(
+                    self.slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
                         attachments=attachments
@@ -55,7 +58,7 @@ class Bid():
         else:
             self.bot.first_set = True
             attachments = helper_functions.buttonify_bids(button_indices,self.bot.first_set)
-            slack.chat.post_message(
+            self.slack.chat.post_message(
                 channel=player_id,
                 as_user=True,
                 attachments=attachments
