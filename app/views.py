@@ -33,36 +33,36 @@ def inbound():
     payload = request.form.get('payload')
     data = json.loads(payload)
     token = data['token']
-    if token == SLACK_VERIFICATION_TOKEN:
-        print 'TOKEN is good!'
+    # if token == SLACK_VERIFICATION_TOKEN:
+        # print '  TOKEN is good!'
         # print data
-        response_url = data['response_url']
-        channel_info = data['channel']
-        channel_id = channel_info['id']
-        user_info = data['user']
-        user_id = user_info['id']
-        user_name = user_info['name']
-        actions = data['actions'][0]
-        value = actions['value']
-        print "Channel ID: ",channel_id
-        print 'User sending message: ',user_name
-        print "Value received: ",value
+    response_url = data['response_url']
+    channel_info = data['channel']
+    channel_id = channel_info['id']
+    user_info = data['user']
+    user_id = user_info['id']
+    user_name = user_info['name']
+    actions = data['actions'][0]
+    value = actions['value']
+    print "  Channel ID: ",channel_id
+    print '  User sending message: ',user_name
+    print "  Value received: ",value
 
-        access_token = models.get_access_token(user_id)
-        slack_client = SlackClient(access_token)
-        tokens = models.get_bot_access_tokens()
-        for token in tokens:
-            try:
-                BOT_ID = models.get_bot_user_id(token["bot_access_token"])
-                AT_BOT = "<@" + BOT_ID + ">"
-                resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
-                if resp['ts']:
-                    ts = resp['ts']
-                    slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
-            except:
-                print "unsuccessful token retrieval attempt"
-            else:
-                print "successful token retrieval"
+    access_token = models.get_access_token(user_id)
+    slack_client = SlackClient(access_token)
+    bot_access_token = models.get_bot_access_token(user_id)
+    # for token in tokens:
+    try:
+        BOT_ID = models.get_bot_user_id(bot_access_token)
+        AT_BOT = "<@" + BOT_ID + ">"
+        resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
+        if resp['ts']:
+            ts = resp['ts']
+            slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
+    except:
+        print "  unsuccessful token retrieval attempt"
+    else:
+        print "  successful token retrieval"
 
     return Response(), 200
 
@@ -91,9 +91,9 @@ def events():
                     round_ = Round(bot,score,trump)
                     bot.main(score, bid, trump, round_)
                 except:
-                    print "unsuccessful token retrieval attempt"
+                    print "  create game not in data['event']['text']"
                 else:
-                    print "successful token retrieval"
+                    print "  successful token retrieval"
     except Exception as e:
         print "  Exception raised!"
         raise
