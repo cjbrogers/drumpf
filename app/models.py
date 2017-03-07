@@ -90,24 +90,23 @@ def get_access_token(user_id):
     finally:
         connection.close()
 
-def get_bot_access_token(user_id):
+def get_bot_access_tokens():
     '''
     Retrieves the Slack bot access token from the database
 
     Returns:
-            [token] (str) bot oauth access token
+            [tokens] (list) bot oauth tokens
     '''
-    print "get_bot_access_token(user_id)"
+    print "get_bot_access_tokens"
     connection = connect()
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT DISTINCT bot_access_token FROM `users` WHERE user_id=%s"
-            data = (user_id)
-            cursor.execute(sql,data)
-            token = cursor.fetchall()
-            print "  token (raw): ",token
-            return token[0]['bot_access_token']
+            sql = '''SELECT DISTINCT bot_access_token FROM `users`'''
+            cursor.execute(sql)
+            tokens = cursor.fetchall()
+            print "  tokens: ",tokens
+            return tokens
     except Exception as e:
         raise
     else:
@@ -135,7 +134,7 @@ def get_bot_user_id(token):
             cursor.execute(sql,data)
             response = cursor.fetchall()
             bot_user_id = response[0]['bot_user_id']
-            print "  bot_user_id: ",bot_user_id
+            print "  bot_user_id",bot_user_id
             return bot_user_id
     except Exception as e:
         raise
