@@ -1,1 +1,1 @@
-worker: honcho -d -f ./app/Procfile start
+worker: honcho -d ./app -f Procfile start
