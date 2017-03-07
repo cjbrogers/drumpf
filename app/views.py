@@ -26,10 +26,10 @@ CLIENT_ID = os.environ["SLACK_OAUTH_CLIENT_ID"]
 CLIENT_SECRET = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
-# app = Flask(__name__)
-app = Celery('tasks', broker='amqp://guest@localhost//')
+app = Flask(__name__)
+celery = Celery(app.name, broker='amqp://guest@localhost//')
 
-@app.task
+@celery.task
 def launch_bot(bot, score, bid, trump, round_):
     bot.main(score, bid, trump, round_)
 
