@@ -71,11 +71,11 @@ def inbound():
 def events():
     data = json.loads(request.data)
     print data
-    token = data['token']
+    # token = data['token']
     # if token == SLACK_VERIFICATION_TOKEN:
     try:
-        if data['event']['text']:
-            if 'create game' in data['event']['text']:
+        for k,v in data.iteritems():
+            if 'create game' in v:
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
@@ -94,8 +94,8 @@ def events():
                     print "  create game not in data['event']['text']"
                 else:
                     print "  successful token retrieval"
+                    break
     except Exception as e:
-        print "  Exception raised!"
         raise
     else:
         print "  Event successfully registered."
