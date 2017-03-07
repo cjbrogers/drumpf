@@ -1,4 +1,5 @@
 import os
+import models
 
 def format_cards_to_emojis(cards):
     print "format_cards_to_emojis(cards) "
@@ -65,6 +66,6 @@ def buttonify_bids(bid_set,first_set):
 
     return attachments
 
-def get_slack_client():
-    token = os.environ.get('SLACK_BOT_TOKEN')
-    return token
+# def get_slack_client():
+#     tokens = models.get_bot_access_tokens()
+#     return tokens

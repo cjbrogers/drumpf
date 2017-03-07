@@ -2,13 +2,14 @@ from slacker import Slacker
 import helper_functions
 
 
-slack = Slacker(helper_functions.get_slack_client())
+# slack = Slacker(helper_functions.get_slack_client())
 SUITS = ["diamonds", "clubs", "hearts", "spades"]
 
 class TrumpSuit():
 
     def __init__(self,bot,score,bid):
         self.bot = bot
+        self.slack = self.bot.slack
         self.score = score
         self.bid = bid
 
@@ -100,7 +101,7 @@ class TrumpSuit():
         {"name":"clubs","text":":clubs:","type":"button","value":"1"},
         {"name":"hearts","text":":hearts:","type":"button","value":"2"},
         {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
-        slack.chat.post_message(
+        self.slack.chat.post_message(
             channel=player_id,
             as_user=True,
             attachments=attachments

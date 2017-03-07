@@ -1,2 +1,2 @@
-web: gunicorn --pythonpath app views:app --log-file=-
-worker: python app/bot.py
+web: gunicorn --pythonpath app views:app
+worker: celery worker -A app.celery
