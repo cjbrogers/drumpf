@@ -8,24 +8,23 @@ import models
 
 class Scoring():
 
-    def __init__(self,bot):
+    def __init__(self,bot,user_id):
         print "Initializing Scoring() class."
         self.bot = bot
         self.slack_client = ""
-        tokens = models.get_bot_access_tokens()
-        for token in tokens:
-            try:
-                print "  bot_access_token: ",token['bot_access_token']
-                self.BOT_TOKEN = token['bot_access_token']
-                self.slack_client = SlackClient(token['bot_access_token'])
-                test_call = self.slack_client.api_call("users.list")
-                if test_call.get('ok'):
-                    print "  A-OK, gang!"
-            except:
-                print "  exception on token retrieval attempt"
-            else:
-                print "  successful token retrieval"
-                break
+        token = models.get_bot_access_token(user_id)
+        # for token in tokens:
+        try:
+            print "  bot_access_token: ",token
+            self.BOT_TOKEN = token
+            self.slack_client = SlackClient(token)
+            test_call = self.slack_client.api_call("users.list")
+            if test_call.get('ok'):
+                print "  A-OK, gang!"
+        except:
+            print "  exception on token retrieval attempt"
+        else:
+            print "  successful token retrieval"
 
     def build_scoreboard(self,msg):
         """

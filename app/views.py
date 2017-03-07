@@ -85,7 +85,7 @@ def events():
                     resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
                     bot = DrumpfBot()
                     bot.initialize(user_id, channel)
-                    score = Scoring(bot)
+                    score = Scoring(bot, user_id)
                     bid = Bid(bot,score)
                     trump = TrumpSuit(bot,score,bid)
                     round_ = Round(bot,score,trump)
