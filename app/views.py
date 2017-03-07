@@ -92,10 +92,11 @@ def events():
                 except:
                     print "  create game not in data['event']['text']"
                 else:
-                    print "  successful token retrieval"
+                    print "  successful bot initialization"
                 finally:
-                    return Response(), 200
                     bot.main(score, bid, trump, round_)
+                    return Response(), 200
+
     except Exception as e:
         raise
     else:
