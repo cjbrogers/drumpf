@@ -456,45 +456,46 @@ class DrumpfBot():
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
         return None, None, None, None
 
-    def initialize(self):
+    def initialize(self, user_id, channel):
         print "initialize(self)"
-        tokens = models.get_bot_access_tokens()
-        for token in tokens:
-            try:
-                self.BOT_TOKEN = token['bot_access_token']
-                self.slack_client = SlackClient(token['bot_access_token'])
-                self.slack = Slacker(token['bot_access_token'])
-                test_call = self.slack_client.api_call("users.list")
+        token = models.get_bot_access_token(user_id)
+        # for token in tokens:
+        try:
+            self.BOT_TOKEN = token
+            self.slack_client = SlackClient(token)
+            self.slack = Slacker(token)
+            test_call = self.slack_client.api_call("users.list")
 
-                if test_call.get('ok'):
-                    print "  OKIE DOKIE"
-                    self.BOT_ID = models.get_bot_user_id(token['bot_access_token'])
-                    self.AT_BOT = "<@" + self.BOT_ID + ">"
-                    members = self.slack_client.api_call('users.list').get('members')
-                    for member in members:
-                        print "  member['id']: ",member['id']
-                        self.user_ids_to_username[member['id']] = member['name']
+            if test_call.get('ok'):
+                print "  test call is OKIE DOKIE"
+                self.BOT_ID = models.get_bot_user_id(token)
+                self.AT_BOT = "<@" + self.BOT_ID + ">"
+                members = self.slack_client.api_call('users.list').get('members')
+                for member in members:
+                    print "  member['id']: ",member['id']
+                    self.user_ids_to_username[member['id']] = member['name']
 
-                    channels = self.slack_client.api_call("channels.list").get('channels')
-                    for channel in channels:
-                        print "  channel",channel
-                        self.channel_ids_to_name[channel['id']] = channel['name']
+                channels = self.slack_client.api_call("channels.list").get('channels')
+                for channel in channels:
+                    print "  channel",channel
+                    self.channel_ids_to_name[channel['id']] = channel['name']
 
-                    if "drumpf-scoreboard" not in [channel['name'] for channel in channels]:
-                        self.make_channel()
-                        users = self.list_users
-                        for user in users:
-                            self.join_channel
-                    else:
-                        print "  Existing #drumpf-scoreboard channel found..."
-                        self.main_channel_id = self.channel_ids_to_name.keys()[self.channel_ids_to_name.values().index('drumpf-scoreboard')]
-                        print "  self.main_channel_id: ",self.main_channel_id
-            except Exception as e:
-                print "  Exception on token retrieval attempt"
-                raise
-            else:
-                print "  Successful token retrieval"
-                break
+                if "drumpf-scoreboard" not in [channel['name'] for channel in channels]:
+                    self.make_channel()
+                    users = self.list_users
+                    for user in users:
+                        self.join_channel
+                else:
+                    print "  Existing #drumpf-scoreboard channel found..."
+                    self.main_channel_id = channel
+                    # self.main_channel_id = self.channel_ids_to_name.keys()[self.channel_ids_to_name.values().index('drumpf-scoreboard')]
+                    print "  self.main_channel_id: ",self.main_channel_id
+        except Exception as e:
+            print "  Exception on token retrieval attempt"
+            raise
+        else:
+            print "  Successful token retrieval"
+            break
 
     def main(self, score, bid, trump, round_):
         """

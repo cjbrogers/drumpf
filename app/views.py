@@ -84,7 +84,7 @@ def events():
                     slack_client = SlackClient(access_token)
                     resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
                     bot = DrumpfBot()
-                    bot.initialize()
+                    bot.initialize(user_id, channel)
                     score = Scoring(bot)
                     bid = Bid(bot,score)
                     trump = TrumpSuit(bot,score,bid)
@@ -95,10 +95,10 @@ def events():
                 else:
                     print "successful token retrieval"
     except Exception as e:
-        print "no data['event']['text']"
+        print "  Exception raised!"
         raise
     else:
-        print "Event successfully registered."
+        print "  Event successfully registered."
     # else:
     #     print "Verification token mismatch"
     return Response(), 200
