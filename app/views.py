@@ -94,7 +94,7 @@ def events():
                 else:
                     print "  successful bot initialization"
                 finally:
-                    bot.main(score, bid, trump, round_)
+                    return Response(bot.main(score, bid, trump, round_)), 200
     except Exception as e:
         raise
     else:
