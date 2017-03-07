@@ -29,7 +29,9 @@ OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 app = Flask(__name__)
 
 def make_celery(app):
+    app.config['CELERY_BROKER_URL'] = os.environ.get('RABBITMQ_BIGWIG_URL')
     celery = Celery(app.name, broker=os.environ.get('RABBITMQ_BIGWIG_URL'))
+    celery.conf.update(app.config)
     TaskBase = celery.Task
     class ContextTask(TaskBase):
         abstract = True
