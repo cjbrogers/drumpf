@@ -97,16 +97,16 @@ def get_bot_access_token(user_id):
     Returns:
             [token] (str) bot oauth access token
     '''
-    print "get_bot_access_token()"
+    print "get_bot_access_token(user_id)"
     connection = connect()
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT DISTINCT bot_access_token FROM `users` where user_id=%s"
+            sql = "SELECT DISTINCT bot_access_token FROM `users` WHERE user_id=%s"
             data = (user_id)
             cursor.execute(sql,data)
             token = cursor.fetchall()
-            print "  token (raw): ",tokens
+            print "  token (raw): ",token
             return token['bot_access_token']
     except Exception as e:
         raise

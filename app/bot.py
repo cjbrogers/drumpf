@@ -457,7 +457,10 @@ class DrumpfBot():
         return None, None, None, None
 
     def initialize(self, user_id, channel):
-        print "initialize(self)"
+        print "initialize(self, user_id, channel)"
+        print "  user_id",user_id
+        print "  channel",channel
+        
         token = models.get_bot_access_token(user_id)
         # for token in tokens:
         try:
