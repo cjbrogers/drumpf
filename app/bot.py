@@ -495,7 +495,6 @@ class DrumpfBot():
             raise
         else:
             print "  Successful token retrieval"
-            break
 
     def main(self, score, bid, trump, round_):
         """
