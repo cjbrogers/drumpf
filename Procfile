@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath app views:app -k gevent --worker-connections 1000 --log-file=-
+web: gunicorn --pythonpath app views:app -w 1 --threads 2

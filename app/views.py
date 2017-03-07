@@ -95,14 +95,10 @@ def events():
                     print "  successful bot initialization"
                 finally:
                     bot.main(score, bid, trump, round_)
-                    return Response(), 200
-
     except Exception as e:
         raise
     else:
         print "  Event successfully registered."
-    # else:
-    #     print "Verification token mismatch"
     return Response(), 200
 
 # the beginning of the Sign In to Slack OAuth process.
