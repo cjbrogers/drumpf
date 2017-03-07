@@ -27,7 +27,7 @@ CLIENT_SECRET = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
 app = Flask(__name__)
-celery = Celery(app.name, broker='amqp://guest@localhost//')
+celery = Celery(app.name, broker=os.environ.get('RABBITMQ_BIGWIG_URL'))
 
 @celery.task
 def launch_bot(user_id,channel):
