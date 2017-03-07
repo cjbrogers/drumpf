@@ -491,7 +491,7 @@ class DrumpfBot():
                     # self.main_channel_id = self.channel_ids_to_name.keys()[self.channel_ids_to_name.values().index('drumpf-scoreboard')]
                     print "  self.main_channel_id: ",self.main_channel_id
         except Exception as e:
-            print "  Exception on token retrieval attempt"
+            print "  Exception raised!"
             raise
         else:
             print "  Successful token retrieval"
