@@ -16,6 +16,7 @@ app.conf.update(BROKER_URL=os.environ['RABBITMQ_BIGWIG_URL'])
 
 @app.task
 def launch_bot(user_id,channel):
+    print "launch_bot(user_id,channel)"
     bot = DrumpfBot()
     bot.initialize(user_id, channel)
     score = Scoring(bot, user_id)
