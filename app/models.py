@@ -18,9 +18,10 @@ def connect():
         Returns:
                 [connection] database connection object
     '''
+    print "connect()"
     # Connect to the database
     try:
-        print "Attempting connection to database..."
+        print "  Attempting connection to database..."
         connection = pymysql.connect(host='us-cdbr-iron-east-04.cleardb.net',
                                      port=int(DB_PORT),
                                      user=DB_USER,
@@ -31,7 +32,7 @@ def connect():
     except Exception as e:
         raise
     else:
-        print "Database successfully connected."
+        print "  Database successfully connected."
         return connection
 
 def get_engine():
@@ -62,6 +63,7 @@ def get_access_token(user_id):
     Returns:
             [tokens] (string) users oauth token
     '''
+    print "get_access_token(user_id)"
     connection = connect()
     try:
         with connection.cursor() as cursor:
@@ -70,8 +72,8 @@ def get_access_token(user_id):
             data = (user_id)
             cursor.execute(sql,data)
             token = cursor.fetchall()
-            print "token: ",token
-            print "token[0]['access_token']: ",token[0]['access_token']
+            print "  token: ",token
+            print "  token[0]['access_token']: ",token[0]['access_token']
             return token[0]['access_token']
             # for user in users:
             #     print user
@@ -84,7 +86,7 @@ def get_access_token(user_id):
     except Exception as e:
         raise
     else:
-        print "Success retrieving user access tokens."
+        print "  Success retrieving user access tokens."
     finally:
         connection.close()
 
@@ -92,12 +94,10 @@ def get_bot_access_tokens():
     '''
     Retrieves the Slack bot access token from the database
 
-    Args:
-            [user_id] the id of the user to query in the db
-
     Returns:
             [tokens] (list) bot oauth tokens
     '''
+    print "get_bot_access_tokens"
     connection = connect()
     try:
         with connection.cursor() as cursor:
@@ -105,12 +105,12 @@ def get_bot_access_tokens():
             sql = '''SELECT DISTINCT bot_access_token FROM `users`'''
             cursor.execute(sql)
             tokens = cursor.fetchall()
-            print tokens
+            print "  tokens: ",tokens
             return tokens
     except Exception as e:
         raise
     else:
-        print "Success retrieving bot access token."
+        print "  Success retrieving bot access token."
     finally:
         connection.close()
 
@@ -124,6 +124,7 @@ def get_bot_user_id(token):
     Returns:
             [bot_user_id] (string) bot user id
     '''
+    print "get_bot_user_id(token)"
     connection = connect()
     try:
         with connection.cursor() as cursor:
@@ -132,13 +133,12 @@ def get_bot_user_id(token):
             data = (token)
             cursor.execute(sql,data)
             response = cursor.fetchall()
-            print response[0]
             bot_user_id = response[0]['bot_user_id']
-            print bot_user_id
+            print "  bot_user_id",bot_user_id
             return bot_user_id
     except Exception as e:
         raise
     else:
-        print "Success retrieving bot user id."
+        print "  Success retrieving bot user id."
     finally:
         connection.close()
