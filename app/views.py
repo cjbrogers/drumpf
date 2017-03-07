@@ -100,9 +100,8 @@ def events():
                     print "  create game not in data['event']['text']"
                 else:
                     print "  successful bot initialization"
-                finally:
                     launch_bot.delay(user_id,channel)
-                    return Response(), 200
+                    return Response(), 200                    
     except Exception as e:
         raise
     else:
