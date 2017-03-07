@@ -18,10 +18,9 @@ def connect():
         Returns:
                 [connection] database connection object
     '''
-    print "connect()"
     # Connect to the database
     try:
-        print "  Attempting connection to database..."
+        print "Attempting connection to database..."
         connection = pymysql.connect(host='us-cdbr-iron-east-04.cleardb.net',
                                      port=int(DB_PORT),
                                      user=DB_USER,
@@ -32,7 +31,7 @@ def connect():
     except Exception as e:
         raise
     else:
-        print "  Database successfully connected."
+        print "Database successfully connected."
         return connection
 
 def get_engine():
@@ -53,7 +52,7 @@ def send_to_db(df,engine,name):
     '''
     df.to_sql(con=engine, name=name, if_exists='append', index=False)
 
-def get_access_token(user_id):
+def get_access_token(user_id,user_name=None):
     '''
     Retrieves the Slack user access token from the database
 
@@ -61,84 +60,86 @@ def get_access_token(user_id):
             [user_id] the id of the user to query in the db
 
     Returns:
-            [tokens] (string) users oauth token
+            [token] (string) users oauth token
     '''
-    print "get_access_token(user_id)"
     connection = connect()
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT DISTINCT access_token FROM `users` WHERE user_id=%s"
-            data = (user_id)
-            cursor.execute(sql,data)
-            token = cursor.fetchall()
-            print "  token: ",token
-            print "  token[0]['access_token']: ",token[0]['access_token']
-            return token[0]['access_token']
-            # for user in users:
-            #     print user
-                # if user['user_id'] == user_id:
-                #     if user_name != user['name'] and user_name != None:
-                #         sql = "UPDATE user SET name=%s WHERE user_id=%s"
-                #         data = (user_name,user_id)
-                #         cursor.execute(sql,data)
-
+            sql = '''SELECT * FROM `users`'''
+            cursor.execute(sql)
+            users = cursor.fetchall()
+            print users
+            for user in users:
+                print user
+                if user['user_id'] == user_id:
+                    if user_name != user['name'] and user_name != None:
+                        sql = "UPDATE user SET name=%s WHERE user_id=%s"
+                        data = (user_name,user_id)
+                        cursor.execute(sql,data)
+                    token = user['access_token']
+                    return token
     except Exception as e:
         raise
     else:
-        print "  Success retrieving user access tokens."
+        print "Success retrieving user access token."
     finally:
         connection.close()
 
-def get_bot_access_tokens():
+def get_bot_access_token(user_id):
     '''
     Retrieves the Slack bot access token from the database
 
+    Args:
+            [user_id] the id of the user to query in the db
+
     Returns:
-            [tokens] (list) bot oauth tokens
+            [token] (string) bot oauth token
     '''
-    print "get_bot_access_tokens"
     connection = connect()
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = '''SELECT DISTINCT bot_access_token FROM `users`'''
+            sql = '''SELECT * FROM `users`'''
             cursor.execute(sql)
-            tokens = cursor.fetchall()
-            print "  tokens: ",tokens
-            return tokens
+            users = cursor.fetchall()
+            for user in users:
+                print user
+                if user['user_id'] == user_id:
+                    token = user['bot_access_token']
+                    return token
     except Exception as e:
         raise
     else:
-        print "  Success retrieving bot access token."
+        print "Success retrieving bot access token."
     finally:
         connection.close()
 
-def get_bot_user_id(token):
+def get_bot_user_id(user_id):
     '''
     Retrieves the Slack bot user id
 
     Args:
-            [token] the bot access token
+            [user_id] the id of the user to query in the db
 
     Returns:
             [bot_user_id] (string) bot user id
     '''
-    print "get_bot_user_id(token)"
     connection = connect()
     try:
         with connection.cursor() as cursor:
             # Read a single record
-            sql = "SELECT DISTINCT bot_user_id FROM `users` WHERE bot_access_token=%s"
-            data = (token)
-            cursor.execute(sql,data)
-            response = cursor.fetchall()
-            bot_user_id = response[0]['bot_user_id']
-            print "  bot_user_id",bot_user_id
-            return bot_user_id
+            sql = '''SELECT * FROM `users`'''
+            cursor.execute(sql)
+            users = cursor.fetchall()
+            for user in users:
+                print user
+                if user['user_id'] == user_id:
+                    bot_user_id = user['bot_user_id']
+                    return bot_user_id
     except Exception as e:
         raise
     else:
-        print "  Success retrieving bot user id."
+        print "Success retrieving bot user id."
     finally:
         connection.close()
