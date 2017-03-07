@@ -1,1 +1,2 @@
-web: python --pythonpath app views.py celery worker --loglevel=info
+web: gunicorn --pythonpath app views.py
+worker: celery worker -A app.celery

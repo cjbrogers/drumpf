@@ -27,7 +27,19 @@ CLIENT_SECRET = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
 app = Flask(__name__)
-celery = Celery(app.name, broker=os.environ.get('RABBITMQ_BIGWIG_URL'))
+
+def make_celery(app):
+    celery = Celery(app.name, broker=os.environ.get('RABBITMQ_BIGWIG_URL'))
+    TaskBase = celery.Task
+    class ContextTask(TaskBase):
+        abstract = True
+        def __call__(self,*args,**kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self,*args,**kwargs)
+    celery.Task = ContextTask
+    return celery
+
+celery = make_celery(app)
 
 @celery.task
 def launch_bot(user_id,channel):
@@ -101,7 +113,7 @@ def events():
                 else:
                     print "  successful bot initialization"
                     launch_bot.delay(user_id,channel)
-                    return Response(), 200                    
+                    return Response(), 200
     except Exception as e:
         raise
     else:
