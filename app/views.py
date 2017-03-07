@@ -30,7 +30,13 @@ app = Flask(__name__)
 celery = Celery(app.name, broker='amqp://guest@localhost//')
 
 @celery.task
-def launch_bot(bot, score, bid, trump, round_):
+def launch_bot(user_id,channel):
+    bot = DrumpfBot()
+    bot.initialize(user_id, channel)
+    score = Scoring(bot, user_id)
+    bid = Bid(bot,score)
+    trump = TrumpSuit(bot,score,bid)
+    round_ = Round(bot,score,trump)
     bot.main(score, bid, trump, round_)
 
 # handles interactive button responses for donny_drumpfbot
@@ -90,18 +96,12 @@ def events():
                 try:
                     slack_client = SlackClient(access_token)
                     resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
-                    bot = DrumpfBot()
-                    bot.initialize(user_id, channel)
-                    score = Scoring(bot, user_id)
-                    bid = Bid(bot,score)
-                    trump = TrumpSuit(bot,score,bid)
-                    round_ = Round(bot,score,trump)
                 except:
                     print "  create game not in data['event']['text']"
                 else:
                     print "  successful bot initialization"
                 finally:
-                    launch_bot.delay(bot,score,bid,trump,round_)
+                    launch_bot.delay(user_id,channel)
                     return Response(), 200
     except Exception as e:
         raise
