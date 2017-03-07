@@ -480,14 +480,13 @@ class DrumpfBot():
                         print "  channel",channel
                         self.channel_ids_to_name[channel['id']] = channel['name']
 
-                    print "  self.channel_ids_to_name",self.channel_ids_to_name
                     if "drumpf-scoreboard" not in [channel['name'] for channel in channels]:
                         self.make_channel()
                         users = self.list_users
                         for user in users:
                             self.join_channel
                     else:
-                        print "  No existing #drumpf-scoreboard channel..."
+                        print "  Existing #drumpf-scoreboard channel found..."
                         self.main_channel_id = self.channel_ids_to_name.keys()[self.channel_ids_to_name.values().index('drumpf-scoreboard')]
                         print "  self.main_channel_id: ",self.main_channel_id
             except Exception as e:

@@ -70,37 +70,37 @@ def inbound():
 @app.route('/events', methods=['POST'])
 def events():
     data = json.loads(request.data)
-    # print data
+    print data
     token = data['token']
-    if token == SLACK_VERIFICATION_TOKEN:
-        try:
-            if data['event']['text']:
-                if 'create game' in data['event']['text']:
-                    ts = data['event']['ts']
-                    channel = data['event']['channel']
-                    user_id = data['event']['user']
-                    access_token = models.get_access_token(user_id)
-                    try:
-                        slack_client = SlackClient(access_token)
-                        resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
-                        bot = DrumpfBot()
-                        bot.initialize()
-                        score = Scoring(bot)
-                        bid = Bid(bot,score)
-                        trump = TrumpSuit(bot,score,bid)
-                        round_ = Round(bot,score,trump)
-                        bot.main(score, bid, trump, round_)
-                    except:
-                        print "unsuccessful token retrieval attempt"
-                    else:
-                        print "successful token retrieval"
-        except Exception as e:
-            print "no data['event']['text']"
-            raise
-        else:
-            print "Event successfully registered."
+    # if token == SLACK_VERIFICATION_TOKEN:
+    try:
+        if data['event']['text']:
+            if 'create game' in data['event']['text']:
+                ts = data['event']['ts']
+                channel = data['event']['channel']
+                user_id = data['event']['user']
+                access_token = models.get_access_token(user_id)
+                try:
+                    slack_client = SlackClient(access_token)
+                    resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+                    bot = DrumpfBot()
+                    bot.initialize()
+                    score = Scoring(bot)
+                    bid = Bid(bot,score)
+                    trump = TrumpSuit(bot,score,bid)
+                    round_ = Round(bot,score,trump)
+                    bot.main(score, bid, trump, round_)
+                except:
+                    print "unsuccessful token retrieval attempt"
+                else:
+                    print "successful token retrieval"
+    except Exception as e:
+        print "no data['event']['text']"
+        raise
     else:
-        print "Verification token mismatch"
+        print "Event successfully registered."
+    # else:
+    #     print "Verification token mismatch"
     return Response(), 200
 
 # the beginning of the Sign In to Slack OAuth process.
