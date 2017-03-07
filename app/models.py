@@ -135,7 +135,7 @@ def get_bot_user_id(token):
             cursor.execute(sql,data)
             response = cursor.fetchall()
             bot_user_id = response[0]['bot_user_id']
-            print "  bot_user_id",bot_user_id
+            print "  bot_user_id: ",bot_user_id
             return bot_user_id
     except Exception as e:
         raise
