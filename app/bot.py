@@ -499,7 +499,7 @@ class DrumpfBot():
         else:
             print "  Successful token retrieval"
 
-    def main(self, score, bid, trump, round_):
+    def main(self, score, bid, trump, round_,msg,channel_id,user_id,ts=None):
         """
             Opens a Slack RTM API websocket connection
         """

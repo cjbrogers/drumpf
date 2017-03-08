@@ -12,8 +12,10 @@ from trump_suit import TrumpSuit
 from app import app
 
 @app.task
-def launch_bot(user_id,channel):
+def launch_bot(user_id,channel,ts):
     print "launch_bot(user_id,channel)"
+    AT_USER = "<@" + user_id + ">"
+    command = AT_USER + " create game"
     bot = DrumpfBot()
     bot.initialize(user_id, channel)
     score = Scoring(bot, user_id)

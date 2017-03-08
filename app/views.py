@@ -68,10 +68,11 @@ def events():
     # if token == SLACK_VERIFICATION_TOKEN:
     try:
         for k,v in data['event'].iteritems():
-            if 'previous_message' not in str(k) and 'create game' in str(v):
+            if 'previous_message' not in str(k) and 'load drumpf' in str(v):
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
+                msg = data['event']['text']
                 access_token = models.get_access_token(user_id)
                 try:
                     slack_client = SlackClient(access_token)
@@ -80,7 +81,7 @@ def events():
                     print "  create game not in data['event']['text']"
                 else:
                     print "  successful deletion of 'create game' instance"
-                    tasks.launch_bot.delay(user_id,channel)
+                    tasks.launch_bot.delay(user_id,channel,ts)
                     return Response(), 200
     except Exception as e:
         raise
