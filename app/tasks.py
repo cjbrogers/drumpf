@@ -23,7 +23,3 @@ def launch_bot(user_id,channel,ts):
     trump = TrumpSuit(bot,score,bid)
     round_ = Round(bot,score,trump)
     bot.main(score, bid, trump, round_)
-
-@app.task
-def add(x, y):
-    return x + y

@@ -116,19 +116,27 @@ class DrumpfBot():
             self.game_created == True
             self.slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
             if len(self.users_in_game) == 0:
+                response = "OK then, playing "
+                if self.winning_points:
+                    response += "to `" + str(self.winning_points) + "` points"
+                else:
+                    response += "Standard Gameplay (until the cards are all used)"
+
+                self.slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
+
                 response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
                 title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
                 attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
                 self.slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
 
-                response = "<@{}> Wants to play a game of drumpf!".format(username)
-                attachments =[{"title":"Click the button below to add yourself to the game:", "fallback":"Add me to the game:", "callback_id":"add me", "attachment_type":"default", "actions":[{"name":"add me","text":"add me","type":"button","value":"add me"}]}]
+                response = "Hey there team! <@{}> Wants to play a game of drumpf!".format(username)
+                attachments =[{"title":"Click the button below to add yourself to the game queue. Click `start game` when everyone has added themselves.", "fallback":"Add me to the game:", "callback_id":"add me", "attachment_type":"default", "actions":[{"name":"add me","text":"add me","type":"button","value":"add me"}]}]
                 self.users_in_game.append(user_id)
                 resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
                 self.ts = resp['ts']
                 return
             else:
-                response = "There's already a game being made, say `@drumpfbot add me` if you want in."
+                response = "There's already a game created, click `add me` if you want in."
 
         if command.lower().startswith("restart"):
             response = "Application restarted."
@@ -138,14 +146,14 @@ class DrumpfBot():
 
         if command.lower().startswith("remove me") and (self.game_started == False) and (self.game_created == True):
             if user_id not in self.users_in_game:
-                response = "You haven't been added, so how can I remove you? Type `@drumpfbot add me` if you want in."
+                response = "You haven't been added, so how can I remove you? Click `add me` if you want in."
             else:
-                response = "Okay, {} removed from the game queue. When you have two or more players, type `@drumpfbot start game`.".format(username)
+                response = "Okay, {} removed from the game queue. When you have two or more players, click `start game`.".format(username)
                 self.users_in_game.remove(user_id)
 
         if command.lower().startswith("add me"):
             if len(self.users_in_game) == 0:
-                response = "There is no active game, try `create game`."
+                response = "There is no active game, try `play drumpf`."
             else:
                 if user_id in self.users_in_game:
                     response = "You've already been added to the game."
@@ -178,23 +186,18 @@ class DrumpfBot():
 
         if command.lower().startswith("commands") or command.lower().startswith("help"):
             response = ">>>Certainly, my liege. The available commands are: \n\n" \
-            "*[add me]*\tAdd yourself to the game queue.\n" \
             "*[bigly]*\tIt's a word.\n" \
             "*[cancel]*\tStop the current game.\n" \
             "*[commands]*\tView available commands.\n" \
             "*[comp]*\tView the card deck composition.\n" \
-            "*[create game]*\tLet Slack know you want to play a game. Players reply '<@drumpfbot> add me' if they wish to join.\n"\
-            "*[debug]*\tStart a game in debug mode. Bidding is automatic.\n" \
             "*[remove me]*\tRemove yourself from the current game queue.\n" \
-            "*[rules]*\tView the rules of the game.\n" \
-            "*[start game]*\tStart the game.\n" \
-            "*[undebug]*\tTurn off the debugging output.\n" \
+            "*[rules/help]*\tView the rules of the game.\n" \
             "*[< _these_ > cards]*\tReplace < _these_ > with the cards you wish to view. i.e. 'Drumpf' cards.\n\n" \
             "Still lost? Follow this link for step-by-step instructions:"
             title_link = "http://cjbrogers.com/drumpf/howto.html"
             attachments = [{"title": "@drumpfbot How To Reference - Click here to learn more", "title_link": title_link}]
 
-        if command.lower().startswith("rules") or command.lower().startswith("game rules"):
+        if command.lower().startswith("rules") or command.lower().startswith("help"):
             response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
             title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
             attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]

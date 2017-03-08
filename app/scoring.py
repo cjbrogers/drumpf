@@ -7,8 +7,6 @@ import models
 import os
 import sys
 
-# slack_client = SlackClient(helper_functions.get_slack_client())
-
 class Scoring():
 
     def __init__(self,bot,user_id):

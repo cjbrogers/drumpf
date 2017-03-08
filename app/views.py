@@ -68,7 +68,7 @@ def events():
     # if token == SLACK_VERIFICATION_TOKEN:
     try:
         for k,v in data['event'].iteritems():
-            if 'previous_message' not in str(k) and 'load drumpf' in str(v):
+            if 'previous_message' not in str(k) and 'play drumpf' in str(v):
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
