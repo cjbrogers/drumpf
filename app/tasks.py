@@ -9,10 +9,7 @@ from round import Round
 import trump_suit
 from trump_suit import TrumpSuit
 
-import celery
-app = celery.Celery('example')
-import os
-app.conf.update(BROKER_URL=os.environ['RABBITMQ_BIGWIG_URL'])
+from app import app
 
 @app.task
 def launch_bot(user_id,channel):
@@ -23,7 +20,7 @@ def launch_bot(user_id,channel):
     bid = Bid(bot,score)
     trump = TrumpSuit(bot,score,bid)
     round_ = Round(bot,score,trump)
-    return bot.main(score, bid, trump, round_)
+    bot.main(score, bid, trump, round_)
 
 @app.task
 def add(x, y):
