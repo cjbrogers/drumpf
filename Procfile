@@ -1,2 +1,2 @@
 web: gunicorn --pythonpath app views:app
-worker: honcho -d ./app -f Procfile start
+worker: celery -A app.tasks worker -B --loglevel=info
