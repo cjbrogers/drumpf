@@ -4,6 +4,9 @@ import game as DrumpfGame
 import random
 import models
 
+import os
+import sys
+
 # slack_client = SlackClient(helper_functions.get_slack_client())
 
 class Scoring():
@@ -558,4 +561,4 @@ class Scoring():
         )
         for player in self.bot.current_game.players:
             self.bot.private_message_user(player.id,response,attachments)
-        return
+        self.bot.restart_program()

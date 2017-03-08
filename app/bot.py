@@ -19,8 +19,6 @@ from round import Round
 import trump_suit
 from trump_suit import TrumpSuit
 
-
-
 class DrumpfBot():
 
     def __init__(self): # drumpf-scoreboard: C4AK56EQ7
