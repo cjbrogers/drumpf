@@ -7,7 +7,8 @@ import json, requests
 from slacker import Slacker
 import pandas as pd
 
-from .app import tasks
+import app
+from app import tasks
 import models
 
 
