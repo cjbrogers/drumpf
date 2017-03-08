@@ -507,11 +507,22 @@ class DrumpfBot():
         self.bid = bid
         self.trump = trump
         self.round_ = round_
+
         READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
         #grab user list and converts it to to a dict of ids to usernames
 
         if self.slack_client.rtm_connect():
             print("DRUMPFBOT v1.0 connected and running!")
+
+            message = "_All set to play Drumpf!_"
+            attachments =[{"title":"Select a game style to play:", "fallback":"Select a game style:", "callback_id":"game style", "attachment_type":"default", "actions":[ \
+            {"name":"create game 250","text":"First to 250pts","type":"button","value":"create game 250"},
+            {"name":"create game 500","text":"First to 500pts","type":"button","value":"create game 500"},
+            {"name":"create game 1000","text":"First to 1000pts","type":"button","value":"create game 1000"},
+            {"name":"create game", "text":"Standard", "type":"button", "value":"create game"}]}]
+
+            self.slack_client.api_call("chat.postMessage",channel=self.main_channel_id,text=message,attachments=attachments,as_user=True)
+
             while True:
                 command, channel, user, ts = self.parse_slack_output()
                 if command and channel:
@@ -523,12 +534,3 @@ class DrumpfBot():
                 time.sleep(READ_WEBSOCKET_DELAY)
         else:
             print("Connection failed. Invalid Slack token or bot ID?")
-
-# if __name__ == "__main__":
-    # bot = DrumpfBot()
-    # bot.initialize()
-    # score = Scoring(bot)
-    # bid = Bid(bot,score)
-    # trump = TrumpSuit(bot,score,bid)
-    # round_ = Round(bot,score,trump)
-    # bot.main()

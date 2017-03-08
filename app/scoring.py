@@ -290,7 +290,7 @@ class Scoring():
                             print "    {} card played in round".format("t_comey")
                             comey_card_idx = self.bot.cards_played_for_sub_round.index("t_comey")
                             if idx < comey_card_idx:
-                                msg = "{} card steals {} card...\n".format(self.bot.cards_played_for_sub_round[comey_card_idx],helper_functions.emojify_card(card_value))
+                                msg = "{} card steals {} card...\n".format(helper_functions.emojify_card(self.bot.cards_played_for_sub_round[comey_card_idx]),helper_functions.emojify_card(card_value))
                                 print "  ",msg
                                 self.build_scoreboard(msg)
                                 self.update_scoreboard(self.bot.scoreboard)
