@@ -59,7 +59,8 @@ def send_to_db(df,engine,name):
         try:
             with connection.cursor() as cursor:
                 # Read a single record
-                event = df['event']
+                event = df.iloc[0]['event']
+                print "  EVENT:",event
                 sql = "SELECT * FROM `messages` WHERE event=%s"
                 data = (event)
                 cursor.execute(sql,data)
