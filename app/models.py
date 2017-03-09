@@ -60,15 +60,19 @@ def send_to_db(df,engine,name):
             with connection.cursor() as cursor:
                 # Read a single record
                 event = df.iloc[0]['event']
+                team_id = df.iloc[0]['team_id']
+                ts = df.iloc[0]['ts']
                 print "  EVENT:",event
-                sql = "SELECT * FROM `messages` WHERE event=%s"
-                data = (event)
+                print "  TEAM_ID:",team_id
+                print "  TS:",event
+                sql = "SELECT * FROM `messages` WHERE event=%s AND team_id=%s"
+                data = (event,team_id)
                 cursor.execute(sql,data)
                 messages = cursor.fetchall()
                 print "  messages: ",messages
                 if messages:
-                    sql = "UPDATE `messages` SET ts=%s WHERE event=%s"
-                    data = (df.iloc[0]['ts'],df.iloc[0]['event'])
+                    sql = "UPDATE `messages` SET ts=%s WHERE event=%s AND team_id=%s"
+                    data = (ts,event,team_id)
                     cursor.execute(sql,data)
                 else:
                     df.to_sql(con=engine, name=name, if_exists='append', index=False)
