@@ -68,10 +68,10 @@ def events():
     # if token == SLACK_VERIFICATION_TOKEN:
     try:
         for k,v in data['event'].iteritems():
-            ts = data['event']['ts']
-            channel = data['event']['channel']
-            user_id = data['event']['user']
-            if 'previous_message' not in str(k) and 'play drumpf' in str(v) and user_id != 'U49SZ7R0S':
+            if 'previous_message' not in str(k) and 'play drumpf' in str(v):
+                ts = data['event']['ts']
+                channel = data['event']['channel']
+                user_id = data['event']['user']
                 msg = data['event']['text']
                 access_token = models.get_access_token(user_id)
                 try:
@@ -89,7 +89,7 @@ def events():
                 channel = data['event']['channel']
                 user_id = data['event']['user']
 
-                access_token = models.get_access_token(user_id)
+                access_token = models.get_bot_access_token(user_id)
                 slack_client = SlackClient(access_token)
 
                 slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
