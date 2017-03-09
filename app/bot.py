@@ -634,7 +634,7 @@ class DrumpfBot():
             self.slack_client.api_call("chat.update",
                                         channel=self.main_channel_id,
                                         text=message,
-                                        ts = self.ts
+                                        ts = self.ts,
                                         attachments=attachments,
                                         as_user=True)
 
