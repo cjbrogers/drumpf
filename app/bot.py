@@ -626,7 +626,7 @@ class DrumpfBot():
                     ]
                 }]
 
-            sql = "SELECT ts FROM `messages` WHERE event='wake_bot' AND team_id={}".format(self.team_id)
+            sql = "SELECT ts FROM `messages` WHERE event='wake_bot' AND team_id='{}'".format(self.team_id)
             engine = models.get_engine()
             df = pd.read_sql_query(sql=sql,con=engine)
             self.ts = df.iloc[0]['ts']
