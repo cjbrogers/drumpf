@@ -575,7 +575,7 @@ class DrumpfBot():
         if self.slack_client.rtm_connect():
             print("DRUMPFBOT v0.9 connected and running!")
 
-            message = "_All set to play Drumpf!_"
+            message = "_All set to play!_"
             attachments = [
                 {
                     "title":"Select a game style to play:",
