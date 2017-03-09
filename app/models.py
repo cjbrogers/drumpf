@@ -54,19 +54,19 @@ def send_to_db(df,engine,name):
     '''
     print "send_to_db(df,engine,name)"
 
-    if name=="members":
+    if name=="messages":
         connection = connect()
         try:
             with connection.cursor() as cursor:
                 # Read a single record
                 event = df['event']
-                sql = "SELECT * FROM `members` WHERE event=%s"
+                sql = "SELECT * FROM `messages` WHERE event=%s"
                 data = (event)
                 cursor.execute(sql,data)
-                members = cursor.fetchall()
-                print "  members: ",members
-                if members:
-                    sql = "UPDATE `members` SET ts=%s WHERE event=%s"
+                messages = cursor.fetchall()
+                print "  messages: ",messages
+                if messages:
+                    sql = "UPDATE `messages` SET ts=%s WHERE event=%s"
                     data = (df['ts'],df['event'])
                     cursor.execute(sql,data)
                 else:
@@ -91,7 +91,7 @@ def get_access_token(user_id):
             [tokens] (string) users oauth token
     '''
     print "get_access_token(user_id)"
-    
+
     connection = connect()
     try:
         with connection.cursor() as cursor:
