@@ -132,18 +132,18 @@ class DrumpfBot():
                 event = "game_play"
                 models.log_message_ts(game_play_ts,channel,event,team_id)
 
-                response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
-                title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
-                attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
-
-                resp = self.slack_client.api_call("chat.postMessage",
-                                                  channel=channel,
-                                                  text=response,
-                                                  attachments=attachments,
-                                                  as_user=True)
-                rules_ts = resp['ts']
-                event = "rules"
-                models.log_message_ts(rules_ts,channel,event,team_id)
+                # response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
+                # title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
+                # attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
+                #
+                # resp = self.slack_client.api_call("chat.postMessage",
+                #                                   channel=channel,
+                #                                   text=response,
+                #                                   attachments=attachments,
+                #                                   as_user=True)
+                # rules_ts = resp['ts']
+                # event = "rules"
+                # models.log_message_ts(rules_ts,channel,event,team_id)
 
                 response = "Hey there team! <@{}> wants to play a game of drumpf!".format(username)
                 attachments = [
@@ -162,16 +162,17 @@ class DrumpfBot():
                         ]
                     }]
 
-                resp = self.slack_client.api_call("chat.postMessage",
+                resp = self.slack_client.api_call("chat.update",
                                                   channel=channel,
                                                   text=response,
+                                                  ts=self.ts
                                                   attachments=attachments,
                                                   as_user=True)
                 # self.ts = resp['ts']
-                self.ts = resp['ts']
-                print "  self.ts:",self.ts
-                event = "add_me"
-                models.log_message_ts(self.ts,channel,event,team_id)
+                # self.ts = resp['ts']
+                # print "  self.ts:",self.ts
+                # event = "add_me"
+                # models.log_message_ts(self.ts,channel,event,team_id)
                 return
             else:
                 response = "There's already a game created, click `add me` if you want in."
@@ -575,7 +576,20 @@ class DrumpfBot():
         if self.slack_client.rtm_connect():
             print("DRUMPFBOT v0.9 connected and running!")
 
-            message = "_All set to play!_"
+            response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
+            title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
+            attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
+
+            resp = self.slack_client.api_call("chat.postMessage",
+                                              channel=self.main_channel_id,
+                                              text=response,
+                                              attachments=attachments,
+                                              as_user=True)
+            rules_ts = resp['ts']
+            event = "rules"
+            models.log_message_ts(rules_ts,channel,event,team_id)
+
+            message = ""
             attachments = [
                 {
                     "title":"Select a game style:",
@@ -585,19 +599,19 @@ class DrumpfBot():
                     "actions": [
                         {
                             "name":"create game 250",
-                            "text":"First to 250pts",
+                            "text":"First to 250 pts",
                             "type":"button",
                             "value":"create game 250"
                         },
                         {
                             "name":"create game 500",
-                            "text":"First to 500pts",
+                            "text":"First to 500 pts",
                             "type":"button",
                             "value":"create game 500"
                         },
                         {
                             "name":"create game 1000",
-                            "text":"First to 1000pts",
+                            "text":"First to 1000 pts",
                             "type":"button",
                             "value":"create game 1000"
                         },
@@ -615,6 +629,7 @@ class DrumpfBot():
                                         text=message,
                                         attachments=attachments,
                                         as_user=True)
+            self.ts = resp['ts']
 
             while True:
                 command, channel, user, ts = self.parse_slack_output()
