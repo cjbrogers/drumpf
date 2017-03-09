@@ -547,6 +547,12 @@ class DrumpfBot():
                             sql = "UPDATE `users` SET name=%s WHERE user_id=%s"
                             data = (member['name'],member['id'])
                             cursor.execute(sql,data)
+                    except Exception as e:
+                        raise
+                    else:
+                        print "  Successfully updated user name in users table."
+                    finally:
+                        connection.close()
                 channels = self.slack_client.api_call("channels.list").get('channels')
                 for channel in channels:
                     self.channel_ids_to_name[channel['id']] = channel['name']
