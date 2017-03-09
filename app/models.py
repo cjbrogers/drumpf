@@ -64,7 +64,7 @@ def send_to_db(df,engine,name):
                 ts = df.iloc[0]['ts']
                 print "  EVENT:",event
                 print "  TEAM_ID:",team_id
-                print "  TS:",event
+                print "  TS:",ts
                 sql = "SELECT * FROM `messages` WHERE event=%s AND team_id=%s"
                 data = (event,team_id)
                 cursor.execute(sql,data)

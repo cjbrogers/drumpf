@@ -540,9 +540,13 @@ class DrumpfBot():
                 self.AT_BOT = "<@" + self.BOT_ID + ">"
                 members = self.slack_client.api_call('users.list').get('members')
                 for member in members:
-                    print "  member['id']: ",member['id']
                     self.user_ids_to_username[member['id']] = member['name']
-
+                    connection = models.connect()
+                    try:
+                        with connection.cursor() as cursor:
+                            sql = "UPDATE `users` SET name=%s WHERE user_id=%s"
+                            data = (member['name'],member['id'])
+                            cursor.execute(sql,data)
                 channels = self.slack_client.api_call("channels.list").get('channels')
                 for channel in channels:
                     self.channel_ids_to_name[channel['id']] = channel['name']
