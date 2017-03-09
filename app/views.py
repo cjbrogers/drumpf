@@ -72,6 +72,7 @@ def events():
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
+                team_id = data['team_id']
                 msg = data['event']['text']
                 access_token = models.get_access_token(user_id)
                 try:
@@ -81,7 +82,7 @@ def events():
                     print "  create game not in data['event']['text']"
                 else:
                     print "  successful deletion of 'create game' instance"
-                    tasks.launch_bot.delay(user_id,channel,ts)
+                    tasks.launch_bot.delay(user_id,channel,ts,team_id)
                     return Response(), 200
             elif 'previous_message' not in str(k) and 'wake up donny_drumpfbot' in str(v):
                 print "  waking up Drumpf!"

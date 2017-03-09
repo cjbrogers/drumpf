@@ -13,7 +13,7 @@ import models
 from app import app
 
 @app.task
-def launch_bot(user_id,channel,ts):
+def launch_bot(user_id,channel,ts,team_id):
     '''
     Instantiates the necessary objects to play a game
 
@@ -32,7 +32,7 @@ def launch_bot(user_id,channel,ts):
     bid = Bid(bot,score)
     trump = TrumpSuit(bot,score,bid)
     round_ = Round(bot,score,trump)
-    bot.main(score, bid, trump, round_)
+    bot.main(score, bid, trump, round_, team_id)
 
 @app.task
 def log_message_ts(ts,channel,event,team_id):

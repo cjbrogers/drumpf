@@ -69,6 +69,7 @@ class DrumpfBot():
         self.initial_scores = ""
         self.command_ts = ""
         self.winning_points = None
+        self.team_id = ""
         # self.timestamps = {}
 
     def handle_command(self, command, channel, user_id, ts):
@@ -561,7 +562,7 @@ class DrumpfBot():
         else:
             print "  Successful token retrieval"
 
-    def main(self, score, bid, trump, round_):
+    def main(self, score, bid, trump, round_, team_id):
         """
             Opens a Slack RTM API websocket connection
         """
@@ -569,6 +570,7 @@ class DrumpfBot():
         self.bid = bid
         self.trump = trump
         self.round_ = round_
+        self.team_id = team_id
 
         READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
         #grab user list and converts it to to a dict of ids to usernames
@@ -587,7 +589,7 @@ class DrumpfBot():
                                               as_user=True)
             rules_ts = resp['ts']
             event = "rules"
-            models.log_message_ts(rules_ts,channel,event,team_id)
+            models.log_message_ts(rules_ts,self.main_channel_id,event,self.team_id)
 
             message = ""
             attachments = [
@@ -624,12 +626,18 @@ class DrumpfBot():
                     ]
                 }]
 
-            resp = self.slack_client.api_call("chat.postMessage",
+            sql = "SELECT ts FROM `messages` WHERE event='wake_bot' AND team_id={}".format(self.team_id)
+            engine = models.get_engine()
+            df = pd.read_sql_query(sql=sql,con=engine)
+            self.ts = df.iloc[0]['ts']
+
+            self.slack_client.api_call("chat.update",
                                         channel=self.main_channel_id,
                                         text=message,
+                                        ts = self.ts
                                         attachments=attachments,
                                         as_user=True)
-            self.ts = resp['ts']
+
 
             while True:
                 command, channel, user, ts = self.parse_slack_output()
