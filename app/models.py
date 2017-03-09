@@ -52,7 +52,7 @@ def send_to_db(df,engine,name):
     Args:
             [df,engine,name] pandas dataframe/sqlalchemy engine/table name
     '''
-    df.to_sql(con=engine, name=name, if_exists='replace', index=False)
+    df.to_sql(con=engine, name=name, if_exists='append', index=False)
 
 def get_access_token(user_id):
     '''

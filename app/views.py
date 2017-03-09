@@ -89,10 +89,12 @@ def events():
                 channel = data['event']['channel']
                 user_id = data['event']['user']
 
+                user_access_token = models.get_access_token(user_id)
+                slack_client = SlackClient(user_access_token)
+                slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+
                 access_token = models.get_bot_access_token(user_id)
                 slack_client = SlackClient(access_token)
-
-                slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
 
                 message = "You have awoken <@donny_drumpfbot> from a bigly slumber."
                 attachments = [
