@@ -3,7 +3,7 @@ import os
 import sys
 import time
 from collections import defaultdict, deque
-
+import pandas as pd
 from slackclient import SlackClient
 from slacker import Slacker
 
