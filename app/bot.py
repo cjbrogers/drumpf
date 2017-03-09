@@ -125,7 +125,9 @@ class DrumpfBot():
                 else:
                     response += "Standard Gameplay (play until the cards are all used)"
 
-                resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
+                self.users_in_game.append(user_id)
+
+                resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
                 game_play_ts = resp['ts']
                 event = "game_play"
                 models.log_message_ts(game_play_ts,channel,event,team_id)
@@ -133,20 +135,43 @@ class DrumpfBot():
                 response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
                 title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
                 attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
-                resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
 
+                resp = self.slack_client.api_call("chat.postMessage",
+                                                  channel=channel,
+                                                  text=response,
+                                                  attachments=attachments,
+                                                  as_user=True)
                 rules_ts = resp['ts']
                 event = "rules"
                 models.log_message_ts(rules_ts,channel,event,team_id)
 
-                response = "Hey there team! <@{}> Wants to play a game of drumpf!".format(username)
-                attachments =[{"title":"Click the button below to add yourself to the game queue. Click `start game` when everyone has added themselves.", "fallback":"Add me to the game:", "callback_id":"add me", "attachment_type":"default", "actions":[{"name":"add me","text":"add me","type":"button","value":"add me"}]}]
-                self.users_in_game.append(user_id)
-                resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,attachments=attachments,as_user=True)
+                response = "Hey there team! <@{}> wants to play a game of drumpf!".format(username)
+                attachments = [
+                    {
+                        "title":"Click the button below to add yourself to the game queue:",
+                        "fallback":"Add me to the game:",
+                        "callback_id":"add me",
+                        "attachment_type":"default",
+                        "actions": [
+                            {
+                                "name":"add me",
+                                "text":"add me",
+                                "type":"button",
+                                "value":"add me"
+                            }
+                        ]
+                    }]
+
+                resp = self.slack_client.api_call("chat.postMessage",
+                                                  channel=channel,
+                                                  text=response,
+                                                  attachments=attachments,
+                                                  as_user=True)
                 # self.ts = resp['ts']
-                self.add_me_ts = resp['ts']
+                self.ts = resp['ts']
+                print "  self.ts:",self.ts
                 event = "add_me"
-                models.log_message_ts(add_me_ts,channel,event,team_id)
+                models.log_message_ts(self.ts,channel,event,team_id)
                 return
             else:
                 response = "There's already a game created, click `add me` if you want in."
@@ -168,7 +193,7 @@ class DrumpfBot():
 
         if command.lower().startswith("add me"):
             if len(self.users_in_game) == 0:
-                response = "There is no active game, try `play drumpf`."
+                response = "There is no active game."
             else:
                 if user_id in self.users_in_game:
                     response = "You've already been added to the game."
@@ -177,10 +202,10 @@ class DrumpfBot():
                     response = "Added <@{}> to the game!".format(username)
                     response += "\n_We have enough players to start a game._"
                     attachments = None
-                    if len(self.users_in_game) == 2:
+                    if len(self.users_in_game) >= 2:
                         attachments = [
                         {
-                            "title":"Click `start game` once everyone has added themselves:",
+                            "title":"Click start game once everyone has added themselves:",
                             "fallback":"Start the game or continue adding players.",
                             "callback_id":"start or add to game", "attachment_type":"default",
                             "actions": [
@@ -207,9 +232,9 @@ class DrumpfBot():
                         }]
 
                     self.slack_client.api_call("chat.update",
-                                                channel=self.main_channel_id,
+                                                channel=channel,
                                                 text=response,
-                                                ts=self.add_me_ts,
+                                                ts=self.ts,
                                                 attachments=attachments,
                                                 as_user=True)
                     return
@@ -217,7 +242,7 @@ class DrumpfBot():
         if command.lower().startswith("start game"):
             print "  Users in game: ", self.users_in_game
             if len(self.users_in_game) == 0:
-                response = "No game exists yet. Try typing `play drumpf`."
+                response = "No game exists yet."
             elif len(self.users_in_game) < 2:
                 response = "There aren't enough players yet (minimum 2). Users can click `add me` to be added to the game."
             elif len(self.users_in_game) > 6:
@@ -229,10 +254,9 @@ class DrumpfBot():
                 self.slack_client.api_call("chat.update",
                                           channel=channel,
                                           text=response,
-                                          ts=self.add_me_ts,
+                                          ts=self.ts,
                                           as_user=True)
                 # self.ts = resp['ts']
-                self.ts = self.add_me_ts
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return
 
@@ -586,7 +610,11 @@ class DrumpfBot():
                     ]
                 }]
 
-            self.slack_client.api_call("chat.postMessage",channel=self.main_channel_id,text=message,attachments=attachments,as_user=True)
+            self.slack_client.api_call("chat.postMessage",
+                                        channel=self.main_channel_id,
+                                        text=message,
+                                        attachments=attachments,
+                                        as_user=True)
 
             while True:
                 command, channel, user, ts = self.parse_slack_output()

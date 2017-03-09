@@ -94,12 +94,31 @@ def events():
 
                 slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
 
-                message = "You have awoken <@donny_drumpfbot> from a bigly slumber. Type `play drumpf` to begin a journey of lying and cheating your way to a tremendous victory."
-                resp = slack_client.api_call("chat.postMessage",text=message,channel=channel,as_user=True)
+                message = "You have awoken <@donny_drumpfbot> from a bigly slumber."
+                attachments = [
+                {
+                    "title":"Click the button below to start lying and cheating your way to a tremendous victory!",
+                    "fallback":"Play a game of Drumpf.",
+                    "callback_id":"Play Drumpf", "attachment_type":"default",
+                    "actions": [
+                        {
+                            "name":"play drumpf",
+                            "text":"play drumpf",
+                            "type":"button",
+                            "value":"play drumpf"
+                        }
+                    ]
+                }]
+
+                resp = slack_client.api_call("chat.postMessage",
+                                             text=message,
+                                             channel=channel,
+                                             attachments=attachments,
+                                             as_user=True)
                 ts_wake = resp['ts']
                 team_id = data['team_id']
                 event = "wake_bot"
-                tasks.log_message_ts.delay(ts_wake,channel,event,team_id)
+                models.log_message_ts(ts_wake,channel,event,team_id)
                 return Response(), 200
     except Exception as e:
         raise
