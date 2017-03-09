@@ -83,6 +83,24 @@ def events():
                     print "  successful deletion of 'create game' instance"
                     tasks.launch_bot.delay(user_id,channel,ts)
                     return Response(), 200
+            elif 'previous_message' not in str(k) and 'wake up donny_drumpfbot' in str(v):
+                print "  waking up Drumpf!"
+                ts = data['event']['ts']
+                channel = data['event']['channel']
+                user_id = data['event']['user']
+
+                access_token = models.get_access_token(user_id)
+                slack_client = SlackClient(access_token)
+
+                slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+
+                message = "You have awoken <@donny_drumpfbot> from a bigly slumber. Type `play drumpf` to begin a journey of lying and cheating your way to a tremendous victory."
+                resp = slack_client.api_call("chat.postMessage",text=message,channel=channel,as_user=True)
+                ts_wake = resp['ts']
+                team_id = data['team_id']
+                event = "wake_bot"
+                tasks.log_message_ts.delay(ts_wake,channel,event,team_id)
+                return Response(), 200
     except Exception as e:
         raise
     else:
