@@ -68,7 +68,7 @@ def send_to_db(df,engine,name):
                 print "  messages: ",messages
                 if messages:
                     sql = "UPDATE `messages` SET ts=%s WHERE event=%s"
-                    data = (df['ts'],df['event'])
+                    data = (df.iloc[0]['ts'],df.iloc[0]['event'])
                     cursor.execute(sql,data)
                 else:
                     df.to_sql(con=engine, name=name, if_exists='append', index=False)
