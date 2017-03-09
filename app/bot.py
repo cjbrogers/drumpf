@@ -578,7 +578,7 @@ class DrumpfBot():
             message = "_All set to play!_"
             attachments = [
                 {
-                    "title":"Select a game style to play:",
+                    "title":"Select a game style:",
                     "fallback":"Select a game style:",
                     "callback_id":"game style",
                     "attachment_type":"default",
@@ -610,7 +610,7 @@ class DrumpfBot():
                     ]
                 }]
 
-            self.slack_client.api_call("chat.postMessage",
+            resp = self.slack_client.api_call("chat.postMessage",
                                         channel=self.main_channel_id,
                                         text=message,
                                         attachments=attachments,

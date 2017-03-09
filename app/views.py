@@ -93,10 +93,10 @@ def events():
                 slack_client = SlackClient(user_access_token)
                 slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
 
-                access_token = models.get_bot_access_token(user_id)
-                slack_client = SlackClient(access_token)
+                bot_access_token = models.get_bot_access_token(user_id)
+                slack_client = SlackClient(bot_access_token)
 
-                message = "You have awoken <@donny_drumpfbot> from a bigly slumber."
+                message = "You have successfully drawn <@donny_drumpfbot>'s attention away from Twitter, at least for the time being."
                 attachments = [
                 {
                     "title":"Click the button below to start lying and cheating your way to a tremendous victory!",

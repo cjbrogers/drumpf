@@ -52,7 +52,33 @@ def send_to_db(df,engine,name):
     Args:
             [df,engine,name] pandas dataframe/sqlalchemy engine/table name
     '''
-    df.to_sql(con=engine, name=name, if_exists='append', index=False)
+    print "send_to_db(df,engine,name)"
+
+    if name=="members":
+        connection = connect()
+        try:
+            with connection.cursor() as cursor:
+                # Read a single record
+                event = df['event']
+                sql = "SELECT * FROM `members` WHERE event=%s"
+                data = (event)
+                cursor.execute(sql,data)
+                members = cursor.fetchall()
+                print "  members: ",members
+                if members:
+                    sql = "UPDATE `members` SET ts=%s WHERE event=%s"
+                    data = (df['ts'],df['event'])
+                    cursor.execute(sql,data)
+                else:
+                    df.to_sql(con=engine, name=name, if_exists='append', index=False)
+        except Exception as e:
+            raise
+        else:
+            print "  Updated members table of database."
+        finally:
+            connection.close()
+    else:
+        df.to_sql(con=engine, name=name, if_exists='append', index=False)
 
 def get_access_token(user_id):
     '''
@@ -65,6 +91,7 @@ def get_access_token(user_id):
             [tokens] (string) users oauth token
     '''
     print "get_access_token(user_id)"
+    
     connection = connect()
     try:
         with connection.cursor() as cursor:
