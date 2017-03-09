@@ -68,10 +68,10 @@ def events():
     # if token == SLACK_VERIFICATION_TOKEN:
     try:
         for k,v in data['event'].iteritems():
+            ts = data['event']['ts']
+            channel = data['event']['channel']
+            user_id = data['event']['user']
             if 'previous_message' not in str(k) and 'play drumpf' in str(v) and user_id != 'U49SZ7R0S':
-                ts = data['event']['ts']
-                channel = data['event']['channel']
-                user_id = data['event']['user']
                 msg = data['event']['text']
                 access_token = models.get_access_token(user_id)
                 try:
