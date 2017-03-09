@@ -165,7 +165,7 @@ class DrumpfBot():
                 resp = self.slack_client.api_call("chat.update",
                                                   channel=channel,
                                                   text=response,
-                                                  ts=self.ts
+                                                  ts=self.ts,
                                                   attachments=attachments,
                                                   as_user=True)
                 # self.ts = resp['ts']
