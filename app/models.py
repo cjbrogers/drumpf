@@ -214,3 +214,23 @@ def log_message_ts(ts,channel,event,team_id):
     df = pd.DataFrame(values, index=[0])
     engine = get_engine()
     send_to_db(df,engine,'messages')
+
+def clear_ts_messages(team_id):
+    '''
+    Deletes the timestamped messages from the database
+
+    Args:
+            [team_id] (str) The id of the team in which the message was sent
+    '''
+    connection = self.connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "DELETE FROM `messages` WHERE team_id=%s"
+            data = (team_id)
+            cursor.execute(sql,data)
+    except Exception as e:
+        raise
+    else:
+        print "  Successfully deleted entries from team's messages table."
+    finally:
+        connection.close()

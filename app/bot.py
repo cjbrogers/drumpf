@@ -482,6 +482,7 @@ class DrumpfBot():
         """
         print "restart_program(self)"
         self.clear_ts_messages()
+        models.clear_ts_messages(self.team_id)
         python = sys.executable
         os.kill(os.getpid(), 9)
         # os.execl(python, python, * sys.argv)
@@ -531,6 +532,13 @@ class DrumpfBot():
         return None, None, None, None
 
     def initialize(self, user_id, channel_id):
+        """
+        Initializes the bot with the necessary global variables
+
+        Args:
+                [user_id] (str) id of the player
+                [channel_id] (str) the main channel for the team the app is initialized from
+        """
         print "initialize(self, user_id, channel)"
         print "  user_id",user_id
         print "  channel",channel_id
@@ -583,6 +591,10 @@ class DrumpfBot():
     def main(self, score, bid, trump, round_, team_id):
         """
             Opens a Slack RTM API websocket connection
+
+            Args:
+                    [score/bid/trump/round_] (Obj) The instantiated objects needed to play the game
+                    [team_id] (str) The team id of the relevant Slack team
         """
         self.score = score
         self.bid = bid
@@ -641,8 +653,6 @@ class DrumpfBot():
                                         ts = self.ts,
                                         attachments=attachments,
                                         as_user=True)
-
-
             while True:
                 command, channel, user, ts = self.parse_slack_output()
                 if command and channel:
