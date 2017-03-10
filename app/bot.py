@@ -6,6 +6,7 @@ from collections import defaultdict, deque
 import pandas as pd
 from slackclient import SlackClient
 from slacker import Slacker
+import giphypop
 
 import models
 import game as DrumpfGame
@@ -20,6 +21,8 @@ import trump_suit
 from trump_suit import TrumpSuit
 
 class DrumpfBot():
+
+    g = giphypop.Giphy()
 
     def __init__(self): # drumpf-scoreboard: C4AK56EQ7
         self.BOT_ID = ""
@@ -235,6 +238,20 @@ class DrumpfBot():
                                         "ok_text": "Yes",
                                         "dismiss_text": "No"
                                     }
+                                },
+                                {
+                                    "name":"screw off",
+                                    "text":"screw off",
+                                    "style":"danger",
+                                    "type":"button",
+                                    "value":"screw off",
+                                    "confirm":
+                                        {
+                                            "title": "For real?",
+                                            "text": "There's no going back if you do this.",
+                                            "ok_text": "Yes",
+                                            "dismiss_text": "No"
+                                        }
                                 }
                             ]
                         }]
