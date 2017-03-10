@@ -99,7 +99,7 @@ def events():
                 bot_access_token = models.get_bot_access_token(user_id)
                 slack_client = SlackClient(bot_access_token)
 
-                response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n"
+                response = ""
                 title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
                 attachments = [
                     {
@@ -129,7 +129,7 @@ def events():
                         {
                             "name":"play drumpf",
                             "text":"play drumpf",
-                            "style":"good",
+                            "style":"primary",
                             "type":"button",
                             "value":"play drumpf"
                         }

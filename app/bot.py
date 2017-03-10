@@ -145,7 +145,7 @@ class DrumpfBot():
                             {
                                 "name":"add me",
                                 "text":"add me",
-                                "style":"good",
+                                "style":"primary",
                                 "type":"button",
                                 "value":"add me"
                             }
@@ -164,7 +164,11 @@ class DrumpfBot():
 
         if command.lower().startswith("restart"):
             response = "Application restarted."
-            resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True,attachments=attachments)
+            resp = self.slack_client.api_call("chat.postMessage",
+                                            channel=channel,
+                                            text=response,
+                                            as_user=True,
+                                            attachments=attachments)
             restart_ts = resp['ts']
             event = "restart"
             models.log_message_ts(restart_ts,channel,event,team_id)
@@ -207,7 +211,7 @@ class DrumpfBot():
                                 {
                                     "name":"start game",
                                     "text":"start game",
-                                    "style":"good",
+                                    "style":"primary",
                                     "type":"button",
                                     "value":"start game",
                                     "confirm":
@@ -619,6 +623,7 @@ class DrumpfBot():
                     "title":"Select a game style:",
                     "fallback":"Select a game style:",
                     "callback_id":"game style",
+                    "color": "#3AA3E3",
                     "attachment_type":"default",
                     "actions": [
                         {
