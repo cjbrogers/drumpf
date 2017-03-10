@@ -482,8 +482,34 @@ class DrumpfBot():
             Restarts the current program.
         """
         print "restart_program(self)"
+        self.clear_ts_messages()
         python = sys.executable
         os.execl(python, python, * sys.argv)
+
+    def clear_ts_messages(self):
+        team_id = self.team_id
+        connection = models.connect()
+        try:
+            with connection.cursor() as cursor:
+                sql = "SELECT channel, ts FROM `users` WHERE team_id=%s"
+                data = (team_id)
+                cursor.execute(sql,data)
+                results = cursor.fetchall()
+                for result in results:
+                    print "  result['channel']:",result['channel']
+                    print "  result['ts']:",result['ts']
+                    try:
+                        resp = self.slack_client.api_call("chat.delete", channel=result['channel'],ts=result['ts'],as_user=True)
+                    except:
+                        print "  failed on slack_client delete call..."
+                    else:
+                        print "  successful deletion of message in channel"
+        except Exception as e:
+            raise
+        else:
+            print "  Successfully updated user name in users table."
+        finally:
+            connection.close()
 
     def parse_slack_output(self):
         """

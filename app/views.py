@@ -74,14 +74,14 @@ def events():
                 user_id = data['event']['user']
                 team_id = data['team_id']
                 msg = data['event']['text']
-                access_token = models.get_access_token(user_id)
                 try:
+                    access_token = models.get_access_token(user_id)
                     slack_client = SlackClient(access_token)
                     resp = slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
                 except:
-                    print "  create game not in data['event']['text']"
+                    print "  no token available for call..."
                 else:
-                    print "  successful deletion of 'create game' instance"
+                    print "  successful deletion of 'play game' user command"
                     tasks.launch_bot.delay(user_id,channel,ts,team_id)
                     return Response(), 200
             elif 'previous_message' not in str(k) and 'wake up donny_drumpfbot' in str(v):

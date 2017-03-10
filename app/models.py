@@ -65,6 +65,7 @@ def send_to_db(df,engine,name):
                 print "  EVENT:",event
                 print "  TEAM_ID:",team_id
                 print "  TS:",ts
+
                 sql = "SELECT * FROM `messages` WHERE event=%s AND team_id=%s"
                 data = (event,team_id)
                 cursor.execute(sql,data)
@@ -131,7 +132,7 @@ def get_bot_access_token(user_id):
             data = (user_id)
             cursor.execute(sql,data)
             token = cursor.fetchall()
-            print "  token (raw): ",token
+            print "  token: ",token[0]['bot_access_token']
             return token[0]['bot_access_token']
     except Exception as e:
         raise
