@@ -47,10 +47,10 @@ def inbound():
     access_token = models.get_access_token(user_id)
     slack_client = SlackClient(access_token)
     bot_access_token = models.get_bot_access_token(user_id)
+    BOT_ID = models.get_bot_user_id(bot_access_token)
+    AT_BOT = "<@" + BOT_ID + ">"
     # for token in tokens:
     try:
-        BOT_ID = models.get_bot_user_id(bot_access_token)
-        AT_BOT = "<@" + BOT_ID + ">"
         if value == "screw off":
             connection = models.connect()
             try:
