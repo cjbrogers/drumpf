@@ -184,6 +184,9 @@ class Scoring():
             as_user=True, attachments=attachments
         )
         self.bot.ts_scores = resp['ts']
+        team_id = self.bot.team_id
+        event = "scores"
+        models.log_message_ts(self.bot.ts_scores,self.bot.main_channel_id,event,team_id)
 
     def update_scores(self, message, attachments=None):
         """
