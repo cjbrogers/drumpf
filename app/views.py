@@ -6,6 +6,8 @@ from werkzeug.datastructures import ImmutableMultiDict
 import json, requests
 from slacker import Slacker
 import pandas as pd
+import giphypop
+import random
 
 import app
 from app import tasks
@@ -18,6 +20,7 @@ CLIENT_SECRET = os.environ["SLACK_OAUTH_CLIENT_SECRET"]
 OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 
 app = Flask(__name__)
+g = giphypop.Giphy()
 
 # handles interactive button responses for donny_drumpfbot
 @app.route('/actions', methods=['POST'])
@@ -48,10 +51,19 @@ def inbound():
     try:
         BOT_ID = models.get_bot_user_id(bot_access_token)
         AT_BOT = "<@" + BOT_ID + ">"
-        if value == "/giphy screw off":
+        if value == "screw off":
+            results = [x for x in g.search(value)]
+            random.shuffle(results)
+            result = results[0]
+            image_url = result.url
+            attachments = [
+                {
+                    "title": user_name + " wanted to say screw off.", "image_url": image_url
+                }]
             resp = slack_client.api_call("chat.postMessage",
                                         channel=channel_id,
-                                        text = value,
+                                        text = "",
+                                        attachments=attachments,
                                         as_user=True)
         else:
             resp = slack_client.api_call("chat.postMessage",

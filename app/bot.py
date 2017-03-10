@@ -154,7 +154,7 @@ class DrumpfBot():
                                 "text":"screw off",
                                 "style":"danger",
                                 "type":"button",
-                                "value":"/giphy screw off",
+                                "value":"screw off",
                                 "confirm":
                                     {
                                         "title": "For real?",

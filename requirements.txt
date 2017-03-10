@@ -10,6 +10,7 @@ Flask-Dance==0.10.1
 Flask-SSLify==0.1.5
 futures>=3.0.5
 gevent>=1.2.1
+giphypop>=0.3
 greenlet>=0.4.12
 gunicorn==19.6.0
 honcho==0.7.1
