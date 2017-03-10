@@ -99,11 +99,12 @@ def events():
                 bot_access_token = models.get_bot_access_token(user_id)
                 slack_client = SlackClient(bot_access_token)
 
-                response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
+                response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n"
                 title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
                 attachments = [
                     {
                         "title": "DRUMPF! The Rules - Click here to learn more",
+                        "color": "#FB8C00",
                         "title_link": title_link
                     }]
 
@@ -121,11 +122,14 @@ def events():
                 {
                     "title":"Click the button below to start lying and cheating your way to a tremendous victory!",
                     "fallback":"Play a game of Drumpf.",
-                    "callback_id":"Play Drumpf", "attachment_type":"default",
+                    "color": "#3AA3E3",
+                    "callback_id":"play_drumpf",
+                    "attachment_type":"default",
                     "actions": [
                         {
                             "name":"play drumpf",
                             "text":"play drumpf",
+                            "style":"good",
                             "type":"button",
                             "value":"play drumpf"
                         }
