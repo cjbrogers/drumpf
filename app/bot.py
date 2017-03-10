@@ -120,11 +120,11 @@ class DrumpfBot():
             self.game_created == True
             self.slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
             if len(self.users_in_game) == 0:
-                response = "OK then, playing "
+                response = "`Playing "
                 if self.winning_points:
-                    response += "to `" + str(self.winning_points) + "` points"
+                    response += "to " + str(self.winning_points) + " points`"
                 else:
-                    response += "Standard Gameplay (play until the cards are all used)"
+                    response += "Standard Gameplay (play until the cards are all used)`"
 
                 self.users_in_game.append(user_id)
 
@@ -476,7 +476,6 @@ class DrumpfBot():
             name=self.main_channel_id
             )
 
-
     def restart_program(self):
         """
             Restarts the current program.
@@ -484,8 +483,8 @@ class DrumpfBot():
         print "restart_program(self)"
         self.clear_ts_messages()
         python = sys.executable
-        os.kill(os.getpid(), signal.SIGHUP)
-        os.execl(python, python, * sys.argv)
+        os.kill(os.getpid(), 9)
+        # os.execl(python, python, * sys.argv)
 
     def clear_ts_messages(self):
         team_id = self.team_id
@@ -596,20 +595,6 @@ class DrumpfBot():
 
         if self.slack_client.rtm_connect():
             print("DRUMPFBOT v0.9 connected and running!")
-
-            # response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
-            # title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
-            # attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
-            #
-            # resp = self.slack_client.api_call("chat.postMessage",
-            #                                   channel=self.main_channel_id,
-            #                                   text=response,
-            #                                   attachments=attachments,
-            #                                   as_user=True)
-            # rules_ts = resp['ts']
-            # event = "rules"
-            # models.log_message_ts(rules_ts,self.main_channel_id,event,self.team_id)
-
             message = ""
             attachments = [
                 {

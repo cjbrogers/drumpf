@@ -36,6 +36,7 @@ class Scoring():
         """
         self.bot.scoreboard += msg
         return
+        
     def update_scoreboard(self, message, attachments=None):
         """
         Posts the updated scoreboard to the main channel
