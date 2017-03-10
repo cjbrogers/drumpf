@@ -222,7 +222,7 @@ def clear_ts_messages(team_id):
     Args:
             [team_id] (str) The id of the team in which the message was sent
     '''
-    connection = self.connect()
+    connection = connect()
     try:
         with connection.cursor() as cursor:
             sql = "DELETE FROM `messages` WHERE team_id=%s"

@@ -120,7 +120,7 @@ def events():
                 message = "You have successfully drawn <@donny_drumpfbot>'s attention away from Twitter, at least for the time being."
                 attachments = [
                 {
-                    "title":"Click the button below to start lying and cheating your way to a tremendous victory!",
+                    "title":"It's time to start lying and cheating your way to a TREMENDOUS victory!",
                     "fallback":"Play a game of Drumpf.",
                     "color": "#3AA3E3",
                     "callback_id":"play_drumpf",

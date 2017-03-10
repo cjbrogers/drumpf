@@ -136,7 +136,7 @@ class DrumpfBot():
                 response = "Hey there team! <@{}> wants to play a game of drumpf!".format(username)
                 attachments = [
                     {
-                        "title":"Click the button below to add yourself to the game queue:",
+                        "title":"Feel free to add yourself to the game queue:",
                         "fallback":"Add me to the game:",
                         "callback_id":"add me",
                         "color": "#3AA3E3",
