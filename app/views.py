@@ -65,7 +65,7 @@ def inbound():
             sql = "SELECT ts FROM `messages` WHERE event='rules' AND team_id='{}'".format(team_id)
             engine = models.get_engine()
             df = pd.read_sql_query(sql=sql,con=engine)
-            self.ts = df.iloc[0]['ts']
+            ts = df.iloc[0]['ts']
             attachments = [
                 {
                     "title": "Just wanted to say screw off.",
