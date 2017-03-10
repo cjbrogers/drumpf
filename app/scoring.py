@@ -58,6 +58,7 @@ class Scoring():
         print "calculate_and_display_points_for_players(self) "
         msg = "*Round {} over!* _calculating points..._\n".format(self.bot.current_game.current_round)
         self.build_scoreboard(msg)
+        self.bot.scoreboard = "_*Previous Round Recap*_\n" + self.bot.scoreboard
         self.update_scoreboard(self.bot.scoreboard)
         self.pm_users_scoreboard(self.bot.scoreboard)
         self.winning_scores = {}

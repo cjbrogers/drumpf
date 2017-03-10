@@ -491,7 +491,7 @@ class DrumpfBot():
         connection = models.connect()
         try:
             with connection.cursor() as cursor:
-                sql = "SELECT channel, ts FROM `users` WHERE team_id=%s"
+                sql = "SELECT channel, ts FROM `messages` WHERE team_id=%s"
                 data = (team_id)
                 cursor.execute(sql,data)
                 results = cursor.fetchall()
