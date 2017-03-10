@@ -48,10 +48,20 @@ def inbound():
     try:
         BOT_ID = models.get_bot_user_id(bot_access_token)
         AT_BOT = "<@" + BOT_ID + ">"
-        resp = slack_client.api_call("chat.postMessage",channel=channel_id,text = AT_BOT +" {}".format(value),as_user=True)
-        if resp['ts']:
-            ts = resp['ts']
-            slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
+        if value == "/giphy screw off":
+            resp = slack_client.api_call("chat.postMessage",
+                                        channel=channel_id,
+                                        text = value,
+                                        as_user=True)
+        else:
+            resp = slack_client.api_call("chat.postMessage",
+                                        channel=channel_id,
+                                        text = AT_BOT +" {}".format(value),
+                                        as_user=True)
+            if resp['ts']:
+                ts = resp['ts']
+                slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
+
     except:
         print "  unsuccessful token retrieval attempt"
     else:

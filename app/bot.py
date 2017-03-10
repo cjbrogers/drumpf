@@ -148,6 +148,20 @@ class DrumpfBot():
                                 "style":"primary",
                                 "type":"button",
                                 "value":"add me"
+                            },
+                            {
+                                "name":"screw off",
+                                "text":"screw off",
+                                "style":"danger",
+                                "type":"button",
+                                "value":"/giphy screw off",
+                                "confirm":
+                                    {
+                                        "title": "For real?",
+                                        "text": "There's no going back if you do this.",
+                                        "ok_text": "Yes",
+                                        "dismiss_text": "No"
+                                    }
                             }
                         ]
                     }]
@@ -298,8 +312,11 @@ class DrumpfBot():
             image_url = "https://s30.postimg.org/r28wxm89t/cards.png"
             attachments = [{"title": "Card Deck Composition", "image_url": image_url}]
 
-        resp = self.slack_client.api_call("chat.postMessage", channel=channel,
-                              text=response, as_user=True, attachments=attachments)
+        if response:
+            resp = self.slack_client.api_call("chat.postMessage",
+                                            channel=channel,
+                                            text=response,
+                                            as_user=True, attachments=attachments)
 
     def handle_private_message(self,command,user_id,ts):
         """
