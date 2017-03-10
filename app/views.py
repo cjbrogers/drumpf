@@ -38,9 +38,12 @@ def inbound():
     user_info = data['user']
     user_id = user_info['id']
     user_name = user_info['name']
+    team_info = data['team']
+    team_id = team_info['id']
     actions = data['actions'][0]
     value = actions['value']
     print "  Channel ID: ",channel_id
+    print "  Team ID: ",team_id
     print '  User sending message: ',user_name
     print "  Value received: ",value
 
@@ -52,24 +55,30 @@ def inbound():
         BOT_ID = models.get_bot_user_id(bot_access_token)
         AT_BOT = "<@" + BOT_ID + ">"
         if value == "screw off":
-            results = [x for x in g.search(value)]
-            random.shuffle(results)
-            print "  results:",results
-            result = results[0]
-            print "  result:",result
-            image_url = result.media_url
+            urls = [x for x in g.search(value)]
+            random.shuffle(urls)
+            print "  urls:",urls
+            url = urls[0]
+            print "  url:",url
+            image_url = url.media_url
             print "  image_url:",image_url
+            sql = "SELECT ts FROM `messages` WHERE event='rules' AND team_id='{}'".format(team_id)
+            engine = models.get_engine()
+            df = pd.read_sql_query(sql=sql,con=engine)
+            self.ts = df.iloc[0]['ts']
             attachments = [
                 {
                     "title": "Just wanted to say screw off.",
                     "fallback": "Screw off.",
+                    "author_name": user_name,
                     "color": "#36a64f",
                     "pretext": "ALERT!",
                     "image_url": image_url
                 }]
-            resp = slack_client.api_call("chat.postMessage",
+            resp = slack_client.api_call("chat.update",
                                         channel=channel_id,
                                         text = "",
+                                        ts=ts,
                                         attachments=attachments)
         else:
             resp = slack_client.api_call("chat.postMessage",
