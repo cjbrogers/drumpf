@@ -55,7 +55,10 @@ def inbound():
         BOT_ID = models.get_bot_user_id(bot_access_token)
         AT_BOT = "<@" + BOT_ID + ">"
         if value == "screw off":
-            urls = [x for x in g.search(value)]
+            search_terms = ["screw","screw off","screw you","piss off","not now","i'm busy","are you mad?","can't be bothered","in due time","leave me alone","angry trump"]
+            random.shuffle(search_terms)
+            term = search_terms[0]
+            urls = [x for x in g.search(term)]
             random.shuffle(urls)
             print "  urls:",urls
             url = urls[0]
@@ -73,7 +76,6 @@ def inbound():
                     "fallback": "Screw off.",
                     "author_name": user_name,
                     "color": "#36a64f",
-                    "pretext": "ALERT!",
                     "image_url": image_url
                 }]
             slack_client = SlackClient(bot_access_token)
