@@ -66,6 +66,7 @@ def inbound():
             engine = models.get_engine()
             df = pd.read_sql_query(sql=sql,con=engine)
             ts = df.iloc[0]['ts']
+            print "  ts:",ts
             attachments = [
                 {
                     "title": "Just wanted to say screw off.",
@@ -79,7 +80,8 @@ def inbound():
                                         channel=channel_id,
                                         text = "",
                                         ts=ts,
-                                        attachments=attachments)
+                                        attachments=attachments,
+                                        as_user=True)
         else:
             resp = slack_client.api_call("chat.postMessage",
                                         channel=channel_id,
