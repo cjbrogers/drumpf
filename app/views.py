@@ -57,7 +57,7 @@ def inbound():
             print "  results:",results
             result = results[0]
             print "  result:",result
-            image_url = result.url
+            image_url = result.media_url
             print "  image_url:",image_url
             attachments = [
                 {
