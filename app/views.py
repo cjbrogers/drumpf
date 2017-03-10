@@ -52,40 +52,25 @@ def inbound():
         BOT_ID = models.get_bot_user_id(bot_access_token)
         AT_BOT = "<@" + BOT_ID + ">"
         if value == "screw off":
-            connection = models.connect()
-            try:
-                with connection.cursor() as cursor:
-                    sql = "SELECT ts FROM `messages` WHERE team_id=%s AND event='rules'"
-                    data = (team_id)
-                    cursor.execute(sql,data)
-                    query = cursor.fetchall()
-                    ts = query[0]['ts']
-                    results = [x for x in g.search(value)]
-                    random.shuffle(results)
-                    print "  results:",results
-                    result = results[0]
-                    print "  result:",result
-                    image_url = result.media_url
-                    print "  image_url:",image_url
-                    attachments = [
-                        {
-                            "title": user_name + " wanted to say screw off.",
-                            "fallback": "Screw off.",
-                            "color": "#36a64f",
-                            "pretext": "ALERT!",
-                            "image_url": image_url
-                        }]
-                    resp = slack_client.api_call("chat.postMessage",
-                                                channel=channel_id,
-                                                text = "",
-                                                attachments=attachments)
-            except Exception as e:
-                raise
-            else:
-                print "  Successfully updated user name in users table."
-            finally:
-                connection.close()
-
+            results = [x for x in g.search(value)]
+            random.shuffle(results)
+            print "  results:",results
+            result = results[0]
+            print "  result:",result
+            image_url = result.media_url
+            print "  image_url:",image_url
+            attachments = [
+                {
+                    "title": "Just wanted to say screw off.",
+                    "fallback": "Screw off.",
+                    "color": "#36a64f",
+                    "pretext": "ALERT!",
+                    "image_url": image_url
+                }]
+            resp = slack_client.api_call("chat.postMessage",
+                                        channel=channel_id,
+                                        text = "",
+                                        attachments=attachments)
         else:
             resp = slack_client.api_call("chat.postMessage",
                                         channel=channel_id,
