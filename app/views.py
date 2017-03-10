@@ -54,6 +54,7 @@ def inbound():
         if value == "screw off":
             results = [x for x in g.search(value)]
             random.shuffle(results)
+            print "  results:",results
             result = results[0]
             print "  result:",result
             image_url = result.url
@@ -61,9 +62,9 @@ def inbound():
             attachments = [
                 {
                     "title": user_name + " wanted to say screw off.",
-                    "fallback": "Required plain-text summary of the attachment.",
+                    "fallback": "Screw off.",
                     "color": "#36a64f",
-                    "pretext": "Optional text that appears above the attachment block",
+                    "pretext": "ALERT!",
                     "author_name": user_name,
                     "image_url": image_url
                 }]
