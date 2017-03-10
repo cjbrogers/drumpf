@@ -76,6 +76,7 @@ def inbound():
                     "pretext": "ALERT!",
                     "image_url": image_url
                 }]
+            slack_client = SlackClient(bot_access_token)
             resp = slack_client.api_call("chat.update",
                                         channel=channel_id,
                                         text = "",
