@@ -55,16 +55,22 @@ def inbound():
             results = [x for x in g.search(value)]
             random.shuffle(results)
             result = results[0]
+            print "  result:",result
             image_url = result.url
+            print "  image_url:",image_url
             attachments = [
                 {
-                    "title": user_name + " wanted to say screw off.", "image_url": image_url
+                    "title": user_name + " wanted to say screw off.",
+                    "fallback": "Required plain-text summary of the attachment.",
+                    "color": "#36a64f",
+                    "pretext": "Optional text that appears above the attachment block",
+                    "author_name": user_name,
+                    "image_url": image_url
                 }]
             resp = slack_client.api_call("chat.postMessage",
                                         channel=channel_id,
                                         text = "",
-                                        attachments=attachments,
-                                        as_user=True)
+                                        attachments=attachments)
         else:
             resp = slack_client.api_call("chat.postMessage",
                                         channel=channel_id,
