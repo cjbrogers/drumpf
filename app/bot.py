@@ -184,7 +184,7 @@ class DrumpfBot():
                 else:
                     self.users_in_game.append(user_id)
                     response = "Added <@{}> to the game!".format(username)
-                    response += "\n_We have enough players to start a game._"
+                    response += "\n_`We have enough players to start a game.`_"
                     attachments = None
                     if len(self.users_in_game) >= 2:
                         attachments = [
@@ -484,6 +484,7 @@ class DrumpfBot():
         print "restart_program(self)"
         self.clear_ts_messages()
         python = sys.executable
+        os.kill(os.getpid(), signal.SIGHUP)
         os.execl(python, python, * sys.argv)
 
     def clear_ts_messages(self):
