@@ -139,11 +139,13 @@ class DrumpfBot():
                         "title":"Click the button below to add yourself to the game queue:",
                         "fallback":"Add me to the game:",
                         "callback_id":"add me",
+                        "color": "#3AA3E3",
                         "attachment_type":"default",
                         "actions": [
                             {
                                 "name":"add me",
                                 "text":"add me",
+                                "style":"good",
                                 "type":"button",
                                 "value":"add me"
                             }
@@ -189,19 +191,23 @@ class DrumpfBot():
                     if len(self.users_in_game) >= 2:
                         attachments = [
                         {
-                            "title":"Click start game once everyone has added themselves:",
+                            "title":"Click start game once everyone is in",
                             "fallback":"Start the game or continue adding players.",
-                            "callback_id":"start or add to game", "attachment_type":"default",
+                            "callback_id":"start_add",
+                            "color": "#3AA3E3",
+                            "attachment_type":"default",
                             "actions": [
                                 {
                                     "name":"add me",
                                     "text":"add me",
+                                    "style":"danger",
                                     "type":"button",
                                     "value":"add me"
                                 },
                                 {
                                     "name":"start game",
                                     "text":"start game",
+                                    "style":"good",
                                     "type":"button",
                                     "value":"start game",
                                     "confirm":

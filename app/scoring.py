@@ -155,8 +155,10 @@ class Scoring():
         print "initialize_scores(self, attachments=None)"
         msg = ""
         msg += ">>>*Score Board*"
+
         for player_id in self.bot.users_in_game:
             msg += "\n><@{}>: *{} Points*".format(self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
+
         resp = self.slack_client.api_call(
             "chat.postMessage",
             channel=self.bot.main_channel_id,
