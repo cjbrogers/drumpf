@@ -81,14 +81,16 @@ def events():
                 except:
                     print "  no token available for call..."
                 else:
-                    print "  successful deletion of 'play game' user command"
+                    print "  successful deletion of 'play drumpf / restart' user command"
+                if 'play drumpf' in str(v):
                     tasks.launch_bot.delay(user_id,channel,ts,team_id)
                     return Response(), 200
-            elif 'previous_message' not in str(k) and 'wake up donny_drumpfbot' in str(v):
+            elif 'previous_message' not in str(k) and 'wake donny_drumpfbot' in str(v):
                 print "  waking up Drumpf!"
                 ts = data['event']['ts']
                 channel = data['event']['channel']
                 user_id = data['event']['user']
+                team_id = data['team_id']
 
                 user_access_token = models.get_access_token(user_id)
                 slack_client = SlackClient(user_access_token)
@@ -96,6 +98,23 @@ def events():
 
                 bot_access_token = models.get_bot_access_token(user_id)
                 slack_client = SlackClient(bot_access_token)
+
+                response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
+                title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
+                attachments = [
+                    {
+                        "title": "DRUMPF! The Rules - Click here to learn more",
+                        "title_link": title_link
+                    }]
+
+                resp = slack_client.api_call("chat.postMessage",
+                                                  channel=channel,
+                                                  text=response,
+                                                  attachments=attachments,
+                                                  as_user=True)
+                rules_ts = resp['ts']
+                event = "rules"
+                models.log_message_ts(rules_ts,channel,event,team_id)
 
                 message = "You have successfully drawn <@donny_drumpfbot>'s attention away from Twitter, at least for the time being."
                 attachments = [

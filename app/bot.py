@@ -596,18 +596,18 @@ class DrumpfBot():
         if self.slack_client.rtm_connect():
             print("DRUMPFBOT v0.9 connected and running!")
 
-            response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
-            title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
-            attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
-
-            resp = self.slack_client.api_call("chat.postMessage",
-                                              channel=self.main_channel_id,
-                                              text=response,
-                                              attachments=attachments,
-                                              as_user=True)
-            rules_ts = resp['ts']
-            event = "rules"
-            models.log_message_ts(rules_ts,self.main_channel_id,event,self.team_id)
+            # response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
+            # title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
+            # attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
+            #
+            # resp = self.slack_client.api_call("chat.postMessage",
+            #                                   channel=self.main_channel_id,
+            #                                   text=response,
+            #                                   attachments=attachments,
+            #                                   as_user=True)
+            # rules_ts = resp['ts']
+            # event = "rules"
+            # models.log_message_ts(rules_ts,self.main_channel_id,event,self.team_id)
 
             message = ""
             attachments = [
