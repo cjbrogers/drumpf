@@ -55,7 +55,7 @@ def inbound():
         BOT_ID = models.get_bot_user_id(bot_access_token)
         AT_BOT = "<@" + BOT_ID + ">"
         if value == "screw off":
-            search_terms = ["screw","screw off","screw you","piss off","not now","i'm busy","are you mad?","can't be bothered","in due time","leave me alone","angry trump"]
+            search_terms = ["screw","screw off","screw you","piss off","not now","i'm busy","nope","can't be bothered","soon","leave me alone","angry trump","get out of here","get out of town","shut your mouth"]
             random.shuffle(search_terms)
             term = search_terms[0]
             urls = [x for x in g.search(term)]

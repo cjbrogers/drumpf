@@ -151,7 +151,7 @@ class DrumpfBot():
                             },
                             {
                                 "name":"screw off",
-                                "text":"screw off",
+                                "text":"shut up and gif",
                                 "style":"danger",
                                 "type":"button",
                                 "value":"screw off",
@@ -238,7 +238,7 @@ class DrumpfBot():
                                 },
                                 {
                                     "name":"screw off",
-                                    "text":"screw off",
+                                    "text":"shut up and gif",
                                     "style":"danger",
                                     "type":"button",
                                     "value":"screw off",
