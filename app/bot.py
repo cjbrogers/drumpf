@@ -133,19 +133,6 @@ class DrumpfBot():
                 event = "game_play"
                 models.log_message_ts(game_play_ts,channel,event,team_id)
 
-                # response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
-                # title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
-                # attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
-                #
-                # resp = self.slack_client.api_call("chat.postMessage",
-                #                                   channel=channel,
-                #                                   text=response,
-                #                                   attachments=attachments,
-                #                                   as_user=True)
-                # rules_ts = resp['ts']
-                # event = "rules"
-                # models.log_message_ts(rules_ts,channel,event,team_id)
-
                 response = "Hey there team! <@{}> wants to play a game of drumpf!".format(username)
                 attachments = [
                     {
@@ -169,11 +156,6 @@ class DrumpfBot():
                                                   ts=self.ts,
                                                   attachments=attachments,
                                                   as_user=True)
-                # self.ts = resp['ts']
-                # self.ts = resp['ts']
-                # print "  self.ts:",self.ts
-                # event = "add_me"
-                # models.log_message_ts(self.ts,channel,event,team_id)
                 return
             else:
                 response = "There's already a game created, click `add me` if you want in."

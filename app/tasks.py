@@ -24,6 +24,8 @@ def launch_bot(user_id,channel,ts,team_id):
 
     '''
     print "launch_bot(user_id,channel)"
+    app.control.purge()
+    
     AT_USER = "<@" + user_id + ">"
     command = AT_USER + " create game"
     bot = DrumpfBot()

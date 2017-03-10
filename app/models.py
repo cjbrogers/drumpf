@@ -108,14 +108,6 @@ def get_access_token(user_id):
             print "  token: ",token
             print "  token[0]['access_token']: ",token[0]['access_token']
             return token[0]['access_token']
-            # for user in users:
-            #     print user
-                # if user['user_id'] == user_id:
-                #     if user_name != user['name'] and user_name != None:
-                #         sql = "UPDATE user SET name=%s WHERE user_id=%s"
-                #         data = (user_name,user_id)
-                #         cursor.execute(sql,data)
-
     except Exception as e:
         raise
     else:
