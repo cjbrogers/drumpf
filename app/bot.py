@@ -434,11 +434,7 @@ class DrumpfBot():
         # the player has more than 5 cards, so we have to send them in separate messages
         self.first_set = True
         attachments = helper_functions.interactify(formatted_cards,self.first_set)
-        resp = self.slack.chat.post_message(
-            channel=player_id,
-            as_user=True,
-            attachments=attachments
-            )
+        resp = self.slack_client.api_call("chat.postMessage",channel=player_id,as_user=True,attachments=attachments)
         pm_ts = resp['ts']
         event = "init_cards_pm"
         models.log_message_ts(pm_ts,player_id,event,self.team_id)
