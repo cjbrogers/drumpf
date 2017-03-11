@@ -123,9 +123,9 @@ class Scoring():
         """
         print "pm_users_scoreboard(self, board, attachments=None)"
         for player_id in self.bot.users_in_game:
-            ts = models.get_ts(player_id,"pm_scoreboard",self.bot.team_id)
             bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
             print "  bot_im_id:",bot_im_id
+            ts = models.get_ts(bot_im_id,"pm_scoreboard",self.bot.team_id)
             resp = self.slack_client.api_call(
                 "chat.update",
                 channel=bot_im_id,
