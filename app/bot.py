@@ -389,34 +389,31 @@ class DrumpfBot():
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
                     attachments = helper_functions.interactify(five_card_set,self.first_set,msg)
-                    self.slack.chat.update(
-                        channel=bot_im_id,
-                        as_user=True,
-                        ts=ts,
-                        attachments=attachments
-                        )
+                    self.slack_client.api_call("chat.update",
+                                                channel=bot_im_id,
+                                                as_user=True,
+                                                ts=ts,
+                                                attachments=attachments)
                     self.first_set = False
                     five_card_set.clear() # clear the set
                     five_card_set[idx] = formatted_cards[idx] # add the first card of the next set
                 if len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
                     attachments = helper_functions.interactify(five_card_set,self.first_set,msg)
-                    self.slack.chat.update(
-                        channel=bot_im_id,
-                        ts=ts,
-                        as_user=True,
-                        attachments=attachments
-                        )
+                    self.slack_client.api_call("chat.update",
+                                                channel=bot_im_id,
+                                                as_user=True,
+                                                ts=ts,
+                                                attachments=attachments)
                     five_card_set.clear()
         # there are less than 5 cards in the players hand, so just display them
         else:
             self.first_set = True
             attachments = helper_functions.interactify(formatted_cards,self.first_set,msg)
-            self.slack.chat.update(
-                channel=bot_im_id,
-                ts=ts,
-                as_user=True,
-                attachments=attachments
-                )
+            self.slack_client.api_call("chat.update",
+                                        channel=bot_im_id,
+                                        as_user=True,
+                                        ts=ts,
+                                        attachments=attachments)
 
     def init_cards_for_player_in_pm(self, player_id, cards):
         """

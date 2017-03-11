@@ -116,8 +116,8 @@ class Bid():
                         print "  ",msg
                         self.present_bid_buttons(self.bot.player_bid_queue[0])
                         return
-            except:
-                response = "That wasn't a valid bid."
+            except Exception as e:
+                raise
 
         self.bot.private_message_user(user_id, response)
 
