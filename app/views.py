@@ -42,7 +42,6 @@ def inbound():
     team_id = team_info['id']
     actions = data['actions'][0]
     value = actions['value']
-    text = actions['text']
     print "  Channel ID: ",channel_id
     print "  Team ID: ",team_id
     print '  User sending message: ',user_name
@@ -64,7 +63,8 @@ def inbound():
             search_terms = {"screw you":screw_terms, "dammit":dammit_terms, "don't cry":cry_terms, "sucka":sucka_terms}
             terms = []
 
-
+            print "  actions:",actions
+            print "  actions['text']:",actions['text']
             if actions['text'] in search_terms.keys(): # the button clicked is a search term
                 terms = search_terms[actions['text']]
             else: # just get a random gif
