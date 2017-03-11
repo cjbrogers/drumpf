@@ -150,8 +150,8 @@ class DrumpfBot():
                                 "value":"add me"
                             },
                             {
-                                "name":"screw off",
-                                "text":"rules me gif",
+                                "name":"mystery",
+                                "text":"mystery button",
                                 "style":"danger",
                                 "type":"button",
                                 "value":"gif",

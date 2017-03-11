@@ -49,13 +49,10 @@ def inbound():
     print "  Value received: ",value
     print "  Name received: ",name
 
-    access_token = models.get_access_token(user_id)
-    slack_client = SlackClient(access_token)
+
     bot_access_token = models.get_bot_access_token(user_id)
     # for token in tokens:
     try:
-        BOT_ID = models.get_bot_user_id(bot_access_token)
-        AT_BOT = "<@" + BOT_ID + ">"
         if value == "gif":
             screw_terms = ["screw off","screw you","piss off","fuck off","fuck you","damn you","you suck"]
             dammit_terms = ["god dammit", "dammit", "damn it", "gosh darnit", "damn you"]
@@ -96,6 +93,7 @@ def inbound():
                 {
                     "title": "Never enough gifs",
                     "fallback": "Never enough gifs.",
+                    "callback_id":"rules_gifs",
                     "author_name": user_name,
                     "color": "#36a64f",
                     "image_url": image_url,
@@ -138,6 +136,10 @@ def inbound():
                                         attachments=attachments,
                                         as_user=True)
         else:
+            access_token = models.get_access_token(user_id)
+            slack_client = SlackClient(access_token)
+            BOT_ID = models.get_bot_user_id(bot_access_token)
+            AT_BOT = "<@" + BOT_ID + ">"
             resp = slack_client.api_call("chat.postMessage",
                                         channel=channel_id,
                                         text = AT_BOT +" {}".format(value),
@@ -199,6 +201,7 @@ def events():
                     {
                         "title": "DRUMPF! The Rules - Click here to learn more",
                         "color": "#FB8C00",
+                        "callback_id":"rules_gifs",
                         "title_link": title_link
                     }]
 
