@@ -98,10 +98,10 @@ def inbound():
             # title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
             attachments = [
                 {
-                    "title": user_name + " says " +name,
+                    "title": user_name + " says \"" +name+ "\"",
                     "fallback": "Gifs",
                     "callback_id":"rules_gifs",
-                    "author_name": user_name,
+                    # "author_name": user_name,
                     "color": "#FB8C00",
                     "image_url": image_url,
                     "actions": [

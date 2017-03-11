@@ -643,6 +643,19 @@ class DrumpfBot():
                     "attachment_type":"default",
                     "actions": [
                         {
+                            "name":"create game",
+                            "text":"Standard",
+                            "type":"button",
+                            "value":"create game",
+                            "confirm":
+                            {
+                                "title": "Are you sure?",
+                                "text": "This can take a while. The game will go until there are no cards left to deal (from the 60 card deck). That means 30 rounds for two people, 20 rounds for three, and so on.",
+                                "ok_text": "Yes",
+                                "dismiss_text": "No"
+                            }
+                        },
+                        {
                             "name":"create game 250",
                             "text":"First to 250 pts",
                             "type":"button",
@@ -659,12 +672,6 @@ class DrumpfBot():
                             "text":"First to 1000 pts",
                             "type":"button",
                             "value":"create game 1000"
-                        },
-                        {
-                            "name":"create game",
-                            "text":"Standard",
-                            "type":"button",
-                            "value":"create game"
                         }
                     ]
                 }]
