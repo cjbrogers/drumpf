@@ -129,7 +129,7 @@ class Scoring():
                 channel=player_id,
                 text=board,
                 ts=ts,
-                as_user=True,
+                # as_user=True,
                 attachments=attachments
             )
 
@@ -162,7 +162,7 @@ class Scoring():
                     channel=player_id,
                     ts = ts,
                     text=board,
-                    as_user=True,
+                    # as_user=True,
                     attachments=attachments
                 )
 
