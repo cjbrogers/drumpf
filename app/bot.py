@@ -437,7 +437,8 @@ class DrumpfBot():
         resp = self.slack_client.api_call("chat.postMessage",channel=player_id,as_user=True,attachments=attachments)
         pm_ts = resp['ts']
         event = "init_cards_pm"
-        models.log_message_ts(pm_ts,player_id,event,self.team_id)
+        bot_im_id = models.get_bot_im_id(player_id,self.team_id)
+        models.log_message_ts(pm_ts,bot_im_id,event,self.team_id)
 
     def play_game_of_drumpf_on_slack(self, players, channel):
         """

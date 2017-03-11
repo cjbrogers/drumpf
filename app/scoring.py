@@ -155,7 +155,8 @@ class Scoring():
                 )
                 self.pm_scoreboard_ts = resp['ts']
                 event = "pm_scoreboard"
-                models.log_message_ts(self.pm_scoreboard_ts,player_id,event,self.bot.team_id)
+                bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
+                models.log_message_ts(self.pm_scoreboard_ts,bot_im_id,event,self.bot.team_id)
             self.first_round = False
         else:
             for player_id in self.bot.users_in_game:
