@@ -46,7 +46,6 @@ def inbound():
     print "  Team ID: ",team_id
     print '  User sending message: ',user_name
     print "  Value received: ",value
-    print "  Text received: ",text
 
     access_token = models.get_access_token(user_id)
     slack_client = SlackClient(access_token)
