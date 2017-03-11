@@ -371,8 +371,8 @@ class DrumpfBot():
         print "  player: ", self.user_ids_to_username[player_id]
         print "  cards: ", cards
 
-        ts = models.get_ts(player_id,"init_cards_pm",self.bot.team_id)
-        bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
+        ts = models.get_ts(player_id,"init_cards_pm",self.team_id)
+        bot_im_id = models.get_bot_im_id(player_id,self.team_id)
 
         formatted_cards = helper_functions.interactiformat(cards)
         # the player has more than 5 cards, so we have to send them in separate messages
