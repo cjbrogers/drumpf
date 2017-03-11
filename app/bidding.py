@@ -19,8 +19,9 @@ class Bid():
     def present_bid_buttons(self, player_id):
         """
         Presents the bidding buttons to the user (max 5 at a time due to Slack's API restrictions)
-        Args: [player_id] the player's id of whom to post the bid buttons to
-        Returns:
+
+        Args:
+                [player_id] the player's id of whom to post the bid buttons to
         """
         button_indices = []
         for player in self.bot.current_game.players:
@@ -103,12 +104,11 @@ class Bid():
                     self.bot.player_bid_queue.popleft()
                     if len(self.bot.player_bid_queue) == 0:
                         #everyone bidded, time to play sub_round
-                        print "    self.bot.player_bids_for_current_round: %s" % self.bot.player_bids_for_current_round
                         for player in self.bot.current_game.players:
                             if player.id == self.bot.player_turn_queue[0]:
-                                self.bot.display_cards_for_player_in_pm(self.bot.player_turn_queue[0],player.cards_in_hand)
-                                print "  Play a card."
-                                self.bot.private_message_user(self.bot.player_turn_queue[0], "Play a card.")
+                                msg = "Play a card."
+                                self.bot.display_cards_for_player_in_pm(self.bot.player_turn_queue[0],player.cards_in_hand,msg)
+                                # self.bot.private_message_user(self.bot.player_turn_queue[0], "Play a card.")
                         return
 
                     else: #get the next player's bid

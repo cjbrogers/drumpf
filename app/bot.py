@@ -358,7 +358,7 @@ class DrumpfBot():
             as_user=True, attachments=attachments
         )
 
-    def display_cards_for_player_in_pm(self, player_id, cards):
+    def display_cards_for_player_in_pm(self, player_id, cards, msg):
         """
         Displays the cards for the players in a private message
 
@@ -370,6 +370,9 @@ class DrumpfBot():
         print "  player_id: ", player_id
         print "  player: ", self.user_ids_to_username[player_id]
         print "  cards: ", cards
+
+        ts = models.get_ts(player_id,"init_cards_pm",self.bot.team_id)
+        bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
 
         formatted_cards = helper_functions.interactiformat(cards)
         # the player has more than 5 cards, so we have to send them in separate messages
@@ -384,19 +387,21 @@ class DrumpfBot():
                 elif (idx % 5) != 0: # add the next 4
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
-                    attachments = helper_functions.interactify(five_card_set,self.first_set)
-                    self.slack.chat.post_message(
-                        channel=player_id,
+                    attachments = helper_functions.interactify(five_card_set,self.first_set,msg)
+                    self.slack.chat.update(
+                        channel=bot_im_id,
                         as_user=True,
+                        ts=ts,
                         attachments=attachments
                         )
                     self.first_set = False
                     five_card_set.clear() # clear the set
                     five_card_set[idx] = formatted_cards[idx] # add the first card of the next set
                 if len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
-                    attachments = helper_functions.interactify(five_card_set,self.first_set)
-                    self.slack.chat.post_message(
-                        channel=player_id,
+                    attachments = helper_functions.interactify(five_card_set,self.first_set,msg)
+                    self.slack.chat.update(
+                        channel=bot_im_id,
+                        ts=ts,
                         as_user=True,
                         attachments=attachments
                         )
@@ -404,13 +409,39 @@ class DrumpfBot():
         # there are less than 5 cards in the players hand, so just display them
         else:
             self.first_set = True
-            attachments = helper_functions.interactify(formatted_cards,self.first_set)
-            self.slack.chat.post_message(
-                channel=player_id,
+            attachments = helper_functions.interactify(formatted_cards,self.first_set,msg)
+            self.slack.chat.update(
+                channel=bot_im_id,
+                ts=ts,
                 as_user=True,
                 attachments=attachments
                 )
 
+    def init_cards_for_player_in_pm(self, player_id, cards):
+        """
+        Initializes the cards for the players in a private message
+
+        Args:
+                [player_id] (str) id of the player
+                [cards] (str) the cards to display
+        """
+        print "init_cards_for_player_in_pm(self, player_id, cards) "
+        print "  player_id: ", player_id
+        print "  player: ", self.user_ids_to_username[player_id]
+        print "  cards: ", cards
+
+        formatted_cards = helper_functions.interactiformat(cards)
+        # the player has more than 5 cards, so we have to send them in separate messages
+        self.first_set = True
+        attachments = helper_functions.interactify(formatted_cards,self.first_set)
+        resp = self.slack.chat.post_message(
+            channel=player_id,
+            as_user=True,
+            attachments=attachments
+            )
+        pm_ts = resp['ts']
+        event = "init_cards_pm"
+        models.log_message_ts(pm_ts,player_id,event,self.team_id)
 
     def play_game_of_drumpf_on_slack(self, players, channel):
         """
