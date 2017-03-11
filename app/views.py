@@ -95,12 +95,11 @@ def inbound():
             df = pd.read_sql_query(sql=sql,con=engine)
             ts = df.iloc[0]['ts']
             print "  ts:",ts
-            title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
+            # title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
             attachments = [
                 {
-                    "title": "DRUMPF! The Rules - Click here to learn more",
-                    "title_link": title_link,
-                    "fallback": "The Rules",
+                    "title": user_name + " says " +name,
+                    "fallback": "Gifs",
                     "callback_id":"rules_gifs",
                     "author_name": user_name,
                     "color": "#FB8C00",

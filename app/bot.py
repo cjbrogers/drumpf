@@ -223,7 +223,7 @@ class DrumpfBot():
                                     }
                                 },
                                 {
-                                    "name":"mystery button",
+                                    "name":"Lie. Cheat. Win!",
                                     "text":"mystery",
                                     "type":"button",
                                     "value":"gif",
