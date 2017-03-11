@@ -126,7 +126,7 @@ class Scoring():
             ts = models.get_ts(player_id,"pm_scoreboard",self.bot.team_id)
             resp = self.slack_client.api_call(
                 "chat.update",
-                channel="D4F6RHNE8",
+                channel=player_id,
                 text=board,
                 ts=ts,
                 as_user=True,
