@@ -99,8 +99,8 @@ def inbound():
             attachments = [
                 {
                     "title": "DRUMPF! The Rules - Click here to learn more",
-                    "title_link": title_link
-                    "fallback": "Never enough gifs.",
+                    "title_link": title_link,
+                    "fallback": "The Rules",
                     "callback_id":"rules_gifs",
                     "author_name": user_name,
                     "color": "#FB8C00",
