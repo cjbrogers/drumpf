@@ -260,3 +260,27 @@ def get_ts(channel,event,team_id):
         print "  Successfully retrieved ts from db"
     finally:
         connection.close()
+
+def get_bot_im_id(user_id,team_id):
+    '''
+    Retrieves bot_im_id from the users table of the db
+
+    Args:
+            [user_id] (str) The id of the user
+            [team_id] (str) The id of the team
+    '''
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT bot_im_id FROM `users` WHERE user_id=%s AND team_id=%s"
+            data = (user_id,team_id)
+            cursor.execute(sql,data)
+            data = cursor.fetchall()
+            bot_im_id = ts_data[0]['bot_im_id']
+            return bot_im_id
+    except Exception as e:
+        raise
+    else:
+        print "  Successfully retrieved bot_im_id from db"
+    finally:
+        connection.close()
