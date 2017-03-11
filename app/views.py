@@ -42,10 +42,12 @@ def inbound():
     team_id = team_info['id']
     actions = data['actions'][0]
     value = actions['value']
+    text = actions['text']
     print "  Channel ID: ",channel_id
     print "  Team ID: ",team_id
     print '  User sending message: ',user_name
     print "  Value received: ",value
+    print "  Text received: ",text
 
     access_token = models.get_access_token(user_id)
     slack_client = SlackClient(access_token)
@@ -66,8 +68,11 @@ def inbound():
             if actions['text'] in search_terms.keys(): # the button clicked is a search term
                 terms = search_terms[actions['text']]
             else: # just get a random gif
-                all_terms = random.shuffle(search_terms.values())
-                terms = all_terms[0]
+                values = search_terms.values()
+                random.shuffle(values)
+                print "  values:",values
+                terms = values[0]
+                print "  terms:",terms
 
             random.shuffle(terms)
             term = terms[0]
@@ -140,8 +145,8 @@ def inbound():
                 ts = resp['ts']
                 slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
 
-    except:
-        print "  unsuccessful token retrieval attempt"
+    except Exception as e:
+        raise
     else:
         print "  successful token retrieval"
 
