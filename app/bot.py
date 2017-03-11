@@ -139,13 +139,13 @@ class DrumpfBot():
                         "title":"Feel free to add yourself to the game queue:",
                         "fallback":"Add me to the game:",
                         "callback_id":"add me",
-                        "color": "#3AA3E3",
+                        "color": "#673AB7",
                         "attachment_type":"default",
                         "actions": [
                             {
                                 "name":"add me",
                                 "text":"add me",
-                                "style":"primary",
+                                "style":"danger",
                                 "type":"button",
                                 "value":"add me"
                             }
@@ -225,7 +225,6 @@ class DrumpfBot():
                                 {
                                     "name":"mystery button",
                                     "text":"mystery",
-                                    "style":"danger",
                                     "type":"button",
                                     "value":"gif",
                                     "confirm":
