@@ -127,7 +127,7 @@ class Scoring():
                 "chat.update",
                 channel=player_id,
                 text=board,
-                ts=self.pm_scoreboard_ts
+                ts=self.pm_scoreboard_ts,
                 as_user=True,
                 attachments=attachments
             )
@@ -157,7 +157,7 @@ class Scoring():
                 resp = self.slack_client.api_call(
                     "chat.update",
                     channel=player_id,
-                    ts = self.pm_scoreboard_ts
+                    ts = self.pm_scoreboard_ts,
                     text=board,
                     as_user=True,
                     attachments=attachments
@@ -177,7 +177,8 @@ class Scoring():
                 "chat.postMessage",
                 channel=player_id,
                 text=scores,
-                as_user=True, attachments=attachments
+                as_user=True,
+                attachments=attachments
             )
 
     def initialize_scores(self, attachments=None):
