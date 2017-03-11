@@ -55,7 +55,7 @@ def inbound():
         BOT_ID = models.get_bot_user_id(bot_access_token)
         AT_BOT = "<@" + BOT_ID + ">"
         if value == "gif":
-            screw terms = ["screw off","screw you","piss off","fuck off","fuck you","damn you","you suck"]
+            screw_terms = ["screw off","screw you","piss off","fuck off","fuck you","damn you","you suck"]
             dammit_terms = ["god dammit", "dammit", "damn it", "gosh darnit", "damn you"]
             cry_terms = ["don't cry", "stop crying", "cry baby", "boo hoo", "so sad"]
             sucka_terms = ["sucka", "nice try sucka", "nice try", "better luck next time","you lose"]
