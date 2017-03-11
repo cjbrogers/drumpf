@@ -59,30 +59,36 @@ def inbound():
             cry_terms = ["don't cry", "stop crying", "cry baby", "boo hoo", "so sad"]
             sucka_terms = ["sucka", "nice try sucka", "nice try", "better luck next time","you lose"]
             search_terms = {"screw you":screw_terms, "dammit":dammit_terms, "don't cry":cry_terms, "sucka":sucka_terms}
-            terms = []
 
+            terms = []
+            image_url = ""
             print "  actions:",actions
             if name in search_terms.keys(): # the button clicked is a search term
                 terms = search_terms[name]
                 print "  terms:",terms
+                random.shuffle(terms)
+                term = terms[0]
+                print "  SEARCH TERM:",term
+
+                urls = [x for x in g.search(term)]
+                random.shuffle(urls)
+                url = urls[0]
+                image_url = url.media_url
+                print "  urls:",urls
+                print "  url:",url
+                print "  image_url:",image_url
             else: # just get a random gif
-                values = search_terms.values()
-                random.shuffle(values)
-                print "  values:",values
-                terms = values[0]
-                print "  terms:",terms
-
-            random.shuffle(terms)
-            term = terms[0]
-            print "  SEARCH TERM:",term
-
-            urls = [x for x in g.search(term)]
-            random.shuffle(urls)
-            url = urls[0]
-            image_url = url.media_url
-            print "  urls:",urls
-            print "  url:",url
-            print "  image_url:",image_url
+                image_urls = ["https://media.giphy.com/media/ytwDCq9aT3cgEyyYVO/giphy.gif",
+                "https://media.giphy.com/media/YTbZzCkRQCEJa/giphy.gif",
+                "https://media.giphy.com/media/jMBmFMAwbA3mg/giphy.gif",
+                "https://media.giphy.com/media/l0MYxef0mpdcnQnvi/source.gif",
+                "https://media.giphy.com/media/3o7TKtsBMu4xzIV808/giphy.gif",
+                "https://media.giphy.com/media/l3q2Z6S6n38zjPswo/giphy.gif",
+                "https://media.giphy.com/media/kmqCVSHi5phMk/giphy.gif",
+                "https://media.giphy.com/media/9X5zV9eHAqAus/giphy.gif",
+                "https://media.giphy.com/media/Xv0Y0A2GsrZ3G/giphy.gif"]
+                random.shuffle(image_urls)
+                image_url = image_urls[0]
 
             sql = "SELECT ts FROM `messages` WHERE event='rules' AND team_id='{}'".format(team_id)
             engine = models.get_engine()

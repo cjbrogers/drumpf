@@ -148,20 +148,6 @@ class DrumpfBot():
                                 "style":"primary",
                                 "type":"button",
                                 "value":"add me"
-                            },
-                            {
-                                "name":"mystery",
-                                "text":"mystery button",
-                                "style":"danger",
-                                "type":"button",
-                                "value":"gif",
-                                "confirm":
-                                    {
-                                        "title": "For serious?",
-                                        "text": "There's no going back if you do this.",
-                                        "ok_text": "Yes",
-                                        "dismiss_text": "No"
-                                    }
                             }
                         ]
                     }]
@@ -237,17 +223,17 @@ class DrumpfBot():
                                     }
                                 },
                                 {
-                                    "name":"screw off",
-                                    "text":"rules me gif",
+                                    "name":"mystery button",
+                                    "text":"mystery",
                                     "style":"danger",
                                     "type":"button",
                                     "value":"gif",
                                     "confirm":
                                         {
-                                            "title": "For real?",
+                                            "title": "Do you dare?",
                                             "text": "There's no going back if you do this.",
-                                            "ok_text": "Yes",
-                                            "dismiss_text": "No"
+                                            "ok_text": "I dare",
+                                            "dismiss_text": "Nope"
                                         }
                                 }
                             ]
