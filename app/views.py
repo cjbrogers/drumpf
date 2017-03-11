@@ -300,6 +300,24 @@ def post_signin():
     engine = models.get_engine()
     models.send_to_db(df,engine,'users')
 
+    slack_client = SlackClient(access_token)
+    ims = slack_client.api_call("im.list").get('ims')
+    print "  IMS:",ims
+    for im in ims:
+        if im['user'] == bot_user_id:
+            im_id = im['id']
+            connection = models.connect()
+            try:
+                with connection.cursor() as cursor:
+                    sql = "UPDATE `users` SET bot_im_id=%s WHERE user_id=%s AND team_id=%s"
+                    data = (im_id,user_id,team_id)
+                    cursor.execute(sql,data)
+            except Exception as e:
+                raise
+            else:
+                print "  Successfully updated bot_im_id in users table."
+            finally:
+                connection.close()
     # Don't forget to let the user know that auth has succeeded!
     return "<h1>Welcome to Drumpf! on Slack!</h1> You can now <a href='https://drumpfbot.herokuapp.com/'>head back to the main page</a>, or just close this window."
 
