@@ -62,11 +62,16 @@ def inbound():
             search_terms = {"screw you":screw_terms, "dammit":dammit_terms, "don't cry":cry_terms, "sucka":sucka_terms}
             terms = []
 
-            for k,v in search_terms.iteritems():
-                if value == k:
-                    terms = v
+
+            if actions['text'] in search_terms.keys(): # the button clicked is a search term
+                terms = search_terms[actions['text']]
+            else: # just get a random gif
+                all_terms = random.shuffle(search_terms.values())
+                terms = all_terms[0]
+
             random.shuffle(terms)
             term = terms[0]
+            print "  SEARCH TERM:",term
 
             urls = [x for x in g.search(term)]
             random.shuffle(urls)
