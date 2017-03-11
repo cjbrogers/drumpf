@@ -151,13 +151,13 @@ class DrumpfBot():
                             },
                             {
                                 "name":"screw off",
-                                "text":"shut up and gif",
+                                "text":"rules me gif",
                                 "style":"danger",
                                 "type":"button",
-                                "value":"screw off",
+                                "value":"gif",
                                 "confirm":
                                     {
-                                        "title": "For real?",
+                                        "title": "For serious?",
                                         "text": "There's no going back if you do this.",
                                         "ok_text": "Yes",
                                         "dismiss_text": "No"
@@ -238,10 +238,10 @@ class DrumpfBot():
                                 },
                                 {
                                     "name":"screw off",
-                                    "text":"shut up and gif",
+                                    "text":"rules me gif",
                                     "style":"danger",
                                     "type":"button",
-                                    "value":"screw off",
+                                    "value":"gif",
                                     "confirm":
                                         {
                                             "title": "For real?",

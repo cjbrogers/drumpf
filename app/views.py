@@ -54,17 +54,28 @@ def inbound():
     try:
         BOT_ID = models.get_bot_user_id(bot_access_token)
         AT_BOT = "<@" + BOT_ID + ">"
-        if value == "screw off":
-            search_terms = ["screw","screw off","screw you","piss off","not now","i'm busy","nope","can't be bothered","soon","leave me alone","angry trump","get out of here","get out of town","shut your mouth"]
-            random.shuffle(search_terms)
-            term = search_terms[0]
+        if value == "gif":
+            screw terms = ["screw off","screw you","piss off","fuck off","fuck you","damn you","you suck"]
+            dammit_terms = ["god dammit", "dammit", "damn it", "gosh darnit", "damn you"]
+            cry_terms = ["don't cry", "stop crying", "cry baby", "boo hoo", "so sad"]
+            sucka_terms = ["sucka", "nice try sucka", "nice try", "better luck next time","you lose"]
+            search_terms = {"screw you":screw_terms, "dammit":dammit_terms, "don't cry":cry_terms, "sucka":sucka_terms}
+            terms = []
+
+            for k,v in search_terms.iteritems():
+                if value == k:
+                    terms = v
+            random.shuffle(terms)
+            term = terms[0]
+
             urls = [x for x in g.search(term)]
             random.shuffle(urls)
-            print "  urls:",urls
             url = urls[0]
-            print "  url:",url
             image_url = url.media_url
+            print "  urls:",urls
+            print "  url:",url
             print "  image_url:",image_url
+
             sql = "SELECT ts FROM `messages` WHERE event='rules' AND team_id='{}'".format(team_id)
             engine = models.get_engine()
             df = pd.read_sql_query(sql=sql,con=engine)
@@ -72,11 +83,41 @@ def inbound():
             print "  ts:",ts
             attachments = [
                 {
-                    "title": "Just wanted to say screw off.",
-                    "fallback": "Screw off.",
+                    "title": "Never enough gifs",
+                    "fallback": "Never enough gifs.",
                     "author_name": user_name,
                     "color": "#36a64f",
-                    "image_url": image_url
+                    "image_url": image_url,
+                    "actions": [
+                        {
+                            "name":"screw off",
+                            "text":"screw you",
+                            "style":"danger",
+                            "type":"button",
+                            "value":"gif"
+                        },
+                        {
+                            "name":"screw off",
+                            "text":"dammit",
+                            "style":"danger",
+                            "type":"button",
+                            "value":"gif"
+                        },
+                        {
+                            "name":"screw off",
+                            "text":"don't cry",
+                            "style":"primary",
+                            "type":"button",
+                            "value":"gif"
+                        },
+                        {
+                            "name":"screw off",
+                            "text":"sucka",
+                            "style":"primary",
+                            "type":"button",
+                            "value":"gif"
+                        }
+                    ]
                 }]
             slack_client = SlackClient(bot_access_token)
             resp = slack_client.api_call("chat.update",
