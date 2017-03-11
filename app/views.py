@@ -42,10 +42,12 @@ def inbound():
     team_id = team_info['id']
     actions = data['actions'][0]
     value = actions['value']
+    name = actions['name']
     print "  Channel ID: ",channel_id
     print "  Team ID: ",team_id
     print '  User sending message: ',user_name
     print "  Value received: ",value
+    print "  Name received: ",name
 
     access_token = models.get_access_token(user_id)
     slack_client = SlackClient(access_token)
@@ -63,9 +65,9 @@ def inbound():
             terms = []
 
             print "  actions:",actions
-            print "  actions['text']:",actions['text']
-            if actions['text'] in search_terms.keys(): # the button clicked is a search term
-                terms = search_terms[actions['text']]
+            if name in search_terms.keys(): # the button clicked is a search term
+                terms = search_terms[name]
+                print "  terms:",terms
             else: # just get a random gif
                 values = search_terms.values()
                 random.shuffle(values)
@@ -99,28 +101,28 @@ def inbound():
                     "image_url": image_url,
                     "actions": [
                         {
-                            "name":"screw off",
+                            "name":"screw you",
                             "text":"screw you",
                             "style":"danger",
                             "type":"button",
                             "value":"gif"
                         },
                         {
-                            "name":"screw off",
+                            "name":"dammit",
                             "text":"dammit",
                             "style":"danger",
                             "type":"button",
                             "value":"gif"
                         },
                         {
-                            "name":"screw off",
+                            "name":"don't cry",
                             "text":"don't cry",
                             "style":"primary",
                             "type":"button",
                             "value":"gif"
                         },
                         {
-                            "name":"screw off",
+                            "name":"sucka",
                             "text":"sucka",
                             "style":"primary",
                             "type":"button",
