@@ -22,7 +22,7 @@ def interactiformat(cards):
             formatted_cards[idx] = ":{}:".format(card)
     return formatted_cards
 
-def interactify(cards,first_set,msg):
+def interactify(cards,first_set,msg=""):
     print "interactify(cards)"
     actions = []
     action = {}
