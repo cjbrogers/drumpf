@@ -123,11 +123,12 @@ class Scoring():
         """
         print "pm_users_scoreboard(self, board, attachments=None)"
         for player_id in self.bot.users_in_game:
+            ts = models.get_ts(player_id,"pm_scoreboard",self.bot.team_id)
             resp = self.slack_client.api_call(
                 "chat.update",
                 channel=player_id,
                 text=board,
-                ts=self.pm_scoreboard_ts,
+                ts=ts,
                 as_user=True,
                 attachments=attachments
             )
@@ -152,6 +153,7 @@ class Scoring():
                 self.pm_scoreboard_ts = resp['ts']
                 event = "pm_scoreboard"
                 models.log_message_ts(self.pm_scoreboard_ts,player_id,event,self.bot.team_id)
+            self.first_round = False
         else:
             for player_id in self.bot.users_in_game:
                 ts = models.get_ts(player_id,"pm_scoreboard",self.bot.team_id)
@@ -163,7 +165,7 @@ class Scoring():
                     as_user=True,
                     attachments=attachments
                 )
-        self.first_round = False
+
 
     def pm_users_scores(self, scores, attachments=None):
         """
