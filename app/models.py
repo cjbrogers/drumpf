@@ -277,8 +277,8 @@ def get_bot_im_id(user_id,team_id):
             sql = "SELECT bot_im_id FROM `users` WHERE user_id=%s AND team_id=%s"
             data = (user_id,team_id)
             cursor.execute(sql,data)
-            data = cursor.fetchall()
-            bot_im_id = ts_data[0]['bot_im_id']
+            user_data = cursor.fetchall()
+            bot_im_id = user_data[0]['bot_im_id']
             return bot_im_id
     except Exception as e:
         raise
