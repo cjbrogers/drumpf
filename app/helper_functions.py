@@ -27,16 +27,33 @@ def interactify(cards,first_set):
     actions = []
     action = {}
     for key, value in cards.iteritems():
-        action = {"name":value,"text":value,"type":"button","value":key}
+        action = {
+                    "name":value,
+                    "text":value,
+                    "type":"button",
+                    "value":key
+                    }
         actions.append(action)
     values = "".join([x["text"] for x in actions])
     print "  values: ",values
     if first_set:
-        attachments =[{"title":"Your cards good sir/mam:", "fallback":values, "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
-        print "  attachments: ",attachments
+        attachments =[
+            {
+                "title":"Your cards good sir/mam:",
+                "fallback":values,
+                "callback_id":"interactify",
+                "attachment_type":"default",
+                "actions":actions
+            }]
     else:
-        attachments =[{"title":"", "fallback":values, "callback_id":"interactify", "attachment_type":"default", "actions":actions}]
-        print "  attachments: ",attachments
+        attachments =[
+            {
+                "title":"",
+                "fallback":values,
+                "callback_id":"interactify",
+                "attachment_type":"default",
+                "actions":actions
+            }]
     return attachments
 
 def buttonify_bids(bid_set,first_set):
@@ -44,17 +61,29 @@ def buttonify_bids(bid_set,first_set):
     actions = []
     action = {}
     for bid in bid_set:
-        action = {"name":str(bid),"text":str(bid),"type":"button","value":int(bid)}
+        action = {
+                    "name":str(bid),
+                    "text":str(bid),
+                    "type":"button",
+                    "value":int(bid)
+                    }
         actions.append(action)
     if first_set:
-        attachments =[{"title":"What's your bid for the round?", "fallback":"Place a bid.", "callback_id":"buttonify_bids", "attachment_type":"default", "actions":actions}]
-        print "  attachments: ",attachments
+        attachments =[
+            {
+                "title":"What's your bid for the round?",
+                "fallback":"Place a bid.",
+                "callback_id":"buttonify_bids",
+                "attachment_type":"default",
+                "actions":actions
+            }]
     else:
-        attachments =[{"title":"", "fallback":"Place a bid.", "callback_id":"buttonify_bids", "attachment_type":"default", "actions":actions}]
-        print "  attachments: ",attachments
-
+        attachments =[
+            {
+                "title":"",
+                "fallback":"Place a bid.",
+                "callback_id":"buttonify_bids",
+                "attachment_type":"default",
+                "actions":actions
+            }]
     return attachments
-
-# def get_slack_client():
-#     tokens = models.get_bot_access_tokens()
-#     return tokens

@@ -29,45 +29,29 @@ class TrumpSuit():
         response = ""
         current_username = self.bot.user_ids_to_username[self.bot.player_trump_card_queue[0]]
         #we're waiting for a user to select a trump card
-        print "  self.bot.player_trump_card_queue[0]: {}".format(self.bot.player_trump_card_queue[0])
         if user_id != self.bot.player_trump_card_queue[0]:
-            print "  Waiting for <@{}> to select a trump suit".format(current_username)
             response = "Waiting for <@{}> to select a trump suit".format(current_username)
         elif user_id == self.bot.player_trump_card_queue[0]:
-            print "  user_id == self.bot.player_trump_card_queue[0]"
             #validate that the dealer picked a valid trump suit
             if (0 <= int(command) <= 3):
-                print "  0 <= int(command) <= 3"
-
-                print "  self.bot.current_game.current_round_trump_suit WAS: {}".format(self.bot.current_game.current_round_trump_suit)
                 self.bot.current_game.current_round_trump_suit = SUITS[int(command)]
-                print "  self.bot.current_game.current_round_trump_suit SET TO: {}".format(self.bot.current_game.current_round_trump_suit)
-
-                # print "  Trump suit recorded! Check the main channel."
-                # response = "Trump suit recorded! Check the main channel."
-
                 msg = "<@{}> chose :{}: for the trump suit.\n".format(current_username, SUITS[int(command)])
-                print " ",msg
                 self.score.build_scoreboard(msg)
                 self.score.update_scoreboard(self.bot.scoreboard)
                 # self.score.pm_users_scoreboard(self.bot.scoreboard)
+
                 for player_id in self.bot.users_in_game:
                     self.bot.private_message_user(player_id,msg)
 
-                print "    self.bot.player_trump_card_queue before pop(): {}".format(self.bot.player_trump_card_queue)
-
                 self.bot.player_trump_card_queue.pop()
 
-                print "    self.bot.player_trump_card_queue after pop(): {}".format(self.bot.player_trump_card_queue)
-
-                for player in self.bot.player_turn_queue_reference:
-                    self.bot.private_message_user(player, response)
+                # for player in self.bot.player_turn_queue_reference:
+                #     self.bot.private_message_user(player, response)
 
                 if len(self.bot.player_bid_queue):
                     self.bid.present_bid_buttons(self.bot.player_bid_queue[0])
                 else:
                     msg = "Play a card."
-                    print "  ",msg
                     for player in self.bot.current_game.players:
                         if player.id == self.bot.player_turn_queue[0]:
                             self.bot.display_cards_for_player_in_pm(self.bot.player_turn_queue[0],player.cards_in_hand)
@@ -93,9 +77,7 @@ class TrumpSuit():
         print "  player: ", self.bot.user_ids_to_username[player_id]
         self.bot.dealer_prompted_for_trump_suit = True
 
-        print "  self.bot.player_trump_card_queue before append(): {}".format(self.bot.player_trump_card_queue)
         self.bot.player_trump_card_queue.append(player_id)
-        print "  self.bot.player_trump_card_queue after append(): {}".format(self.bot.player_trump_card_queue)
 
         attachments =[{"title":"Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
         {"name":"clubs","text":":clubs:","type":"button","value":"1"},
@@ -123,10 +105,6 @@ class TrumpSuit():
         self.score.build_scoreboard(msg)
         self.score.update_scoreboard(self.bot.scoreboard)
         self.score.pm_users_scoreboard(self.bot.scoreboard)
-        # trump = "The trump card is: {} \n".format(helper_functions.emojify_card(trump_card))
-        # # send the trump suit to pm
-        # for player_id in self.bot.users_in_game:
-        #     self.bot.private_message_user(player_id,trump)
 
     def player_hand_contains_suit(self, user_id, suit):
         """Determines if the player has the leading suit in hand or not

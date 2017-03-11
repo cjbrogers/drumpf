@@ -87,7 +87,6 @@ class DrumpfBot():
         print "  channel: ", channel
         print "  user_id: ", user_id
         print "  player: ", self.user_ids_to_username[user_id]
-
         team_id = models.get_team_id(user_id)
         print "  team_id: ",team_id
 
@@ -381,17 +380,11 @@ class DrumpfBot():
             for idx, card in enumerate(cards):
                 if idx == 0: # add the first card
                     self.first_set = True
-                    print "  idx == 0"
-                    print "  formatted_cards[idx] = ", formatted_cards[idx]
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) != 0: # add the next 4
-                    print "  (idx % 5) != 0"
-                    print "  formatted_cards[idx] = ", formatted_cards[idx]
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
-                    print "  (idx % 5) == 0"
                     attachments = helper_functions.interactify(five_card_set,self.first_set)
-                    print "  *posting whole set of five"
                     self.slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
@@ -400,11 +393,8 @@ class DrumpfBot():
                     self.first_set = False
                     five_card_set.clear() # clear the set
                     five_card_set[idx] = formatted_cards[idx] # add the first card of the next set
-                    print "  five_card_set (first card of next set): ", five_card_set
                 if len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
-                    print "  len(cards) == (idx + 1)"
                     attachments = helper_functions.interactify(five_card_set,self.first_set)
-                    print "  *posting remaining set of cards"
                     self.slack.chat.post_message(
                         channel=player_id,
                         as_user=True,
@@ -413,10 +403,8 @@ class DrumpfBot():
                     five_card_set.clear()
         # there are less than 5 cards in the players hand, so just display them
         else:
-            print "  len(cards) <= 5"
             self.first_set = True
             attachments = helper_functions.interactify(formatted_cards,self.first_set)
-            print "  *posting set of 0-5"
             self.slack.chat.post_message(
                 channel=player_id,
                 as_user=True,

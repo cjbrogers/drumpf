@@ -121,9 +121,7 @@ class Scoring():
         """
         print "pm_users_scoreboard(self, board, attachments=None)"
         for player_id in self.bot.users_in_game:
-            print "  board: ",board
-
-            resp_scores = self.slack_client.api_call(
+            resp = self.slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,
                 text=board,
@@ -139,8 +137,6 @@ class Scoring():
         """
         print "pm_users_scores(self, scores, attachments=None)"
         for player_id in self.bot.users_in_game:
-            print "  scores: ",scores
-
             resp_scores = self.slack_client.api_call(
                 "chat.postMessage",
                 channel=player_id,

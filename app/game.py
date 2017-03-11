@@ -103,14 +103,15 @@ class Game:
                 trump_suit = None
 
         elif len(shuffled_deck.cards) == 0:
-            print "  len(shuffled_deck.cards) == 0"
             self.trump.prompt_dealer_for_trump_suit(self.players[0].id)
+            
+        self.bot.current_game.current_round_trump_suit = trump_suit
+        self.trump.announce_trump_card(trump_card)
         for player in self.players:
             self.bot.display_cards_for_player_in_pm(player.id,
                                                     player.cards_in_hand)
         self.bid.get_bids_from_players(self.current_round, self.players)
-        self.bot.current_game.current_round_trump_suit = trump_suit
-        self.trump.announce_trump_card(trump_card)
+
         self.players.rotate(1)
         #dealer is always index 0 of players and we will rotate the array end of each turn
 
