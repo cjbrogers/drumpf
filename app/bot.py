@@ -571,6 +571,27 @@ class DrumpfBot():
                 members = self.slack_client.api_call('users.list').get('members')
                 for member in members:
                     self.user_ids_to_username[member['id']] = member['name']
+
+                    access_token = models.get_access_token(member['id'])
+                    slack_client = SlackClient(access_token)
+                    ims = slack_client.api_call("im.list").get('ims')
+                    print "  IMS:",ims
+                    for im in ims:
+                        if im['user'] == self.BOT_ID:
+                            im_id = im['id']
+                            connection = models.connect()
+                            try:
+                                with connection.cursor() as cursor:
+                                    sql = "UPDATE `users` SET bot_im_id=%s WHERE user_id=%s"
+                                    data = (im_id,member['id'])
+                                    cursor.execute(sql,data)
+                            except Exception as e:
+                                raise
+                            else:
+                                print "  Successfully updated bot_im_id in users table."
+                            finally:
+                                connection.close()
+
                     connection = models.connect()
                     try:
                         with connection.cursor() as cursor:

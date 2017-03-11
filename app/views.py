@@ -293,8 +293,9 @@ def post_signin():
     bot_access_token = auth_response['bot']['bot_access_token']
     bot_user_id = auth_response['bot']['bot_user_id']
     name = ""
+    im_id = ""
 
-    values = {"user_id": user_id, "name": name, "access_token": access_token,"bot_access_token": bot_access_token, "bot_user_id": bot_user_id, "team_id": team_id, "team_name": team_name}
+    values = {"user_id": user_id, "name": name, "access_token": access_token,"bot_access_token": bot_access_token, "bot_user_id": bot_user_id, "team_id": team_id, "team_name": team_name, "bot_im_id": im_id}
     df = pd.DataFrame(values, index=[0])
     engine = models.get_engine()
     models.send_to_db(df,engine,'users')
