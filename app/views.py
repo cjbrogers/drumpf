@@ -90,10 +90,11 @@ def inbound():
                 random.shuffle(image_urls)
                 image_url = image_urls[0]
 
-            sql = "SELECT ts FROM `messages` WHERE event='rules' AND team_id='{}'".format(team_id)
-            engine = models.get_engine()
-            df = pd.read_sql_query(sql=sql,con=engine)
-            ts = df.iloc[0]['ts']
+            # sql = "SELECT ts FROM `messages` WHERE event='rules' AND team_id='{}'".format(team_id)
+            # engine = models.get_engine()
+            # df = pd.read_sql_query(sql=sql,con=engine)
+            # ts = df.iloc[0]['ts']
+            ts = models.get_ts(channel_id,"rules",team_id)
             print "  ts:",ts
             # title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
             attachments = [
