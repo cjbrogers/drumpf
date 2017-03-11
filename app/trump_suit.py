@@ -38,10 +38,10 @@ class TrumpSuit():
                 msg = "<@{}> chose :{}: for the trump suit.\n".format(current_username, SUITS[int(command)])
                 self.score.build_scoreboard(msg)
                 self.score.update_scoreboard(self.bot.scoreboard)
-                # self.score.pm_users_scoreboard(self.bot.scoreboard)
+                self.score.pm_users_scoreboard(self.bot.scoreboard)
 
-                for player_id in self.bot.users_in_game:
-                    self.bot.private_message_user(player_id,msg)
+                # for player_id in self.bot.users_in_game:
+                #     self.bot.private_message_user(player_id,msg)
 
                 self.bot.player_trump_card_queue.pop()
 
@@ -104,7 +104,8 @@ class TrumpSuit():
             helper_functions.emojify_card(trump_card),(self.bot.sub_rounds_played + 1))
         self.score.build_scoreboard(msg)
         self.score.update_scoreboard(self.bot.scoreboard)
-        self.score.pm_users_scoreboard(self.bot.scoreboard)
+        # self.score.pm_users_scoreboard(self.bot.scoreboard)
+        self.score.init_pm_scoreboard(self.bot.scoreboard)
 
     def player_hand_contains_suit(self, user_id, suit):
         """Determines if the player has the leading suit in hand or not

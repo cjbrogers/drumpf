@@ -149,9 +149,9 @@ class Round():
         print " ",msg
         self.score.build_scoreboard(msg)
         self.score.update_scoreboard(self.bot.scoreboard)
-        # self.score.pm_users_scoreboard(self.bot.scoreboard)
-        for player_id in self.bot.users_in_game:
-            self.bot.private_message_user(player_id,msg)
+        self.score.pm_users_scoreboard(self.bot.scoreboard)
+        # for player_id in self.bot.users_in_game:
+        #     self.bot.private_message_user(player_id,msg)
 
         self.bot.cards_played_for_sub_round.append(card)
         print("  Cards played for sub-round: {}".format(self.bot.cards_played_for_sub_round))
@@ -193,9 +193,9 @@ class Round():
                 msg = ">_Sub-Round {}_\n".format(self.bot.sub_rounds_played + 1)
                 self.score.build_scoreboard(msg)
                 self.score.update_scoreboard(self.bot.scoreboard)
-                # self.score.pm_users_scoreboard(self.bot.scoreboard)
-                for player_id in self.bot.users_in_game:
-                    self.bot.private_message_user(player_id,msg)
+                self.score.pm_users_scoreboard(self.bot.scoreboard)
+                # for player_id in self.bot.users_in_game:
+                #     self.bot.private_message_user(player_id,msg)
 
                 #initialize another turn queue cause there are more cards to play
                 self.bot.player_turn_queue = copy.copy(self.bot.users_in_game)
