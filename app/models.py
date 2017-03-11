@@ -245,6 +245,7 @@ def get_ts(channel,event,team_id):
             [event] (str) The event type that the timestamp correlates to
             [team_id] (str) The id of the team in which the message was sent
     '''
+    print "get_ts(channel,event,team_id)"
     connection = connect()
     try:
         with connection.cursor() as cursor:
@@ -269,6 +270,7 @@ def get_bot_im_id(user_id,team_id):
             [user_id] (str) The id of the user
             [team_id] (str) The id of the team
     '''
+    print "get_bot_im_id(user_id,team_id)"
     connection = connect()
     try:
         with connection.cursor() as cursor:
