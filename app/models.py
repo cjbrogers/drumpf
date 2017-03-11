@@ -61,19 +61,20 @@ def send_to_db(df,engine,name):
                 # Read a single record
                 event = df.iloc[0]['event']
                 team_id = df.iloc[0]['team_id']
+                channel = df.iloc[0]['channel']
                 ts = df.iloc[0]['ts']
                 print "  EVENT:",event
                 print "  TEAM_ID:",team_id
                 print "  TS:",ts
 
-                sql = "SELECT * FROM `messages` WHERE event=%s AND team_id=%s"
-                data = (event,team_id)
+                sql = "SELECT * FROM `messages` WHERE event=%s AND team_id=%s AND channel=%s"
+                data = (event,team_id,channel)
                 cursor.execute(sql,data)
                 messages = cursor.fetchall()
                 print "  messages: ",messages
                 if messages:
-                    sql = "UPDATE `messages` SET ts=%s WHERE event=%s AND team_id=%s"
-                    data = (ts,event,team_id)
+                    sql = "UPDATE `messages` SET ts=%s WHERE event=%s AND team_id=%s AND channel=%s"
+                    data = (ts,event,team_id,channel)
                     cursor.execute(sql,data)
                 else:
                     df.to_sql(con=engine, name=name, if_exists='append', index=False)
@@ -232,5 +233,30 @@ def clear_ts_messages(team_id):
         raise
     else:
         print "  Successfully deleted entries from team's messages table."
+    finally:
+        connection.close()
+
+def get_ts(channel,event,team_id):
+    '''
+    Retrieves the original message timestamp from the database
+
+    Args:
+            [channel] (str) The channel the message was posted in
+            [event] (str) The event type that the timestamp correlates to
+            [team_id] (str) The id of the team in which the message was sent
+    '''
+    connection = connect()
+    try:
+        with connection.cursor() as cursor:
+            sql = "SELECT ts FROM `messages` WHERE team_id=%s AND channel=%s AND event=%s"
+            data = (team_id,channel,event)
+            cursor.execute(sql,data)
+            ts_data = cursor.fetchall()
+            ts = ts_data[0]['ts']
+            return ts
+    except Exception as e:
+        raise
+    else:
+        print "  Successfully retrieved ts from db"
     finally:
         connection.close()

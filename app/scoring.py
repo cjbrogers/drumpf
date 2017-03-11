@@ -154,10 +154,11 @@ class Scoring():
                 models.log_message_ts(self.pm_scoreboard_ts,player_id,event,self.bot.team_id)
         else:
             for player_id in self.bot.users_in_game:
+                ts = models.get_ts(player_id,"pm_scoreboard",self.bot.team_id)
                 resp = self.slack_client.api_call(
                     "chat.update",
                     channel=player_id,
-                    ts = self.pm_scoreboard_ts,
+                    ts = ts,
                     text=board,
                     as_user=True,
                     attachments=attachments
