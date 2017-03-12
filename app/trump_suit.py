@@ -1,5 +1,7 @@
 from slacker import Slacker
+from slackclient import SlackClient
 import helper_functions
+import models
 
 SUITS = ["diamonds", "clubs", "hearts", "spades"]
 
@@ -8,6 +10,7 @@ class TrumpSuit():
     def __init__(self,bot,score,bid):
         self.bot = bot
         self.slack = self.bot.slack
+        self.slack_client = self.bot.slack_client
         self.score = score
         self.bid = bid
 
@@ -70,15 +73,21 @@ class TrumpSuit():
 
         self.bot.player_trump_card_queue.append(player_id)
 
-        attachments =[{"title":"Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[{"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
+        attachments =[{"title":"Please select index for trump suit:", "fallback":"Your interface does not support interactive messages.", "callback_id":"prompt_trump_suit", "attachment_type":"default", "actions":[
+        {"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
         {"name":"clubs","text":":clubs:","type":"button","value":"1"},
         {"name":"hearts","text":":hearts:","type":"button","value":"2"},
         {"name":"spades","text":":spades:","type":"button","value":"3"}]}]
-        self.slack.chat.post_message(
+        resp = self.slack_client.api_call(
+            "chat.postMessage",
             channel=player_id,
             as_user=True,
             attachments=attachments
             )
+        ts = resp['ts']
+        bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
+        event = "trump_suit"
+        models.log_message_ts(ts,bot_im_id,event,self.bot.team_id)
 
     def announce_trump_card(self, trump_card):
         """Announces the trump card to the main game channel and each user privately

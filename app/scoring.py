@@ -501,7 +501,7 @@ class Scoring():
         image_url = image_urls[0]
         attachments = [
             {
-                "title": "Celebrate good times!",
+                "title": "Please vote responsibly.",
                 "image_url": image_url
             }]
 

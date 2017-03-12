@@ -22,6 +22,8 @@ OAUTH_SCOPE = os.environ["SLACK_BOT_SCOPE"]
 app = Flask(__name__)
 g = giphypop.Giphy()
 
+suits = ["diamonds", "clubs", "hearts", "spades"]
+
 # handles interactive button responses for donny_drumpfbot
 @app.route('/actions', methods=['POST'])
 def inbound():
@@ -175,7 +177,7 @@ def inbound():
                                     channel=bot_im_id,
                                     ts=ts,
                                     text=":white_check_mark:",
-                                    attachments=[],
+                                    attachments=attachments,
                                     as_user=True)
 
             access_token = models.get_access_token(user_id)
@@ -189,6 +191,13 @@ def inbound():
             if resp['ts']:
                 ts = resp['ts']
                 slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
+        elif name in suits:
+            slack_client = SlackClient(bot_access_token)
+            bot_im_id = models.get_bot_im_id(user_id,team_id)
+            event = "trump_suit"
+            ts = models.get_ts(bot_im_id,event,team_id)
+
+            slack_client.api_call("chat.delete", channel=bot_im_id,ts=ts,as_user=True)
         else:
             access_token = models.get_access_token(user_id)
             slack_client = SlackClient(access_token)
