@@ -50,7 +50,7 @@ class Bid():
                                                 as_user=True,
                                                 attachments=attachments)
                     ts = resp['ts']
-                    event = "bid_buttons_" + self.button_set_count
+                    event = "bid_buttons_" + str(self.button_set_count)
 
                     bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
                     models.log_message_ts(ts,bot_im_id,event,self.bot.team_id)
@@ -65,7 +65,7 @@ class Bid():
                                                 as_user=True,
                                                 attachments=attachments)
                     ts = resp['ts']
-                    event = "bid_buttons_" + self.button_set_count
+                    event = "bid_buttons_" + str(self.button_set_count)
                     bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
                     models.log_message_ts(ts,bot_im_id,event,self.bot.team_id)
                     button_set[:] = []
@@ -77,7 +77,7 @@ class Bid():
                                         as_user=True,
                                         attachments=attachments)
             ts = resp['ts']
-            event = "bid_buttons_" + self.button_set_count
+            event = "bid_buttons_" + str(self.button_set_count)
             bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
             models.log_message_ts(ts,bot_im_id,event,self.bot.team_id)
             self.bot.first_set = False
