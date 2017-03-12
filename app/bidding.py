@@ -58,7 +58,6 @@ class Bid():
                     button_set[:] = []
                     button_set.append(idx)
                 if (idx+1) == len(button_indices):
-                    self.button_set_count += 1
                     attachments = helper_functions.buttonify_bids(button_set,self.bot.first_set,no_button_sets)
                     resp = self.slack_client.api_call("chat.postMessage",
                                                 channel=player_id,
@@ -81,6 +80,8 @@ class Bid():
             bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
             models.log_message_ts(ts,bot_im_id,event,self.bot.team_id)
             self.bot.first_set = False
+            if len(button_indices) == 5:
+                self.button_set_count += 1
         return
 
     def handle_player_bid(self, command, user_id):
