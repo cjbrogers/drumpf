@@ -63,9 +63,9 @@ class Scoring():
         print "calculate_and_display_points_for_players(self) "
         msg = "*Round {} over!* _calculating points..._\n".format(self.bot.current_game.current_round)
         self.build_scoreboard(msg)
-        self.bot.scoreboard = "*`Previous Round Recap`*\n" + self.bot.scoreboard
         self.update_scoreboard(self.bot.scoreboard)
-        self.pm_users_scoreboard(self.bot.scoreboard)
+        self.bot.scoreboard = "*`Previous Round Recap`*\n" + self.bot.scoreboard + self.bot.scores
+        self.pm_users_scoreboard_recap(self.bot.scoreboard)
         self.winning_scores = {}
         for idx, player_id in enumerate(self.bot.users_in_game):
             current_players_bid = self.bot.player_bids_for_current_round[player_id]
@@ -97,7 +97,7 @@ class Scoring():
 
         self.update_scores(self.bot.scores)
         # self.pm_users_scoreboard(self.bot.scoreboard)
-        self.pm_users_scores(self.bot.scores)
+        # self.pm_users_scores(self.bot.scores)
 
         self.bot.prepare_for_next_round()
         if self.bot.current_game.current_round == self.bot.current_game.final_round:
@@ -125,7 +125,31 @@ class Scoring():
         for player_id in self.bot.users_in_game:
             bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
             print "  bot_im_id:",bot_im_id
-            ts = models.get_ts(bot_im_id,"pm_scoreboard",self.bot.team_id)
+            event = "pm_scoreboard_" + self.bot.current_game.current_round
+            ts = models.get_ts(bot_im_id,event,self.bot.team_id)
+            resp = self.slack_client.api_call(
+                "chat.update",
+                channel=bot_im_id,
+                text=board,
+                ts=ts,
+                as_user=True,
+                attachments=attachments
+            )
+            print "RESP:",resp
+
+    def pm_users_scoreboard_recap(self,board,attachments=None):
+        """
+        Private messages the relevant users the scoreboard recap for past round
+
+        Args:
+                [board] the scoreboard
+        """
+        print "pm_users_scoreboard_recap(self, board, attachments=None)"
+        for player_id in self.bot.users_in_game:
+            bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
+            print "  bot_im_id:",bot_im_id
+            event = "pm_scoreboard_" + self.bot.current_game.current_round
+            ts = models.get_ts(bot_im_id,event,self.bot.team_id)
             resp = self.slack_client.api_call(
                 "chat.update",
                 channel=bot_im_id,
@@ -144,32 +168,32 @@ class Scoring():
                 [board] the scoreboard
         """
         print "init_pm_scoreboard(self, board, attachments=None)"
-        if self.first_round:
-            for player_id in self.bot.users_in_game:
-                resp = self.slack_client.api_call(
-                    "chat.postMessage",
-                    channel=player_id,
-                    text=board,
-                    as_user=True,
-                    attachments=attachments
-                )
-                self.pm_scoreboard_ts = resp['ts']
-                event = "pm_scoreboard"
-                bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
-                models.log_message_ts(self.pm_scoreboard_ts,bot_im_id,event,self.bot.team_id)
-            self.first_round = False
-        else:
-            for player_id in self.bot.users_in_game:
-                ts = models.get_ts(player_id,"pm_scoreboard",self.bot.team_id)
-                bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
-                resp = self.slack_client.api_call(
-                    "chat.update",
-                    channel=bot_im_id,
-                    ts = ts,
-                    text=board,
-                    as_user=True,
-                    attachments=attachments
-                )
+        # if self.first_round:
+        for player_id in self.bot.users_in_game:
+            resp = self.slack_client.api_call(
+                "chat.postMessage",
+                channel=player_id,
+                text=board,
+                as_user=True,
+                attachments=attachments
+            )
+            self.pm_scoreboard_ts = resp['ts']
+            event = "pm_scoreboard_" + self.bot.current_game.current_round
+            bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
+            models.log_message_ts(self.pm_scoreboard_ts,bot_im_id,event,self.bot.team_id)
+        #     self.first_round = False
+        # else:
+        #     for player_id in self.bot.users_in_game:
+        #         bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
+        #         ts = models.get_ts(bot_im_id,"pm_scoreboard",self.bot.team_id)
+        #         resp = self.slack_client.api_call(
+        #             "chat.update",
+        #             channel=bot_im_id,
+        #             ts = ts,
+        #             text=board,
+        #             as_user=True,
+        #             attachments=attachments
+        #         )
 
 
     def pm_users_scores(self, scores, attachments=None):
