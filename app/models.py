@@ -74,10 +74,12 @@ def send_to_db(df,engine,name):
                 messages = cursor.fetchall()
                 print "  messages: ",messages
                 if messages:
+                    print "MESSAGES"
                     sql = "UPDATE `messages` SET ts=%s WHERE event=%s AND team_id=%s AND channel=%s"
                     data = (ts,event,team_id,channel)
                     cursor.execute(sql,data)
                 else:
+                    print "NOT MESSAGES"
                     with engine.connect() as conn:
                         df.to_sql(con=conn, name=name, if_exists='append', index=False)
                         conn.close()

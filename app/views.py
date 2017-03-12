@@ -144,20 +144,20 @@ def inbound():
             # print "  no_button_sets:",no_button_sets
 
             slack_client = SlackClient(bot_access_token)
-            bot_im_id = models.get_bot_im_id(user_id,team_id)
+            # bot_im_id = models.get_bot_im_id(user_id,team_id)
 
             connection = models.connect()
             try:
                 with connection.cursor() as cursor:
                     sql = "SELECT ts FROM `messages` WHERE event LIKE %s AND team_id=%s AND channel=%s"
                     event = "bid_buttons%"
-                    data = (event,team_id,bot_im_id)
+                    data = (event,team_id,channel_id)
                     cursor.execute(sql,data)
                     timestamps = cursor.fetchall()
                     for timestamp in timestamps:
                         print timestamp['ts']
                         slack_client.api_call("chat.delete",
-                                            channel=bot_im_id,
+                                            channel=channel_id,
                                             ts=timestamp['ts'],
                                             as_user=True)
             except Exception as e:
