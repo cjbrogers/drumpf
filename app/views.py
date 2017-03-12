@@ -140,18 +140,38 @@ def inbound():
                                         attachments=attachments,
                                         as_user=True)
         elif name[0:3] == "bid":
-            no_button_sets = int(name[-1])
-            print "  no_button_sets:",no_button_sets
+            # no_button_sets = int(name[-1])
+            # print "  no_button_sets:",no_button_sets
 
             slack_client = SlackClient(bot_access_token)
             bot_im_id = models.get_bot_im_id(user_id,team_id)
-            for i in range(1,(no_button_sets+1)):
-                print str(i)
-                ts = models.get_ts(bot_im_id,"bid_buttons_{}".format(str(i)),team_id)
-                slack_client.api_call("chat.delete",
-                                        channel=bot_im_id,
-                                        ts=ts,
-                                        as_user=True)
+
+            connection = models.connect()
+            try:
+                with connection.cursor() as cursor:
+                    sql = "SELECT ts FROM `messages` WHERE event LIKE 'bid_buttons%' AND team=%s AND channel=%s"
+                    data = (team_id,bot_im_id)
+                    cursor.execute(sql,data)
+                    timestamps = cursor.fetchall()
+                    for timestamp in timestamps:
+                        print timestamp['ts']
+                        slack_client.api_call("chat.delete",
+                                            channel=bot_im_id,
+                                            ts=ts,
+                                            as_user=True)
+            except Exception as e:
+                raise
+            else:
+                print "  Great success!"
+            finally:
+                connection.close()
+            # for i in range(1,(no_button_sets+1)):
+            #     print str(i)
+            #     ts = models.get_ts(bot_im_id,"bid_buttons_{}".format(str(i)),team_id)
+            #     slack_client.api_call("chat.delete",
+            #                             channel=bot_im_id,
+            #                             ts=ts,
+            #                             as_user=True)
 
             access_token = models.get_access_token(user_id)
             slack_client = SlackClient(access_token)
