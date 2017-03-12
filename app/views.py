@@ -149,8 +149,9 @@ def inbound():
             connection = models.connect()
             try:
                 with connection.cursor() as cursor:
-                    sql = "SELECT ts FROM `messages` WHERE event LIKE 'bid_buttons%' AND team=%s AND channel=%s"
-                    data = (team_id,bot_im_id)
+                    sql = "SELECT ts FROM `messages` WHERE event LIKE %s AND team=%s AND channel=%s"
+                    event = "bid_buttons%"
+                    data = (event,team_id,bot_im_id)
                     cursor.execute(sql,data)
                     timestamps = cursor.fetchall()
                     for timestamp in timestamps:
