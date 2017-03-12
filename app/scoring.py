@@ -64,8 +64,6 @@ class Scoring():
         msg = "*Round {} over!* _calculating points..._\n".format(self.bot.current_game.current_round)
         self.build_scoreboard(msg)
         self.update_scoreboard(self.bot.scoreboard)
-        # self.bot.scoreboard = "*`Previous Round Recap`*\n" + self.bot.scoreboard + "\n" + self.bot.scores
-        # self.pm_users_scoreboard_recap(self.bot.scoreboard)
         self.winning_scores = {}
         for idx, player_id in enumerate(self.bot.users_in_game):
             current_players_bid = self.bot.player_bids_for_current_round[player_id]
@@ -98,8 +96,6 @@ class Scoring():
         self.update_scores(self.bot.scores)
         self.bot.scoreboard = "*`Previous Round Recap`*\n{}{}".format(self.bot.scoreboard,self.bot.scores)
         self.pm_users_scoreboard_recap(self.bot.scoreboard)
-        # self.pm_users_scoreboard(self.bot.scoreboard)
-        # self.pm_users_scores(self.bot.scores)
 
         self.bot.prepare_for_next_round()
         if self.bot.current_game.current_round == self.bot.current_game.final_round:
@@ -183,20 +179,6 @@ class Scoring():
             event = "pm_scoreboard_" + str(self.bot.current_game.current_round)
             bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
             models.log_message_ts(self.pm_scoreboard_ts,bot_im_id,event,self.bot.team_id)
-        #     self.first_round = False
-        # else:
-        #     for player_id in self.bot.users_in_game:
-        #         bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
-        #         ts = models.get_ts(bot_im_id,"pm_scoreboard",self.bot.team_id)
-        #         resp = self.slack_client.api_call(
-        #             "chat.update",
-        #             channel=bot_im_id,
-        #             ts = ts,
-        #             text=board,
-        #             as_user=True,
-        #             attachments=attachments
-        #         )
-
 
     def pm_users_scores(self, scores, attachments=None):
         """
@@ -327,8 +309,6 @@ class Scoring():
                                 self.build_scoreboard(msg)
                                 self.update_scoreboard(self.bot.scoreboard)
                                 self.pm_users_scoreboard(self.bot.scoreboard)
-                                # for player_id in self.bot.users_in_game:
-                                #     self.bot.private_message_user(player_id,msg)
 
                                 self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[comey_card_idx]
                                 self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[comey_card_idx]
@@ -344,8 +324,6 @@ class Scoring():
                                 self.build_scoreboard(msg)
                                 self.update_scoreboard(self.bot.scoreboard)
                                 self.pm_users_scoreboard(self.bot.scoreboard)
-                                # for player_id in self.bot.users_in_game:
-                                #     self.bot.private_message_user(player_id,msg)
 
                                 self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[nasty_card_idx]
                                 self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[nasty_card_idx]
@@ -371,8 +349,6 @@ class Scoring():
                                 self.build_scoreboard(msg)
                                 self.update_scoreboard(self.bot.scoreboard)
                                 self.pm_users_scoreboard(self.bot.scoreboard)
-                                # for player_id in self.bot.users_in_game:
-                                #     self.bot.private_message_user(player_id,msg)
 
                                 self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[hombres_card_idx]
                                 self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[hombres_card_idx]
@@ -389,8 +365,7 @@ class Scoring():
                                 self.build_scoreboard(msg)
                                 self.update_scoreboard(self.bot.scoreboard)
                                 self.pm_users_scoreboard(self.bot.scoreboard)
-                                # for player_id in self.bot.users_in_game:
-                                #     self.bot.private_message_user(player_id,msg)
+
                                 self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[nasty_card_idx]
                                 self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[nasty_card_idx]
                                 return
@@ -419,8 +394,7 @@ class Scoring():
                                     self.build_scoreboard(msg)
                                     self.update_scoreboard(self.bot.scoreboard)
                                     self.pm_users_scoreboard(self.bot.scoreboard)
-                                    # for player_id in self.bot.users_in_game:
-                                    #     self.bot.private_message_user(player_id,msg)
+
                                     self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[nasty_card_idx]
                                     self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[nasty_card_idx]
                                     return
@@ -447,8 +421,6 @@ class Scoring():
                         continue
 
                     if "blacks" in card_value:
-                        # self.bot.zero_point_players.append(current_player)
-
                         # to get to this point, t_comey or t_nasty or t_shower must be the only other card and played first, so no winner is present.
                         if self.bot.winning_sub_round_card == None:
                             for t_card in self.bot.t_cards:

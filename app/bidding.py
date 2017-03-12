@@ -5,9 +5,6 @@ from collections import deque
 import copy
 import models
 
-# slack_client = SlackClient(helper_functions.get_slack_client())
-# slack = Slacker(helper_functions.get_slack_client())
-
 class Bid():
 
     def __init__(self,bot,score):

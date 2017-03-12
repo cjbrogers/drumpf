@@ -108,7 +108,6 @@ class Game:
         self.bot.current_game.current_round_trump_suit = trump_suit
         self.trump.announce_trump_card(trump_card)
         for player in self.players:
-            # self.bot.display_cards_for_player_in_pm(player.id,player.cards_in_hand)
             self.bot.init_cards_for_player_in_pm(player.id,player.cards_in_hand)
         self.bid.get_bids_from_players(self.current_round, self.players)
 

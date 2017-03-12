@@ -150,8 +150,6 @@ class Round():
         self.score.build_scoreboard(msg)
         self.score.update_scoreboard(self.bot.scoreboard)
         self.score.pm_users_scoreboard(self.bot.scoreboard)
-        # for player_id in self.bot.users_in_game:
-        #     self.bot.private_message_user(player_id,msg)
 
         self.bot.cards_played_for_sub_round.append(card)
         print("  Cards played for sub-round: {}".format(self.bot.cards_played_for_sub_round))
@@ -173,8 +171,6 @@ class Round():
             print " ",msg
             self.score.build_scoreboard(msg)
             self.score.update_scoreboard(self.bot.scoreboard)
-            # for player_id in self.bot.users_in_game:
-            #     self.bot.private_message_user(player_id,msg)
 
             #reset all sub-round variables
             self.bot.leading_suit = None
@@ -194,8 +190,6 @@ class Round():
                 self.score.build_scoreboard(msg)
                 self.score.update_scoreboard(self.bot.scoreboard)
                 self.score.pm_users_scoreboard(self.bot.scoreboard)
-                # for player_id in self.bot.users_in_game:
-                #     self.bot.private_message_user(player_id,msg)
 
                 #initialize another turn queue cause there are more cards to play
                 self.bot.player_turn_queue = copy.copy(self.bot.users_in_game)
@@ -220,13 +214,11 @@ class Round():
                     if player.id == self.bot.player_turn_queue[0]:
                         msg = "Play a card."
                         self.bot.display_cards_for_player_in_pm(self.bot.player_turn_queue[0],player.cards_in_hand,msg)
-                        # self.bot.private_message_user(self.bot.player_turn_queue[0], "Play a card.")
         else:
             for player in self.bot.current_game.players:
                 if player.id == self.bot.player_turn_queue[0]:
                     msg = "Play a card."
                     self.bot.display_cards_for_player_in_pm(self.bot.player_turn_queue[0],player.cards_in_hand,msg)
-                    # self.bot.private_message_user(self.bot.player_turn_queue[0], "Play a card.")
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
         """Removes a card from the players hand

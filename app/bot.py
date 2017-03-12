@@ -691,9 +691,6 @@ class DrumpfBot():
                     ]
                 }]
 
-            # sql = "SELECT ts FROM `messages` WHERE event='wake_bot' AND team_id='{}'".format(self.team_id)
-            # engine = models.get_engine()
-            # df = pd.read_sql_query(sql=sql,con=engine)
             self.ts = models.get_ts(self.main_channel_id,"wake_bot",self.team_id)
 
             self.slack_client.api_call("chat.update",

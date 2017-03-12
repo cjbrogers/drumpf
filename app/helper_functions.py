@@ -36,16 +36,7 @@ def interactify(cards,first_set,msg="Your cards good sir/mam:"):
         actions.append(action)
     values = "".join([x["text"] for x in actions])
     print "  values: ",values
-    # if first_set:
-    #     attachments =[
-    #         {
-    #             "title":"Your cards good sir/mam:",
-    #             "fallback":values,
-    #             "callback_id":"interactify",
-    #             "attachment_type":"default",
-    #             "actions":actions
-    #         }]
-    # else:
+
     color = ""
     if msg == "Play a card.":
         color = "#4CAF50"

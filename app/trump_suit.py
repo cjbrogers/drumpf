@@ -1,8 +1,6 @@
 from slacker import Slacker
 import helper_functions
 
-
-# slack = Slacker(helper_functions.get_slack_client())
 SUITS = ["diamonds", "clubs", "hearts", "spades"]
 
 class TrumpSuit():
@@ -40,13 +38,7 @@ class TrumpSuit():
                 self.score.update_scoreboard(self.bot.scoreboard)
                 self.score.pm_users_scoreboard(self.bot.scoreboard)
 
-                # for player_id in self.bot.users_in_game:
-                #     self.bot.private_message_user(player_id,msg)
-
                 self.bot.player_trump_card_queue.pop()
-
-                # for player in self.bot.player_turn_queue_reference:
-                #     self.bot.private_message_user(player, response)
 
                 if len(self.bot.player_bid_queue):
                     self.bid.present_bid_buttons(self.bot.player_bid_queue[0])
@@ -55,7 +47,6 @@ class TrumpSuit():
                     for player in self.bot.current_game.players:
                         if player.id == self.bot.player_turn_queue[0]:
                             self.bot.display_cards_for_player_in_pm(self.bot.player_turn_queue[0],player.cards_in_hand,msg)
-                            # self.bot.private_message_user(self.bot.player_turn_queue[0], "Play a card.")
                 return
             else:
                 print "  That wasn't a valid index for a trump suit."
@@ -104,7 +95,6 @@ class TrumpSuit():
             helper_functions.emojify_card(trump_card),(self.bot.sub_rounds_played + 1))
         self.score.build_scoreboard(msg)
         self.score.update_scoreboard(self.bot.scoreboard)
-        # self.score.pm_users_scoreboard(self.bot.scoreboard)
         self.score.init_pm_scoreboard(self.bot.scoreboard)
 
     def player_hand_contains_suit(self, user_id, suit):
