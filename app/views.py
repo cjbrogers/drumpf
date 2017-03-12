@@ -158,7 +158,7 @@ def inbound():
                         print timestamp['ts']
                         slack_client.api_call("chat.delete",
                                             channel=bot_im_id,
-                                            ts=ts,
+                                            ts=timestamp['ts'],
                                             as_user=True)
             except Exception as e:
                 raise
