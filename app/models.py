@@ -42,7 +42,7 @@ def get_engine():
     Returns:
             [engine] the sqlalchemy engine
     '''
-    engine = create_engine(DB_URL, echo=False)
+    engine = create_engine(DB_URL, echo=False, poolclass=NullPool)
     return engine
 
 def send_to_db(df,engine,name):
