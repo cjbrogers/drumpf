@@ -372,7 +372,8 @@ class DrumpfBot():
         print "  cards: ", cards
 
         bot_im_id = models.get_bot_im_id(player_id,self.team_id)
-        ts = models.get_ts(bot_im_id,"init_cards_pm",self.team_id)
+        event = "init_cards_pm_" + str(self.current_game.current_round)
+        ts = models.get_ts(bot_im_id,event,self.team_id)
 
 
         formatted_cards = helper_functions.interactiformat(cards)
@@ -434,7 +435,7 @@ class DrumpfBot():
         attachments = helper_functions.interactify(formatted_cards,self.first_set)
         resp = self.slack_client.api_call("chat.postMessage",channel=player_id,as_user=True,attachments=attachments)
         pm_ts = resp['ts']
-        event = "init_cards_pm"
+        event = "init_cards_pm_" + str(self.current_game.current_round)
         bot_im_id = models.get_bot_im_id(player_id,self.team_id)
         models.log_message_ts(pm_ts,bot_im_id,event,self.team_id)
 

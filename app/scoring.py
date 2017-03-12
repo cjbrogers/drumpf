@@ -64,8 +64,8 @@ class Scoring():
         msg = "*Round {} over!* _calculating points..._\n".format(self.bot.current_game.current_round)
         self.build_scoreboard(msg)
         self.update_scoreboard(self.bot.scoreboard)
-        self.bot.scoreboard = "*`Previous Round Recap`*\n" + self.bot.scoreboard + self.bot.scores
-        self.pm_users_scoreboard_recap(self.bot.scoreboard)
+        # self.bot.scoreboard = "*`Previous Round Recap`*\n" + self.bot.scoreboard + "\n" + self.bot.scores
+        # self.pm_users_scoreboard_recap(self.bot.scoreboard)
         self.winning_scores = {}
         for idx, player_id in enumerate(self.bot.users_in_game):
             current_players_bid = self.bot.player_bids_for_current_round[player_id]
@@ -96,6 +96,8 @@ class Scoring():
                 self.bot.scores += msg
 
         self.update_scores(self.bot.scores)
+        self.bot.scoreboard = "*`Previous Round Recap`*\n{}{}".format(self.bot.scoreboard,self.bot.scores)
+        self.pm_users_scoreboard_recap(self.bot.scoreboard)
         # self.pm_users_scoreboard(self.bot.scoreboard)
         # self.pm_users_scores(self.bot.scores)
 
