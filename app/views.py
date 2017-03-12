@@ -114,16 +114,16 @@ def inbound():
                             "value":"gif"
                         },
                         {
-                            "name":"dammit",
-                            "text":"dammit",
-                            "style":"danger",
+                            "name":"don't cry",
+                            "text":"don't cry",
+                            "style":"primary",
                             "type":"button",
                             "value":"gif"
                         },
                         {
-                            "name":"don't cry",
-                            "text":"don't cry",
-                            "style":"primary",
+                            "name":"dammit",
+                            "text":"dammit",
+                            "style":"danger",
                             "type":"button",
                             "value":"gif"
                         },
@@ -143,6 +143,26 @@ def inbound():
                                         ts=ts,
                                         attachments=attachments,
                                         as_user=True)
+        elif name == "bid":
+            slack_client = SlackClient(bot_access_token)
+            bot_im_id = models.get_bot_im_id(user_id,team_id)
+            ts = models.get_ts(bot_im_id,"bid_buttons",team_id)
+            slack_client.api_call("chat.delete"
+                                    channel=bot_im_id,
+                                    ts=ts,
+                                    as_user=True)
+
+            access_token = models.get_access_token(user_id)
+            slack_client = SlackClient(access_token)
+            BOT_ID = models.get_bot_user_id(bot_access_token)
+            AT_BOT = "<@" + BOT_ID + ">"
+            resp = slack_client.api_call("chat.postMessage",
+                                        channel=channel_id,
+                                        text = AT_BOT +" {}".format(value),
+                                        as_user=True)
+            if resp['ts']:
+                ts = resp['ts']
+                slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
         else:
             access_token = models.get_access_token(user_id)
             slack_client = SlackClient(access_token)

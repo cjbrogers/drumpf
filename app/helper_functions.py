@@ -46,10 +46,16 @@ def interactify(cards,first_set,msg="Your cards good sir/mam:"):
     #             "actions":actions
     #         }]
     # else:
+    color = ""
+    if msg == "Play a card.":
+        color = "#4CAF50"
+    else:
+        color = "#9E9E9E"
     attachments =[
         {
             "title":msg,
             "fallback":values,
+            "color":color,
             "callback_id":"interactify",
             "attachment_type":"default",
             "actions":actions
@@ -62,7 +68,7 @@ def buttonify_bids(bid_set,first_set):
     action = {}
     for bid in bid_set:
         action = {
-                    "name":str(bid),
+                    "name":"bid",
                     "text":str(bid),
                     "type":"button",
                     "value":int(bid)
