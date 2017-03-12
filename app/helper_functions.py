@@ -53,13 +53,13 @@ def interactify(cards,first_set,current_round,msg="Your cards good sir/mam:"):
         }]
     return attachments
 
-def buttonify_bids(bid_set,first_set):
-    print "buttonify_bids(bid_set)"
+def buttonify_bids(bid_set,first_set,no_button_sets):
+    print "buttonify_bids(bid_set,first_set,no_button_sets)"
     actions = []
     action = {}
     for bid in bid_set:
         action = {
-                    "name":"bid",
+                    "name":"bid_{}".format(no_button_sets),
                     "text":str(bid),
                     "type":"button",
                     "value":int(bid)
@@ -80,6 +80,7 @@ def buttonify_bids(bid_set,first_set):
             {
                 "title":"",
                 "fallback":"Place a bid.",
+                "color":"#4CAF50",
                 "callback_id":"buttonify_bids",
                 "attachment_type":"default",
                 "actions":actions

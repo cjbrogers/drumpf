@@ -139,14 +139,18 @@ def inbound():
                                         ts=ts,
                                         attachments=attachments,
                                         as_user=True)
-        elif name == "bid":
+        elif name[0:3] == "bid":
+            no_button_sets = int(name[-1])
+            print "  no_button_sets:",no_button_sets
+
             slack_client = SlackClient(bot_access_token)
             bot_im_id = models.get_bot_im_id(user_id,team_id)
-            ts = models.get_ts(bot_im_id,"bid_buttons",team_id)
-            slack_client.api_call("chat.delete",
-                                    channel=bot_im_id,
-                                    ts=ts,
-                                    as_user=True)
+            for i in range(1,(no_button_sets+1)):
+                ts = models.get_ts(bot_im_id,"bid_buttons_{}".format(i),team_id)
+                slack_client.api_call("chat.delete",
+                                        channel=bot_im_id,
+                                        ts=ts,
+                                        as_user=True)
 
             access_token = models.get_access_token(user_id)
             slack_client = SlackClient(access_token)

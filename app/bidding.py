@@ -4,6 +4,7 @@ import helper_functions
 from collections import deque
 import copy
 import models
+import math
 
 class Bid():
 
@@ -13,6 +14,7 @@ class Bid():
         self.slack = self.bot.slack
         self.score = score
         self.slack_client = self.bot.slack_client
+        self.button_set_count = None
 
     def present_bid_buttons(self, player_id):
         """
@@ -22,7 +24,7 @@ class Bid():
                 [player_id] the player's id of whom to post the bid buttons to
         """
         print "present_bid_buttons(self, player_id)"
-
+        self.button_set_count = 1
         button_indices = []
         for player in self.bot.current_game.players:
             if player.id == player_id:
@@ -31,6 +33,8 @@ class Bid():
                 button_indices.append(len(player.cards_in_hand))
         self.bot.first_set = False
         button_set = []
+        no_button_sets = int(math.ceil(len(button_indices)/5.0))
+        # TODO: clean this up with new no_button_sets logic
         if len(button_indices) > 5:
             for idx in button_indices:
                 if idx == 0:
@@ -39,38 +43,41 @@ class Bid():
                 elif (idx % 5) != 0:
                     button_set.append(idx)
                 elif (idx % 5) == 0:
-                    attachments = helper_functions.buttonify_bids(button_set,self.bot.first_set)
+                    self.button_set_count += 1
+                    attachments = helper_functions.buttonify_bids(button_set,self.bot.first_set,no_button_sets)
                     resp = self.slack_client.api_call("chat.postMessage",
                                                 channel=player_id,
                                                 as_user=True,
                                                 attachments=attachments)
                     ts = resp['ts']
-                    event = "bid_buttons"
+                    event = "bid_buttons_" + self.button_set_count
+
                     bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
                     models.log_message_ts(ts,bot_im_id,event,self.bot.team_id)
                     self.bot.first_set = False
                     button_set[:] = []
                     button_set.append(idx)
                 if (idx+1) == len(button_indices):
-                    attachments = helper_functions.buttonify_bids(button_set,self.bot.first_set)
+                    self.button_set_count += 1
+                    attachments = helper_functions.buttonify_bids(button_set,self.bot.first_set,no_button_sets)
                     resp = self.slack_client.api_call("chat.postMessage",
                                                 channel=player_id,
                                                 as_user=True,
                                                 attachments=attachments)
                     ts = resp['ts']
-                    event = "bid_buttons"
+                    event = "bid_buttons_" + self.button_set_count
                     bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
                     models.log_message_ts(ts,bot_im_id,event,self.bot.team_id)
                     button_set[:] = []
         else:
             self.bot.first_set = True
-            attachments = helper_functions.buttonify_bids(button_indices,self.bot.first_set)
+            attachments = helper_functions.buttonify_bids(button_indices,self.bot.first_set,no_button_sets)
             resp = self.slack_client.api_call("chat.postMessage",
                                         channel=player_id,
                                         as_user=True,
                                         attachments=attachments)
             ts = resp['ts']
-            event = "bid_buttons"
+            event = "bid_buttons_" + self.button_set_count
             bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
             models.log_message_ts(ts,bot_im_id,event,self.bot.team_id)
             self.bot.first_set = False
