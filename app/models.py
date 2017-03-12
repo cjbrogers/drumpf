@@ -1,5 +1,6 @@
 import os
 from sqlalchemy import create_engine
+import sqlalchemy
 import pymysql
 import pymysql.cursors
 import pandas as pd
@@ -42,7 +43,7 @@ def get_engine():
     Returns:
             [engine] the sqlalchemy engine
     '''
-    engine = create_engine(DB_URL, echo=False, poolclass=NullPool)
+    engine = create_engine(DB_URL, echo=False, poolclass=sqlalchemy.pool.NullPool)
     return engine
 
 def send_to_db(df,engine,name):
