@@ -77,7 +77,9 @@ def send_to_db(df,engine,name):
                     data = (ts,event,team_id,channel)
                     cursor.execute(sql,data)
                 else:
-                    df.to_sql(con=engine, name=name, if_exists='append', index=False)
+                    with engine.connect() as conn:
+                        df.to_sql(con=conn, name=name, if_exists='append', index=False)
+                        conn.close()
         except Exception as e:
             raise
         else:
@@ -85,7 +87,9 @@ def send_to_db(df,engine,name):
         finally:
             connection.close()
     else:
-        df.to_sql(con=engine, name=name, if_exists='append', index=False)
+        with engine.connect() as conn:
+            df.to_sql(con=conn, name=name, if_exists='append', index=False)
+            conn.close()
 
 def get_access_token(user_id):
     '''
