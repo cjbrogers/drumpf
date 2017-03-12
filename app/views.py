@@ -149,7 +149,7 @@ def inbound():
             connection = models.connect()
             try:
                 with connection.cursor() as cursor:
-                    sql = "SELECT ts FROM `messages` WHERE event LIKE %s AND team=%s AND channel=%s"
+                    sql = "SELECT ts FROM `messages` WHERE event LIKE %s AND team_id=%s AND channel=%s"
                     event = "bid_buttons%"
                     data = (event,team_id,bot_im_id)
                     cursor.execute(sql,data)
