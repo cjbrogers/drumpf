@@ -148,7 +148,7 @@ class Scoring():
         for player_id in self.bot.users_in_game:
             bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
             print "  bot_im_id:",bot_im_id
-            event = "pm_scoreboard_" + int(self.bot.current_game.current_round)
+            event = "pm_scoreboard_" + str(self.bot.current_game.current_round)
             ts = models.get_ts(bot_im_id,event,self.bot.team_id)
             resp = self.slack_client.api_call(
                 "chat.update",

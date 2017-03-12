@@ -23,6 +23,8 @@ class Bid():
         Args:
                 [player_id] the player's id of whom to post the bid buttons to
         """
+        print "present_bid_buttons(self, player_id)"
+        
         button_indices = []
         for player in self.bot.current_game.players:
             if player.id == player_id:
