@@ -165,8 +165,8 @@ def inbound():
 
             attachments = [
                 {
-                    "title": "Waiting on other players..."
-                    "fallback": "card played"
+                    "title": "Waiting on other players...",
+                    "fallback": "card played",
                     "color": "#9E9E9E",
                     "callback_id":"interactify",
                 }]
