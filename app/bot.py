@@ -389,7 +389,7 @@ class DrumpfBot():
                 elif (idx % 5) != 0: # add the next 4
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
-                    attachments = helper_functions.interactify(five_card_set,self.first_set,msg)
+                    attachments = helper_functions.interactify(five_card_set,self.first_set,self.current_game.current_round,msg)
                     self.slack_client.api_call("chat.update",
                                                 channel=bot_im_id,
                                                 as_user=True,
@@ -399,7 +399,7 @@ class DrumpfBot():
                     five_card_set.clear() # clear the set
                     five_card_set[idx] = formatted_cards[idx] # add the first card of the next set
                 if len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
-                    attachments = helper_functions.interactify(five_card_set,self.first_set,msg)
+                    attachments = helper_functions.interactify(five_card_set,self.first_set,self.current_game.current_round,msg)
                     self.slack_client.api_call("chat.update",
                                                 channel=bot_im_id,
                                                 as_user=True,
@@ -409,7 +409,7 @@ class DrumpfBot():
         # there are less than 5 cards in the players hand, so just display them
         else:
             self.first_set = True
-            attachments = helper_functions.interactify(formatted_cards,self.first_set,msg)
+            attachments = helper_functions.interactify(formatted_cards,self.first_set,self.current_game.current_round,msg)
             self.slack_client.api_call("chat.update",
                                         channel=bot_im_id,
                                         as_user=True,
@@ -432,7 +432,7 @@ class DrumpfBot():
         formatted_cards = helper_functions.interactiformat(cards)
         # the player has more than 5 cards, so we have to send them in separate messages
         self.first_set = True
-        attachments = helper_functions.interactify(formatted_cards,self.first_set)
+        attachments = helper_functions.interactify(formatted_cards,self.first_set,self.current_game.current_round)
         resp = self.slack_client.api_call("chat.postMessage",channel=player_id,as_user=True,attachments=attachments)
         pm_ts = resp['ts']
         event = "init_cards_pm_" + str(self.current_game.current_round)

@@ -22,13 +22,13 @@ def interactiformat(cards):
             formatted_cards[idx] = ":{}:".format(card)
     return formatted_cards
 
-def interactify(cards,first_set,msg="Your cards good sir/mam:"):
+def interactify(cards,first_set,current_round,msg="Your cards good sir/mam:"):
     print "interactify(cards)"
     actions = []
     action = {}
     for key, value in cards.iteritems():
         action = {
-                    "name":value,
+                    "name":"play_card_{}".format(current_round),
                     "text":value,
                     "type":"button",
                     "value":key
@@ -70,6 +70,7 @@ def buttonify_bids(bid_set,first_set):
             {
                 "title":"What's your bid for the round?",
                 "fallback":"Place a bid.",
+                "color":"#4CAF50",
                 "callback_id":"buttonify_bids",
                 "attachment_type":"default",
                 "actions":actions
