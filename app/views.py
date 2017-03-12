@@ -146,7 +146,8 @@ def inbound():
             slack_client = SlackClient(bot_access_token)
             bot_im_id = models.get_bot_im_id(user_id,team_id)
             for i in range(1,(no_button_sets+1)):
-                ts = models.get_ts(bot_im_id,"bid_buttons_{}".format(i),team_id)
+                print str(i)
+                ts = models.get_ts(bot_im_id,"bid_buttons_{}".format(str(i)),team_id)
                 slack_client.api_call("chat.delete",
                                         channel=bot_im_id,
                                         ts=ts,
