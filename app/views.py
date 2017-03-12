@@ -198,6 +198,18 @@ def inbound():
             ts = models.get_ts(bot_im_id,event,team_id)
 
             slack_client.api_call("chat.delete", channel=bot_im_id,ts=ts,as_user=True)
+
+            access_token = models.get_access_token(user_id)
+            slack_client = SlackClient(access_token)
+            BOT_ID = models.get_bot_user_id(bot_access_token)
+            AT_BOT = "<@" + BOT_ID + ">"
+            resp = slack_client.api_call("chat.postMessage",
+                                        channel=channel_id,
+                                        text = AT_BOT +" {}".format(value),
+                                        as_user=True)
+            if resp['ts']:
+                ts = resp['ts']
+                slack_client.api_call("chat.delete", channel=channel_id,ts=ts,as_user=True)
         else:
             access_token = models.get_access_token(user_id)
             slack_client = SlackClient(access_token)
