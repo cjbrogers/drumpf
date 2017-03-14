@@ -19,36 +19,40 @@ from round import Round
 import trump_suit
 from trump_suit import TrumpSuit
 
+
 class DrumpfBot():
 
-    def __init__(self): # drumpf-scoreboard: C4AK56EQ7
+    def __init__(self):  # drumpf-scoreboard: C4AK56EQ7
         self.BOT_ID = ""
         self.AT_BOT = ""
         self.BOT_TOKEN = ""
         self.slack_client = None
         self.slack = None
-        self.users_in_game = deque([]) #[user_id, user_id...]
-        self.user_ids_to_username = {} #{'USERID': 'James'}
-        self.channel_ids_to_name = {} #{'CHANNELID': "#drumpf-play"}
+        self.users_in_game = deque([])  # [user_id, user_id...]
+        self.user_ids_to_username = {}  # {'USERID': 'James'}
+        self.channel_ids_to_name = {}  # {'CHANNELID': "#drumpf-play"}
         self.main_channel_id = ""
         self.game_scorecard = defaultdict(int)
 
-        self.player_trump_card_queue = [] #['USERID']
-        self.player_bid_queue = [] #['USERID1', 'USERID2', 'USERID3']
-        self.player_turn_queue = [] #['USERID1', 'USERID2', 'USERID3']
+        self.player_trump_card_queue = []  # ['USERID']
+        self.player_bid_queue = []  # ['USERID1', 'USERID2', 'USERID3']
+        self.player_turn_queue = []  # ['USERID1', 'USERID2', 'USERID3']
         self.player_turn_queue_reference = []
         self.dealer_for_current_round = None
 
-        #ROUND VARIABLES
-        self.player_bids_for_current_round = {} #{"U3LCLSTA5": 1, "U3MP47XAB": 0}
-        self.current_game = None #DrumpfGame.Game() object
+        # ROUND VARIABLES
+        self.player_bids_for_current_round = {}  # {"U3LCLSTA5": 1, "U3MP47XAB": 0}
+        self.current_game = None  # DrumpfGame.Game() object
         self.player_points_for_round = defaultdict(int)
-        self.leading_suit = None #string
-        self.zero_point_players = [] #if users play blacks card in a sub round they get 0 points for that round
-        self.shower_card_holder = [] # holds the player who holds the golden shower card
+        self.leading_suit = None  # string
+        # if users play blacks card in a sub round they get 0 points for that
+        # round
+        self.zero_point_players = []
+        self.shower_card_holder = []  # holds the player who holds the golden shower card
 
-        #SUB-ROUND VARIABLES
-        self.cards_played_for_sub_round = [] #this mirrors player_turn_queue as to determine a winner
+        # SUB-ROUND VARIABLES
+        # this mirrors player_turn_queue as to determine a winner
+        self.cards_played_for_sub_round = []
         self.winner_for_sub_round = None
         self.sub_rounds_played = 0
         self.winning_sub_round_card = None
@@ -56,9 +60,9 @@ class DrumpfBot():
         self.attachments = None
         self.game_started = False
         self.game_created = False
-        self.vm_cards = ["vm_blacks","vm_hombres","vm_thieves","vm_muslims"]
-        self.t_cards = ["t_comey","t_nasty","t_russian","t_shower"]
-        self.d_cards = ["d_wall","d_clinton","d_ivanka","d_pussy"]
+        self.vm_cards = ["vm_blacks", "vm_hombres", "vm_thieves", "vm_muslims"]
+        self.t_cards = ["t_comey", "t_nasty", "t_russian", "t_shower"]
+        self.d_cards = ["d_wall", "d_clinton", "d_ivanka", "d_pussy"]
         self.drumpfmendous_card_first = None
         self.first_card_sub_round = 0
         self.dealer_prompted_for_trump_suit = False
@@ -88,10 +92,11 @@ class DrumpfBot():
         print "  user_id: ", user_id
         print "  player: ", self.user_ids_to_username[user_id]
         team_id = models.get_team_id(user_id)
-        print "  team_id: ",team_id
+        print "  team_id: ", team_id
 
         attachments = None
-        username = self.user_ids_to_username[user_id] #user who sent the message
+        # user who sent the message
+        username = self.user_ids_to_username[user_id]
 
         response = "Wrong! Bing-bing-bing! Try `@drumpfbot help` for a tremendous list of available commands."
 
@@ -104,8 +109,11 @@ class DrumpfBot():
                 self.winning_points = 1000
             self.game_created == True
             self.users_in_game.append(user_id)
-            self.users_in_game.append('U44V02PDY') #Roberto U3LCLSTA5 Alex U3LNCN0F3 donny_drumpfbot U41R44L82 Cam U3N36HRHU James U3MP47XAB Testicle U44V02PDY
-            self.slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+            # Roberto U3LCLSTA5 Alex U3LNCN0F3 donny_drumpfbot U41R44L82 Cam
+            # U3N36HRHU James U3MP47XAB Testicle U44V02PDY
+            self.users_in_game.append('U44V02PDY')
+            self.slack_client.api_call(
+                "chat.delete", channel=channel, ts=ts, as_user=True)
             self.handle_command("start game", channel, user_id, ts)
             return
 
@@ -117,7 +125,8 @@ class DrumpfBot():
             if command.lower().startswith("create game 1000"):
                 self.winning_points = 1000
             self.game_created == True
-            self.slack_client.api_call("chat.delete", channel=channel,ts=ts,as_user=True)
+            self.slack_client.api_call(
+                "chat.delete", channel=channel, ts=ts, as_user=True)
             if len(self.users_in_game) == 0:
                 response = "`Playing "
                 if self.winning_points:
@@ -127,26 +136,28 @@ class DrumpfBot():
 
                 self.users_in_game.append(user_id)
 
-                resp = self.slack_client.api_call("chat.postMessage", channel=channel,text=response,as_user=True)
+                resp = self.slack_client.api_call(
+                    "chat.postMessage", channel=channel, text=response, as_user=True)
                 game_play_ts = resp['ts']
                 event = "game_play"
-                models.log_message_ts(game_play_ts,channel,event,team_id)
+                models.log_message_ts(game_play_ts, channel, event, team_id)
 
-                response = "Hey there team! <@{}> wants to play a game of drumpf!".format(username)
+                response = "Hey there team! <@{}> wants to play a game of drumpf!".format(
+                    username)
                 attachments = [
                     {
-                        "title":"Feel free to add yourself to the game queue:",
-                        "fallback":"Add me to the game:",
-                        "callback_id":"add me",
+                        "title": "Feel free to add yourself to the game queue:",
+                        "fallback": "Add me to the game:",
+                        "callback_id": "add me",
                         "color": "#673AB7",
-                        "attachment_type":"default",
+                        "attachment_type": "default",
                         "actions": [
                             {
-                                "name":"add me",
-                                "text":"add me",
-                                "style":"danger",
-                                "type":"button",
-                                "value":"add me"
+                                "name": "add me",
+                                "text": "add me",
+                                "style": "danger",
+                                "type": "button",
+                                "value": "add me"
                             }
                         ]
                     }]
@@ -164,20 +175,21 @@ class DrumpfBot():
         if command.lower().startswith("restart"):
             response = "Application restarted."
             resp = self.slack_client.api_call("chat.postMessage",
-                                            channel=channel,
-                                            text=response,
-                                            as_user=True,
-                                            attachments=attachments)
+                                              channel=channel,
+                                              text=response,
+                                              as_user=True,
+                                              attachments=attachments)
             restart_ts = resp['ts']
             event = "restart"
-            models.log_message_ts(restart_ts,channel,event,team_id)
+            models.log_message_ts(restart_ts, channel, event, team_id)
             return self.restart_program()
 
         if command.lower().startswith("remove me") and (self.game_started == False) and (self.game_created == True):
             if user_id not in self.users_in_game:
                 response = "You haven't been added, so how can I remove you? Click `add me` if you want in."
             else:
-                response = "Okay, {} removed from the game queue. When you have two or more players, click `start game`.".format(username)
+                response = "Okay, {} removed from the game queue. When you have two or more players, click `start game`.".format(
+                    username)
                 self.users_in_game.remove(user_id)
 
         if command.lower().startswith("add me"):
@@ -193,56 +205,56 @@ class DrumpfBot():
                     attachments = None
                     if len(self.users_in_game) >= 2:
                         attachments = [
-                        {
-                            "title":"Click start game once everyone is in",
-                            "fallback":"Start the game or continue adding players.",
-                            "callback_id":"start_add",
-                            "color": "#3AA3E3",
-                            "attachment_type":"default",
-                            "actions": [
-                                {
-                                    "name":"add me",
-                                    "text":"add me",
-                                    "style":"danger",
-                                    "type":"button",
-                                    "value":"add me"
-                                },
-                                {
-                                    "name":"start game",
-                                    "text":"start game",
-                                    "style":"primary",
-                                    "type":"button",
-                                    "value":"start game",
-                                    "confirm":
+                            {
+                                "title": "Click start game once everyone is in",
+                                "fallback": "Start the game or continue adding players.",
+                                "callback_id": "start_add",
+                                "color": "#3AA3E3",
+                                "attachment_type": "default",
+                                "actions": [
                                     {
-                                        "title": "Are you sure?",
-                                        "text": "Has everyone added themselves to the game already?",
-                                        "ok_text": "Yes",
-                                        "dismiss_text": "No"
-                                    }
-                                },
-                                {
-                                    "name":"Lie. Cheat. Win!",
-                                    "text":"mystery",
-                                    "type":"button",
-                                    "value":"gif",
-                                    "confirm":
+                                        "name": "add me",
+                                        "text": "add me",
+                                        "style": "danger",
+                                        "type": "button",
+                                        "value": "add me"
+                                    },
+                                    {
+                                        "name": "start game",
+                                        "text": "start game",
+                                        "style": "primary",
+                                        "type": "button",
+                                        "value": "start game",
+                                        "confirm":
+                                        {
+                                            "title": "Are you sure?",
+                                            "text": "Has everyone added themselves to the game already?",
+                                            "ok_text": "Yes",
+                                            "dismiss_text": "No"
+                                        }
+                                    },
+                                    {
+                                        "name": "Lie. Cheat. Win!",
+                                        "text": "mystery",
+                                        "type": "button",
+                                        "value": "gif",
+                                        "confirm":
                                         {
                                             "title": "Do you dare?",
                                             "text": "There's no going back if you do this.",
                                             "ok_text": "I dare",
                                             "dismiss_text": "Nope"
                                         }
-                                }
-                            ]
-                        }]
+                                    }
+                                ]
+                            }]
 
                     self.slack_client.api_call("chat.update",
-                                                channel=channel,
-                                                text=response,
-                                                ts=self.ts,
-                                                attachments=attachments,
-                                                as_user=True)
+                                               channel=channel,
+                                               text=response,
+                                               ts=self.ts,
+                                               attachments=attachments,
+                                               as_user=True)
                     return
 
         if command.lower().startswith("start game"):
@@ -258,29 +270,30 @@ class DrumpfBot():
                 response = ">>>Starting a new game of Drumpf!\n"
                 self.score.initialize_scores()
                 self.slack_client.api_call("chat.update",
-                                          channel=channel,
-                                          text=response,
-                                          ts=self.ts,
-                                          as_user=True)
+                                           channel=channel,
+                                           text=response,
+                                           ts=self.ts,
+                                           as_user=True)
                 # self.ts = resp['ts']
                 self.play_game_of_drumpf_on_slack(self.users_in_game, channel)
                 return
 
         if command.lower().startswith("commands") or command.lower().startswith("help"):
             response = \
-            ">>>Certainly, my liege. The available commands are: \n\n" \
-            "*[bigly]*\tIt's a word.\n" \
-            "*[cancel]*\tStop the current game.\n" \
-            "*[commands]*\tView available commands.\n" \
-            "*[comp]*\tView the card deck composition.\n" \
-            "*[remove me]*\tRemove yourself from the current game queue.\n" \
-            "*[rules/help]*\tView the rules of the game.\n" \
-            "*[< _these_ > cards]*\tReplace < _these_ > with the cards you wish to view. i.e. 'Drumpf' cards.\n"
+                ">>>Certainly, my liege. The available commands are: \n\n" \
+                "*[bigly]*\tIt's a word.\n" \
+                "*[cancel]*\tStop the current game.\n" \
+                "*[commands]*\tView available commands.\n" \
+                "*[comp]*\tView the card deck composition.\n" \
+                "*[remove me]*\tRemove yourself from the current game queue.\n" \
+                "*[rules/help]*\tView the rules of the game.\n" \
+                "*[< _these_ > cards]*\tReplace < _these_ > with the cards you wish to view. i.e. 'Drumpf' cards.\n"
 
         if command.lower().startswith("rules") or command.lower().startswith("help"):
             response = ">>>Welcome to Drumpf! Check out the rules if you need some help: \n\n"
             title_link = "http://cjbrogers.com/drumpf/DrumpfGameDesign.html"
-            attachments = [{"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
+            attachments = [
+                {"title": "DRUMPF! The Rules - Click here to learn more", "title_link": title_link}]
 
         if command.lower().startswith("bigly"):
             response = ">>>*bigly* (ˈbɪɡlɪ) \n_adj_\n\t\t_archaic_ comfortably habitable"
@@ -293,12 +306,14 @@ class DrumpfBot():
         if command.lower().startswith("visible minority cards"):
             response = ">>>Racism is bad. \n"
             image_url = "https://s27.postimg.org/8ffx0pigz/vmcards.png"
-            attachments = [{"title": "Visible Minority Cards", "image_url": image_url}]
+            attachments = [
+                {"title": "Visible Minority Cards", "image_url": image_url}]
 
         if command.lower().startswith("tremendous cards"):
             response = ">>>Your wish is my command: \n"
             image_url = "https://s23.postimg.org/6hntc9lej/tcards.png"
-            attachments = [{"title": "Tremendous Cards", "image_url": image_url}]
+            attachments = [
+                {"title": "Tremendous Cards", "image_url": image_url}]
 
         if command.lower().startswith("drumpf cards"):
             response = ">>>At your service, you sexy thing you: \n"
@@ -308,15 +323,16 @@ class DrumpfBot():
         if command.lower().startswith("comp"):
             response = ">>>Here's the card deck composition: \n"
             image_url = "https://s30.postimg.org/r28wxm89t/cards.png"
-            attachments = [{"title": "Card Deck Composition", "image_url": image_url}]
+            attachments = [
+                {"title": "Card Deck Composition", "image_url": image_url}]
 
         if response:
             resp = self.slack_client.api_call("chat.postMessage",
-                                            channel=channel,
-                                            text=response,
-                                            as_user=True, attachments=attachments)
+                                              channel=channel,
+                                              text=response,
+                                              as_user=True, attachments=attachments)
 
-    def handle_private_message(self,command,user_id,ts):
+    def handle_private_message(self, command, user_id, ts):
         """
         Controls how a private message incoming from a user is handled
 
@@ -371,50 +387,56 @@ class DrumpfBot():
         print "  player: ", self.user_ids_to_username[player_id]
         print "  cards: ", cards
 
-        bot_im_id = models.get_bot_im_id(player_id,self.team_id)
+        bot_im_id = models.get_bot_im_id(player_id, self.team_id)
         event = "init_cards_pm_" + str(self.current_game.current_round)
-        ts = models.get_ts(bot_im_id,event,self.team_id)
-
+        ts = models.get_ts(bot_im_id, event, self.team_id)
 
         formatted_cards = helper_functions.interactiformat(cards)
-        # the player has more than 5 cards, so we have to send them in separate messages
+        # the player has more than 5 cards, so we have to send them in separate
+        # messages
         self.first_set = False
         if len(cards) > 5:
             print "  len(cards) > 5"
             five_card_set = {}
             for idx, card in enumerate(cards):
-                if idx == 0: # add the first card
+                if idx == 0:  # add the first card
                     self.first_set = True
                     five_card_set[idx] = formatted_cards[idx]
-                elif (idx % 5) != 0: # add the next 4
+                elif (idx % 5) != 0:  # add the next 4
                     five_card_set[idx] = formatted_cards[idx]
-                elif (idx % 5) == 0: # we've hit the 5th card that sends a new message
-                    attachments = helper_functions.interactify(five_card_set,self.first_set,self.current_game.current_round,msg)
+                elif (idx % 5) == 0:  # we've hit the 5th card that sends a new message
+                    attachments = helper_functions.interactify(
+                        five_card_set, self.first_set, self.current_game.current_round, msg)
                     self.slack_client.api_call("chat.update",
-                                                channel=bot_im_id,
-                                                as_user=True,
-                                                ts=ts,
-                                                attachments=attachments)
+                                               channel=bot_im_id,
+                                               as_user=True,
+                                               ts=ts,
+                                               attachments=attachments)
                     self.first_set = False
-                    five_card_set.clear() # clear the set
-                    five_card_set[idx] = formatted_cards[idx] # add the first card of the next set
-                if len(cards) == (idx + 1): # we've reached the last card so post the remaining cards to the user
-                    attachments = helper_functions.interactify(five_card_set,self.first_set,self.current_game.current_round,msg)
+                    five_card_set.clear()  # clear the set
+                    # add the first card of the next set
+                    five_card_set[idx] = formatted_cards[idx]
+                # we've reached the last card so post the remaining cards to
+                # the user
+                if len(cards) == (idx + 1):
+                    attachments = helper_functions.interactify(
+                        five_card_set, self.first_set, self.current_game.current_round, msg)
                     self.slack_client.api_call("chat.update",
-                                                channel=bot_im_id,
-                                                as_user=True,
-                                                ts=ts,
-                                                attachments=attachments)
+                                               channel=bot_im_id,
+                                               as_user=True,
+                                               ts=ts,
+                                               attachments=attachments)
                     five_card_set.clear()
         # there are less than 5 cards in the players hand, so just display them
         else:
             self.first_set = True
-            attachments = helper_functions.interactify(formatted_cards,self.first_set,self.current_game.current_round,msg)
+            attachments = helper_functions.interactify(
+                formatted_cards, self.first_set, self.current_game.current_round, msg)
             self.slack_client.api_call("chat.update",
-                                        channel=bot_im_id,
-                                        as_user=True,
-                                        ts=ts,
-                                        attachments=attachments)
+                                       channel=bot_im_id,
+                                       as_user=True,
+                                       ts=ts,
+                                       attachments=attachments)
 
     def init_cards_for_player_in_pm(self, player_id, cards):
         """
@@ -430,14 +452,17 @@ class DrumpfBot():
         print "  cards: ", cards
 
         formatted_cards = helper_functions.interactiformat(cards)
-        # the player has more than 5 cards, so we have to send them in separate messages
+        # the player has more than 5 cards, so we have to send them in separate
+        # messages
         self.first_set = True
-        attachments = helper_functions.interactify(formatted_cards,self.first_set,self.current_game.current_round)
-        resp = self.slack_client.api_call("chat.postMessage",channel=player_id,as_user=True,attachments=attachments)
+        attachments = helper_functions.interactify(
+            formatted_cards, self.first_set, self.current_game.current_round)
+        resp = self.slack_client.api_call(
+            "chat.postMessage", channel=player_id, as_user=True, attachments=attachments)
         pm_ts = resp['ts']
         event = "init_cards_pm_" + str(self.current_game.current_round)
-        bot_im_id = models.get_bot_im_id(player_id,self.team_id)
-        models.log_message_ts(pm_ts,bot_im_id,event,self.team_id)
+        bot_im_id = models.get_bot_im_id(player_id, self.team_id)
+        models.log_message_ts(pm_ts, bot_im_id, event, self.team_id)
 
     def play_game_of_drumpf_on_slack(self, players, channel):
         """
@@ -488,8 +513,8 @@ class DrumpfBot():
         print "make_channel(self)"
         resp = self.slack.channels.create(
             name="drumpf-scoreboard"
-            )
-        print "  resp['channel']['id']:",resp['channel']['id']
+        )
+        print "  resp['channel']['id']:", resp['channel']['id']
         self.main_channel_id = resp['channel']['id']
 
     def list_users(self):
@@ -505,7 +530,7 @@ class DrumpfBot():
         users = []
         for member in members:
             users.append(member['id'])
-        print "  users:",users
+        print "  users:", users
         return users
 
     def join_channel(self):
@@ -515,7 +540,7 @@ class DrumpfBot():
         print "join_channel(self)"
         resp = self.slack.channels.join(
             name=self.main_channel_id
-            )
+        )
 
     def restart_program(self):
         """
@@ -535,13 +560,14 @@ class DrumpfBot():
             with connection.cursor() as cursor:
                 sql = "SELECT channel, ts FROM `messages` WHERE team_id=%s"
                 data = (team_id)
-                cursor.execute(sql,data)
+                cursor.execute(sql, data)
                 results = cursor.fetchall()
                 for result in results:
-                    print "  result['channel']:",result['channel']
-                    print "  result['ts']:",result['ts']
+                    print "  result['channel']:", result['channel']
+                    print "  result['ts']:", result['ts']
                     try:
-                        resp = self.slack_client.api_call("chat.delete", channel=result['channel'],ts=result['ts'],as_user=True)
+                        resp = self.slack_client.api_call(
+                            "chat.delete", channel=result['channel'], ts=result['ts'], as_user=True)
                     except:
                         print "  failed on slack_client delete call..."
                     else:
@@ -568,7 +594,7 @@ class DrumpfBot():
                     if 'ts' in output:
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
                     else:
-                        print "SELF.AT_BOT2: ",self.AT_BOT
+                        print "SELF.AT_BOT2: ", self.AT_BOT
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
         return None, None, None, None
 
@@ -581,8 +607,8 @@ class DrumpfBot():
                 [channel_id] (str) the main channel for the team the app is initialized from
         """
         print "initialize(self, user_id, channel)"
-        print "  user_id",user_id
-        print "  channel",channel_id
+        print "  user_id", user_id
+        print "  channel", channel_id
 
         token = models.get_bot_access_token(user_id)
         try:
@@ -595,22 +621,24 @@ class DrumpfBot():
                 print "  test call is OKIE DOKIE"
                 self.BOT_ID = models.get_bot_user_id(token)
                 self.AT_BOT = "<@" + self.BOT_ID + ">"
-                members = self.slack_client.api_call('users.list').get('members')
+                members = self.slack_client.api_call(
+                    'users.list').get('members')
                 for member in members:
                     self.user_ids_to_username[member['id']] = member['name']
                     connection = models.connect()
                     try:
                         with connection.cursor() as cursor:
                             sql = "UPDATE `users` SET name=%s WHERE user_id=%s"
-                            data = (member['name'],member['id'])
-                            cursor.execute(sql,data)
+                            data = (member['name'], member['id'])
+                            cursor.execute(sql, data)
                     except Exception as e:
                         raise
                     else:
                         print "  Successfully updated user name in users table."
                     finally:
                         connection.close()
-                channels = self.slack_client.api_call("channels.list").get('channels')
+                channels = self.slack_client.api_call(
+                    "channels.list").get('channels')
                 for channel in channels:
                     self.channel_ids_to_name[channel['id']] = channel['name']
 
@@ -622,7 +650,7 @@ class DrumpfBot():
                 else:
                     print "  Existing #drumpf-scoreboard channel found..."
                     self.main_channel_id = channel_id
-                    print "  self.main_channel_id: ",self.main_channel_id
+                    print "  self.main_channel_id: ", self.main_channel_id
         except Exception as e:
             print "  Exception raised!"
             raise
@@ -643,25 +671,25 @@ class DrumpfBot():
         self.round_ = round_
         self.team_id = team_id
 
-        READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-        #grab user list and converts it to to a dict of ids to usernames
+        READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
+        # grab user list and converts it to to a dict of ids to usernames
 
         if self.slack_client.rtm_connect():
             print("DRUMPFBOT v0.9 connected and running!")
             message = ""
             attachments = [
                 {
-                    "title":"Select a game style:",
-                    "fallback":"Select a game style:",
-                    "callback_id":"game style",
+                    "title": "Select a game style:",
+                    "fallback": "Select a game style:",
+                    "callback_id": "game style",
                     "color": "#3AA3E3",
-                    "attachment_type":"default",
+                    "attachment_type": "default",
                     "actions": [
                         {
-                            "name":"create game",
-                            "text":"Standard",
-                            "type":"button",
-                            "value":"create game",
+                            "name": "create game",
+                            "text": "Standard",
+                            "type": "button",
+                            "value": "create game",
                             "confirm":
                             {
                                 "title": "Are you sure?",
@@ -671,39 +699,41 @@ class DrumpfBot():
                             }
                         },
                         {
-                            "name":"create game 250",
-                            "text":"First to 250 pts",
-                            "type":"button",
-                            "value":"create game 250"
+                            "name": "create game 250",
+                            "text": "First to 250 pts",
+                            "type": "button",
+                            "value": "create game 250"
                         },
                         {
-                            "name":"create game 500",
-                            "text":"First to 500 pts",
-                            "type":"button",
-                            "value":"create game 500"
+                            "name": "create game 500",
+                            "text": "First to 500 pts",
+                            "type": "button",
+                            "value": "create game 500"
                         },
                         {
-                            "name":"create game 1000",
-                            "text":"First to 1000 pts",
-                            "type":"button",
-                            "value":"create game 1000"
+                            "name": "create game 1000",
+                            "text": "First to 1000 pts",
+                            "type": "button",
+                            "value": "create game 1000"
                         }
                     ]
                 }]
 
-            self.ts = models.get_ts(self.main_channel_id,"wake_bot",self.team_id)
+            self.ts = models.get_ts(
+                self.main_channel_id, "wake_bot", self.team_id)
 
             self.slack_client.api_call("chat.update",
-                                        channel=self.main_channel_id,
-                                        text=message,
-                                        ts = self.ts,
-                                        attachments=attachments,
-                                        as_user=True)
+                                       channel=self.main_channel_id,
+                                       text=message,
+                                       ts=self.ts,
+                                       attachments=attachments,
+                                       as_user=True)
             while True:
                 command, channel, user, ts = self.parse_slack_output()
                 if command and channel:
                     if channel not in self.channel_ids_to_name.keys():
-                        #this (most likely) means that this channel is a PM with the bot
+                        # this (most likely) means that this channel is a PM
+                        # with the bot
                         self.handle_private_message(command, user, ts)
                     else:
                         self.handle_command(command, channel, user, ts)

@@ -5,16 +5,17 @@ import models
 
 SUITS = ["diamonds", "clubs", "hearts", "spades"]
 
+
 class TrumpSuit():
 
-    def __init__(self,bot,score,bid):
+    def __init__(self, bot, score, bid):
         self.bot = bot
         self.slack = self.bot.slack
         self.slack_client = self.bot.slack_client
         self.score = score
         self.bid = bid
 
-    def handle_trump_suit_selection(self,command,user_id):
+    def handle_trump_suit_selection(self, command, user_id):
         """Takes incoming command along with the user id and validates/sets trump suit
 
         Args:
@@ -23,20 +24,23 @@ class TrumpSuit():
         Returns:
         """
         print "handle_trump_suit_selection(command, user_id) "
-        print "  command: ",command
-        print "  user_id: ",user_id
+        print "  command: ", command
+        print "  user_id: ", user_id
         print "  player: ", self.bot.user_ids_to_username[user_id]
 
         response = ""
         current_username = self.bot.user_ids_to_username[self.bot.player_trump_card_queue[0]]
-        #we're waiting for a user to select a trump card
+        # we're waiting for a user to select a trump card
         if user_id != self.bot.player_trump_card_queue[0]:
-            response = "Waiting for <@{}> to select a trump suit".format(current_username)
+            response = "Waiting for <@{}> to select a trump suit".format(
+                current_username)
         elif user_id == self.bot.player_trump_card_queue[0]:
-            #validate that the dealer picked a valid trump suit
+            # validate that the dealer picked a valid trump suit
             if (0 <= int(command) <= 3):
-                self.bot.current_game.current_round_trump_suit = SUITS[int(command)]
-                msg = "<@{}> chose :{}: for the trump suit.\n".format(current_username, SUITS[int(command)])
+                self.bot.current_game.current_round_trump_suit = SUITS[int(
+                    command)]
+                msg = "<@{}> chose :{}: for the trump suit.\n".format(
+                    current_username, SUITS[int(command)])
                 self.score.build_scoreboard(msg)
                 self.score.update_scoreboard(self.bot.scoreboard)
                 self.score.pm_users_scoreboard(self.bot.scoreboard)
@@ -49,7 +53,8 @@ class TrumpSuit():
                     msg = "Play a card."
                     for player in self.bot.current_game.players:
                         if player.id == self.bot.player_turn_queue[0]:
-                            self.bot.display_cards_for_player_in_pm(self.bot.player_turn_queue[0],player.cards_in_hand,msg)
+                            self.bot.display_cards_for_player_in_pm(
+                                self.bot.player_turn_queue[0], player.cards_in_hand, msg)
                 return
             else:
                 print "  That wasn't a valid index for a trump suit."
@@ -73,29 +78,32 @@ class TrumpSuit():
 
         self.bot.player_trump_card_queue.append(player_id)
 
-        attachments =[
+        attachments = [
             {
-                "title":"Please select index for trump suit:",
-                "fallback":"Your interface does not support interactive messages.",
-                "callback_id":"prompt_trump_suit",
+                "title": "Please select index for trump suit:",
+                "fallback": "Your interface does not support interactive messages.",
+                "callback_id": "prompt_trump_suit",
                 "color": "#4CAF50",
-                "attachment_type":"default",
-                "actions":[
-        {"name":"diamonds","text":":diamonds:","type":"button","value":"0"},
-        {"name":"clubs","text":":clubs:","type":"button","value":"1"},
-        {"name":"hearts","text":":hearts:","type":"button","value":"2"},
-        {"name":"spades","text":":spades:","type":"button","value":"3"}]
-        }]
+                "attachment_type": "default",
+                "actions": [
+                    {"name": "diamonds", "text": ":diamonds:",
+                        "type": "button", "value": "0"},
+                    {"name": "clubs", "text": ":clubs:",
+                        "type": "button", "value": "1"},
+                    {"name": "hearts", "text": ":hearts:",
+                        "type": "button", "value": "2"},
+                    {"name": "spades", "text": ":spades:", "type": "button", "value": "3"}]
+            }]
         resp = self.slack_client.api_call(
             "chat.postMessage",
             channel=player_id,
             as_user=True,
             attachments=attachments
-            )
+        )
         ts = resp['ts']
-        bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
+        bot_im_id = models.get_bot_im_id(player_id, self.bot.team_id)
         event = "trump_suit"
-        models.log_message_ts(ts,bot_im_id,event,self.bot.team_id)
+        models.log_message_ts(ts, bot_im_id, event, self.bot.team_id)
 
     def announce_trump_card(self, trump_card):
         """Announces the trump card to the main game channel and each user privately
@@ -105,11 +113,11 @@ class TrumpSuit():
         Returns:
         """
         print "announce_trump_card(self, trump_card) "
-        print "  trump_card: ",trump_card
+        print "  trump_card: ", trump_card
 
         msg = "*Round {}* \n The trump card is: {} \n>_Sub-Round {}_\n".format(
             self.bot.current_game.current_round,
-            helper_functions.emojify_card(trump_card),(self.bot.sub_rounds_played + 1))
+            helper_functions.emojify_card(trump_card), (self.bot.sub_rounds_played + 1))
         self.score.build_scoreboard(msg)
         self.score.update_scoreboard(self.bot.scoreboard)
         self.score.init_pm_scoreboard(self.bot.scoreboard)

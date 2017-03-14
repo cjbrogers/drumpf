@@ -12,8 +12,9 @@ import models
 
 from app import app
 
+
 @app.task
-def launch_bot(user_id,channel,ts,team_id):
+def launch_bot(user_id, channel, ts, team_id):
     '''
     Instantiates the necessary objects to play a game
 
@@ -28,13 +29,14 @@ def launch_bot(user_id,channel,ts,team_id):
     bot = DrumpfBot()
     bot.initialize(user_id, channel)
     score = Scoring(bot, user_id)
-    bid = Bid(bot,score)
-    trump = TrumpSuit(bot,score,bid)
-    round_ = Round(bot,score,trump)
+    bid = Bid(bot, score)
+    trump = TrumpSuit(bot, score, bid)
+    round_ = Round(bot, score, trump)
     bot.main(score, bid, trump, round_, team_id)
 
+
 @app.task
-def log_message_ts(ts,channel,event,team_id):
+def log_message_ts(ts, channel, event, team_id):
     '''
     Logs an incoming message timestamp in the database for the purpose of eventually cleaning up the main message channel
 
@@ -48,4 +50,4 @@ def log_message_ts(ts,channel,event,team_id):
     values = {"event": event, "channel": channel, "ts": ts, "team_id": team_id}
     df = pd.DataFrame(values, index=[0])
     engine = models.get_engine()
-    models.send_to_db(df,engine,'messages')
+    models.send_to_db(df, engine, 'messages')

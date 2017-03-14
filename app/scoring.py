@@ -7,9 +7,10 @@ import models
 import os
 import sys
 
+
 class Scoring():
 
-    def __init__(self,bot,user_id):
+    def __init__(self, bot, user_id):
         print "Initializing Scoring() class."
         self.bot = bot
         self.first_round = True
@@ -18,7 +19,7 @@ class Scoring():
         token = models.get_bot_access_token(user_id)
         # for token in tokens:
         try:
-            print "  bot_access_token: ",token
+            print "  bot_access_token: ", token
             self.BOT_TOKEN = token
             self.slack_client = SlackClient(token)
             test_call = self.slack_client.api_call("users.list")
@@ -29,7 +30,7 @@ class Scoring():
         else:
             print "  successful token retrieval"
 
-    def build_scoreboard(self,msg):
+    def build_scoreboard(self, msg):
         """
         Concatenates the incoming message to a continuous string of scoreboard data
 
@@ -61,54 +62,66 @@ class Scoring():
         Handles the logic for calculating players points
         """
         print "calculate_and_display_points_for_players(self) "
-        msg = "*Round {} over!* _calculating points..._\n".format(self.bot.current_game.current_round)
+        msg = "*Round {} over!* _calculating points..._\n".format(
+            self.bot.current_game.current_round)
         self.build_scoreboard(msg)
         self.update_scoreboard(self.bot.scoreboard)
         self.winning_scores = {}
         for idx, player_id in enumerate(self.bot.users_in_game):
             current_players_bid = self.bot.player_bids_for_current_round[player_id]
-            points_off_from_bid = abs(current_players_bid - self.bot.player_points_for_round[player_id])
+            points_off_from_bid = abs(
+                current_players_bid - self.bot.player_points_for_round[player_id])
             if player_id in self.bot.shower_card_holder and player_id not in self.bot.zero_point_players:
                 self.bot.game_scorecard[player_id] += 175
             elif player_id in self.bot.zero_point_players:
                 self.bot.game_scorecard[player_id] += 0
             elif points_off_from_bid == 0:
-                #The player got his/her bid correctly
-                self.bot.game_scorecard[player_id] += (50 + 25 * current_players_bid)
+                # The player got his/her bid correctly
+                self.bot.game_scorecard[player_id] += (
+                    50 + 25 * current_players_bid)
             else:
-                #player loses 25-points for every point above or below bid
+                # player loses 25-points for every point above or below bid
                 self.bot.game_scorecard[player_id] -= 25 * points_off_from_bid
             if self.bot.game_scorecard[player_id] >= self.bot.winning_points:
                 self.winning_scores[player_id] = self.bot.game_scorecard[player_id]
         self.bot.scores += ">>>*Score Board*\n"
-        print "  ",self.bot.scores
+        print "  ", self.bot.scores
         for player_id in self.bot.users_in_game:
             if player_id in self.bot.shower_card_holder:
-                msg = "><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_\n".format(self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
+                msg = "><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_\n".format(
+                    self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
                 self.bot.scores += msg
             elif player_id in self.bot.zero_point_players:
-                msg = "><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_\n".format(self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
+                msg = "><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_\n".format(
+                    self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
                 self.bot.scores += msg
             else:
-                msg = "><@{}>: *{} Points*\n".format(self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
+                msg = "><@{}>: *{} Points*\n".format(
+                    self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
                 self.bot.scores += msg
 
         self.update_scores(self.bot.scores)
-        self.bot.scoreboard = "*`Previous Round Recap`*\n{}{}".format(self.bot.scoreboard,self.bot.scores)
+        self.bot.scoreboard = "*`Previous Round Recap`*\n{}{}".format(
+            self.bot.scoreboard, self.bot.scores)
         self.pm_users_scoreboard_recap(self.bot.scoreboard)
 
         self.bot.prepare_for_next_round()
         if self.bot.current_game.current_round == self.bot.current_game.final_round:
-            self.present_winner_for_game(self.bot.user_ids_to_username[player_id],player_id)
+            self.present_winner_for_game(
+                self.bot.user_ids_to_username[player_id], player_id)
         elif self.winning_scores:
             if len(self.winning_scores) > 1:
                 self.winning_score = max(self.winning_scores.values())
-                winner = self.winning_scores.keys()[self.winning_scores.values().index(self.winning_score)]
-                self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
+                winner = self.winning_scores.keys(
+                )[self.winning_scores.values().index(self.winning_score)]
+                self.present_winner_for_game(
+                    self.bot.user_ids_to_username[winner], winner)
             else:
                 self.winning_score = self.winning_scores.values()[0]
-                winner = self.winning_scores.keys()[self.winning_scores.values().index(self.winning_score)]
-                self.present_winner_for_game(self.bot.user_ids_to_username[winner],winner)
+                winner = self.winning_scores.keys(
+                )[self.winning_scores.values().index(self.winning_score)]
+                self.present_winner_for_game(
+                    self.bot.user_ids_to_username[winner], winner)
         else:
             self.bot.current_game.play_round()
 
@@ -121,10 +134,10 @@ class Scoring():
         """
         print "pm_users_scoreboard(self, board, attachments=None)"
         for player_id in self.bot.users_in_game:
-            bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
-            print "  bot_im_id:",bot_im_id
+            bot_im_id = models.get_bot_im_id(player_id, self.bot.team_id)
+            print "  bot_im_id:", bot_im_id
             event = "pm_scoreboard_" + str(self.bot.current_game.current_round)
-            ts = models.get_ts(bot_im_id,event,self.bot.team_id)
+            ts = models.get_ts(bot_im_id, event, self.bot.team_id)
             resp = self.slack_client.api_call(
                 "chat.update",
                 channel=bot_im_id,
@@ -133,9 +146,9 @@ class Scoring():
                 as_user=True,
                 attachments=attachments
             )
-            print "RESP:",resp
+            print "RESP:", resp
 
-    def pm_users_scoreboard_recap(self,board,attachments=None):
+    def pm_users_scoreboard_recap(self, board, attachments=None):
         """
         Private messages the relevant users the scoreboard recap for past round
 
@@ -144,10 +157,10 @@ class Scoring():
         """
         print "pm_users_scoreboard_recap(self, board, attachments=None)"
         for player_id in self.bot.users_in_game:
-            bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
-            print "  bot_im_id:",bot_im_id
+            bot_im_id = models.get_bot_im_id(player_id, self.bot.team_id)
+            print "  bot_im_id:", bot_im_id
             event = "pm_scoreboard_" + str(self.bot.current_game.current_round)
-            ts = models.get_ts(bot_im_id,event,self.bot.team_id)
+            ts = models.get_ts(bot_im_id, event, self.bot.team_id)
             resp = self.slack_client.api_call(
                 "chat.update",
                 channel=bot_im_id,
@@ -156,7 +169,7 @@ class Scoring():
                 as_user=True,
                 attachments=attachments
             )
-            print "RESP:",resp
+            print "RESP:", resp
 
     def init_pm_scoreboard(self, board, attachments=None):
         """
@@ -177,8 +190,9 @@ class Scoring():
             )
             self.pm_scoreboard_ts = resp['ts']
             event = "pm_scoreboard_" + str(self.bot.current_game.current_round)
-            bot_im_id = models.get_bot_im_id(player_id,self.bot.team_id)
-            models.log_message_ts(self.pm_scoreboard_ts,bot_im_id,event,self.bot.team_id)
+            bot_im_id = models.get_bot_im_id(player_id, self.bot.team_id)
+            models.log_message_ts(self.pm_scoreboard_ts,
+                                  bot_im_id, event, self.bot.team_id)
 
     def pm_users_scores(self, scores, attachments=None):
         """
@@ -206,7 +220,8 @@ class Scoring():
         msg += ">>>*Score Board*"
 
         for player_id in self.bot.users_in_game:
-            msg += "\n><@{}>: *{} Points*".format(self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
+            msg += "\n><@{}>: *{} Points*".format(
+                self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
 
         resp = self.slack_client.api_call(
             "chat.postMessage",
@@ -217,7 +232,8 @@ class Scoring():
         self.bot.ts_scores = resp['ts']
         team_id = self.bot.team_id
         event = "scores"
-        models.log_message_ts(self.bot.ts_scores,self.bot.main_channel_id,event,team_id)
+        models.log_message_ts(self.bot.ts_scores,
+                              self.bot.main_channel_id, event, team_id)
 
     def update_scores(self, message, attachments=None):
         """
@@ -253,43 +269,53 @@ class Scoring():
         self.bot.first_card_sub_round = 0
 
         if len(self.bot.cards_played_for_sub_round[0]) == 2:
-            card_value_sub_round = str(self.bot.cards_played_for_sub_round[0][0])
+            card_value_sub_round = str(
+                self.bot.cards_played_for_sub_round[0][0])
             card_suit_sub_round = self.bot.cards_played_for_sub_round[0][1]
         else:
             card_value_sub_round = str(self.bot.cards_played_for_sub_round[0])
             card_suit_sub_round = None
         # everyone has played VM cards, first person to play one wins
-        if  all(x[0:3]=="vm_" for x in self.bot.cards_played_for_sub_round):
+        if all(x[0:3] == "vm_" for x in self.bot.cards_played_for_sub_round):
             self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[0]
             self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[0]
             return
         # make sure the t_shower card holder gets set
         if "t_shower" in self.bot.cards_played_for_sub_round:
-            t_shower_idx = self.bot.cards_played_for_sub_round.index("t_shower")
-            self.bot.shower_card_holder.append(self.bot.player_turn_queue_reference[t_shower_idx])
+            t_shower_idx = self.bot.cards_played_for_sub_round.index(
+                "t_shower")
+            self.bot.shower_card_holder.append(
+                self.bot.player_turn_queue_reference[t_shower_idx])
         # make sure the vm_blacks card holder gets set
         if "vm_blacks" in self.bot.cards_played_for_sub_round:
-            vm_blacks_idx = self.bot.cards_played_for_sub_round.index("vm_blacks")
-            self.bot.zero_point_players.append(self.bot.player_turn_queue_reference[vm_blacks_idx])
+            vm_blacks_idx = self.bot.cards_played_for_sub_round.index(
+                "vm_blacks")
+            self.bot.zero_point_players.append(
+                self.bot.player_turn_queue_reference[vm_blacks_idx])
         # Russian Blackmail card wins in every situation
         if "t_russian" in self.bot.cards_played_for_sub_round:
-            t_russian_idx = self.bot.cards_played_for_sub_round.index("t_russian")
+            t_russian_idx = self.bot.cards_played_for_sub_round.index(
+                "t_russian")
             self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[t_russian_idx]
             self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[t_russian_idx]
             return
-        # everyone played Tremendous cards, no t_russian card, so first person to play wins
-        if  all(x[0:2]=="t_" for x in self.bot.cards_played_for_sub_round):
+        # everyone played Tremendous cards, no t_russian card, so first person
+        # to play wins
+        if all(x[0:2] == "t_" for x in self.bot.cards_played_for_sub_round):
             if "t_russian" not in self.bot.cards_played_for_sub_round:
                 self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[0]
                 self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[0]
                 return
         else:
-            #we have to iterate over the cards to determine the winner for the sub-round
+            # we have to iterate over the cards to determine the winner for the
+            # sub-round
             winning_card = None
             trump_suit = self.bot.current_game.current_round_trump_suit
             card_value = None
             card_suit = None
-            visited = False # keeps track of the case of pussy/ivanka/nasty cards all being played same round
+            # keeps track of the case of pussy/ivanka/nasty cards all being
+            # played same round
+            visited = False
             for idx, card in enumerate(self.bot.cards_played_for_sub_round):
                 if len(card) == 2:
                     card_value = str(card[0])
@@ -303,30 +329,38 @@ class Scoring():
                     # comey card steals Clinton's Email Server card
                     if card_value.startswith("d_clinton"):
                         if "t_comey" in self.bot.cards_played_for_sub_round:
-                            comey_card_idx = self.bot.cards_played_for_sub_round.index("t_comey")
+                            comey_card_idx = self.bot.cards_played_for_sub_round.index(
+                                "t_comey")
                             if idx < comey_card_idx:
-                                msg = "{} card steals {} card...\n".format(helper_functions.emojify_card(self.bot.cards_played_for_sub_round[comey_card_idx]),helper_functions.emojify_card(card_value))
+                                msg = "{} card steals {} card...\n".format(helper_functions.emojify_card(
+                                    self.bot.cards_played_for_sub_round[comey_card_idx]), helper_functions.emojify_card(card_value))
                                 self.build_scoreboard(msg)
                                 self.update_scoreboard(self.bot.scoreboard)
                                 self.pm_users_scoreboard(self.bot.scoreboard)
 
-                                self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[comey_card_idx]
-                                self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[comey_card_idx]
+                                self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[
+                                    comey_card_idx]
+                                self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[
+                                    comey_card_idx]
                                 return
                             else:
                                 self.bot.winning_sub_round_card = card
                                 self.bot.winner_for_sub_round = current_player
                                 return
                         elif "t_nasty" in self.bot.cards_played_for_sub_round:
-                            nasty_card_idx = self.bot.cards_played_for_sub_round.index("t_nasty")
+                            nasty_card_idx = self.bot.cards_played_for_sub_round.index(
+                                "t_nasty")
                             if idx < nasty_card_idx:
-                                msg = "{} card negates {} card...\n".format(helper_functions.emojify_card(self.bot.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
+                                msg = "{} card negates {} card...\n".format(helper_functions.emojify_card(
+                                    self.bot.cards_played_for_sub_round[nasty_card_idx]), helper_functions.emojify_card(card_value))
                                 self.build_scoreboard(msg)
                                 self.update_scoreboard(self.bot.scoreboard)
                                 self.pm_users_scoreboard(self.bot.scoreboard)
 
-                                self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[nasty_card_idx]
-                                self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[nasty_card_idx]
+                                self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[
+                                    nasty_card_idx]
+                                self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[
+                                    nasty_card_idx]
                                 return
                             else:
                                 print "  {} card wins".format(card)
@@ -342,32 +376,40 @@ class Scoring():
                     elif card_value.startswith("d_wall"):
                         print "  handling {} card...".format(card_value)
                         if "vm_hombres" in self.bot.cards_played_for_sub_round:
-                            hombres_card_idx = self.bot.cards_played_for_sub_round.index("vm_hombres")
+                            hombres_card_idx = self.bot.cards_played_for_sub_round.index(
+                                "vm_hombres")
                             if idx < hombres_card_idx:
 
-                                msg = "{} card steals {}\n".format(helper_functions.emojify_card(self.bot.cards_played_for_sub_round[hombres_card_idx]),helper_functions.emojify_card(card_value))
+                                msg = "{} card steals {}\n".format(helper_functions.emojify_card(
+                                    self.bot.cards_played_for_sub_round[hombres_card_idx]), helper_functions.emojify_card(card_value))
                                 self.build_scoreboard(msg)
                                 self.update_scoreboard(self.bot.scoreboard)
                                 self.pm_users_scoreboard(self.bot.scoreboard)
 
-                                self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[hombres_card_idx]
-                                self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[hombres_card_idx]
+                                self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[
+                                    hombres_card_idx]
+                                self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[
+                                    hombres_card_idx]
                                 return
                             else:
                                 self.bot.winning_sub_round_card = card
                                 self.bot.winner_for_sub_round = current_player
                                 return
                         elif "t_nasty" in self.bot.cards_played_for_sub_round:
-                            nasty_card_idx = self.bot.cards_played_for_sub_round.index("t_nasty")
+                            nasty_card_idx = self.bot.cards_played_for_sub_round.index(
+                                "t_nasty")
                             if idx < nasty_card_idx:
-                                msg = "{} card negates {} card...\n".format(helper_functions.emojify_card(self.bot.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
+                                msg = "{} card negates {} card...\n".format(helper_functions.emojify_card(
+                                    self.bot.cards_played_for_sub_round[nasty_card_idx]), helper_functions.emojify_card(card_value))
 
                                 self.build_scoreboard(msg)
                                 self.update_scoreboard(self.bot.scoreboard)
                                 self.pm_users_scoreboard(self.bot.scoreboard)
 
-                                self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[nasty_card_idx]
-                                self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[nasty_card_idx]
+                                self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[
+                                    nasty_card_idx]
+                                self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[
+                                    nasty_card_idx]
                                 return
                             else:
                                 self.bot.winning_sub_round_card = card
@@ -386,17 +428,22 @@ class Scoring():
                             return
                         else:
                             if "t_nasty" in self.bot.cards_played_for_sub_round:
-                                nasty_card_idx = self.bot.cards_played_for_sub_round.index("t_nasty")
+                                nasty_card_idx = self.bot.cards_played_for_sub_round.index(
+                                    "t_nasty")
                                 if idx < nasty_card_idx:
                                     visited = True
-                                    msg = "*{} card negates {} card...\n".format(helper_functions.emojify_card(self.bot.cards_played_for_sub_round[nasty_card_idx]),helper_functions.emojify_card(card_value))
+                                    msg = "*{} card negates {} card...\n".format(helper_functions.emojify_card(
+                                        self.bot.cards_played_for_sub_round[nasty_card_idx]), helper_functions.emojify_card(card_value))
 
                                     self.build_scoreboard(msg)
                                     self.update_scoreboard(self.bot.scoreboard)
-                                    self.pm_users_scoreboard(self.bot.scoreboard)
+                                    self.pm_users_scoreboard(
+                                        self.bot.scoreboard)
 
-                                    self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[nasty_card_idx]
-                                    self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[nasty_card_idx]
+                                    self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[
+                                        nasty_card_idx]
+                                    self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[
+                                        nasty_card_idx]
                                     return
                                 else:
                                     self.bot.winning_sub_round_card = card
@@ -413,7 +460,9 @@ class Scoring():
 
                 elif card_value[0:3] == "vm_":
                     if "muslims" in card_value or "thieves" in card_value or "hombres" in card_value:
-                        # to get to this point, t_comey or t_nasty or t_shower must be the only other card and played first, so the VM card wins
+                        # to get to this point, t_comey or t_nasty or t_shower
+                        # must be the only other card and played first, so the
+                        # VM card wins
                         if self.bot.winning_sub_round_card == None:
                             print "  *No self.bot.winning_sub_round_card set so the remaining VM card must be the winner"
                             self.bot.winning_sub_round_card = card
@@ -421,23 +470,30 @@ class Scoring():
                         continue
 
                     if "blacks" in card_value:
-                        # to get to this point, t_comey or t_nasty or t_shower must be the only other card and played first, so no winner is present.
+                        # to get to this point, t_comey or t_nasty or t_shower
+                        # must be the only other card and played first, so no
+                        # winner is present.
                         if self.bot.winning_sub_round_card == None:
                             for t_card in self.bot.t_cards:
                                 if t_card == "t_russian":
                                     print "    *passing on t_russian card"
                                     pass
                                 elif t_card in self.bot.cards_played_for_sub_round:
-                                    t_idx = self.bot.cards_played_for_sub_round.index(t_card)
+                                    t_idx = self.bot.cards_played_for_sub_round.index(
+                                        t_card)
                                     if t_idx < idx:
                                         print "  a t_card has been played before the vm_blacks card, so it wins"
-                                        self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[t_idx]
-                                        self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[t_idx]
+                                        self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[
+                                            t_idx]
+                                        self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[
+                                            t_idx]
                                         return
                                     else:
                                         print "  a t_card has been played after the vm_blacks card, so it loses"
-                                        self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[idx]
-                                        self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[idx]
+                                        self.bot.winning_sub_round_card = self.bot.cards_played_for_sub_round[
+                                            idx]
+                                        self.bot.winner_for_sub_round = self.bot.player_turn_queue_reference[
+                                            idx]
                                         return
                                 else:
                                     print "***SOMEHOW GOT HERE???"
@@ -451,7 +507,7 @@ class Scoring():
                     elif self.bot.winning_sub_round_card[1] == trump_suit:
                         if DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.bot.winning_sub_round_card):
                             print "  trump suit played second beats previous trump suit"
-                            #trump suit played beats previous trump suit
+                            # trump suit played beats previous trump suit
                             self.bot.winning_sub_round_card = card
                             self.bot.winner_for_sub_round = current_player
                     else:
@@ -464,7 +520,7 @@ class Scoring():
                         self.bot.winning_sub_round_card = card
                         self.bot.winner_for_sub_round = current_player
                     elif DrumpfGame.drumpf_deck.index(card) > DrumpfGame.drumpf_deck.index(self.bot.winning_sub_round_card):
-                        print "  the card index of {} is greater than the index of the winning sub-round card ({})".format(card,self.bot.winning_sub_round_card)
+                        print "  the card index of {} is greater than the index of the winning sub-round card ({})".format(card, self.bot.winning_sub_round_card)
                         self.bot.winning_sub_round_card = card
                         self.bot.winner_for_sub_round = current_player
                 elif self.bot.winning_sub_round_card == None:
@@ -476,7 +532,7 @@ class Scoring():
                     print "    {} card passed by".format(card)
                     print "    player {} card has been passed".format(current_player)
 
-    def present_winner_for_game(self,winner,pid):
+    def present_winner_for_game(self, winner, pid):
         """
         Presents a winner for the game, posting to the main Slack channel
 
@@ -486,17 +542,18 @@ class Scoring():
         """
         print "present_winner_for_game(self) "
         score = self.bot.game_scorecard[pid]
-        response = "And our winner for the game is *{}*!\n:cake: :birthday: :fireworks: *Score: `{}`* :fireworks: :birthday: :cake:\n".format(winner,score)
+        response = "And our winner for the game is *{}*!\n:cake: :birthday: :fireworks: *Score: `{}`* :fireworks: :birthday: :cake:\n".format(
+            winner, score)
 
         image_urls = ["https://media.giphy.com/media/ytwDCq9aT3cgEyyYVO/giphy.gif",
-        "https://media.giphy.com/media/YTbZzCkRQCEJa/giphy.gif",
-        "https://media.giphy.com/media/jMBmFMAwbA3mg/giphy.gif",
-        "https://media.giphy.com/media/l0MYxef0mpdcnQnvi/source.gif",
-        "https://media.giphy.com/media/3o7TKtsBMu4xzIV808/giphy.gif",
-        "https://media.giphy.com/media/l3q2Z6S6n38zjPswo/giphy.gif",
-        "https://media.giphy.com/media/kmqCVSHi5phMk/giphy.gif",
-        "https://media.giphy.com/media/9X5zV9eHAqAus/giphy.gif",
-        "https://media.giphy.com/media/Xv0Y0A2GsrZ3G/giphy.gif"]
+                      "https://media.giphy.com/media/YTbZzCkRQCEJa/giphy.gif",
+                      "https://media.giphy.com/media/jMBmFMAwbA3mg/giphy.gif",
+                      "https://media.giphy.com/media/l0MYxef0mpdcnQnvi/source.gif",
+                      "https://media.giphy.com/media/3o7TKtsBMu4xzIV808/giphy.gif",
+                      "https://media.giphy.com/media/l3q2Z6S6n38zjPswo/giphy.gif",
+                      "https://media.giphy.com/media/kmqCVSHi5phMk/giphy.gif",
+                      "https://media.giphy.com/media/9X5zV9eHAqAus/giphy.gif",
+                      "https://media.giphy.com/media/Xv0Y0A2GsrZ3G/giphy.gif"]
         random.shuffle(image_urls)
         image_url = image_urls[0]
         attachments = [
@@ -510,10 +567,10 @@ class Scoring():
             channel=self.bot.main_channel_id,
             text=response,
             ts=self.bot.ts,
-            attachments = attachments,
+            attachments=attachments,
             as_user=True
         )
         for player in self.bot.current_game.players:
-            self.bot.private_message_user(player.id,response,attachments)
+            self.bot.private_message_user(player.id, response, attachments)
         # TODO: Prompt user if they wish to clear the main channel or not (also use this to restart the program)
         # self.bot.restart_program()

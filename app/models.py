@@ -36,6 +36,7 @@ def connect():
         print "  Database successfully connected."
         return connection
 
+
 def get_engine():
     '''
     Creates and returns sqlalchemy engine for database storage
@@ -43,10 +44,12 @@ def get_engine():
     Returns:
             [engine] the sqlalchemy engine
     '''
-    engine = create_engine(DB_URL, echo=False, poolclass=sqlalchemy.pool.NullPool)
+    engine = create_engine(
+        DB_URL, echo=False, poolclass=sqlalchemy.pool.NullPool)
     return engine
 
-def send_to_db(df,engine,name):
+
+def send_to_db(df, engine, name):
     '''
     Sends the data in the pandas dataframe to a table
 
@@ -55,7 +58,7 @@ def send_to_db(df,engine,name):
     '''
     print "send_to_db(df,engine,name)"
 
-    if name=="messages":
+    if name == "messages":
         connection = connect()
         try:
             with connection.cursor() as cursor:
@@ -64,24 +67,25 @@ def send_to_db(df,engine,name):
                 team_id = df.iloc[0]['team_id']
                 channel = df.iloc[0]['channel']
                 ts = df.iloc[0]['ts']
-                print "  EVENT:",event
-                print "  TEAM_ID:",team_id
-                print "  TS:",ts
+                print "  EVENT:", event
+                print "  TEAM_ID:", team_id
+                print "  TS:", ts
 
                 sql = "SELECT * FROM `messages` WHERE event=%s AND team_id=%s AND channel=%s"
-                data = (event,team_id,channel)
-                cursor.execute(sql,data)
+                data = (event, team_id, channel)
+                cursor.execute(sql, data)
                 messages = cursor.fetchall()
-                print "  messages: ",messages
+                print "  messages: ", messages
                 if messages:
                     print "MESSAGES"
                     sql = "UPDATE `messages` SET ts=%s WHERE event=%s AND team_id=%s AND channel=%s"
-                    data = (ts,event,team_id,channel)
-                    cursor.execute(sql,data)
+                    data = (ts, event, team_id, channel)
+                    cursor.execute(sql, data)
                 else:
                     print "NOT MESSAGES"
                     with engine.connect() as conn:
-                        df.to_sql(con=conn, name=name, if_exists='append', index=False)
+                        df.to_sql(con=conn, name=name,
+                                  if_exists='append', index=False)
                         conn.close()
         except Exception as e:
             raise
@@ -93,6 +97,7 @@ def send_to_db(df,engine,name):
         with engine.connect() as conn:
             df.to_sql(con=conn, name=name, if_exists='append', index=False)
             conn.close()
+
 
 def get_access_token(user_id):
     '''
@@ -112,10 +117,10 @@ def get_access_token(user_id):
             # Read a single record
             sql = "SELECT DISTINCT access_token FROM `users` WHERE user_id=%s"
             data = (user_id)
-            cursor.execute(sql,data)
+            cursor.execute(sql, data)
             token = cursor.fetchall()
-            print "  token: ",token
-            print "  token[0]['access_token']: ",token[0]['access_token']
+            print "  token: ", token
+            print "  token[0]['access_token']: ", token[0]['access_token']
             return token[0]['access_token']
     except Exception as e:
         raise
@@ -123,6 +128,7 @@ def get_access_token(user_id):
         print "  Success retrieving user access tokens."
     finally:
         connection.close()
+
 
 def get_bot_access_token(user_id):
     '''
@@ -138,9 +144,9 @@ def get_bot_access_token(user_id):
             # Read a single record
             sql = "SELECT DISTINCT bot_access_token FROM `users` WHERE user_id=%s"
             data = (user_id)
-            cursor.execute(sql,data)
+            cursor.execute(sql, data)
             token = cursor.fetchall()
-            print "  token: ",token[0]['bot_access_token']
+            print "  token: ", token[0]['bot_access_token']
             return token[0]['bot_access_token']
     except Exception as e:
         raise
@@ -148,6 +154,7 @@ def get_bot_access_token(user_id):
         print "  Success retrieving bot access token."
     finally:
         connection.close()
+
 
 def get_bot_user_id(token):
     '''
@@ -166,10 +173,10 @@ def get_bot_user_id(token):
             # Read a single record
             sql = "SELECT DISTINCT bot_user_id FROM `users` WHERE bot_access_token=%s"
             data = (token)
-            cursor.execute(sql,data)
+            cursor.execute(sql, data)
             response = cursor.fetchall()
             bot_user_id = response[0]['bot_user_id']
-            print "  bot_user_id: ",bot_user_id
+            print "  bot_user_id: ", bot_user_id
             return bot_user_id
     except Exception as e:
         raise
@@ -177,6 +184,7 @@ def get_bot_user_id(token):
         print "  Success retrieving bot user id."
     finally:
         connection.close()
+
 
 def get_team_id(user_id):
     '''
@@ -195,10 +203,10 @@ def get_team_id(user_id):
             # Read a single record
             sql = "SELECT DISTINCT team_id FROM `users` WHERE user_id=%s"
             data = (user_id)
-            cursor.execute(sql,data)
+            cursor.execute(sql, data)
             response = cursor.fetchall()
             team_id = response[0]['team_id']
-            print "  team_id: ",team_id
+            print "  team_id: ", team_id
             return team_id
     except Exception as e:
         raise
@@ -207,7 +215,8 @@ def get_team_id(user_id):
     finally:
         connection.close()
 
-def log_message_ts(ts,channel,event,team_id):
+
+def log_message_ts(ts, channel, event, team_id):
     '''
     Logs an incoming message timestamp in the database for the purpose of eventually cleaning up the main message channel
 
@@ -221,7 +230,8 @@ def log_message_ts(ts,channel,event,team_id):
     values = {"event": event, "channel": channel, "ts": ts, "team_id": team_id}
     df = pd.DataFrame(values, index=[0])
     engine = get_engine()
-    send_to_db(df,engine,'messages')
+    send_to_db(df, engine, 'messages')
+
 
 def clear_ts_messages(team_id):
     '''
@@ -235,7 +245,7 @@ def clear_ts_messages(team_id):
         with connection.cursor() as cursor:
             sql = "DELETE FROM `messages` WHERE team_id=%s"
             data = (team_id)
-            cursor.execute(sql,data)
+            cursor.execute(sql, data)
     except Exception as e:
         raise
     else:
@@ -243,7 +253,8 @@ def clear_ts_messages(team_id):
     finally:
         connection.close()
 
-def get_ts(channel,event,team_id):
+
+def get_ts(channel, event, team_id):
     '''
     Retrieves the original message timestamp from the database
 
@@ -257,8 +268,8 @@ def get_ts(channel,event,team_id):
     try:
         with connection.cursor() as cursor:
             sql = "SELECT ts FROM `messages` WHERE team_id=%s AND channel=%s AND event=%s"
-            data = (team_id,channel,event)
-            cursor.execute(sql,data)
+            data = (team_id, channel, event)
+            cursor.execute(sql, data)
             ts_data = cursor.fetchall()
             ts = ts_data[0]['ts']
             return ts
@@ -269,7 +280,8 @@ def get_ts(channel,event,team_id):
     finally:
         connection.close()
 
-def get_bot_im_id(user_id,team_id):
+
+def get_bot_im_id(user_id, team_id):
     '''
     Retrieves bot_im_id from the users table of the db
 
@@ -282,8 +294,8 @@ def get_bot_im_id(user_id,team_id):
     try:
         with connection.cursor() as cursor:
             sql = "SELECT bot_im_id FROM `users` WHERE user_id=%s AND team_id=%s"
-            data = (user_id,team_id)
-            cursor.execute(sql,data)
+            data = (user_id, team_id)
+            cursor.execute(sql, data)
             user_data = cursor.fetchall()
             bot_im_id = user_data[0]['bot_im_id']
             return bot_im_id

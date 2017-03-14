@@ -7,18 +7,23 @@ values = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K"]
 for suit in suits:
     for value in values:
         drumpf_deck.append([value, suit])
-drumpf_deck = drumpf_deck + ["d_pussy","d_wall","d_clinton","d_ivanka"]
-drumpf_deck = drumpf_deck + ["t_russian","t_nasty","t_shower","t_comey"]
+drumpf_deck = drumpf_deck + ["d_pussy", "d_wall", "d_clinton", "d_ivanka"]
+drumpf_deck = drumpf_deck + ["t_russian", "t_nasty", "t_shower", "t_comey"]
 
-builder_deck = ["b_bannon","b_altfact","b_pence","b_media","b_obama","b_eric"]
-builder_deck += ["b_wall","b_wall","b_wall","b_wall","b_wall","b_wall"]
-builder_deck += ["b_green","b_green","b_green","b_green","b_green","b_green"]
-builder_deck += ["b_deport","b_deport","b_deport","b_deport","b_deport","b_deport"]
-builder_deck += ["b_immig","b_immig","b_immig","b_immig","b_immig","b_immig"]
+builder_deck = ["b_bannon", "b_altfact",
+                "b_pence", "b_media", "b_obama", "b_eric"]
+builder_deck += ["b_wall", "b_wall", "b_wall", "b_wall", "b_wall", "b_wall"]
+builder_deck += ["b_green", "b_green",
+                 "b_green", "b_green", "b_green", "b_green"]
+builder_deck += ["b_deport", "b_deport",
+                 "b_deport", "b_deport", "b_deport", "b_deport"]
+builder_deck += ["b_immig", "b_immig",
+                 "b_immig", "b_immig", "b_immig", "b_immig"]
 
 
 def rotate_list(l, n):
     return l[-n:] + l[:-n]
+
 
 class Player:
     def __init__(self, id):
@@ -33,7 +38,8 @@ class Player:
     def receive_builder_card(self, card):
         self.builder_cards_in_hand.append(card)
 
-class Deck: #preshuffled deck
+
+class Deck:  # preshuffled deck
     def __init__(self):
         self.cards = drumpf_deck[:]
         self.builder_cards = builder_deck[:]
@@ -46,11 +52,12 @@ class Deck: #preshuffled deck
     def deal_builder_card(self):
         return self.builder_cards.pop()
 
+
 class Game:
     def __init__(self, players, bot, bid, trump):
         #[Player1, Player2, Player3, ...etc]
         self.players = deque(players)
-        self.final_round = 60/len(players) #i.e. 12 rounds for 5 players
+        self.final_round = 60 / len(players)  # i.e. 12 rounds for 5 players
         self.current_round = 1
         self.current_round_trump_suit = None
         self.bot = bot
@@ -69,13 +76,13 @@ class Game:
         for _ in range(0, self.current_round):
             self.deal_single_card_to_each_player(shuffled_deck)
 
-        #determine trump suit according to default rules
+        # determine trump suit according to default rules
         if len(shuffled_deck.cards) > 0:
             print "  len(shuffled_deck.cards) > 0"
             trump_card = shuffled_deck.cards.pop()
             trump_value = None
             trump_suit = None
-            if len(trump_card) == 2: # regular card
+            if len(trump_card) == 2:  # regular card
                 print "  *dealing with a regular card"
 
                 trump_value = str(trump_card[0])
@@ -87,7 +94,7 @@ class Game:
                 self.bot.current_game.current_round_trump_suit = trump_suit
                 print "  self.bot.current_game.current_round_trump_suit set to: {}".format(self.bot.current_game.current_round_trump_suit)
 
-            else: # special card
+            else:  # special card
                 trump_value = trump_card
                 print "  Trump Value: ", trump_value
                 trump_suit = None
@@ -108,11 +115,13 @@ class Game:
         self.bot.current_game.current_round_trump_suit = trump_suit
         self.trump.announce_trump_card(trump_card)
         for player in self.players:
-            self.bot.init_cards_for_player_in_pm(player.id,player.cards_in_hand)
+            self.bot.init_cards_for_player_in_pm(
+                player.id, player.cards_in_hand)
         self.bid.get_bids_from_players(self.current_round, self.players)
 
         self.players.rotate(1)
-        #dealer is always index 0 of players and we will rotate the array end of each turn
+        # dealer is always index 0 of players and we will rotate the array end
+        # of each turn
 
     def deal_single_card_to_each_player(self, deck):
         print "deal_single_card_to_each_player(self, deck) "
