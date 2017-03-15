@@ -27,6 +27,19 @@ suits = ["diamonds", "clubs", "hearts", "spades"]
 
 # handles interactive button responses for donny_drumpfbot
 
+def post_message_as_user(user_id,channel_id,value):
+    access_token = models.get_access_token(user_id)
+    slack_client = SlackClient(access_token)
+    BOT_ID = models.get_bot_user_id(bot_access_token)
+    AT_BOT = "<@" + BOT_ID + ">"
+    resp = slack_client.api_call("chat.postMessage",
+                                 channel=channel_id,
+                                 text=AT_BOT + " {}".format(value),
+                                 as_user=True)
+    if resp['ts']:
+        ts = resp['ts']
+        slack_client.api_call(
+            "chat.delete", channel=channel_id, ts=ts, as_user=True)
 
 @app.route('/actions', methods=['POST'])
 def inbound():
@@ -55,17 +68,17 @@ def inbound():
     print "  Name received: ", name
 
     bot_access_token = models.get_bot_access_token(user_id)
-    # for token in tokens:
+    slack_client = SlackClient(bot_access_token)
     try:
         if value == "gif":
-            screw_terms = ["screw off", "screw you", "piss off",
-                           "fuck off", "fuck you", "damn you", "you suck"]
-            dammit_terms = ["god dammit", "dammit",
-                            "damn it", "gosh darnit", "damn you"]
-            cry_terms = ["don't cry", "stop crying",
-                         "cry baby", "boo hoo", "so sad"]
-            sucka_terms = ["sucka", "nice try sucka",
-                           "nice try", "better luck next time", "you lose"]
+            screw_terms = ["screw off", "screw you", "piss off", "fuck off",
+                            "fuck you", "damn you", "you suck"]
+            dammit_terms = ["god dammit", "dammit","damn it", "gosh darnit",
+                            "damn you"]
+            cry_terms = ["don't cry", "stop crying", "cry baby", "boo hoo",
+                            "so sad"]
+            sucka_terms = ["sucka", "nice try sucka", "nice try",
+                            "better luck next time", "you lose"]
             search_terms = {"screw you": screw_terms, "dammit": dammit_terms,
                             "don't cry": cry_terms, "sucka": sucka_terms}
 
@@ -99,8 +112,6 @@ def inbound():
                 random.shuffle(image_urls)
                 image_url = image_urls[0]
 
-            ts = models.get_ts(channel_id, "rules", team_id)
-            print "  ts:", ts
             attachments = [
                 {
                     "title": user_name + " says \"" + name + "\"",
@@ -139,7 +150,7 @@ def inbound():
                         }
                     ]
                 }]
-            slack_client = SlackClient(bot_access_token)
+            ts = models.get_ts(channel_id, "rules", team_id)
             resp = slack_client.api_call("chat.update",
                                          channel=channel_id,
                                          text="",
@@ -147,54 +158,30 @@ def inbound():
                                          attachments=attachments,
                                          as_user=True)
         elif name[0:3] == "bid":
-            # no_button_sets = int(name[-1])
-            # print "  no_button_sets:",no_button_sets
-
-            slack_client = SlackClient(bot_access_token)
-            # bot_im_id = models.get_bot_im_id(user_id,team_id)
-
             connection = models.connect()
             try:
                 with connection.cursor() as cursor:
-                    sql = "SELECT ts FROM `messages` WHERE event LIKE %s AND team_id=%s AND channel=%s"
-                    event = "bid_buttons%"
-                    data = (event, team_id, channel_id)
+                    sql = "SELECT ts FROM `messages` WHERE event LIKE %s AND team_id=%s"
+                    event = "bid_buttons_%"
+                    data = (event, team_id)
                     cursor.execute(sql, data)
                     timestamps = cursor.fetchall()
                     for timestamp in timestamps:
-                        print timestamp['ts']
+                        ts = timestamp['ts']
+                        print "  TIMESTAMP: ",ts
                         slack_client.api_call("chat.delete",
                                               channel=channel_id,
-                                              ts=timestamp['ts'],
+                                              ts=ts,
                                               as_user=True)
             except Exception as e:
                 raise
             else:
-                print "  Great success!"
+                print "  Great success deleting bid buttons!"
             finally:
                 connection.close()
-            # for i in range(1,(no_button_sets+1)):
-            #     print str(i)
-            #     ts = models.get_ts(bot_im_id,"bid_buttons_{}".format(str(i)),team_id)
-            #     slack_client.api_call("chat.delete",
-            #                             channel=bot_im_id,
-            #                             ts=ts,
-            #                             as_user=True)
+                post_message_as_user(user_id,channel_id,value)
 
-            access_token = models.get_access_token(user_id)
-            slack_client = SlackClient(access_token)
-            BOT_ID = models.get_bot_user_id(bot_access_token)
-            AT_BOT = "<@" + BOT_ID + ">"
-            resp = slack_client.api_call("chat.postMessage",
-                                         channel=channel_id,
-                                         text=AT_BOT + " {}".format(value),
-                                         as_user=True)
-            if resp['ts']:
-                ts = resp['ts']
-                slack_client.api_call(
-                    "chat.delete", channel=channel_id, ts=ts, as_user=True)
         elif name[0:9] == "play_card":
-            slack_client = SlackClient(bot_access_token)
             bot_im_id = models.get_bot_im_id(user_id, team_id)
             event = "init_cards_pm_" + name[-1]
             ts = models.get_ts(bot_im_id, event, team_id)
@@ -210,61 +197,28 @@ def inbound():
             slack_client.api_call("chat.update",
                                   channel=bot_im_id,
                                   ts=ts,
-                                  text=":white_check_mark:",
+                                  text=">:white_check_mark:",
                                   attachments=attachments,
                                   as_user=True)
+            post_message_as_user(user_id,channel_id,value)
 
-            access_token = models.get_access_token(user_id)
-            slack_client = SlackClient(access_token)
-            BOT_ID = models.get_bot_user_id(bot_access_token)
-            AT_BOT = "<@" + BOT_ID + ">"
-            resp = slack_client.api_call("chat.postMessage",
-                                         channel=channel_id,
-                                         text=AT_BOT + " {}".format(value),
-                                         as_user=True)
-            if resp['ts']:
-                ts = resp['ts']
-                slack_client.api_call(
-                    "chat.delete", channel=channel_id, ts=ts, as_user=True)
         elif name in suits:
-            slack_client = SlackClient(bot_access_token)
             bot_im_id = models.get_bot_im_id(user_id, team_id)
             event = "trump_suit"
             ts = models.get_ts(bot_im_id, event, team_id)
+            slack_client.api_call("chat.delete",
+                                    channel=bot_im_id,
+                                    ts=ts,
+                                    as_user=True)
+            post_message_as_user(user_id,channel_id,value)
 
-            slack_client.api_call(
-                "chat.delete", channel=bot_im_id, ts=ts, as_user=True)
-
-            access_token = models.get_access_token(user_id)
-            slack_client = SlackClient(access_token)
-            BOT_ID = models.get_bot_user_id(bot_access_token)
-            AT_BOT = "<@" + BOT_ID + ">"
-            resp = slack_client.api_call("chat.postMessage",
-                                         channel=channel_id,
-                                         text=AT_BOT + " {}".format(value),
-                                         as_user=True)
-            if resp['ts']:
-                ts = resp['ts']
-                slack_client.api_call(
-                    "chat.delete", channel=channel_id, ts=ts, as_user=True)
         else:
-            access_token = models.get_access_token(user_id)
-            slack_client = SlackClient(access_token)
-            BOT_ID = models.get_bot_user_id(bot_access_token)
-            AT_BOT = "<@" + BOT_ID + ">"
-            resp = slack_client.api_call("chat.postMessage",
-                                         channel=channel_id,
-                                         text=AT_BOT + " {}".format(value),
-                                         as_user=True)
-            if resp['ts']:
-                ts = resp['ts']
-                slack_client.api_call(
-                    "chat.delete", channel=channel_id, ts=ts, as_user=True)
+            post_message_as_user(user_id,channel_id,value)
 
     except Exception as e:
         raise
     else:
-        print "  successful token retrieval"
+        print "  Handled action post successfully!"
 
     return Response(), 200
 
