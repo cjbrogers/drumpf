@@ -197,20 +197,20 @@ def inbound():
             event = "init_cards_pm_" + name[-1]
             ts = models.get_ts(bot_im_id, event, team_id)
 
-            attachments = [
-                {
-                    "title": "Waiting on other players...",
-                    "fallback": "card played",
-                    "color": "#9E9E9E",
-                    "callback_id": "interactify",
-                    "actions": actions
-                }]
+            # attachments = [
+            #     {
+            #         "title": "Waiting on other players...",
+            #         "fallback": "card played",
+            #         "color": "#9E9E9E",
+            #         "callback_id": "interactify",
+            #         # "actions": actions
+            #     }]
 
             slack_client.api_call("chat.update",
                                   channel=bot_im_id,
                                   ts=ts,
                                   text=">:white_check_mark:",
-                                  attachments=attachments,
+                                #   attachments=attachments,
                                   as_user=True)
             post_message_as_user(user_id,channel_id,value)
 
