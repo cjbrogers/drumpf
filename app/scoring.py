@@ -87,14 +87,15 @@ class Scoring():
         self.bot.scores += ">>>*Score Board*\n"
         print "  ", self.bot.scores
         for player_id in self.bot.users_in_game:
-            if player_id in self.bot.shower_card_holder:
-                msg = "><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_\n".format(
-                    self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
-                self.bot.scores += msg
-            elif player_id in self.bot.zero_point_players:
+            if player_id in self.bot.zero_point_players:
                 msg = "><@{}>: *{} Points* _(VM: The Blacks means the player neither loses nor gains points for the round)_\n".format(
                     self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
                 self.bot.scores += msg
+            elif player_id in self.bot.shower_card_holder:
+                msg = "><@{}>: *{} Points* _(Golden Shower card holder wins 175 points for the round)_\n".format(
+                    self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
+                self.bot.scores += msg
+
             else:
                 msg = "><@{}>: *{} Points*\n".format(
                     self.bot.user_ids_to_username[player_id], self.bot.game_scorecard[player_id])
