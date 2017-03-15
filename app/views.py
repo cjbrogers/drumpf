@@ -203,6 +203,7 @@ def inbound():
                     "fallback": "card played",
                     "color": "#9E9E9E",
                     "callback_id": "interactify",
+                    "actions": actions
                 }]
 
             slack_client.api_call("chat.update",

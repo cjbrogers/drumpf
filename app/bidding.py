@@ -24,6 +24,8 @@ class Bid():
                 [player_id] the player's id of whom to post the bid buttons to
         """
         print "present_bid_buttons(self, player_id)"
+
+        bot_im_id = models.get_bot_im_id(player_id, self.bot.team_id)
         button_indices = []
         for player in self.bot.current_game.players:
             if player.id == player_id:
@@ -50,9 +52,6 @@ class Bid():
                                                       attachments=attachments)
                     ts_no_remainder = resp['ts']
                     event = "bid_buttons_" + str(idx)
-
-                    bot_im_id = models.get_bot_im_id(
-                        player_id, self.bot.team_id)
                     models.log_message_ts(
                         ts_no_remainder, bot_im_id, event, self.bot.team_id)
                     self.bot.first_set = False
@@ -67,8 +66,6 @@ class Bid():
                                                       attachments=attachments)
                     ts_remainder = resp['ts']
                     event = "bid_buttons_" + str(len(button_indices))
-                    bot_im_id = models.get_bot_im_id(
-                        player_id, self.bot.team_id)
                     models.log_message_ts(
                         ts_remainder, bot_im_id, event, self.bot.team_id)
                     button_set[:] = []
@@ -82,7 +79,6 @@ class Bid():
                                               attachments=attachments)
             ts = resp['ts']
             event = "bid_buttons_" + str(len(button_indices))
-            bot_im_id = models.get_bot_im_id(player_id, self.bot.team_id)
             models.log_message_ts(ts, bot_im_id, event, self.bot.team_id)
             self.bot.first_set = False
         return
