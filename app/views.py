@@ -28,7 +28,16 @@ suits = ["diamonds", "clubs", "hearts", "spades"]
 # handles interactive button responses for donny_drumpfbot
 
 def post_message_as_user(user_id,channel_id,value):
+    """
+    Posts a message as the user to the given slack channel and then promptly deletes the message so the user doesn't see it
+
+    Args:
+            [user_id] (str)     the id of the user to post as
+            [channel_id] (str)  the channel to post to
+            [value] (int)       the message to post as the user
+    """
     access_token = models.get_access_token(user_id)
+    bot_access_token = models.get_bot_access_token(user_id)
     slack_client = SlackClient(access_token)
     BOT_ID = models.get_bot_user_id(bot_access_token)
     AT_BOT = "<@" + BOT_ID + ">"
@@ -43,7 +52,9 @@ def post_message_as_user(user_id,channel_id,value):
 
 @app.route('/actions', methods=['POST'])
 def inbound():
-
+    """
+    Handles the inbound action logic of a button selection
+    """
     payload = request.form.get('payload')
     data = json.loads(payload)
     token = data['token']
@@ -227,6 +238,9 @@ def inbound():
 
 @app.route('/events', methods=['POST'])
 def events():
+    """
+    Handles the inbound event of a post to the main Slack channel
+    """
     data = json.loads(request.data)
     print data
     # token = data['token']
