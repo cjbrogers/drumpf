@@ -15,7 +15,6 @@ class Bid():
         self.slack = self.bot.slack
         self.score = score
         self.slack_client = self.bot.slack_client
-        self.button_set_count = None
 
     def present_bid_buttons(self, player_id):
         """
@@ -60,7 +59,6 @@ class Bid():
                     button_set[:] = []
                     button_set.append(idx)
                 if (idx + 1) == len(button_indices): # e.g. 6th button, post it
-                    self.button_set_count += 1
                     attachments = helper_functions.buttonify_bids(
                         button_set, self.bot.first_set, no_button_sets)
                     resp = self.slack_client.api_call("chat.postMessage",
