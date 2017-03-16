@@ -168,11 +168,8 @@ class Round():
         print(
             "  Cards played for sub-round: {}".format(self.bot.cards_played_for_sub_round))
 
-        print "    self.bot.player_turn_queue before popleft(): {}".format(self.bot.player_turn_queue)
         self.bot.player_turn_queue.popleft()
-        print "    self.bot.player_turn_queue after popleft(): {}".format(self.bot.player_turn_queue)
 
-        print("  Player turn queue: {}".format(self.bot.player_turn_queue))
         if len(self.bot.player_turn_queue) == 0:
             self.bot.sub_rounds_played += 1
 

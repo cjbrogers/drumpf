@@ -389,8 +389,11 @@ class DrumpfBot():
         print "  cards: ", cards
         set_count = 1
         bot_im_id = models.get_bot_im_id(player_id, self.team_id)
-        no_cards = len(cards)
-        no_card_sets = int(math.ceil(no_cards/5.0))
+        # no_cards = len(cards)
+        # no_card_sets = int(math.ceil(no_cards/5.0))
+        # no_cards = self.current_game.current_round
+        # no_card_sets = int(math.ceil(no_cards/5.0))
+
         ts = None
         event = "waiting"
         ts_wait = models.get_ts(bot_im_id, event, self.team_id)
@@ -414,6 +417,9 @@ class DrumpfBot():
                 elif (idx % 5) != 0:  # add the next 4
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0:  # we've hit the 5th card that sends a new message
+                    if len(cards) < self.current_game.current_round:
+                        # TODO: delete last set of cards
+
                     attachments = helper_functions.interactify(
                         five_card_set, self.first_set, self.current_game.current_round, set_count, msg)
                     if call_type == "chat.update":
@@ -454,6 +460,14 @@ class DrumpfBot():
                     five_card_set.clear()
         # there are less than 5 cards in the players hand, so just display them
         else:
+            if len(cards) < self.current_game.current_round and self.current_game.current_round > 5:
+                # TODO: delete last set of cards
+                event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count+1))
+                ts = models.get_ts(bot_im_id, event, self.team_id)
+                self.slack_client.api_call("chat.delete"
+                                            channel=bot_im_id,
+                                            ts=ts,
+                                            as_user=True)
             set_count = 1
             self.first_set = True
             attachments = helper_functions.interactify(
