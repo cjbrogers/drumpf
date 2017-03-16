@@ -274,7 +274,7 @@ def get_ts(channel, event, team_id):
             ts = ts_data[0]['ts']
             return ts
     except Exception as e:
-        raise
+        return None
     else:
         print "  Successfully retrieved ts from db"
     finally:

@@ -194,8 +194,6 @@ def inbound():
 
         elif name[0:9] == "play_card":
             bot_im_id = models.get_bot_im_id(user_id, team_id)
-            event = "init_cards_pm_" + name[-3:]
-            ts = models.get_ts(bot_im_id, event, team_id)
 
             # attachments = [
             #     {
@@ -206,12 +204,16 @@ def inbound():
             #         # "actions": actions
             #     }]
 
-            slack_client.api_call("chat.update",
-                                  channel=bot_im_id,
-                                  ts=ts,
-                                  text=">:white_check_mark: Waiting for your turn...",
-                                #   attachments=attachments,
-                                  as_user=True)
+            resp = slack_client.api_call("chat.postMessage",
+                                          channel=bot_im_id,
+                                        #   ts=ts,
+                                          text=">:white_check_mark: \nWaiting for your turn...",
+                                        #   attachments=attachments,
+                                          as_user=True)
+            ts = resp['ts']
+            event = "waiting"
+            models.log_message_ts(ts, channel_id, event, team_id)
+
             post_message_as_user(user_id,channel_id,value)
 
         elif name in suits:

@@ -392,6 +392,13 @@ class DrumpfBot():
         no_cards = len(cards)
         no_card_sets = int(math.ceil(no_cards/5.0))
         ts = None
+        event = "waiting"
+        ts_wait = models.get_ts(bot_im_id, event, self.team_id)
+        if ts_wait:
+            slack_client.api_call("chat.delete",
+                                    channel=bot_im_id,
+                                    ts=ts_wait,
+                                    as_user=True)
         formatted_cards = helper_functions.interactiformat(cards)
         # the player has more than 5 cards, so we have to send them in separate
         # messages
