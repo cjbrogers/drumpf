@@ -562,7 +562,7 @@ class DrumpfBot():
                     channel = timestamp['channel']
                     print "  init_cards_pm_ ts: ",ts
                     print "  init_cards_pm_ channel: ",channel
-                    slack_client.api_call("chat.delete",
+                    self.slack_client.api_call("chat.delete",
                                           channel=channel,
                                           ts=ts,
                                           as_user=True)
