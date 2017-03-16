@@ -194,7 +194,7 @@ def inbound():
 
         elif name[0:9] == "play_card":
             bot_im_id = models.get_bot_im_id(user_id, team_id)
-            event = "init_cards_pm_" + name[-1]
+            event = "init_cards_pm_" + name[-3:]
             ts = models.get_ts(bot_im_id, event, team_id)
 
             # attachments = [

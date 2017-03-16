@@ -408,7 +408,7 @@ class DrumpfBot():
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0:  # we've hit the 5th card that sends a new message
                     attachments = helper_functions.interactify(
-                        five_card_set, self.first_set, self.current_game.current_round, msg)
+                        five_card_set, self.first_set, self.current_game.current_round, set_count, msg)
                     if call_type == "chat.update":
                         event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count))
                         ts = models.get_ts(bot_im_id, event, self.team_id)
@@ -431,7 +431,7 @@ class DrumpfBot():
                 # the user
                 if len(cards) == (idx + 1):
                     attachments = helper_functions.interactify(
-                        five_card_set, self.first_set, self.current_game.current_round, msg)
+                        five_card_set, self.first_set, self.current_game.current_round, set_count, msg)
                     if call_type == "chat.update":
                         event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count))
                         ts = models.get_ts(bot_im_id, event, self.team_id)
@@ -450,7 +450,7 @@ class DrumpfBot():
             set_count = 1
             self.first_set = True
             attachments = helper_functions.interactify(
-                formatted_cards, self.first_set, self.current_game.current_round, msg)
+                formatted_cards, self.first_set, self.current_game.current_round, set_count, msg)
             if call_type == "chat.update":
                 event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count))
                 ts = models.get_ts(bot_im_id, event, self.team_id)

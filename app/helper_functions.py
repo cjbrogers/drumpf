@@ -25,13 +25,13 @@ def interactiformat(cards):
     return formatted_cards
 
 
-def interactify(cards, first_set, current_round, msg="Your cards good sir/mam:"):
+def interactify(cards, first_set, current_round, set_count, msg="Your cards good sir/mam:"):
     print "interactify(cards)"
     actions = []
     action = {}
     for key, value in cards.iteritems():
         action = {
-            "name": "play_card_{}".format(current_round),
+            "name": "play_card_{}_{}".format(current_round,set_count),
                     "text": value,
                     "type": "button",
                     "value": key
