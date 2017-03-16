@@ -130,7 +130,7 @@ def inbound():
 
             attachments = [
                 {
-                    "title": user_name + " says \"" + name + "\"",
+                    "title": "",
                     "fallback": "Gifs",
                     "callback_id": "rules_gifs",
                     "color": "#FB8C00",
@@ -169,7 +169,7 @@ def inbound():
             ts = models.get_ts(channel_id, "rules", team_id)
             resp = slack_client.api_call("chat.update",
                                          channel=channel_id,
-                                         text="",
+                                         text=user_name + " says \"" + name + "\"",
                                          ts=ts,
                                          attachments=attachments,
                                          as_user=True)
