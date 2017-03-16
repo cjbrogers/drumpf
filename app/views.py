@@ -12,7 +12,6 @@ import random
 
 import app
 from app import tasks
-from tasks import Task
 import models
 
 
@@ -265,8 +264,7 @@ def events():
                 else:
                     print "  successful deletion of 'play drumpf / restart' user command"
                 if 'play drumpf' in str(v):
-                    task = Task()
-                    task.launch_bot.delay(user_id, channel, ts, team_id)
+                    tasks.launch_bot.delay(user_id, channel, ts, team_id)
                     return Response(), 200
             elif 'previous_message' not in str(k) and 'wake donny_drumpfbot' in str(v):
                 print "  waking up Drumpf!"
