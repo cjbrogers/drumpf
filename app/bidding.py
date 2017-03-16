@@ -120,6 +120,11 @@ class Bid():
 
                     self.bot.player_bid_queue.popleft()
                     if len(self.bot.player_bid_queue) == 0:
+                        msg = "\n>_Sub-Round {}_\n".format(
+                        (self.bot.sub_rounds_played + 1))
+                        self.score.build_scoreboard(msg)
+                        self.score.update_scoreboard(self.bot.scoreboard)
+                        self.score.pm_users_scoreboard(self.bot.scoreboard)
                         # everyone bidded, time to play sub_round
                         for player in self.bot.current_game.players:
                             if player.id == self.bot.player_turn_queue[0]:

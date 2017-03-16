@@ -143,7 +143,7 @@ class DrumpfBot():
                 event = "game_play"
                 models.log_message_ts(game_play_ts, channel, event, team_id)
 
-                response = "Hey there team! <@{}> wants to play a game of drumpf!".format(
+                response = "*Hey there team!* <@{}> wants to play a game of drumpf!".format(
                     username)
                 attachments = [
                     {
@@ -236,7 +236,7 @@ class DrumpfBot():
                                     },
                                     {
                                         "name": "Lie. Cheat. Win!",
-                                        "text": "mystery",
+                                        "text": "add gif reactions",
                                         "type": "button",
                                         "value": "gif",
                                         "confirm":
@@ -368,6 +368,7 @@ class DrumpfBot():
                 [message] (str) the message to post
                 [attachments] (list) a list of attachments to append to the message -optional, defaults to None
         """
+        print "private_message_user(self, user_id, message, attachments=None)"
         self.slack_client.api_call(
             "chat.postMessage",
             channel=user_id,
@@ -417,8 +418,13 @@ class DrumpfBot():
                 elif (idx % 5) != 0:  # add the next 4
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0:  # we've hit the 5th card that sends a new message
-                    # if len(cards) < self.current_game.current_round:
-                    #     # TODO: delete last set of cards
+                    if len(cards) < self.current_game.current_round and self.current_game.current_round > 10:
+                        event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count+1))
+                        ts = models.get_ts(bot_im_id, event, self.team_id)
+                        self.slack_client.api_call("chat.delete",
+                                                    channel=bot_im_id,
+                                                    ts=ts,
+                                                    as_user=True)
 
                     attachments = helper_functions.interactify(
                         five_card_set, self.first_set, self.current_game.current_round, set_count, msg)
@@ -461,7 +467,6 @@ class DrumpfBot():
         # there are less than 5 cards in the players hand, so just display them
         else:
             if len(cards) < self.current_game.current_round and self.current_game.current_round > 5:
-                # TODO: delete last set of cards
                 event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count+1))
                 ts = models.get_ts(bot_im_id, event, self.team_id)
                 self.slack_client.api_call("chat.delete",
@@ -535,6 +540,7 @@ class DrumpfBot():
         Clears all round and sub-round variables
         """
         print "prepare_for_next_round(self) "
+        self.clear_old_messages()
         self.current_game.current_round += 1
         self.scoreboard = ""
         self.scores = ""
@@ -553,6 +559,36 @@ class DrumpfBot():
         self.current_game.current_round_trump_suit = None
         self.first_card_sub_round = 0
         self.player_turn_queue.rotate(1)
+
+    def clear_old_messages(self):
+        """
+            At the end of the round, deletes cards from users hand in preparation for next round.
+        """
+        print "clear_old_messages(self)"
+        connection = models.connect()
+        try:
+            with connection.cursor() as cursor:
+                sql = "SELECT ts, channel FROM `messages` WHERE event LIKE %s AND team_id=%s"
+                event = "init_cards_pm_%"
+                data = (event, self.team_id)
+                cursor.execute(sql, data)
+                timestamps = cursor.fetchall()
+                for timestamp in timestamps:
+                    ts = timestamp['ts']
+                    channel = timestamp['channel']
+                    print "  init_cards_pm_ ts: ",ts
+                    print "  init_cards_pm_ channel: ",channel
+                    slack_client.api_call("chat.delete",
+                                          channel=channel,
+                                          ts=ts,
+                                          as_user=True)
+        except Exception as e:
+            raise
+        else:
+            print "  Great success deleting bid buttons!"
+        finally:
+            connection.close()
+            post_message_as_user(user_id,channel_id,value)
 
     def make_channel(self):
         """
@@ -602,6 +638,10 @@ class DrumpfBot():
         # os.execl(python, python, * sys.argv)
 
     def clear_ts_messages(self):
+        """
+            Clears all messages from the slack channels the game has posted in.
+        """
+        print "clear_ts_messages(self)"
         team_id = self.team_id
         connection = models.connect()
         try:
@@ -623,7 +663,7 @@ class DrumpfBot():
         except Exception as e:
             raise
         else:
-            print "  Successfully updated user name in users table."
+            print "  Successfully deleted all messages from all channels."
         finally:
             connection.close()
 
@@ -642,7 +682,6 @@ class DrumpfBot():
                     if 'ts' in output:
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], output['ts']
                     else:
-                        print "SELF.AT_BOT2: ", self.AT_BOT
                         return output['text'].split(self.AT_BOT)[1].strip().lower(), output['channel'], output['user'], None
         return None, None, None, None
 
@@ -713,6 +752,7 @@ class DrumpfBot():
                     [score/bid/trump/round_] (Obj) The instantiated objects needed to play the game
                     [team_id] (str) The team id of the relevant Slack team
         """
+        print "main(self, score, bid, trump, round_, team_id)"
         self.score = score
         self.bid = bid
         self.trump = trump
@@ -723,7 +763,7 @@ class DrumpfBot():
         # grab user list and converts it to to a dict of ids to usernames
 
         if self.slack_client.rtm_connect():
-            print("DRUMPFBOT v0.9 connected and running!")
+            print("DRUMPFBOT v0.99 connected and running!")
             message = ""
             attachments = [
                 {
@@ -742,8 +782,8 @@ class DrumpfBot():
                             {
                                 "title": "Are you sure?",
                                 "text": "This can take a while. The game will go until there are no cards left to deal (from the 60 card deck). That means 30 rounds for two people, 20 rounds for three, and so on.",
-                                "ok_text": "Yes",
-                                "dismiss_text": "No"
+                                "ok_text": "I'm sure",
+                                "dismiss_text": "Not so sure"
                             }
                         },
                         {

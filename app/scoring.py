@@ -147,7 +147,7 @@ class Scoring():
                 as_user=True,
                 attachments=attachments
             )
-            print "RESP:", resp
+            # print "RESP:", resp
 
     def pm_users_scoreboard_recap(self, board, attachments=None):
         """

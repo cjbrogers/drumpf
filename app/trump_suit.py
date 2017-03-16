@@ -115,9 +115,9 @@ class TrumpSuit():
         print "announce_trump_card(self, trump_card) "
         print "  trump_card: ", trump_card
 
-        msg = "*Round {}* \n The trump card is: {} \n>_Sub-Round {}_\n".format(
+        msg = "*Round {}* \n The trump card is: {} \n>>>_Bids:_\n".format(
             self.bot.current_game.current_round,
-            helper_functions.emojify_card(trump_card), (self.bot.sub_rounds_played + 1))
+            helper_functions.emojify_card(trump_card))
         self.score.build_scoreboard(msg)
         self.score.update_scoreboard(self.bot.scoreboard)
         self.score.init_pm_scoreboard(self.bot.scoreboard)
