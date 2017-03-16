@@ -12,6 +12,7 @@ import random
 
 import app
 from app import tasks
+from tasks import Task
 import models
 
 
@@ -209,7 +210,7 @@ def inbound():
             slack_client.api_call("chat.update",
                                   channel=bot_im_id,
                                   ts=ts,
-                                  text=">:white_check_mark:",
+                                  text=">:white_check_mark: Waiting for your turn...",
                                 #   attachments=attachments,
                                   as_user=True)
             post_message_as_user(user_id,channel_id,value)
@@ -264,7 +265,8 @@ def events():
                 else:
                     print "  successful deletion of 'play drumpf / restart' user command"
                 if 'play drumpf' in str(v):
-                    tasks.launch_bot.delay(user_id, channel, ts, team_id)
+                    task = Task()
+                    task.launch_bot.delay(user_id, channel, ts, team_id)
                     return Response(), 200
             elif 'previous_message' not in str(k) and 'wake donny_drumpfbot' in str(v):
                 print "  waking up Drumpf!"
