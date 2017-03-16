@@ -369,12 +369,17 @@ class DrumpfBot():
                 [attachments] (list) a list of attachments to append to the message -optional, defaults to None
         """
         print "private_message_user(self, user_id, message, attachments=None)"
-        self.slack_client.api_call(
+        resp = self.slack_client.api_call(
             "chat.postMessage",
             channel=user_id,
             text=message,
             as_user=True, attachments=attachments
         )
+        ts = resp['ts']
+        bot_im_id = models.get_bot_im_id(user_id,self.team_id)
+        event = "pm_user_{}_{}".format(str(self.current_game.current_round),str(self.sub_rounds_played))
+        models.log_message_ts(ts, bot_im_id, event, self.team_id)
+
 
     def display_cards_for_player_in_pm(self, player_id, cards, msg, call_type):
         """
@@ -521,10 +526,11 @@ class DrumpfBot():
 
     def prepare_for_next_round(self):
         """
-        Clears all round and sub-round variables
+        Clears all round and sub-round variables; cleans relevant Slack channels
         """
         print "prepare_for_next_round(self) "
-        self.clear_old_messages()
+        msg_events_to_clear = ["pm_user_%","init_cards_pm_%"]
+        self.clear_old_messages(msg_events_to_clear)
         self.current_game.current_round += 1
         self.scoreboard = ""
         self.scores = ""
@@ -544,7 +550,7 @@ class DrumpfBot():
         self.first_card_sub_round = 0
         self.player_turn_queue.rotate(1)
 
-    def clear_old_messages(self):
+    def clear_old_messages(self,events):
         """
             At the end of the round, deletes cards from users hand in preparation for next round.
         """
@@ -552,20 +558,20 @@ class DrumpfBot():
         connection = models.connect()
         try:
             with connection.cursor() as cursor:
-                sql = "SELECT ts, channel FROM `messages` WHERE event LIKE %s AND team_id=%s"
-                event = "init_cards_pm_%"
-                data = (event, self.team_id)
-                cursor.execute(sql, data)
-                timestamps = cursor.fetchall()
-                for timestamp in timestamps:
-                    ts = timestamp['ts']
-                    channel = timestamp['channel']
-                    print "  init_cards_pm_ ts: ",ts
-                    print "  init_cards_pm_ channel: ",channel
-                    self.slack_client.api_call("chat.delete",
-                                          channel=channel,
-                                          ts=ts,
-                                          as_user=True)
+                for event in events:
+                    sql = "SELECT ts, channel FROM `messages` WHERE event LIKE %s AND team_id=%s"
+                    data = (event, self.team_id)
+                    cursor.execute(sql, data)
+                    timestamps = cursor.fetchall()
+                    for timestamp in timestamps:
+                        ts = timestamp['ts']
+                        channel = timestamp['channel']
+                        print "  ts: ",ts
+                        print "  channel: ",channel
+                        self.slack_client.api_call("chat.delete",
+                                              channel=channel,
+                                              ts=ts,
+                                              as_user=True)
         except Exception as e:
             raise
         else:

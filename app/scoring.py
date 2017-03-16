@@ -574,4 +574,30 @@ class Scoring():
         for player in self.bot.current_game.players:
             self.bot.private_message_user(player.id, response, attachments)
         # TODO: Prompt user if they wish to clear the main channel or not (also use this to restart the program)
-        # self.bot.restart_program()
+        attachments = [
+            {
+                "title": "",
+                "fallback": "Restart bot",
+                "callback_id": "restart",
+                "color": "#3AA3E3",
+                "attachment_type": "default",
+                "actions": [
+                    {
+                        "name": "prompt_restart",
+                        "text": "restart",
+                        "type": "button",
+                        "value": "restart"
+                    }
+                ]
+            }]
+        resp = self.slack_client.api_call(
+            "chat.postMessage",
+            text = "Click below to restart <@donny_drumpfbot> and clear the channels:",
+            channel=self.bot.main_channel_id,
+            attachments=attachments,
+            as_user=True
+        )
+        ts = resp['ts']
+        event = "prompt_restart"
+        models.log_message_ts(self.pm_scoreboard_ts,
+                              self.bot.main_channel_id, event, self.bot.team_id)

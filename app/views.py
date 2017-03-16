@@ -230,7 +230,6 @@ def inbound():
                                     ts=ts,
                                     as_user=True)
             post_message_as_user(user_id,channel_id,value)
-
         else:
             post_message_as_user(user_id,channel_id,value)
 
