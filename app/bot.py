@@ -395,7 +395,7 @@ class DrumpfBot():
         event = "waiting"
         ts_wait = models.get_ts(bot_im_id, event, self.team_id)
         if ts_wait:
-            slack_client.api_call("chat.delete",
+            self.slack_client.api_call("chat.delete",
                                     channel=bot_im_id,
                                     ts=ts_wait,
                                     as_user=True)
