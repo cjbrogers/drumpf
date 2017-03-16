@@ -45,15 +45,26 @@ def interactify(cards, first_set, current_round, set_count, msg="Your cards good
         color = "#4CAF50"
     else:
         color = "#9E9E9E"
-    attachments = [
-        {
-            "title": msg,
-            "fallback": values,
-            "color": color,
-            "callback_id": "interactify",
-            "attachment_type": "default",
-            "actions": actions
-        }]
+    if first_set:
+        attachments = [
+            {
+                "title": msg,
+                "fallback": values,
+                "color": color,
+                "callback_id": "interactify",
+                "attachment_type": "default",
+                "actions": actions
+            }]
+    else:
+        attachments = [
+            {
+                "title": "",
+                "fallback": values,
+                "color": color,
+                "callback_id": "interactify",
+                "attachment_type": "default",
+                "actions": actions
+            }]
     return attachments
 
 
