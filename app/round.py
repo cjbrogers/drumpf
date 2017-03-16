@@ -233,13 +233,13 @@ class Round():
                     if player.id == self.bot.player_turn_queue[0]:
                         msg = "Play a card."
                         self.bot.display_cards_for_player_in_pm(
-                            self.bot.player_turn_queue[0], player.cards_in_hand, msg)
+                            self.bot.player_turn_queue[0], player.cards_in_hand, msg, "chat.update")
         else:
             for player in self.bot.current_game.players:
                 if player.id == self.bot.player_turn_queue[0]:
                     msg = "Play a card."
                     self.bot.display_cards_for_player_in_pm(
-                        self.bot.player_turn_queue[0], player.cards_in_hand, msg)
+                        self.bot.player_turn_queue[0], player.cards_in_hand, msg, "chat.update")
 
     def remove_card_from_players_hand(self, current_player_id, card_to_remove):
         """Removes a card from the players hand

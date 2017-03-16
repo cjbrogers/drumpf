@@ -374,7 +374,7 @@ class DrumpfBot():
             as_user=True, attachments=attachments
         )
 
-    def display_cards_for_player_in_pm(self, player_id, cards, msg):
+    def display_cards_for_player_in_pm(self, player_id, cards, msg, call_type):
         """
         Displays the cards for the players in a private message
 
@@ -407,7 +407,7 @@ class DrumpfBot():
                 elif (idx % 5) == 0:  # we've hit the 5th card that sends a new message
                     attachments = helper_functions.interactify(
                         five_card_set, self.first_set, self.current_game.current_round, msg)
-                    self.slack_client.api_call("chat.update",
+                    self.slack_client.api_call(call_type,
                                                channel=bot_im_id,
                                                as_user=True,
                                                ts=ts,
@@ -421,7 +421,7 @@ class DrumpfBot():
                 if len(cards) == (idx + 1):
                     attachments = helper_functions.interactify(
                         five_card_set, self.first_set, self.current_game.current_round, msg)
-                    self.slack_client.api_call("chat.update",
+                    self.slack_client.api_call(call_type,
                                                channel=bot_im_id,
                                                as_user=True,
                                                ts=ts,
@@ -432,7 +432,7 @@ class DrumpfBot():
             self.first_set = True
             attachments = helper_functions.interactify(
                 formatted_cards, self.first_set, self.current_game.current_round, msg)
-            self.slack_client.api_call("chat.update",
+            self.slack_client.api_call(call_type,
                                        channel=bot_im_id,
                                        as_user=True,
                                        ts=ts,

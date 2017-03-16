@@ -54,7 +54,7 @@ class TrumpSuit():
                     for player in self.bot.current_game.players:
                         if player.id == self.bot.player_turn_queue[0]:
                             self.bot.display_cards_for_player_in_pm(
-                                self.bot.player_turn_queue[0], player.cards_in_hand, msg)
+                                self.bot.player_turn_queue[0], player.cards_in_hand, msg, "chat.update")
                 return
             else:
                 print "  That wasn't a valid index for a trump suit."

@@ -125,7 +125,7 @@ class Bid():
                             if player.id == self.bot.player_turn_queue[0]:
                                 msg = "Play a card."
                                 self.bot.display_cards_for_player_in_pm(
-                                    self.bot.player_turn_queue[0], player.cards_in_hand, msg)
+                                    self.bot.player_turn_queue[0], player.cards_in_hand, msg, "chat.update")
                         return
 
                     else:  # get the next player's bid
