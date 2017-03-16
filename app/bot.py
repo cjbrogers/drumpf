@@ -499,22 +499,6 @@ class DrumpfBot():
                 [cards] (str) the cards to display
         """
         print "init_cards_for_player_in_pm(self, player_id, cards) "
-        print "  player_id: ", player_id
-        print "  player: ", self.user_ids_to_username[player_id]
-        print "  cards: ", cards
-        #
-        # formatted_cards = helper_functions.interactiformat(cards)
-        # # the player has more than 5 cards, so we have to send them in separate
-        # # messages
-        # self.first_set = True
-        # attachments = helper_functions.interactify(
-        #     formatted_cards, self.first_set, self.current_game.current_round)
-        # resp = self.slack_client.api_call(
-        #     "chat.postMessage", channel=player_id, as_user=True, attachments=attachments)
-        # pm_ts = resp['ts']
-        # event = "init_cards_pm_" + str(self.current_game.current_round)
-        # bot_im_id = models.get_bot_im_id(player_id, self.team_id)
-        # models.log_message_ts(pm_ts, bot_im_id, event, self.team_id)
         self.display_cards_for_player_in_pm(player_id,cards,"Your cards:","chat.postMessage")
 
     def play_game_of_drumpf_on_slack(self, players, channel):
@@ -588,7 +572,6 @@ class DrumpfBot():
             print "  Great success deleting bid buttons!"
         finally:
             connection.close()
-            post_message_as_user(user_id,channel_id,value)
 
     def make_channel(self):
         """
