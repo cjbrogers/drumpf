@@ -417,8 +417,8 @@ class DrumpfBot():
                 elif (idx % 5) != 0:  # add the next 4
                     five_card_set[idx] = formatted_cards[idx]
                 elif (idx % 5) == 0:  # we've hit the 5th card that sends a new message
-                    if len(cards) < self.current_game.current_round:
-                        # TODO: delete last set of cards
+                    # if len(cards) < self.current_game.current_round:
+                    #     # TODO: delete last set of cards
 
                     attachments = helper_functions.interactify(
                         five_card_set, self.first_set, self.current_game.current_round, set_count, msg)
