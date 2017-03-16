@@ -6,6 +6,7 @@ from collections import defaultdict, deque
 import pandas as pd
 from slackclient import SlackClient
 from slacker import Slacker
+import math
 
 import models
 import game as DrumpfGame
@@ -386,11 +387,11 @@ class DrumpfBot():
         print "  player_id: ", player_id
         print "  player: ", self.user_ids_to_username[player_id]
         print "  cards: ", cards
-
+        set_count = 1
         bot_im_id = models.get_bot_im_id(player_id, self.team_id)
-        # event = "init_cards_pm_" + str(self.current_game.current_round)
-        # ts = models.get_ts(bot_im_id, event, self.team_id)
-
+        no_cards = len(cards)
+        no_card_sets = int(math.ceil(no_cards/5.0))
+        ts = None
         formatted_cards = helper_functions.interactiformat(cards)
         # the player has more than 5 cards, so we have to send them in separate
         # messages
@@ -408,6 +409,9 @@ class DrumpfBot():
                 elif (idx % 5) == 0:  # we've hit the 5th card that sends a new message
                     attachments = helper_functions.interactify(
                         five_card_set, self.first_set, self.current_game.current_round, msg)
+                    if call_type == "chat.update":
+                        event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count))
+                        ts = models.get_ts(bot_im_id, event, self.team_id)
                     resp = self.slack_client.api_call(call_type,
                                                channel=bot_im_id,
                                                as_user=True,
@@ -415,18 +419,22 @@ class DrumpfBot():
                                                attachments=attachments)
                     if call_type == "chat.postMessage":
                         ts = resp['ts']
-                        event = "init_cards_pm_" + str(idx)
+                        event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count))
                         models.log_message_ts(ts, bot_im_id, event, self.team_id)
 
                     self.first_set = False
                     five_card_set.clear()  # clear the set
                     # add the first card of the next set
                     five_card_set[idx] = formatted_cards[idx]
+                    set_count += 1
                 # we've reached the last card so post the remaining cards to
                 # the user
                 if len(cards) == (idx + 1):
                     attachments = helper_functions.interactify(
                         five_card_set, self.first_set, self.current_game.current_round, msg)
+                    if call_type == "chat.update":
+                        event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count))
+                        ts = models.get_ts(bot_im_id, event, self.team_id)
                     resp = self.slack_client.api_call(call_type,
                                                channel=bot_im_id,
                                                as_user=True,
@@ -434,14 +442,18 @@ class DrumpfBot():
                                                attachments=attachments)
                     if call_type == "chat.postMessage":
                         ts = resp['ts']
-                        event = "init_cards_pm_" + str(len(cards))
+                        event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count))
                         models.log_message_ts(ts, bot_im_id, event, self.team_id)
                     five_card_set.clear()
         # there are less than 5 cards in the players hand, so just display them
         else:
+            set_count = 1
             self.first_set = True
             attachments = helper_functions.interactify(
                 formatted_cards, self.first_set, self.current_game.current_round, msg)
+            if call_type == "chat.update":
+                event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count))
+                ts = models.get_ts(bot_im_id, event, self.team_id)
             resp = self.slack_client.api_call(call_type,
                                        channel=bot_im_id,
                                        as_user=True,
@@ -449,7 +461,7 @@ class DrumpfBot():
                                        attachments=attachments)
             if call_type == "chat.postMessage":
                 ts = resp['ts']
-                event = "init_cards_pm_" + str(len(cards))
+                event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count))
                 models.log_message_ts(ts, bot_im_id, event, self.team_id)
 
     def init_cards_for_player_in_pm(self, player_id, cards):
@@ -464,19 +476,20 @@ class DrumpfBot():
         print "  player_id: ", player_id
         print "  player: ", self.user_ids_to_username[player_id]
         print "  cards: ", cards
-
-        formatted_cards = helper_functions.interactiformat(cards)
-        # the player has more than 5 cards, so we have to send them in separate
-        # messages
-        self.first_set = True
-        attachments = helper_functions.interactify(
-            formatted_cards, self.first_set, self.current_game.current_round)
-        resp = self.slack_client.api_call(
-            "chat.postMessage", channel=player_id, as_user=True, attachments=attachments)
-        pm_ts = resp['ts']
-        event = "init_cards_pm_" + str(self.current_game.current_round)
-        bot_im_id = models.get_bot_im_id(player_id, self.team_id)
-        models.log_message_ts(pm_ts, bot_im_id, event, self.team_id)
+        #
+        # formatted_cards = helper_functions.interactiformat(cards)
+        # # the player has more than 5 cards, so we have to send them in separate
+        # # messages
+        # self.first_set = True
+        # attachments = helper_functions.interactify(
+        #     formatted_cards, self.first_set, self.current_game.current_round)
+        # resp = self.slack_client.api_call(
+        #     "chat.postMessage", channel=player_id, as_user=True, attachments=attachments)
+        # pm_ts = resp['ts']
+        # event = "init_cards_pm_" + str(self.current_game.current_round)
+        # bot_im_id = models.get_bot_im_id(player_id, self.team_id)
+        # models.log_message_ts(pm_ts, bot_im_id, event, self.team_id)
+        self.display_cards_for_player_in_pm(player_id,cards,"Your cards:","chat.postMessage")
 
     def play_game_of_drumpf_on_slack(self, players, channel):
         """
