@@ -686,8 +686,9 @@ class DrumpfBot():
         print "  user_id", user_id
         print "  channel", channel_id
 
-        token = models.get_bot_access_token(user_id)
+
         try:
+            token = models.get_bot_access_token(user_id)
             self.BOT_TOKEN = token
             self.slack_client = SlackClient(token)
             self.slack = Slacker(token)
@@ -728,7 +729,7 @@ class DrumpfBot():
                     self.main_channel_id = channel_id
                     print "  self.main_channel_id: ", self.main_channel_id
         except Exception as e:
-            print "  Exception raised!"
+            print "  Couldn't get the token"
             raise
         else:
             print "  Successful token retrieval"
