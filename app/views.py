@@ -92,6 +92,7 @@ def inbound():
                             "better luck next time", "you lose"]
             search_terms = {"screw you": screw_terms, "dammit": dammit_terms,
                             "don't cry": cry_terms, "sucka": sucka_terms}
+            lie_cheat_terms = ["lie", "cheat", "win"]
 
             terms = []
             image_url = ""
@@ -111,17 +112,21 @@ def inbound():
                 print "  url:", url
                 print "  image_url:", image_url
             else:  # just get a random gif
-                image_urls = ["https://media.giphy.com/media/ytwDCq9aT3cgEyyYVO/giphy.gif",
-                              "https://media.giphy.com/media/YTbZzCkRQCEJa/giphy.gif",
-                              "https://media.giphy.com/media/jMBmFMAwbA3mg/giphy.gif",
-                              "https://media.giphy.com/media/l0MYxef0mpdcnQnvi/source.gif",
-                              "https://media.giphy.com/media/3o7TKtsBMu4xzIV808/giphy.gif",
-                              "https://media.giphy.com/media/l3q2Z6S6n38zjPswo/giphy.gif",
-                              "https://media.giphy.com/media/kmqCVSHi5phMk/giphy.gif",
-                              "https://media.giphy.com/media/9X5zV9eHAqAus/giphy.gif",
-                              "https://media.giphy.com/media/Xv0Y0A2GsrZ3G/giphy.gif"]
-                random.shuffle(image_urls)
-                image_url = image_urls[0]
+                # image_urls = ["https://media.giphy.com/media/ytwDCq9aT3cgEyyYVO/giphy.gif",
+                #               "https://media.giphy.com/media/YTbZzCkRQCEJa/giphy.gif",
+                #               "https://media.giphy.com/media/jMBmFMAwbA3mg/giphy.gif",
+                #               "https://media.giphy.com/media/l0MYxef0mpdcnQnvi/source.gif",
+                #               "https://media.giphy.com/media/3o7TKtsBMu4xzIV808/giphy.gif",
+                #               "https://media.giphy.com/media/l3q2Z6S6n38zjPswo/giphy.gif",
+                #               "https://media.giphy.com/media/kmqCVSHi5phMk/giphy.gif",
+                #               "https://media.giphy.com/media/9X5zV9eHAqAus/giphy.gif",
+                #               "https://media.giphy.com/media/Xv0Y0A2GsrZ3G/giphy.gif"]
+                random.shuffle(lie_cheat_terms)
+                term = lie_cheat_terms[0]
+                urls = [x for x in g.search(term)]
+                random.shuffle(urls)
+                url = urls[0]
+                image_url = url.media_url
 
             attachments = [
                 {
