@@ -464,7 +464,7 @@ class DrumpfBot():
                 # TODO: delete last set of cards
                 event = "init_cards_pm_{}_{}".format(str(self.current_game.current_round),str(set_count+1))
                 ts = models.get_ts(bot_im_id, event, self.team_id)
-                self.slack_client.api_call("chat.delete"
+                self.slack_client.api_call("chat.delete",
                                             channel=bot_im_id,
                                             ts=ts,
                                             as_user=True)
