@@ -369,16 +369,22 @@ class DrumpfBot():
                 [attachments] (list) a list of attachments to append to the message -optional, defaults to None
         """
         print "private_message_user(self, user_id, message, attachments=None)"
+        print "  message:",message
         resp = self.slack_client.api_call(
             "chat.postMessage",
             channel=user_id,
             text=message,
             as_user=True, attachments=attachments
         )
-        ts = resp['ts']
-        bot_im_id = models.get_bot_im_id(user_id,self.team_id)
-        event = "pm_user_{}_{}".format(str(self.current_game.current_round),str(self.sub_rounds_played))
-        models.log_message_ts(ts, bot_im_id, event, self.team_id)
+        try:
+            ts = resp['ts']
+            bot_im_id = models.get_bot_im_id(user_id,self.team_id)
+            event = "pm_user_{}_{}".format(str(self.current_game.current_round),str(self.sub_rounds_played))
+            models.log_message_ts(ts, bot_im_id, event, self.team_id)
+        except Exception as e:
+            print "  no ts in response"
+        else:
+            print "  successful ts log for private message"
 
 
     def display_cards_for_player_in_pm(self, player_id, cards, msg, call_type):
