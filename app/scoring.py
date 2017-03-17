@@ -599,5 +599,5 @@ class Scoring():
         )
         ts = resp['ts']
         event = "prompt_restart"
-        models.log_message_ts(self.pm_scoreboard_ts,
+        models.log_message_ts(ts,
                               self.bot.main_channel_id, event, self.bot.team_id)
